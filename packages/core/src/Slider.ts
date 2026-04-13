@@ -164,6 +164,10 @@ export class Slider implements SliderInstance {
     )
     this.keyboardNav.init()
 
+    // Init reduced motion (must be before responsiveManager — applyLayout reads it)
+    this.reducedMotion = new ReducedMotion()
+    this.reducedMotion.init()
+
     // Init responsive
     this.responsiveManager = new ResponsiveManager(
       el,
@@ -182,9 +186,6 @@ export class Slider implements SliderInstance {
       this.mergedOptions.a11y
     )
     this.ariaManager.init()
-
-    this.reducedMotion = new ReducedMotion()
-    this.reducedMotion.init()
 
     // Add CSS classes
     addClass(el, 'c--slider-a--initialized')

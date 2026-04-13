@@ -73,6 +73,9 @@ export class ResponsiveManager {
     if (matched !== this.activeBreakpoint) {
       const previous = this.activeBreakpoint
       const current = matched
+
+      // Update activeBreakpoint first so getMergedOptions picks up the new bp
+      this.activeBreakpoint = current
       const merged = this.getMergedOptions()
 
       this.eventBus.emit('newBreakpointStart', {
@@ -82,7 +85,6 @@ export class ResponsiveManager {
         slider: this.slider,
       })
 
-      this.activeBreakpoint = current
       this.onBreakpointChange(merged)
 
       this.eventBus.emit('newBreakpointEnd', {
