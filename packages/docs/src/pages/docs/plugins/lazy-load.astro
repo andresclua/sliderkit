@@ -1,0 +1,33 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Lazy Load Plugin">
+  <h1>lazyLoad</h1>
+  <p class="lead">IntersectionObserver-based lazy loading. Images load only when they enter the viewport. Falls back to immediate load in browsers without IntersectionObserver.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} lazyLoad {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`// Use data-src instead of src on images
+new Slider('#el', {
+  plugins: [lazyLoad({ rootMargin: '200px' })],
+})`}</code></pre>
+
+  <h2>HTML</h2>
+  <pre><code>{`<div class="c--slider-a__slide" data-slide>
+  <img data-src="/photo-large.jpg" alt="..." />
+</div>`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>selector</code></td><td><code>string</code></td><td><code>'[data-src]'</code></td><td>CSS selector for lazy elements.</td></tr>
+      <tr><td><code>rootMargin</code></td><td><code>string</code></td><td><code>'200px'</code></td><td>IntersectionObserver rootMargin — how early to start loading.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/lazy-load">View lazy load demo →</a></p>
+</DocsLayout>

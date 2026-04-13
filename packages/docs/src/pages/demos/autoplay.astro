@@ -1,0 +1,71 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Autoplay">
+  <DemoViewer
+    title="Autoplay"
+    description="Auto-advances every 2 seconds. Hover to pause. Use the buttons to control it manually."
+    code={`import { autoplay } from '@acslider/plugins'
+
+const slider = new Slider('#el', {
+  loop: true,
+  plugins: [
+    autoplay({ delay: 2000, pauseOnHover: true }),
+    arrows(),
+    pagination({ type: 'dots' }),
+  ],
+})
+
+// Control via instance
+slider.play()
+slider.pause()`}
+  >
+    <div class="c--slider-a" id="demo-autoplay">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-autoplay-pag" class="c--slider-a__pagination"></div>
+    <div class="ctrl-row">
+      <button id="btn-play"  class="ctrl-btn">▶ Play</button>
+      <button id="btn-pause" class="ctrl-btn">⏸ Pause</button>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.ctrl-row { display: flex; gap: 8px; margin-top: 12px; }
+.ctrl-btn {
+  padding: 7px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.ctrl-btn:hover { background: #f3f4f6; }
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination, autoplay } from '@acslider/plugins'
+
+const slider = new Slider('#demo-autoplay', {
+  loop: true,
+  plugins: [
+    autoplay({ delay: 2000, pauseOnHover: true }),
+    arrows(),
+    pagination({ el: '#demo-autoplay-pag', type: 'dots', clickable: true }),
+  ],
+})
+
+document.getElementById('btn-play')?.addEventListener('click', () => slider.play())
+document.getElementById('btn-pause')?.addEventListener('click', () => slider.pause())
+</script>

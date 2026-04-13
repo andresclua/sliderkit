@@ -1,0 +1,68 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Parallax CSS">
+  <DemoViewer
+    title="Parallax CSS"
+    description="Elements with data-parallax move at a different speed than the slide, creating a depth effect."
+    code={`import { parallax } from '@acslider/plugins'
+
+// Add data-parallax to any element inside a slide
+// <div class="slide-bg" data-parallax></div>
+
+new Slider('#el', {
+  plugins: [parallax({ depth: 0.4 }), arrows()],
+})`}
+  >
+    <div class="c--slider-a" id="demo-parallax">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide pslide" data-slide>
+          <div class="pslide-bg s-purple" data-parallax></div>
+          <span class="pslide-label">Slide 1</span>
+        </div>
+        <div class="c--slider-a__slide pslide" data-slide>
+          <div class="pslide-bg s-blue" data-parallax></div>
+          <span class="pslide-label">Slide 2</span>
+        </div>
+        <div class="c--slider-a__slide pslide" data-slide>
+          <div class="pslide-bg s-green" data-parallax></div>
+          <span class="pslide-label">Slide 3</span>
+        </div>
+        <div class="c--slider-a__slide pslide" data-slide>
+          <div class="pslide-bg s-amber" data-parallax></div>
+          <span class="pslide-label">Slide 4</span>
+        </div>
+      </div>
+    </div>
+    <div id="demo-parallax-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.pslide { height: 260px; position: relative; overflow: hidden; }
+.pslide-bg {
+  position: absolute; inset: -40px;
+  transition: transform 0.4s ease;
+}
+.pslide-label {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 700; color: #fff;
+  z-index: 1;
+}
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, parallax, pagination } from '@acslider/plugins'
+new Slider('#demo-parallax', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    parallax({ depth: 0.4 }),
+    arrows(),
+    pagination({ el: '#demo-parallax-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

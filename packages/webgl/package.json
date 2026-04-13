@@ -1,0 +1,43 @@
+{
+  "name": "@acslider/webgl",
+  "version": "0.1.0",
+  "description": "ACSlider WebGL renderer — OGL-powered effects with displacement, rgb-shift, pixel-dissolve, parallax",
+  "type": "module",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./css/*": "./dist/css/*",
+    "./scss/*": "./src/scss/*",
+    "./textures/*": "./textures/*"
+  },
+  "files": ["dist", "src/scss", "textures"],
+  "sideEffects": ["**/*.css", "**/*.scss"],
+  "scripts": {
+    "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ogl": "^1.0.3"
+  },
+  "peerDependencies": {
+    "@acslider/core": "workspace:*",
+    "gsap": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "gsap": { "optional": true }
+  },
+  "devDependencies": {
+    "vite": "^5.2.12",
+    "vite-plugin-dts": "^3.9.1",
+    "typescript": "^5.4.5",
+    "@acslider/core": "workspace:*"
+  },
+  "author": "Andres Clua",
+  "license": "MIT"
+}

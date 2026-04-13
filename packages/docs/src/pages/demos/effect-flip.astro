@@ -1,0 +1,58 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Effect — Flip">
+  <DemoViewer
+    title="CSS Effect — Flip"
+    description="Card-flip transition on the Y axis using CSS 3D perspective."
+    code={`import { flipEffect } from '@acslider/effects'
+
+new Slider('#el', {
+  slidesPerPage: 1,
+  loop: false,
+  rewind: true,
+  speed: 600,
+  plugins: [flipEffect(), arrows()],
+})`}
+  >
+    <div class="c--slider-a c--slider-a--effect c--slider-a--flip" id="demo-flip">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-flip-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.c--slider-a--flip {
+  perspective: 1200px;
+}
+.c--slider-a--flip .c--slider-a__slide {
+  transition: transform 0.6s ease;
+  backface-visibility: hidden;
+}
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+import { flipEffect } from '@acslider/effects'
+
+new Slider('#demo-flip', {
+  slidesPerPage: 1,
+  loop: false,
+  rewind: true,
+  speed: 600,
+  plugins: [
+    flipEffect(),
+    arrows(),
+    pagination({ el: '#demo-flip-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

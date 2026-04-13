@@ -1,0 +1,75 @@
+---
+import type { NavGroup } from '../nav'
+
+interface Props {
+  nav: NavGroup[]
+  currentPath: string
+}
+const { nav, currentPath } = Astro.props
+---
+<aside class="sidebar">
+  <nav class="sidebar-nav">
+    {nav.map(group => (
+      <div class="nav-group">
+        <p class="nav-group-title">{group.title}</p>
+        <ul>
+          {group.items.map(item => (
+            <li>
+              <a
+                href={item.href}
+                class:list={['nav-item', currentPath === item.href && 'nav-item--active']}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+</aside>
+
+<style>
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  overflow-y: auto;
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+}
+.sidebar-nav { padding: 1.25rem 0.75rem; }
+
+.nav-group { margin-bottom: 1.5rem; }
+.nav-group-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 0 0.6rem;
+  margin-bottom: 0.35rem;
+}
+ul { list-style: none; }
+.nav-item {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #374151;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+}
+.nav-item:hover { background: #f3f4f6; color: var(--text); text-decoration: none; }
+.nav-item--active {
+  background: #ede9fe;
+  color: var(--brand);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+}
+</style>

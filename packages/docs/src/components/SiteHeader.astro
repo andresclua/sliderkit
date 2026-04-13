@@ -1,0 +1,61 @@
+---
+const currentPath = Astro.url.pathname
+const isDemo = currentPath.startsWith('/demos')
+const isDocs = currentPath.startsWith('/docs')
+---
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <span class="logo-ac">AC</span><span class="logo-slider">Slider</span>
+    </a>
+    <nav class="header-nav">
+      <a href="/docs/getting-started" class:list={['nav-link', isDocs && 'nav-link--active']}>Docs</a>
+      <a href="/demos/base" class:list={['nav-link', isDemo && 'nav-link--active']}>Demos</a>
+      <a href="https://github.com/andresclua/acslider" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+      <a href="/docs/sponsor" class="nav-link nav-link--sponsor">♥ Sponsor</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.logo {
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: -0.03em;
+}
+.logo-ac     { color: var(--brand); }
+.logo-slider { color: var(--text); }
+
+.header-nav { display: flex; align-items: center; gap: 0.25rem; }
+.nav-link {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+}
+.nav-link:hover { color: var(--text); background: #f3f4f6; text-decoration: none; }
+.nav-link--active { color: var(--brand); background: #ede9fe; }
+.nav-link--sponsor { color: #db2777; background: #fce7f3; }
+.nav-link--sponsor:hover { background: #fbcfe8; color: #be185d; }
+</style>

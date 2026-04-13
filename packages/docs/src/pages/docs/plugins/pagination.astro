@@ -1,0 +1,61 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Pagination Plugin">
+  <h1>pagination</h1>
+  <p class="lead">Five pagination modes: dots, fraction, progress bar, dynamic bullets, and fully custom HTML.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} pagination {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  plugins: [
+    pagination({
+      type: 'dots',
+      clickable: true,
+    }),
+  ],
+})`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>type</code></td><td><code>'dots' | 'fraction' | 'progress' | 'dynamic' | 'custom'</code></td><td><code>'dots'</code></td><td>Pagination style.</td></tr>
+      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Target element. Auto-created inside container if omitted.</td></tr>
+      <tr><td><code>clickable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Allow clicking dots to navigate (dots/dynamic only).</td></tr>
+      <tr><td><code>dynamicBullets</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Scale nearby bullets smaller (dynamic mode).</td></tr>
+      <tr><td><code>renderCustom</code></td><td><code>{"({"} current, total {"}"}) => string</code></td><td>—</td><td>Custom HTML renderer (custom mode).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Types</h2>
+  <pre><code>{`// Dots
+pagination({ type: 'dots', clickable: true })
+
+// Fraction "2 / 5"
+pagination({ type: 'fraction' })
+
+// Horizontal fill bar
+pagination({ type: 'progress' })
+
+// Shrinking dots around active
+pagination({ type: 'dynamic', dynamicBullets: true })
+
+// Custom HTML
+pagination({
+  type: 'custom',
+  renderCustom: ({ current, total }) =>
+    \`<strong>\${current}</strong> of \${total}\`,
+})`}</code></pre>
+
+  <h2>Demos</h2>
+  <ul>
+    <li><a href="/demos/pagination-dots">Dots</a></li>
+    <li><a href="/demos/pagination-fraction">Fraction</a></li>
+    <li><a href="/demos/pagination-progress">Progress</a></li>
+    <li><a href="/demos/pagination-dynamic">Dynamic</a></li>
+    <li><a href="/demos/pagination-custom">Custom</a></li>
+  </ul>
+</DocsLayout>

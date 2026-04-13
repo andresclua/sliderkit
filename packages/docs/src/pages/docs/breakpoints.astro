@@ -1,0 +1,50 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Breakpoints">
+  <h1>Breakpoints</h1>
+  <p class="lead">Override any slider option at specific viewport widths using the <code>breakpoints</code> option.</p>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  slidesPerPage: 1,
+  gutter: 0,
+
+  breakpoints: {
+    640: {
+      slidesPerPage: 2,
+      gutter: 16,
+    },
+    1024: {
+      slidesPerPage: 3,
+      gutter: 24,
+    },
+  },
+})`}</code></pre>
+
+  <h2>How it works</h2>
+  <p>Breakpoints are <strong>min-width</strong> based. The slider applies the largest matching breakpoint on top of the base options. When the viewport resizes, options are re-merged and <code>applyLayout()</code> is called automatically.</p>
+
+  <h2>Overrideable options</h2>
+  <p>Most layout and behavior options can be overridden per breakpoint. The following cannot (they are set once at construction):</p>
+  <ul>
+    <li><code>plugins</code> — plugin list is fixed</li>
+    <li><code>on</code> — event handlers are fixed</li>
+  </ul>
+
+  <h2>Example: hide arrows on mobile</h2>
+  <pre><code>{`new Slider('#el', {
+  slidesPerPage: 1,
+  plugins: [arrows()],
+  breakpoints: {
+    768: { slidesPerPage: 2 },
+  },
+})`}</code></pre>
+  <p>To hide arrows on mobile use CSS targeting the container width rather than JS breakpoints:</p>
+  <pre><code>{`@media (max-width: 767px) {
+  .c--slider-a__arrow { display: none; }
+}`}</code></pre>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/responsive">View responsive demo →</a></p>
+</DocsLayout>

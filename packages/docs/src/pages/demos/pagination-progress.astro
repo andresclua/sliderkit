@@ -1,0 +1,40 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Pagination — Progress">
+  <DemoViewer
+    title="Pagination — Progress Bar"
+    description="Horizontal fill bar that grows as you advance through slides."
+    code={`pagination({ type: 'progress' })`}
+  >
+    <div class="c--slider-a" id="demo-pag-prog">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-pag-prog-pag" class="c--slider-a__pagination">
+      <div class="c--slider-a__pagination-progress" style="width:100%">
+        <div class="c--slider-a__pagination-progress-fill"></div>
+      </div>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-pag-prog', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-pag-prog-pag', type: 'progress' }),
+  ],
+})
+</script>

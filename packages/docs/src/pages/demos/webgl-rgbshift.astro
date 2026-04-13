@@ -1,0 +1,15 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title={`WebGL — ${Astro.url.pathname.split('/').pop()?.replace('webgl-', '').replace(/-/g, ' ')}`}>
+  <DemoViewer title="WebGL demo" description="Requires real image slides and texture files.">
+    <div class="coming-soon">
+      <p>🚧 WebGL demo — requires real image slides and texture files.</p>
+      <p>See <a href="/docs/webgl">WebGL documentation</a> for setup instructions.</p>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+<style>
+.coming-soon { padding: 3rem 1.5rem; text-align: center; background: #f9fafb; border-radius: 8px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; }
+</style>

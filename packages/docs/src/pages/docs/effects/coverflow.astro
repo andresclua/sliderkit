@@ -1,0 +1,54 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Coverflow Effect">
+  <h1>Coverflow Effect</h1>
+  <p class="lead">An iTunes-style coverflow built with <code>creativeEffect</code>. Side slides are rotated and pushed back in Z to create depth, while the active slide faces forward.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} creativeEffect {"}"} from '@acslider/effects'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  loop: true,
+  plugins: [
+    creativeEffect({
+      perspective: true,
+      prev: {
+        translate: ['-60%', 0, -200],
+        rotate:    [0, 45, 0],
+        opacity:   0.5,
+      },
+      active: {
+        translate: [0, 0, 0],
+        opacity:   1,
+      },
+      next: {
+        translate: ['60%', 0, -200],
+        rotate:    [0, -45, 0],
+        opacity:   0.5,
+      },
+    }),
+    arrows(),
+  ],
+})`}</code></pre>
+
+  <h2>CSS for smooth animation</h2>
+  <pre><code>{`.c--slider-effect-creative .c--slider-a__slide {
+  transition: transform 500ms ease, opacity 500ms ease;
+}`}</code></pre>
+
+  <h2>Tuning tips</h2>
+  <ul>
+    <li>Increase the <code>-200</code> Z translate to push side slides further back.</li>
+    <li>Adjust the <code>45</code> degree rotation to flatten or exaggerate the fan angle.</li>
+    <li>Lower <code>opacity: 0.5</code> to make inactive slides more ghostly.</li>
+    <li>Use <code>scale: 0.8</code> on prev/next for an additional size reduction.</li>
+  </ul>
+
+  <h2>See also</h2>
+  <ul>
+    <li><a href="/docs/effects/creative">Creative Effect</a> — full options reference</li>
+    <li><a href="/demos/effect-coverflow">View coverflow demo →</a></li>
+  </ul>
+</DocsLayout>

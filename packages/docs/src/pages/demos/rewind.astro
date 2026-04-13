@@ -1,0 +1,40 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Rewind">
+  <DemoViewer
+    title="Rewind"
+    description="No clones. At the last slide, Next jumps back to first. At the first, Prev jumps to last."
+    code={`new Slider('#el', {
+  loop: false,
+  rewind: true,
+  plugins: [arrows(), pagination({ type: 'dots' })],
+})`}
+  >
+    <div class="c--slider-a" id="demo-rewind">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-rewind-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-rewind', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-rewind-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

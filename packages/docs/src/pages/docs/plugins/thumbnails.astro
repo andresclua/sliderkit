@@ -1,0 +1,41 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Thumbnails Plugin">
+  <h1>thumbnails</h1>
+  <p class="lead">Renders a clickable thumbnail strip synced with the active slide. Thumbnails are generated from slide <code>data-src</code> or <code>img[src]</code>.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} thumbnails {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  plugins: [thumbnails({ clickable: true })],
+})`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Container for thumbnails. Auto-created after slider container if omitted.</td></tr>
+      <tr><td><code>clickable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Click thumbnails to navigate.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Image source</h2>
+  <p>The plugin reads thumbnail images from:</p>
+  <ol>
+    <li><code>data-src</code> attribute on the slide</li>
+    <li><code>src</code> of the first <code>img</code> inside the slide</li>
+  </ol>
+  <pre><code>{`<!-- data-src on slide -->
+<div class="c--slider-a__slide" data-src="/thumb-1.jpg">...</div>
+
+<!-- img inside slide -->
+<div class="c--slider-a__slide">
+  <img src="/full-1.jpg" alt="..." />
+</div>`}</code></pre>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/thumbnails">View thumbnails demo →</a></p>
+</DocsLayout>

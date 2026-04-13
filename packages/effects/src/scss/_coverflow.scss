@@ -1,0 +1,11 @@
+.c--slider-effect-coverflow {
+  .c--slider-a__wrapper {
+    transform-style: preserve-3d;
+    perspective: 1200px;
+  }
+
+  .c--slider-a__slide {
+    transition: transform 300ms ease;
+    transform-origin: center center;
+  }
+}

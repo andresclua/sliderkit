@@ -1,0 +1,220 @@
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Design tokens ── */
+:root {
+  --brand: #6C2BD9;
+  --brand-light: #8B5CF6;
+  --brand-dark: #4C1D95;
+  --bg: #f8f8f8;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --code-bg: #1e1e2e;
+  --sidebar-w: 260px;
+  --header-h: 60px;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code {
+  font-family: 'Fira Code', 'Cascadia Code', 'Menlo', monospace;
+  font-size: 0.875em;
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+pre {
+  background: var(--code-bg);
+  color: #cdd6f4;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+
+/* ── Slider core styles (inline — no SCSS preprocessor needed) ── */
+.c--slider-a {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #e5e7eb;
+}
+.c--slider-a__wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  will-change: transform;
+  user-select: none;
+}
+.c--slider-a__slide {
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* ── Demo slide colors ── */
+.s-purple  { background: #6C2BD9; }
+.s-blue    { background: #3B82F6; }
+.s-green   { background: #10B981; }
+.s-amber   { background: #F59E0B; }
+.s-red     { background: #EF4444; }
+.s-pink    { background: #EC4899; }
+.s-teal    { background: #14B8A6; }
+.s-indigo  { background: #6366F1; }
+
+.demo-slide {
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+/* ── Arrows ── */
+.c--slider-a__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.92);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  transition: background 0.15s, opacity 0.15s;
+  padding: 0;
+}
+.c--slider-a__arrow:hover { background: #fff; }
+.c--slider-a__arrow--disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow svg { width: 20px; height: 20px; color: #374151; }
+
+/* ── Pagination ── */
+.c--slider-a__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 0 8px;
+}
+.c--slider-a__pagination-bullet {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: #d1d5db;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+.c--slider-a__pagination-bullet--active {
+  background: var(--brand);
+  transform: scale(1.3);
+}
+.c--slider-a__pagination-fraction {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.c--slider-a__pagination-progress {
+  width: 100%;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.c--slider-a__pagination-progress-fill {
+  height: 100%;
+  background: var(--brand);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ── Progress bar plugin ── */
+.c--slider-a__progress-bar {
+  position: absolute;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--brand);
+  transition: width 0.3s linear;
+  z-index: 10;
+}
+
+/* ── Thumbnails plugin ── */
+.c--slider-a__thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.c--slider-a__thumb {
+  flex: 1;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.5;
+  border: 2px solid transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+  background: #e5e7eb;
+}
+.c--slider-a__thumb--active {
+  opacity: 1;
+  border-color: var(--brand);
+}
+
+/* ── Progress bar plugin ── */
+.c--slider-a__progress {
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.c--slider-a__progress-fill {
+  height: 100%;
+  background: var(--brand);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+/* ── Effects: absolute-stacked slides ── */
+.c--slider-a--effect {
+  height: 260px;
+}
+.c--slider-a--effect .c--slider-a__wrapper {
+  height: 100%;
+}
+
+/* ── Slide counter plugin ── */
+.c--slider-a__counter {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  z-index: 10;
+}

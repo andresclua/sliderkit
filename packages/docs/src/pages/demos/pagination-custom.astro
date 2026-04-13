@@ -1,0 +1,51 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Pagination — Custom">
+  <DemoViewer
+    title="Pagination — Custom render"
+    description="Render any HTML you want inside the pagination container using renderCustom."
+    code={`pagination({
+  type: 'custom',
+  renderCustom: ({ current, total }) =>
+    \`<strong>\${current}</strong> <span>of</span> \${total}\`,
+})`}
+  >
+    <div class="c--slider-a" id="demo-pag-cust">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-pag-cust-pag" class="c--slider-a__pagination custom-pag"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.custom-pag { font-size: 1.1rem; font-weight: 300; color: #374151; letter-spacing: 0.05em; }
+.custom-pag :global(strong) { font-size: 1.6rem; font-weight: 800; color: var(--brand); }
+.custom-pag :global(span) { color: #9ca3af; font-size: 0.85rem; }
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-pag-cust', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({
+      el: '#demo-pag-cust-pag',
+      type: 'custom',
+      renderCustom: ({ current, total }) =>
+        `<strong>${current}</strong> <span>of</span> ${total}`,
+    }),
+  ],
+})
+</script>

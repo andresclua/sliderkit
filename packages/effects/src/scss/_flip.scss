@@ -1,0 +1,15 @@
+.c--slider-effect-flip {
+  .c--slider-a__wrapper {
+    transform-style: preserve-3d;
+    perspective: 1200px;
+  }
+
+  .c--slider-a__slide {
+    backface-visibility: hidden;
+    transition: transform 300ms ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

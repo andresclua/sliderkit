@@ -1,0 +1,88 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Options">
+  <h1>Options</h1>
+  <p class="lead">All options passed to the <code>Slider</code> constructor. All are optional with sensible defaults.</p>
+
+  <h2>Layout</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>slidesPerPage</code></td><td><code>number | 'auto'</code></td><td><code>1</code></td><td>Number of slides visible per page.</td></tr>
+      <tr><td><code>gutter</code></td><td><code>number</code></td><td><code>0</code></td><td>Gap in pixels between slides.</td></tr>
+      <tr><td><code>edgePadding</code></td><td><code>number</code></td><td><code>0</code></td><td>Padding in pixels on both edges of the container, peeking next/prev slides.</td></tr>
+      <tr><td><code>direction</code></td><td><code>'horizontal' | 'vertical'</code></td><td><code>'horizontal'</code></td><td>Slide direction.</td></tr>
+      <tr><td><code>centered</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Center the active slide.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Behavior</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>loop</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Infinite loop via DOM clones.</td></tr>
+      <tr><td><code>rewind</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Jump from last to first (and vice versa) without clones.</td></tr>
+      <tr><td><code>speed</code></td><td><code>number</code></td><td><code>300</code></td><td>Transition duration in ms.</td></tr>
+      <tr><td><code>grabCursor</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show grab cursor on hover.</td></tr>
+      <tr><td><code>startIndex</code></td><td><code>number</code></td><td><code>0</code></td><td>Initial active slide index.</td></tr>
+      <tr><td><code>freezable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Freeze (disable interaction) when all slides fit on one page.</td></tr>
+      <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Initialize in disabled state.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Touch & drag</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>touch</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enable touch events.</td></tr>
+      <tr><td><code>mouseDrag</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Enable mouse drag.</td></tr>
+      <tr><td><code>swipeThreshold</code></td><td><code>number</code></td><td><code>50</code></td><td>Minimum swipe distance in px to trigger navigation.</td></tr>
+      <tr><td><code>swipeAngle</code></td><td><code>number</code></td><td><code>15</code></td><td>Max angle (degrees) to consider a swipe valid.</td></tr>
+      <tr><td><code>resistance</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Add resistance at the edges.</td></tr>
+      <tr><td><code>resistanceRatio</code></td><td><code>number</code></td><td><code>0.85</code></td><td>Resistance multiplier (0–1).</td></tr>
+      <tr><td><code>preventScrollOnTouch</code></td><td><code>'auto' | 'force' | false</code></td><td><code>'auto'</code></td><td>Prevent page scroll during horizontal swipe.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Responsive / Breakpoints</h2>
+  <pre><code>{`const slider = new Slider('#el', {
+  slidesPerPage: 1,
+  gutter: 0,
+  breakpoints: {
+    768: { slidesPerPage: 2, gutter: 16 },
+    1024: { slidesPerPage: 3, gutter: 24, edgePadding: 32 },
+  },
+})`}</code></pre>
+  <p>Breakpoint keys are <strong>min-width</strong> values. Options merge with the base config at each breakpoint.</p>
+
+  <h2>Accessibility</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th></tr></thead>
+    <tbody>
+      <tr><td><code>a11y.enabled</code></td><td><code>boolean</code></td><td><code>true</code></td></tr>
+      <tr><td><code>a11y.prevSlideMessage</code></td><td><code>string</code></td><td><code>'Previous slide'</code></td></tr>
+      <tr><td><code>a11y.nextSlideMessage</code></td><td><code>string</code></td><td><code>'Next slide'</code></td></tr>
+      <tr><td><code>a11y.slideLabel</code></td><td><code>string</code></td><td><code>'{"{"}"{"{"}"index{"}"}{"}"} of {"{"}"{"{"}"total{"}"}{"}"}' </code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Plugins</h2>
+  <pre><code>{`import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#el', {
+  plugins: [arrows(), pagination({ type: 'dots' })],
+})`}</code></pre>
+
+  <h2>Events (on init)</h2>
+  <pre><code>{`new Slider('#el', {
+  on: {
+    afterSlideChange: ({ index, previousIndex }) => {
+      console.log('Went from', previousIndex, 'to', index)
+    },
+    progress: ({ progress }) => {
+      progressBar.style.width = progress * 100 + '%'
+    },
+  },
+})`}</code></pre>
+</DocsLayout>

@@ -1,0 +1,63 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Plugins">
+  <h1>Plugins</h1>
+  <p class="lead">Plugins extend the slider with UI features. Import only what you need from <code>@acslider/plugins</code>.</p>
+
+  <h2>Installation</h2>
+  <pre><code>pnpm add @acslider/plugins</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`import { Slider } from '@acslider/core'
+import { arrows, pagination, autoplay } from '@acslider/plugins'
+
+new Slider('#el', {
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots' }),
+    autoplay({ delay: 3000 }),
+  ],
+})
+
+// Or register post-init:
+slider.use(mouseWheel())`}</code></pre>
+
+  <h2>Available plugins</h2>
+  <table>
+    <thead><tr><th>Plugin</th><th>Import</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><a href="/docs/plugins/arrows">arrows</a></td><td><code>arrows(opts?)</code></td><td>Previous/next navigation buttons.</td></tr>
+      <tr><td><a href="/docs/plugins/pagination">pagination</a></td><td><code>pagination(opts?)</code></td><td>Dots, fraction, progress, dynamic, or custom pagination.</td></tr>
+      <tr><td><a href="/docs/plugins/autoplay">autoplay</a></td><td><code>autoplay(opts?)</code></td><td>Automatic slide advancement with pause on hover/focus.</td></tr>
+      <tr><td><a href="/docs/plugins/thumbnails">thumbnails</a></td><td><code>thumbnails(opts?)</code></td><td>Clickable thumbnail strip synced with the slider.</td></tr>
+      <tr><td><a href="/docs/plugins/progress-bar">progressBar</a></td><td><code>progressBar(opts?)</code></td><td>Animated progress bar that fills as slides advance.</td></tr>
+      <tr><td><a href="/docs/plugins/slide-counter">slideCounter</a></td><td><code>slideCounter(opts?)</code></td><td>Overlay badge showing "2 / 5" style counter.</td></tr>
+      <tr><td><a href="/docs/plugins/mouse-wheel">mouseWheel</a></td><td><code>mouseWheel(opts?)</code></td><td>Navigate with the mouse wheel or trackpad scroll.</td></tr>
+      <tr><td><a href="/docs/plugins/lazy-load">lazyLoad</a></td><td><code>lazyLoad(opts?)</code></td><td>IntersectionObserver-based image lazy loading.</td></tr>
+      <tr><td><a href="/docs/plugins/parallax">parallax</a></td><td><code>parallax(opts?)</code></td><td>CSS-based parallax effect on slide content.</td></tr>
+      <tr><td><a href="/docs/plugins/auto-height">autoHeight</a></td><td><code>autoHeight(opts?)</code></td><td>Animate the container height to match the active slide.</td></tr>
+      <tr><td><a href="/docs/plugins/virtual-slides">virtualSlides</a></td><td><code>virtualSlides(opts?)</code></td><td>Render only visible slides for huge datasets.</td></tr>
+      <tr><td><a href="/docs/plugins/center-mode">centerMode</a></td><td><code>centerMode(opts?)</code></td><td>Center the active slide with partial prev/next visible.</td></tr>
+      <tr><td><a href="/docs/plugins/variable-width">variableWidth</a></td><td><code>variableWidth(opts?)</code></td><td>Allow slides with different widths.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Writing your own plugin</h2>
+  <pre><code>{`import type { SliderPlugin } from '@acslider/core'
+
+function myPlugin(): SliderPlugin {
+  return {
+    name: 'my-plugin',
+    install(slider) {
+      // slider is the full SliderInstance
+      slider.on('afterSlideChange', ({ index }) => {
+        console.log('slide changed to', index)
+      })
+    },
+    destroy() {
+      // cleanup
+    },
+  }
+}`}</code></pre>
+</DocsLayout>

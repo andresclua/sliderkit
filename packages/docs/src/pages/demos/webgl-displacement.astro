@@ -1,0 +1,41 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="WebGL — Displacement">
+  <DemoViewer
+    title="WebGL — Displacement"
+    description="Warp-based transition using a displacement map texture. Powered by OGL."
+    code={`import { WebGLRenderer } from '@acslider/webgl'
+import { displacement } from '@acslider/webgl/effects'
+
+new Slider('#el', {
+  plugins: [
+    WebGLRenderer({
+      effect: displacement({
+        texture: '/textures/displacement-01.png',
+        intensity: 1.2,
+      }),
+    }),
+    arrows(),
+  ],
+})`}
+  >
+    <div class="coming-soon">
+      <p>🚧 WebGL demo — requires real image slides and texture files.</p>
+      <p>See <a href="/docs/webgl">WebGL documentation</a> for setup instructions.</p>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.coming-soon {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: #f9fafb;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+</style>

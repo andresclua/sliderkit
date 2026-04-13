@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import SiteHeader from '../components/SiteHeader.astro'
+---
+<BaseLayout title="ACSlider — A modern, accessible slider library">
+  <SiteHeader />
+  <main class="landing">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="hero-kicker">Open source · MIT · TypeScript</p>
+        <h1 class="hero-title">
+          The modern<br />
+          <span class="hero-accent">slider library</span><br />
+          you've been waiting for.
+        </h1>
+        <p class="hero-subtitle">
+          Accessible, modular, and lightweight. Built with TypeScript,
+          shipped as ESM + UMD, with WebGL effects, plugins, and full ARIA support.
+        </p>
+        <div class="hero-actions">
+          <a href="/docs/getting-started" class="btn btn-primary">Get started →</a>
+          <a href="/demos/base" class="btn btn-ghost">View demos</a>
+          <a href="https://github.com/andresclua/acslider" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+        </div>
+        <div class="hero-install">
+          <code>pnpm add @acslider/core @acslider/plugins</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature grid -->
+    <section class="features">
+      <div class="features-inner">
+        <div class="feature-grid">
+          {[
+            { icon: '⚡', title: 'Lightweight core', desc: 'The core is tiny. Import only what you use — plugins, effects, and WebGL are optional extras.' },
+            { icon: '♿', title: 'Fully accessible', desc: 'ARIA roles, live regions, roledescription, keyboard navigation, and prefers-reduced-motion built in.' },
+            { icon: '🎨', title: '6 CSS effects', desc: 'Fade, cube, coverflow, flip, cards, creative — all pure CSS, no JavaScript animations.' },
+            { icon: '✨', title: 'WebGL renderer', desc: 'Powered by OGL. Displacement maps, RGB shift, pixel dissolve, parallax depth, and custom GLSL shaders.' },
+            { icon: '🔌', title: '13 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, mousewheel, lazy load, parallax, virtual slides, and more.' },
+            { icon: '📱', title: 'Touch & mouse drag', desc: 'Native-feeling swipe gestures with configurable threshold, angle, and resistance.' },
+            { icon: '📐', title: 'Responsive', desc: 'Breakpoint-aware: change any option at any viewport width. ResizeObserver powered.' },
+            { icon: '🔒', title: 'TypeScript strict', desc: 'Fully typed API, typed event payloads, and typed plugin interface. Zero any escape hatches.' },
+          ].map(f => (
+            <div class="feature-card">
+              <span class="feature-icon">{f.icon}</span>
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick usage -->
+    <section class="quick-usage">
+      <div class="quick-inner">
+        <h2>Get up and running in seconds</h2>
+        <div class="code-tabs">
+          <pre><code>{`import { Slider } from '@acslider/core'
+import { pagination, arrows, autoplay } from '@acslider/plugins'
+
+const slider = new Slider('#my-slider', {
+  slidesPerPage: 1,
+  loop: true,
+  speed: 400,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    autoplay({ delay: 3000, pauseOnHover: true }),
+  ],
+  on: {
+    afterSlideChange: ({ index }) => {
+      console.log('Active slide:', index)
+    },
+  },
+})`}</code></pre>
+        </div>
+        <div class="quick-actions">
+          <a href="/docs/getting-started" class="btn btn-primary">Read the docs</a>
+          <a href="/demos/base" class="btn btn-ghost">Browse all demos</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Packages -->
+    <section class="packages">
+      <div class="packages-inner">
+        <h2>Four packages, one ecosystem</h2>
+        <div class="package-grid">
+          {[
+            { name: '@acslider/core', badge: 'Always needed', color: '#6C2BD9', desc: 'The slider engine. Touch, drag, keyboard, loop, breakpoints, a11y, events, plugin system.' },
+            { name: '@acslider/plugins', badge: 'Optional', color: '#3B82F6', desc: '13 UI plugins. Arrows, pagination, autoplay, thumbnails, mousewheel, lazy load, and more.' },
+            { name: '@acslider/effects', badge: 'Optional', color: '#10B981', desc: '6 CSS effects. Fade, cube, coverflow, flip, cards, creative.' },
+            { name: '@acslider/webgl', badge: 'Optional', color: '#F59E0B', desc: 'WebGL renderer via OGL. 4 built-in effects + custom GLSL shader API. Automatic fallback.' },
+          ].map(p => (
+            <div class="package-card" style={`border-top: 3px solid ${p.color}`}>
+              <div class="package-header">
+                <code class="package-name">{p.name}</code>
+                <span class="package-badge" style={`color: ${p.color}; background: ${p.color}18`}>{p.badge}</span>
+              </div>
+              <p>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Sponsor -->
+    <section class="sponsor-section">
+      <div class="sponsor-inner">
+        <span class="sponsor-heart">♥</span>
+        <h2>Support ACSlider</h2>
+        <p>ACSlider is free and open source. If it saves you time, consider sponsoring development on GitHub Sponsors.</p>
+        <a href="https://github.com/sponsors/andresclua" target="_blank" rel="noopener" class="btn btn-sponsor">
+          Become a sponsor
+        </a>
+      </div>
+    </section>
+
+  </main>
+</BaseLayout>
+
+<style>
+.landing { padding-top: var(--header-h); }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+  color: #fff;
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+}
+.hero-inner { max-width: 720px; margin: 0 auto; }
+.hero-kicker {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #a78bfa;
+  margin-bottom: 1rem;
+}
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.25rem;
+}
+.hero-accent { color: #c4b5fd; }
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: #c7d2fe;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+.hero-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.hero-install code {
+  background: rgba(255,255,255,0.1);
+  color: #e0e7ff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.btn-primary { background: #fff; color: var(--brand); }
+.btn-primary:hover { background: #f0f0f0; text-decoration: none; }
+.btn-ghost { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+.btn-ghost:hover { background: rgba(255,255,255,0.2); text-decoration: none; }
+
+/* Features */
+.features { padding: 4rem 1.5rem; background: var(--bg); }
+.features-inner { max-width: 1100px; margin: 0 auto; }
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.feature-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+.feature-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+.feature-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+/* Quick usage */
+.quick-usage { padding: 4rem 1.5rem; background: var(--surface); border-top: 1px solid var(--border); }
+.quick-inner { max-width: 760px; margin: 0 auto; }
+.quick-inner h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: 1.5rem; }
+.quick-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.quick-actions .btn-primary { background: var(--brand); color: #fff; }
+.quick-actions .btn-primary:hover { background: var(--brand-dark); }
+.quick-actions .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+.quick-actions .btn-ghost:hover { background: var(--bg); color: var(--text); }
+
+/* Packages */
+.packages { padding: 4rem 1.5rem; background: var(--bg); }
+.packages-inner { max-width: 1100px; margin: 0 auto; }
+.packages-inner h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: 1.5rem; }
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+.package-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.package-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.package-name { font-size: 0.8rem; font-weight: 700; }
+.package-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.04em; }
+.package-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+/* Sponsor */
+.sponsor-section { padding: 4rem 1.5rem; background: linear-gradient(135deg, #fce7f3, #ede9fe); text-align: center; border-top: 1px solid var(--border); }
+.sponsor-inner { max-width: 560px; margin: 0 auto; }
+.sponsor-heart { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+.sponsor-inner h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.75rem; }
+.sponsor-inner p { color: var(--text-muted); margin-bottom: 1.5rem; }
+.btn-sponsor { background: var(--brand); color: #fff; }
+.btn-sponsor:hover { background: var(--brand-dark); text-decoration: none; }
+</style>

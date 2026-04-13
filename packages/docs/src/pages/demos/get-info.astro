@@ -1,0 +1,61 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="getInfo()">
+  <DemoViewer
+    title="getInfo()"
+    description="Live snapshot of the full slider state. Updates on every slide change."
+  >
+    <div class="c--slider-a" id="demo-info">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-info-pag" class="c--slider-a__pagination"></div>
+    <pre id="info-output" class="info-pre">Navigate the slider to see getInfo() output...</pre>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.info-pre {
+  margin-top: 1rem;
+  max-height: 260px;
+  overflow-y: auto;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+const output = document.getElementById('info-output')!
+
+const slider = new Slider('#demo-info', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-info-pag', type: 'dots', clickable: true }),
+  ],
+  on: {
+    afterInit: () => renderInfo(),
+    afterSlideChange: () => renderInfo(),
+  },
+})
+
+function renderInfo() {
+  const info = slider.getInfo()
+  const printable = { ...info }
+  delete printable.container
+  delete printable.wrapper
+  delete printable.slides
+  output.textContent = JSON.stringify(printable, null, 2)
+}
+</script>

@@ -1,0 +1,39 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import SiteHeader from '../components/SiteHeader.astro'
+import Sidebar from '../components/Sidebar.astro'
+import { demosNav } from '../nav'
+
+interface Props {
+  title?: string
+  description?: string
+}
+const { title, description } = Astro.props
+const currentPath = Astro.url.pathname
+---
+<BaseLayout title={title} description={description}>
+  <SiteHeader />
+  <div class="demo-shell">
+    <Sidebar nav={demosNav} currentPath={currentPath} />
+    <main class="demo-main">
+      <slot />
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+.demo-shell {
+  display: flex;
+  min-height: calc(100vh - var(--header-h));
+  padding-top: var(--header-h);
+}
+.demo-main {
+  flex: 1;
+  min-width: 0;
+  padding: 2rem 2.5rem;
+  max-width: 900px;
+}
+@media (max-width: 768px) {
+  .demo-main { padding: 1.25rem 1rem; }
+}
+</style>

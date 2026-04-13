@@ -1,0 +1,72 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Events">
+  <h1>Events</h1>
+  <p class="lead">ACSlider fires typed events at every stage of its lifecycle. Listen via the <code>on</code> option or <code>slider.on()</code> post-init.</p>
+
+  <h2>Usage</h2>
+  <pre><code>{`// On init
+new Slider('#el', {
+  on: {
+    afterSlideChange: ({ index }) => console.log(index),
+  },
+})
+
+// Post init
+slider.on('afterSlideChange', ({ index }) => console.log(index))
+slider.off('afterSlideChange', myHandler)`}</code></pre>
+
+  <h2>Lifecycle events</h2>
+  <table>
+    <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>beforeInit</code></td><td><code>{"{"} slider {"}"}</code></td><td>Before the slider initializes.</td></tr>
+      <tr><td><code>afterInit</code></td><td><code>{"{"} slider {"}"}</code></td><td>After initialization is complete.</td></tr>
+      <tr><td><code>beforeDestroy</code></td><td><code>{"{"} slider {"}"}</code></td><td>Before destroy() runs.</td></tr>
+      <tr><td><code>afterDestroy</code></td><td><code>{"{"} slider {"}"}</code></td><td>After destroy() completes.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Slide change events</h2>
+  <table>
+    <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>beforeSlideChange</code></td><td><code>{"{"} from, to, direction, slider {"}"}</code></td><td>Before the active index changes.</td></tr>
+      <tr><td><code>afterSlideChange</code></td><td><code>{"{"} index, previousIndex, slide, slider {"}"}</code></td><td>After the active index changes.</td></tr>
+      <tr><td><code>beforeTransitionStart</code></td><td><code>{"{"} from, to, direction, slider {"}"}</code></td><td>Alias for beforeSlideChange (transition timing).</td></tr>
+      <tr><td><code>afterTransitionEnd</code></td><td><code>{"{"} index, previousIndex, slide, slider {"}"}</code></td><td>Alias for afterSlideChange (transition timing).</td></tr>
+      <tr><td><code>progress</code></td><td><code>{"{"} progress, activeIndex, slider {"}"}</code></td><td>Fires after each slide change. <code>progress</code> is 0–1.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Touch events</h2>
+  <table>
+    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <tbody>
+      <tr><td><code>touchStart</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
+      <tr><td><code>touchMove</code></td><td><code>{"{"} event, delta, direction, slider {"}"}</code></td></tr>
+      <tr><td><code>touchEnd</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Drag events</h2>
+  <table>
+    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <tbody>
+      <tr><td><code>dragStart</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
+      <tr><td><code>dragMove</code></td><td><code>{"{"} event, delta, direction, slider {"}"}</code></td></tr>
+      <tr><td><code>dragEnd</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Responsive events</h2>
+  <table>
+    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <tbody>
+      <tr><td><code>newBreakpointStart</code></td><td><code>{"{"} previousBreakpoint, currentBreakpoint, options, slider {"}"}</code></td></tr>
+      <tr><td><code>newBreakpointEnd</code></td><td><code>{"{"} previousBreakpoint, currentBreakpoint, options, slider {"}"}</code></td></tr>
+      <tr><td><code>resize</code></td><td><code>{"{"} width, height, slidesPerPage, slider {"}"}</code></td></tr>
+    </tbody>
+  </table>
+</DocsLayout>

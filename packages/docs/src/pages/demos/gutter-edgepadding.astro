@@ -1,0 +1,48 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Gutter & Edge Padding">
+  <DemoViewer
+    title="Gutter & Edge Padding"
+    description="3 slides per page with 16px gutters. Edge padding peeks the prev/next slide."
+    code={`new Slider('#el', {
+  slidesPerPage: 3,
+  gutter: 16,
+  edgePadding: 40,
+  loop: false,
+  rewind: true,
+  plugins: [arrows(), pagination({ type: 'fraction' })],
+})`}
+  >
+    <div class="c--slider-a" id="demo-gutter">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>A</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>B</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>C</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>D</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>E</div>
+        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>F</div>
+        <div class="c--slider-a__slide demo-slide s-teal"   data-slide>G</div>
+      </div>
+    </div>
+    <div id="demo-gutter-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-gutter', {
+  slidesPerPage: 3,
+  gutter: 16,
+  edgePadding: 40,
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-gutter-pag', type: 'fraction' }),
+  ],
+})
+</script>

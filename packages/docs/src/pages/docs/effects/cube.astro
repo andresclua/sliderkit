@@ -1,0 +1,46 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Cube Effect">
+  <h1>Cube Effect</h1>
+  <p class="lead">Simulates a rotating 3D cube by configuring <code>creativeEffect</code> with rotateY and translate offsets. No separate package — uses the Creative Effect plugin.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} creativeEffect {"}"} from '@acslider/effects'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  loop: true,
+  plugins: [
+    creativeEffect({
+      perspective: true,
+      prev: {
+        translate: ['-100%', 0, 0],
+        rotate:    [0, 90, 0],
+      },
+      active: {
+        translate: [0, 0, 0],
+      },
+      next: {
+        translate: ['100%', 0, 0],
+        rotate:    [0, -90, 0],
+      },
+    }),
+    arrows(),
+  ],
+})`}</code></pre>
+
+  <h2>CSS for the cube face transition</h2>
+  <pre><code>{`.c--slider-effect-creative .c--slider-a__slide {
+  transition: transform 500ms ease;
+}`}</code></pre>
+
+  <h2>How it works</h2>
+  <p>The cube illusion comes from combining a 100% horizontal translate with a 90° Y-axis rotation on each face. The wrapper has <code>perspective: 1200px</code> and <code>transform-style: preserve-3d</code> so the 3D transforms compose correctly.</p>
+
+  <h2>See also</h2>
+  <ul>
+    <li><a href="/docs/effects/creative">Creative Effect</a> — full options reference</li>
+    <li><a href="/demos/effect-cube">View cube demo →</a></li>
+  </ul>
+</DocsLayout>

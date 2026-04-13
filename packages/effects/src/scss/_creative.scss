@@ -1,0 +1,19 @@
+.c--slider-effect-creative {
+  overflow: visible;
+
+  .c--slider-a__wrapper {
+    transform-style: preserve-3d;
+    perspective: 1200px;
+    position: relative;
+  }
+
+  .c--slider-a__slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 300ms ease, opacity 300ms ease;
+    transform-origin: center center;
+  }
+}

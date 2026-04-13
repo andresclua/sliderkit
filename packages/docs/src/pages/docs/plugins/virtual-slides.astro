@@ -1,0 +1,38 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Virtual Slides Plugin">
+  <h1>virtualSlides</h1>
+  <p class="lead">Renders only the active slide ± N nearby slides. Ideal for sliders with hundreds of slides or heavy content per slide.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} virtualSlides {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  plugins: [
+    virtualSlides({
+      preRender: 2,
+      cache: true,
+    }),
+  ],
+})`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>preRender</code></td><td><code>number</code></td><td><code>2</code></td><td>Number of slides to pre-render on each side of the active slide.</td></tr>
+      <tr><td><code>cache</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Don't re-render already rendered slides.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How it works</h2>
+  <p>Slides use <code>data-src</code> as a deferred content marker. The plugin reads it and injects the real image <code>src</code> when the slide is within the render window.</p>
+  <pre><code>{`<div class="c--slider-a__slide" data-slide>
+  <img data-src="/heavy-image.jpg" alt="..." />
+</div>`}</code></pre>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/virtual-slides">View virtual slides demo (50 slides) →</a></p>
+</DocsLayout>

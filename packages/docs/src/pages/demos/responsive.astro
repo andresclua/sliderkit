@@ -1,0 +1,53 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Responsive">
+  <DemoViewer
+    title="Responsive / Breakpoints"
+    description="1 slide on mobile, 2 at 640px, 3 at 1024px. Resize the window to see it adapt."
+    code={`new Slider('#el', {
+  slidesPerPage: 1,
+  gutter: 8,
+  loop: false,
+  rewind: true,
+  breakpoints: {
+    640:  { slidesPerPage: 2, gutter: 12 },
+    1024: { slidesPerPage: 3, gutter: 20 },
+  },
+  plugins: [arrows(), pagination({ type: 'fraction' })],
+})`}
+  >
+    <div class="c--slider-a" id="demo-responsive">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>6</div>
+      </div>
+    </div>
+    <div id="demo-responsive-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-responsive', {
+  slidesPerPage: 1,
+  gutter: 8,
+  loop: false,
+  rewind: true,
+  breakpoints: {
+    640:  { slidesPerPage: 2, gutter: 12 },
+    1024: { slidesPerPage: 3, gutter: 20 },
+  },
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-responsive-pag', type: 'fraction' }),
+  ],
+})
+</script>

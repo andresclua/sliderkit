@@ -1,0 +1,20 @@
+@use '@acslider/core/scss/variables' as *;
+
+.c--slider-a__scrollbar {
+  height: $slider-scrollbar-height;
+  background: $slider-scrollbar-bg;
+  border-radius: 2px;
+  position: relative;
+  margin-top: 8px;
+  cursor: pointer;
+
+  &-drag {
+    height: 100%;
+    background: $slider-scrollbar-drag;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: left, width;
+  }
+}

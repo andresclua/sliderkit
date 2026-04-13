@@ -1,0 +1,73 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Styling">
+  <h1>Styling</h1>
+  <p class="lead">ACSlider uses a BEM-based CSS class system. All classes are prefixed with <code>c--slider-a</code>.</p>
+
+  <h2>HTML structure</h2>
+  <pre><code>{`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide" data-slide>Slide 1</div>
+    <div class="c--slider-a__slide" data-slide>Slide 2</div>
+  </div>
+</div>`}</code></pre>
+
+  <h2>Core CSS classes</h2>
+  <table>
+    <thead><tr><th>Class</th><th>Applied to</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>.c--slider-a</code></td><td>Container</td><td>Overflow hidden, position relative, sets the viewport</td></tr>
+      <tr><td><code>.c--slider-a__wrapper</code></td><td>Wrapper</td><td>Flex row (or column in vertical mode); translate animates here</td></tr>
+      <tr><td><code>.c--slider-a__slide</code></td><td>Each slide</td><td>Flex shrink 0; width set by <code>applyLayout()</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>State classes</h2>
+  <table>
+    <thead><tr><th>Class</th><th>Applied to</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td><code>.is-active</code></td><td>Active slide</td><td>The current visible slide</td></tr>
+      <tr><td><code>.is-prev</code></td><td>Previous slide</td><td>Slide immediately before active</td></tr>
+      <tr><td><code>.is-next</code></td><td>Next slide</td><td>Slide immediately after active</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Minimum required CSS</h2>
+  <pre><code>{`.c--slider-a {
+  overflow: hidden;
+  position: relative;
+}
+
+.c--slider-a__wrapper {
+  display: flex;
+  will-change: transform;
+}
+
+.c--slider-a__slide {
+  flex-shrink: 0;
+}`}</code></pre>
+
+  <h2>Effect plugin classes</h2>
+  <p>When an effect plugin is active, a modifier class is added to the container:</p>
+  <table>
+    <thead><tr><th>Plugin</th><th>Container class</th></tr></thead>
+    <tbody>
+      <tr><td>fadeEffect</td><td><code>.c--slider-effect-fade</code></td></tr>
+      <tr><td>flipEffect</td><td><code>.c--slider-effect-flip</code></td></tr>
+      <tr><td>cardsEffect</td><td><code>.c--slider-effect-cards</code></td></tr>
+      <tr><td>creativeEffect</td><td><code>.c--slider-effect-creative</code></td></tr>
+    </tbody>
+  </table>
+  <p>Use these to scope slide transition CSS:</p>
+  <pre><code>{`.c--slider-effect-fade .c--slider-a__slide {
+  transition: opacity 400ms ease;
+}`}</code></pre>
+
+  <h2>Custom properties</h2>
+  <p>You can use CSS custom properties to make the slider theme-aware:</p>
+  <pre><code>{`.c--slider-a {
+  --slider-height: 400px;
+  height: var(--slider-height);
+}`}</code></pre>
+</DocsLayout>

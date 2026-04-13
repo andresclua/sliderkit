@@ -1,0 +1,53 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Effect — Cards">
+  <DemoViewer
+    title="CSS Effect — Cards"
+    description="Stacked card effect. Past slides hide; upcoming slides are visible behind the active one, offset and rotated."
+    code={`import { cardsEffect } from '@acslider/effects'
+
+new Slider('#el', {
+  plugins: [
+    cardsEffect({ perSlideOffset: 10, perSlideRotate: 2 }),
+    arrows(),
+  ],
+})`}
+  >
+    <div class="c--slider-a c--slider-a--effect" id="demo-cards">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-cards-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+#demo-cards .c--slider-a__slide {
+  transition: transform 0.4s ease;
+}
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+import { cardsEffect } from '@acslider/effects'
+
+new Slider('#demo-cards', {
+  slidesPerPage: 1,
+  loop: false,
+  rewind: true,
+  speed: 400,
+  plugins: [
+    cardsEffect({ perSlideOffset: 10, perSlideRotate: 2 }),
+    arrows(),
+    pagination({ el: '#demo-cards-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

@@ -1,0 +1,77 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Destroy & Rebuild">
+  <DemoViewer
+    title="Destroy & Rebuild"
+    description="destroy() tears down everything. rebuild() re-initializes, optionally with new options."
+  >
+    <div class="c--slider-a" id="demo-destroy">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-destroy-pag" class="c--slider-a__pagination"></div>
+    <div class="ctrl-row">
+      <button id="btn-destroy" class="ctrl-btn ctrl-btn--danger">Destroy</button>
+      <button id="btn-rebuild" class="ctrl-btn">Rebuild (1 per page)</button>
+      <button id="btn-rebuild3" class="ctrl-btn">Rebuild (3 per page)</button>
+    </div>
+    <p id="destroy-status" class="status-msg"></p>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.ctrl-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.ctrl-btn {
+  padding: 7px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.ctrl-btn:hover { background: #f3f4f6; }
+.ctrl-btn--danger { border-color: #fca5a5; color: #dc2626; }
+.ctrl-btn--danger:hover { background: #fef2f2; }
+.status-msg { margin-top: 8px; font-size: 0.82rem; color: var(--text-muted); min-height: 20px; }
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+const makePlugins = (pagEl: string) => [
+  arrows(),
+  pagination({ el: pagEl, type: 'dots', clickable: true }),
+]
+
+let slider = new Slider('#demo-destroy', {
+  loop: true,
+  plugins: makePlugins('#demo-destroy-pag'),
+})
+
+const status = document.getElementById('destroy-status')!
+
+document.getElementById('btn-destroy')?.addEventListener('click', () => {
+  slider.destroy()
+  status.textContent = 'Slider destroyed. DOM restored to original state.'
+})
+
+document.getElementById('btn-rebuild')?.addEventListener('click', () => {
+  slider = slider.rebuild({ slidesPerPage: 1, loop: true })
+  status.textContent = 'Rebuilt with 1 slide per page.'
+})
+
+document.getElementById('btn-rebuild3')?.addEventListener('click', () => {
+  slider = slider.rebuild({ slidesPerPage: 3, gutter: 12, loop: false, rewind: true })
+  status.textContent = 'Rebuilt with 3 slides per page.'
+})
+</script>

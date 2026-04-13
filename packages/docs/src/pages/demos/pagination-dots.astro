@@ -1,0 +1,43 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Pagination — Dots">
+  <DemoViewer
+    title="Pagination — Dots"
+    description="Clickable dot navigation. Click any dot to jump directly to that slide."
+    code={`import { pagination } from '@acslider/plugins'
+
+new Slider('#el', {
+  loop: true,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+  ],
+})`}
+  >
+    <div class="c--slider-a" id="demo-pag-dots">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-pag-dots-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-pag-dots', {
+  loop: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-pag-dots-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

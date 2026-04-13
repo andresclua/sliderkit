@@ -1,0 +1,24 @@
+@use 'variables' as *;
+
+.c--slider-a {
+  &__slide {
+    img {
+      display: block;
+      max-width: 100%;
+      width: 100%;
+      height: auto;
+    }
+
+    &--visible {
+      // Visible but not active slide
+    }
+
+    &--prev {
+      // Previous slide
+    }
+
+    &--next {
+      // Next slide
+    }
+  }
+}

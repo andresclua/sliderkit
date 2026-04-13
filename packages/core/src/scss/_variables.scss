@@ -1,0 +1,31 @@
+// ACSlider — SCSS Variables
+// Override before importing slider.scss
+
+$slider-width: 100% !default;
+$slider-height: auto !default;
+$slider-speed: 300ms !default;
+$slider-easing: ease !default;
+$slider-bg: transparent !default;
+
+// Pagination
+$slider-pagination-color: rgba(0, 0, 0, 0.25) !default;
+$slider-pagination-color-active: #000 !default;
+$slider-pagination-gap: 6px !default;
+$slider-pagination-bullet-size: 8px !default;
+$slider-pagination-bullet-border-radius: 50% !default;
+
+// Arrows
+$slider-arrow-color: #000 !default;
+$slider-arrow-size: 44px !default;
+$slider-arrow-bg: transparent !default;
+$slider-arrow-disabled-opacity: 0.35 !default;
+
+// Scrollbar
+$slider-scrollbar-bg: rgba(0, 0, 0, 0.1) !default;
+$slider-scrollbar-drag: rgba(0, 0, 0, 0.5) !default;
+$slider-scrollbar-height: 4px !default;
+
+// Thumbnails
+$slider-thumb-size: 60px !default;
+$slider-thumb-gap: 8px !default;
+$slider-thumb-opacity-inactive: 0.5 !default;

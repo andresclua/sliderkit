@@ -1,0 +1,50 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Auto Height">
+  <DemoViewer
+    title="Auto Height"
+    description="The container animates its height to match the active slide. Each slide has a different height."
+    code={`import { autoHeight } from '@acslider/plugins'
+
+new Slider('#el', {
+  plugins: [
+    arrows(),
+    autoHeight({ animationDuration: 400 }),
+  ],
+})`}
+  >
+    <div class="c--slider-a" id="demo-autoheight">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple ah-1" data-slide>Short</div>
+        <div class="c--slider-a__slide demo-slide s-blue   ah-2" data-slide>Medium<br/>height</div>
+        <div class="c--slider-a__slide demo-slide s-green  ah-3" data-slide>Tall<br/>slide<br/>content</div>
+        <div class="c--slider-a__slide demo-slide s-amber  ah-1" data-slide>Short again</div>
+        <div class="c--slider-a__slide demo-slide s-red    ah-2" data-slide>Medium<br/>again</div>
+      </div>
+    </div>
+    <div id="demo-autoheight-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.ah-1 { height: 120px !important; }
+.ah-2 { height: 200px !important; }
+.ah-3 { height: 300px !important; }
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination, autoHeight } from '@acslider/plugins'
+
+new Slider('#demo-autoheight', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    autoHeight({ animationDuration: 400 }),
+    pagination({ el: '#demo-autoheight-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

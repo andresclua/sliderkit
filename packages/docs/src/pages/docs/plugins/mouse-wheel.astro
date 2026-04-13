@@ -1,0 +1,34 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Mouse Wheel Plugin">
+  <h1>mouseWheel</h1>
+  <p class="lead">Navigate with the mouse wheel or trackpad. A built-in debounce prevents accidental multi-slide skips.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} mouseWheel {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  plugins: [
+    mouseWheel({
+      forceToAxis: true,
+      sensitivity: 1,
+      releaseOnEdges: false,
+    }),
+  ],
+})`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>forceToAxis</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Only trigger when scroll matches the slider direction.</td></tr>
+      <tr><td><code>releaseOnEdges</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Release scroll propagation at first/last slide.</td></tr>
+      <tr><td><code>sensitivity</code></td><td><code>number</code></td><td><code>1</code></td><td>Multiplier applied to delta to determine direction.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/mousewheel">View mouse wheel demo →</a></p>
+</DocsLayout>

@@ -1,0 +1,10 @@
+.c--slider-a--vertical {
+  .c--slider-a__wrapper {
+    flex-direction: column;
+    touch-action: pan-x;
+  }
+
+  .c--slider-a__slide {
+    width: 100%;
+  }
+}

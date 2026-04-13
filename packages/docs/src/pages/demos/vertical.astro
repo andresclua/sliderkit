@@ -1,0 +1,49 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Vertical">
+  <DemoViewer
+    title="Vertical slider"
+    description='Set direction: "vertical" for a top-to-bottom slider. Swipe up/down or use arrow keys.'
+    code={`new Slider('#el', {
+  direction: 'vertical',
+  loop: false,
+  rewind: true,
+})`}
+  >
+    <div class="c--slider-a c--slider-a--vertical-demo" id="demo-vertical">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-vertical-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.c--slider-a--vertical-demo {
+  height: 260px;
+}
+.c--slider-a--vertical-demo .c--slider-a__wrapper {
+  flex-direction: column;
+}
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { pagination } from '@acslider/plugins'
+
+new Slider('#demo-vertical', {
+  direction: 'vertical',
+  loop: false,
+  rewind: true,
+  plugins: [
+    pagination({ el: '#demo-vertical-pag', type: 'fraction' }),
+  ],
+})
+</script>

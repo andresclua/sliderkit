@@ -1,0 +1,64 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Effect — Cube">
+  <DemoViewer
+    title="CSS Effect — Cube"
+    description="3D cube rotation via creativeEffect with rotateY transforms."
+    code={`import { creativeEffect } from '@acslider/effects'
+
+new Slider('#el', {
+  plugins: [
+    creativeEffect({
+      prev:   { rotate: [0, -90, 0], translate: ['-50%', 0, 0] },
+      active: { rotate: [0, 0, 0],   translate: [0, 0, 0] },
+      next:   { rotate: [0, 90, 0],  translate: ['50%', 0, 0] },
+      perspective: true,
+    }),
+  ],
+})`}
+  >
+    <div class="c--slider-a c--slider-a--effect c--slider-a--cube" id="demo-cube">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-cube-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.c--slider-a--cube { perspective: 1200px; overflow: visible; }
+.c--slider-a--cube .c--slider-a__slide {
+  transition: transform 0.6s ease;
+  backface-visibility: hidden;
+}
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+import { creativeEffect } from '@acslider/effects'
+
+new Slider('#demo-cube', {
+  slidesPerPage: 1,
+  loop: false,
+  rewind: true,
+  speed: 600,
+  plugins: [
+    creativeEffect({
+      prev:   { rotate: [0, -90, 0], translate: ['-50%', 0, 0] },
+      active: { rotate: [0, 0, 0],   translate: [0, 0, 0] },
+      next:   { rotate: [0, 90, 0],  translate: ['50%', 0, 0] },
+      perspective: true,
+    }),
+    arrows(),
+    pagination({ el: '#demo-cube-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

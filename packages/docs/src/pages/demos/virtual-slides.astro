@@ -1,0 +1,57 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Virtual Slides">
+  <DemoViewer
+    title="Virtual Slides"
+    description="50 slides — only the active slide ± 2 have their content rendered. Open DevTools to see data-src removal on navigation."
+    code={`import { virtualSlides } from '@acslider/plugins'
+
+new Slider('#el', {
+  plugins: [
+    virtualSlides({ preRender: 2 }),
+    arrows(),
+  ],
+})`}
+  >
+    <div class="c--slider-a" id="demo-virtual">
+      <div class="c--slider-a__wrapper" id="demo-virtual-wrapper"></div>
+    </div>
+    <div id="demo-virtual-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, virtualSlides, pagination } from '@acslider/plugins'
+
+const colors = ['#6C2BD9','#3B82F6','#10B981','#F59E0B','#EF4444','#EC4899','#14B8A6','#6366F1']
+const wrapper = document.getElementById('demo-virtual-wrapper')!
+for (let i = 0; i < 50; i++) {
+  const slide = document.createElement('div')
+  slide.className = 'c--slider-a__slide demo-slide'
+  slide.setAttribute('data-slide', '')
+  slide.style.background = colors[i % colors.length]
+  slide.style.color = '#fff'
+  slide.style.height = '260px'
+  slide.style.display = 'flex'
+  slide.style.alignItems = 'center'
+  slide.style.justifyContent = 'center'
+  slide.style.fontSize = '2rem'
+  slide.style.fontWeight = '700'
+  slide.setAttribute('data-src', `slide-${i + 1}`) // simulated lazy content
+  slide.textContent = String(i + 1)
+  wrapper.appendChild(slide)
+}
+
+new Slider('#demo-virtual', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    virtualSlides({ preRender: 2 }),
+    arrows(),
+    pagination({ el: '#demo-virtual-pag', type: 'fraction' }),
+  ],
+})
+</script>

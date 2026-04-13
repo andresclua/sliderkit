@@ -1,0 +1,45 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Installation">
+  <h1>Installation</h1>
+  <p class="lead">ACSlider is split into focused packages. Install only what you need.</p>
+
+  <h2>Core</h2>
+  <p>The core slider engine — required by everything else.</p>
+  <pre><code>npm install @acslider/core
+# or
+pnpm add @acslider/core</code></pre>
+
+  <h2>Plugins</h2>
+  <p>Optional UI plugins: arrows, pagination, autoplay, thumbnails, and more.</p>
+  <pre><code>npm install @acslider/plugins</code></pre>
+
+  <h2>CSS Effects</h2>
+  <p>Fade, flip, cards, cube, coverflow, and creative effects.</p>
+  <pre><code>npm install @acslider/effects</code></pre>
+
+  <h2>WebGL Effects</h2>
+  <p>GPU-powered transition effects using Three.js.</p>
+  <pre><code>npm install @acslider/webgl</code></pre>
+
+  <h2>CDN (no bundler)</h2>
+  <pre><code>{`<!-- Core -->
+<script type="module">
+  import { Slider } from 'https://cdn.jsdelivr.net/npm/@acslider/core/dist/index.mjs'
+  new Slider('#el')
+</script>`}</code></pre>
+
+  <h2>TypeScript</h2>
+  <p>All packages ship full TypeScript declarations. No <code>@types</code> package needed.</p>
+
+  <h2>Requirements</h2>
+  <ul>
+    <li>Modern browser (Chrome 90+, Firefox 88+, Safari 14+)</li>
+    <li>No jQuery or other runtime dependencies</li>
+    <li>WebGL package requires a GPU-capable browser (no IE fallback)</li>
+  </ul>
+
+  <h2>Next steps</h2>
+  <p><a href="/docs/getting-started">Getting Started →</a></p>
+</DocsLayout>

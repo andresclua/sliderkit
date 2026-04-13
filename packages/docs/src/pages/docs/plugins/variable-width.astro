@@ -1,0 +1,20 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Variable Width Plugin">
+  <h1>variableWidth</h1>
+  <p class="lead">Allows slides to have different widths. The slider respects each slide's natural or set width instead of calculating a uniform size.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} variableWidth {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  plugins: [variableWidth()],
+})`}</code></pre>
+
+  <h2>HTML</h2>
+  <pre><code>{`<div class="c--slider-a__slide" style="width: 200px">Narrow</div>
+<div class="c--slider-a__slide" style="width: 400px">Wide</div>
+<div class="c--slider-a__slide" style="width: 300px">Medium</div>`}</code></pre>
+</DocsLayout>

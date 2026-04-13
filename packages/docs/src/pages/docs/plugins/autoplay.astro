@@ -1,0 +1,46 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Autoplay Plugin">
+  <h1>autoplay</h1>
+  <p class="lead">Auto-advances slides on a timer. Pauses on hover, focus, and optionally on visibility change.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} autoplay {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  loop: true,
+  plugins: [
+    autoplay({
+      delay: 3000,
+      pauseOnHover: true,
+      pauseOnFocus: true,
+      stopOnLastSlide: false,
+      resetOnVisibility: true,
+    }),
+  ],
+})`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>delay</code></td><td><code>number</code></td><td><code>3000</code></td><td>Time in ms between slide advances.</td></tr>
+      <tr><td><code>pauseOnHover</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Pause when the mouse is over the slider.</td></tr>
+      <tr><td><code>pauseOnFocus</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Pause when a focusable element inside has keyboard focus.</td></tr>
+      <tr><td><code>stopOnLastSlide</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Stop permanently when the last slide is reached.</td></tr>
+      <tr><td><code>resetOnVisibility</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Reset timer when the tab becomes visible again (Page Visibility API).</td></tr>
+      <tr><td><code>reverseDirection</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Auto-advance backwards.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Control via slider instance</h2>
+  <pre><code>{`const slider = new Slider('#el', { plugins: [autoplay()] })
+
+slider.play()   // start autoplay
+slider.pause()  // pause autoplay`}</code></pre>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/autoplay">View autoplay demo →</a></p>
+</DocsLayout>

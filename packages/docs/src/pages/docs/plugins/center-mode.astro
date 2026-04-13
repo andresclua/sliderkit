@@ -1,0 +1,24 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Center Mode Plugin">
+  <h1>centerMode</h1>
+  <p class="lead">Centers the active slide in the container, with partial prev/next slides peeking on both sides.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} centerMode {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  slidesPerPage: 1,
+  plugins: [centerMode({ padding: 60 })],
+})`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>padding</code></td><td><code>number</code></td><td><code>60</code></td><td>Visible width of prev/next slides in px.</td></tr>
+    </tbody>
+  </table>
+</DocsLayout>

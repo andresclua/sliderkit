@@ -1,0 +1,37 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Start Index">
+  <DemoViewer
+    title="Start Index"
+    description="Initialize the slider at any slide with startIndex. Here it starts at slide 3 (index 2)."
+    code={`new Slider('#el', {
+  startIndex: 2, // 0-based
+  loop: true,
+})`}
+  >
+    <div class="c--slider-a" id="demo-startidx">
+      <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+      <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+      <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+      <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+      <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+    </div>
+    <div id="demo-startidx-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-startidx', {
+  startIndex: 2,
+  loop: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-startidx-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

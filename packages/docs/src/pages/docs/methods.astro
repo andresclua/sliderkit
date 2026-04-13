@@ -1,0 +1,81 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Methods">
+  <h1>Methods</h1>
+  <p class="lead">All public methods available on a <code>Slider</code> instance.</p>
+
+  <h2>Navigation</h2>
+  <table>
+    <thead><tr><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>slider.goTo(target)</code></td><td>Navigate to a slide. Target can be a number (index), <code>'next'</code>, <code>'prev'</code>, <code>'first'</code>, or <code>'last'</code>.</td></tr>
+      <tr><td><code>slider.next()</code></td><td>Go to next slide. Shorthand for <code>goTo('next')</code>.</td></tr>
+      <tr><td><code>slider.prev()</code></td><td>Go to previous slide. Shorthand for <code>goTo('prev')</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Autoplay proxy</h2>
+  <table>
+    <thead><tr><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>slider.play()</code></td><td>Start autoplay. Requires the <code>autoplay</code> plugin.</td></tr>
+      <tr><td><code>slider.pause()</code></td><td>Pause autoplay. Requires the <code>autoplay</code> plugin.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>State</h2>
+  <table>
+    <thead><tr><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>slider.update()</code></td><td>Recalculate layout. Useful after DOM mutations (adding/removing slides).</td></tr>
+      <tr><td><code>slider.updateSliderHeight()</code></td><td>Force a height recalculation based on the active slide (useful with <code>autoHeight</code>).</td></tr>
+      <tr><td><code>slider.getInfo()</code></td><td>Returns a full snapshot of the slider state as a plain object.</td></tr>
+      <tr><td><code>slider.enable()</code></td><td>Enable the slider (unfreezes and un-disables).</td></tr>
+      <tr><td><code>slider.disable()</code></td><td>Disable the slider (pointer-events off, visual opacity).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Lifecycle</h2>
+  <table>
+    <thead><tr><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>slider.destroy()</code></td><td>Full teardown. Removes clones, event listeners, plugins, ARIA attributes, and inline styles.</td></tr>
+      <tr><td><code>slider.rebuild(opts?)</code></td><td>Calls <code>destroy()</code> then creates a new slider with the same (or merged) options. Returns the new instance.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Events (post-init)</h2>
+  <pre><code>{`// Add listener after init
+slider.on('afterSlideChange', ({ index }) => {
+  console.log('Active:', index)
+})
+
+// Remove it later
+slider.off('afterSlideChange', myHandler)`}</code></pre>
+
+  <h2>Plugin access</h2>
+  <pre><code>{`import { mouseWheel } from '@acslider/plugins'
+
+// Register a plugin after init
+slider.use(mouseWheel())`}</code></pre>
+
+  <h2>Getters</h2>
+  <table>
+    <thead><tr><th>Getter</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>slider.activeIndex</code></td><td><code>number</code></td><td>Current active slide index.</td></tr>
+      <tr><td><code>slider.previousIndex</code></td><td><code>number</code></td><td>Previously active slide index.</td></tr>
+      <tr><td><code>slider.slides</code></td><td><code>HTMLElement[]</code></td><td>Array of original slide elements (no clones).</td></tr>
+      <tr><td><code>slider.slideCount</code></td><td><code>number</code></td><td>Number of original slides.</td></tr>
+      <tr><td><code>slider.isBeginning</code></td><td><code>boolean</code></td><td>True when at the first slide.</td></tr>
+      <tr><td><code>slider.isEnd</code></td><td><code>boolean</code></td><td>True when at the last slide (or last page).</td></tr>
+      <tr><td><code>slider.progress</code></td><td><code>number</code></td><td>Progress from 0 (first) to 1 (last).</td></tr>
+      <tr><td><code>slider.isDestroyed</code></td><td><code>boolean</code></td><td>True after <code>destroy()</code> was called.</td></tr>
+      <tr><td><code>slider.isOn</code></td><td><code>boolean</code></td><td>True when active (not destroyed, frozen, or disabled).</td></tr>
+      <tr><td><code>slider.container</code></td><td><code>HTMLElement</code></td><td>The container element.</td></tr>
+      <tr><td><code>slider.wrapper</code></td><td><code>HTMLElement</code></td><td>The wrapper element (slides parent).</td></tr>
+      <tr><td><code>slider.version</code></td><td><code>string</code></td><td>Library version string.</td></tr>
+    </tbody>
+  </table>
+</DocsLayout>

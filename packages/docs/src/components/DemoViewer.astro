@@ -1,0 +1,63 @@
+---
+interface Props {
+  title: string
+  description?: string
+  code?: string
+}
+const { title, description, code } = Astro.props
+---
+<section class="demo-viewer">
+  <header class="demo-header">
+    <h1 class="demo-title">{title}</h1>
+    {description && <p class="demo-description">{description}</p>}
+  </header>
+
+  <div class="demo-stage">
+    <slot />
+  </div>
+
+  {code && (
+    <details class="demo-code">
+      <summary>View code</summary>
+      <pre><code>{code}</code></pre>
+    </details>
+  )}
+</section>
+
+<style>
+.demo-viewer {}
+
+.demo-header { margin-bottom: 1.5rem; }
+.demo-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+.demo-description { color: var(--text-muted); font-size: 0.95rem; }
+
+.demo-stage {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.demo-code {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.demo-code summary {
+  padding: 0.6rem 1rem;
+  background: #f9fafb;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  user-select: none;
+}
+.demo-code summary:hover { background: #f3f4f6; }
+.demo-code pre { margin: 0; border-radius: 0; }
+</style>

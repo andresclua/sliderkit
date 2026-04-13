@@ -1,0 +1,13 @@
+.c--slider-effect-cube {
+  overflow: visible;
+
+  .c--slider-a__wrapper {
+    transform-style: preserve-3d;
+    perspective: 1200px;
+  }
+
+  .c--slider-a__slide {
+    backface-visibility: hidden;
+    transform-origin: center center;
+  }
+}

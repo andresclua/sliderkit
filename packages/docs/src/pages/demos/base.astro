@@ -1,0 +1,41 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Base">
+  <DemoViewer
+    title="Base slider"
+    description="The simplest slider. No loop, no plugins. Swipe or drag to navigate."
+    code={`import { Slider } from '@acslider/core'
+
+new Slider('#demo-base', {
+  slidesPerPage: 1,
+  speed: 300,
+})`}
+  >
+    <div class="c--slider-a" id="demo-base">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-base-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-base', {
+  slidesPerPage: 1,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-base-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

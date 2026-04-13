@@ -1,0 +1,51 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Arrows Plugin">
+  <h1>arrows</h1>
+  <p class="lead">Previous/next navigation buttons. Auto-creates buttons inside the container, or uses existing elements.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} arrows {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`// Auto-create buttons
+new Slider('#el', { plugins: [arrows()] })
+
+// Use existing elements
+new Slider('#el', {
+  plugins: [
+    arrows({
+      prevEl: '#my-prev',
+      nextEl: '#my-next',
+      prevLabel: 'Previous',
+      nextLabel: 'Next',
+    }),
+  ],
+})`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>prevEl</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Selector or element for the prev button. Auto-created if omitted.</td></tr>
+      <tr><td><code>nextEl</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Selector or element for the next button. Auto-created if omitted.</td></tr>
+      <tr><td><code>prevLabel</code></td><td><code>string</code></td><td><code>'Previous slide'</code></td><td>aria-label for the prev button.</td></tr>
+      <tr><td><code>nextLabel</code></td><td><code>string</code></td><td><code>'Next slide'</code></td><td>aria-label for the next button.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>CSS classes</h2>
+  <table>
+    <thead><tr><th>Class</th><th>Applied when</th></tr></thead>
+    <tbody>
+      <tr><td><code>.c--slider-a__arrow</code></td><td>Always</td></tr>
+      <tr><td><code>.c--slider-a__arrow--prev</code></td><td>Prev button</td></tr>
+      <tr><td><code>.c--slider-a__arrow--next</code></td><td>Next button</td></tr>
+      <tr><td><code>.c--slider-a__arrow--disabled</code></td><td>At first/last slide (non-loop)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/arrows">View arrows demo →</a></p>
+</DocsLayout>

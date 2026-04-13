@@ -1,0 +1,54 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Freeze / Disable">
+  <DemoViewer
+    title="Freeze & Disable"
+    description="freeze: auto-triggers when all slides fit on one page. disable: manual control."
+  >
+    <div class="c--slider-a" id="demo-freeze">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+      </div>
+    </div>
+    <div id="demo-freeze-pag" class="c--slider-a__pagination"></div>
+    <div class="ctrl-row">
+      <button id="btn-enable"  class="ctrl-btn ctrl-btn--on">enable()</button>
+      <button id="btn-disable" class="ctrl-btn ctrl-btn--off">disable()</button>
+    </div>
+    <p class="hint">The slider auto-froze because all 3 slides fit with <code>slidesPerPage: 3</code>. Use <code>enable()</code>/<code>disable()</code> for manual control.</p>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.ctrl-row { display: flex; gap: 8px; margin-top: 12px; }
+.ctrl-btn {
+  padding: 7px 14px; border: 1px solid #d1d5db; border-radius: 6px;
+  background: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 500;
+  transition: background 0.15s;
+}
+.ctrl-btn--on  { border-color: #6ee7b7; color: #065f46; }
+.ctrl-btn--off { border-color: #fca5a5; color: #dc2626; }
+.hint { margin-top: 10px; font-size: 0.82rem; color: var(--text-muted); }
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+const slider = new Slider('#demo-freeze', {
+  slidesPerPage: 3,
+  gutter: 12,
+  freezable: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-freeze-pag', type: 'dots', clickable: true }),
+  ],
+})
+
+document.getElementById('btn-enable')?.addEventListener('click',  () => slider.enable())
+document.getElementById('btn-disable')?.addEventListener('click', () => slider.disable())
+</script>

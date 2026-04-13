@@ -1,0 +1,63 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Lazy Load">
+  <DemoViewer
+    title="Lazy Load"
+    description="Images load only when their slide enters the viewport (IntersectionObserver). Open DevTools Network to see deferred loads."
+    code={`import { lazyLoad } from '@acslider/plugins'
+
+// Use data-src instead of src on images
+// <img data-src="/photo.jpg" alt="..." />
+
+new Slider('#el', {
+  plugins: [lazyLoad({ rootMargin: '200px' }), arrows()],
+})`}
+  >
+    <div class="c--slider-a" id="demo-lazy">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide lazy-slide s-purple" data-slide>
+          <span class="lazy-label">Slide 1 — color fallback</span>
+        </div>
+        <div class="c--slider-a__slide lazy-slide s-blue" data-slide>
+          <img data-src="https://picsum.photos/seed/ac1/800/260" alt="Lazy slide 2" class="lazy-img" />
+        </div>
+        <div class="c--slider-a__slide lazy-slide s-green" data-slide>
+          <img data-src="https://picsum.photos/seed/ac2/800/260" alt="Lazy slide 3" class="lazy-img" />
+        </div>
+        <div class="c--slider-a__slide lazy-slide s-amber" data-slide>
+          <img data-src="https://picsum.photos/seed/ac3/800/260" alt="Lazy slide 4" class="lazy-img" />
+        </div>
+        <div class="c--slider-a__slide lazy-slide s-red" data-slide>
+          <img data-src="https://picsum.photos/seed/ac4/800/260" alt="Lazy slide 5" class="lazy-img" />
+        </div>
+      </div>
+    </div>
+    <div id="demo-lazy-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.lazy-slide { height: 260px; position: relative; overflow: hidden; }
+.lazy-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.lazy-label {
+  position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 600; color: #fff;
+}
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, lazyLoad, pagination } from '@acslider/plugins'
+new Slider('#demo-lazy', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    lazyLoad({ rootMargin: '200px' }),
+    arrows(),
+    pagination({ el: '#demo-lazy-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

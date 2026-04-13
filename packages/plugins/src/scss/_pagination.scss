@@ -1,0 +1,45 @@
+@use '@acslider/core/scss/variables' as *;
+
+.c--slider-a__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $slider-pagination-gap;
+  padding: 12px 0;
+
+  &-bullet {
+    display: inline-block;
+    width: $slider-pagination-bullet-size;
+    height: $slider-pagination-bullet-size;
+    border-radius: $slider-pagination-bullet-border-radius;
+    background: $slider-pagination-color;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s ease, background 0.2s ease;
+
+    &--active {
+      background: $slider-pagination-color-active;
+    }
+  }
+
+  &-fraction {
+    font-size: 0.875rem;
+    color: currentColor;
+  }
+
+  &-progress {
+    width: 100%;
+    height: 4px;
+    background: $slider-pagination-color;
+    border-radius: 2px;
+    overflow: hidden;
+
+    &-fill {
+      height: 100%;
+      background: $slider-pagination-color-active;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+  }
+}

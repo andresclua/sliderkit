@@ -1,0 +1,24 @@
+@use '@acslider/core/scss/variables' as *;
+
+.c--slider-a__thumbs {
+  display: flex;
+  gap: $slider-thumb-gap;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.c--slider-a__thumb {
+  width: $slider-thumb-size;
+  height: $slider-thumb-size;
+  cursor: pointer;
+  opacity: $slider-thumb-opacity-inactive;
+  transition: opacity 0.2s ease;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+
+  &--active {
+    opacity: 1;
+  }
+}

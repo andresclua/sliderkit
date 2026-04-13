@@ -1,0 +1,47 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Mouse Wheel">
+  <DemoViewer
+    title="Mouse Wheel"
+    description="Scroll over the slider with your mouse wheel or trackpad to navigate. A 300ms debounce prevents accidental multi-slide skips."
+    code={`import { mouseWheel } from '@acslider/plugins'
+
+new Slider('#el', {
+  loop: false,
+  rewind: true,
+  plugins: [mouseWheel({ forceToAxis: true }), arrows()],
+})`}
+  >
+    <p class="hint">⬆ Scroll here with mouse wheel or trackpad</p>
+    <div class="c--slider-a" id="demo-wheel">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-wheel-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.hint { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px; }
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, mouseWheel, pagination } from '@acslider/plugins'
+new Slider('#demo-wheel', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    mouseWheel({ forceToAxis: true }),
+    arrows(),
+    pagination({ el: '#demo-wheel-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

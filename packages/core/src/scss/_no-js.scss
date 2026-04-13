@@ -1,0 +1,22 @@
+// Fallback when JS is unavailable or disabled
+.no-js .c--slider-a {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+
+.no-js .c--slider-a--vertical {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.no-js .c--slider-a__wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.no-js .c--slider-a__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}

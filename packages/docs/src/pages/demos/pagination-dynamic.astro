@@ -1,0 +1,42 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Pagination — Dynamic">
+  <DemoViewer
+    title="Pagination — Dynamic bullets"
+    description="Nearby dots scale smaller, creating a shrinking effect around the active bullet."
+    code={`pagination({ type: 'dynamic', dynamicBullets: true, clickable: true })`}
+  >
+    <div class="c--slider-a" id="demo-pag-dyn">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>6</div>
+        <div class="c--slider-a__slide demo-slide s-teal"   data-slide>7</div>
+      </div>
+    </div>
+    <div id="demo-pag-dyn-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#demo-pag-dyn', {
+  loop: true,
+  plugins: [
+    arrows(),
+    pagination({
+      el: '#demo-pag-dyn-pag',
+      type: 'dynamic',
+      dynamicBullets: true,
+      clickable: true,
+    }),
+  ],
+})
+</script>

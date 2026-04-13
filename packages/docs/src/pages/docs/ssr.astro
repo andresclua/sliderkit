@@ -1,0 +1,92 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="SSR / Server-Side Rendering">
+  <h1>SSR</h1>
+  <p class="lead">ACSlider is a client-side library that manipulates the DOM. It must only be instantiated in browser environments.</p>
+
+  <h2>Next.js</h2>
+  <pre><code>{`'use client'
+import { useEffect, useRef } from 'react'
+import { Slider } from '@acslider/core'
+
+export function MySlider() {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const slider = new Slider(ref.current)
+    return () => slider.destroy()
+  }, [])
+
+  return (
+    <div className="c--slider-a" ref={ref}>
+      <div className="c--slider-a__wrapper">
+        <div className="c--slider-a__slide" data-slide>Slide 1</div>
+        <div className="c--slider-a__slide" data-slide>Slide 2</div>
+      </div>
+    </div>
+  )
+}`}</code></pre>
+
+  <h2>Nuxt / Vue</h2>
+  <pre><code>{`<template>
+  <div class="c--slider-a" ref="sliderEl">
+    <div class="c--slider-a__wrapper">
+      <div class="c--slider-a__slide" data-slide>Slide 1</div>
+      <div class="c--slider-a__slide" data-slide>Slide 2</div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { Slider } from '@acslider/core'
+
+const sliderEl = ref(null)
+let slider = null
+
+onMounted(() => { slider = new Slider(sliderEl.value) })
+onBeforeUnmount(() => slider?.destroy())
+</script>`}</code></pre>
+
+  <h2>Astro</h2>
+  <pre><code>{`---
+// server-side: just HTML
+---
+<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide" data-slide>Slide 1</div>
+  </div>
+</div>
+
+<script>
+  // client-side only — runs in browser
+  import { Slider } from '@acslider/core'
+  new Slider('#my-slider')
+</script>`}</code></pre>
+
+  <h2>SvelteKit</h2>
+  <pre><code>{`<script>
+  import { onMount, onDestroy } from 'svelte'
+  import { Slider } from '@acslider/core'
+
+  let el
+  let slider
+
+  onMount(() => { slider = new Slider(el) })
+  onDestroy(() => slider?.destroy())
+</script>
+
+<div class="c--slider-a" bind:this={el}>
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide" data-slide>Slide 1</div>
+  </div>
+</div>`}</code></pre>
+
+  <h2>Dynamic import guard</h2>
+  <p>If you cannot use framework lifecycle hooks, guard the import:</p>
+  <pre><code>{`if (typeof window !== 'undefined') {
+  const { Slider } = await import('@acslider/core')
+  new Slider('#el')
+}`}</code></pre>
+</DocsLayout>

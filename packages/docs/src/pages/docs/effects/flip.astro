@@ -1,0 +1,47 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Flip Effect">
+  <h1>flipEffect</h1>
+  <p class="lead">Rotates slides around the Y axis like a page turn. Each slide sits at a <code>rotateY</code> offset from the active one — 0°, ±180°, ±360°, etc.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} flipEffect {"}"} from '@acslider/effects'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  loop: true,
+  plugins: [
+    flipEffect(),
+    arrows(),
+  ],
+})`}</code></pre>
+
+  <h2>How it works</h2>
+  <p>On install the plugin:</p>
+  <ul>
+    <li>Enables <code>preserve-3d</code> and <code>perspective: 1200px</code> on the wrapper</li>
+    <li>Positions all slides <code>absolute</code>, stacked at <code>top: 0 / left: 0 / width: 100%</code></li>
+    <li>Sets <code>backface-visibility: hidden</code> on each slide so the reverse side is invisible</li>
+    <li>Applies <code>rotateY(offset * 180deg)</code> where <code>offset = slideIndex - activeIndex</code></li>
+  </ul>
+  <p>Add a CSS transition on the slides to animate the rotation:</p>
+  <pre><code>{`.c--slider-effect-flip .c--slider-a__slide {
+  transition: transform 600ms ease;
+}`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>slideShadows</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Reserved for a future drop-shadow layer.</td></tr>
+      <tr><td><code>limitRotation</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Reserved option (not yet implemented).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>CSS class</h2>
+  <p>The container receives <code>.c--slider-effect-flip</code> while the plugin is active.</p>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/effect-flip">View flip effect demo →</a></p>
+</DocsLayout>

@@ -1,0 +1,30 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Parallax Plugin">
+  <h1>parallax</h1>
+  <p class="lead">CSS-based parallax. Elements with <code>data-parallax</code> inside each slide move at a fraction of the slide scroll speed, creating depth.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} parallax {"}"} from '@acslider/plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>{`new Slider('#el', {
+  plugins: [parallax({ depth: 0.3 })],
+})
+
+// HTML: add data-parallax to inner elements
+// <div data-parallax class="slide-bg"></div>`}</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>selector</code></td><td><code>string</code></td><td><code>'[data-parallax]'</code></td><td>Selector for parallax elements inside slides.</td></tr>
+      <tr><td><code>depth</code></td><td><code>number</code></td><td><code>0.3</code></td><td>Parallax multiplier. Higher = more movement.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/parallax-css">View parallax demo →</a></p>
+</DocsLayout>

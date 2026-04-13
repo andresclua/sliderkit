@@ -1,0 +1,22 @@
+.c--slider-a--webgl {
+  position: relative;
+  overflow: hidden;
+
+  .c--slider-a__wrapper {
+    position: relative;
+    z-index: 1;
+  }
+
+  .c--slider-a__content {
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  // In permanent mode, slide images are hidden (canvas renders them)
+  &[data-webgl-mode="permanent"] {
+    .c--slider-a__slide img {
+      visibility: hidden;
+    }
+  }
+}

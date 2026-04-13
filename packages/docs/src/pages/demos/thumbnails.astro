@@ -1,0 +1,43 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Thumbnails">
+  <DemoViewer
+    title="Thumbnails"
+    description="Clickable thumbnail strip below the slider, synced with the active slide."
+    code={`import { thumbnails } from '@acslider/plugins'
+
+new Slider('#el', {
+  plugins: [arrows(), thumbnails({ clickable: true })],
+})`}
+  >
+    <div class="c--slider-a" id="demo-thumbs">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+:global(#demo-thumbs + .c--slider-a__thumbs .c--slider-a__thumb:nth-child(1)) { background: #6C2BD9; }
+:global(#demo-thumbs + .c--slider-a__thumbs .c--slider-a__thumb:nth-child(2)) { background: #3B82F6; }
+:global(#demo-thumbs + .c--slider-a__thumbs .c--slider-a__thumb:nth-child(3)) { background: #10B981; }
+:global(#demo-thumbs + .c--slider-a__thumbs .c--slider-a__thumb:nth-child(4)) { background: #F59E0B; }
+:global(#demo-thumbs + .c--slider-a__thumbs .c--slider-a__thumb:nth-child(5)) { background: #EF4444; }
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, thumbnails } from '@acslider/plugins'
+new Slider('#demo-thumbs', {
+  loop: false,
+  rewind: true,
+  plugins: [arrows(), thumbnails({ clickable: true })],
+})
+</script>

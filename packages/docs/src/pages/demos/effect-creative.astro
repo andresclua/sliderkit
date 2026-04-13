@@ -1,0 +1,62 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Effect — Creative">
+  <DemoViewer
+    title="CSS Effect — Creative"
+    description="Fully configurable prev/active/next transforms. This example: vertical slide-up reveal."
+    code={`import { creativeEffect } from '@acslider/effects'
+
+new Slider('#el', {
+  plugins: [
+    creativeEffect({
+      prev:   { translate: [0, '-110%', 0], opacity: 0 },
+      active: { translate: [0, 0, 0],       opacity: 1 },
+      next:   { translate: [0, '110%', 0],  opacity: 0 },
+      perspective: false,
+    }),
+  ],
+})`}
+  >
+    <div class="c--slider-a c--slider-a--effect" id="demo-creative">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-creative-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+#demo-creative .c--slider-a__slide {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
+}
+</style>
+
+<script>
+import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+import { creativeEffect } from '@acslider/effects'
+
+new Slider('#demo-creative', {
+  slidesPerPage: 1,
+  loop: false,
+  rewind: true,
+  speed: 500,
+  plugins: [
+    creativeEffect({
+      prev:   { translate: [0, '-110%', 0], opacity: 0 },
+      active: { translate: [0, 0, 0],       opacity: 1 },
+      next:   { translate: [0, '110%', 0],  opacity: 0 },
+      perspective: false,
+    }),
+    arrows(),
+    pagination({ el: '#demo-creative-pag', type: 'dots', clickable: true }),
+  ],
+})
+</script>

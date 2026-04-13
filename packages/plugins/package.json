@@ -1,0 +1,42 @@
+{
+  "name": "@acslider/plugins",
+  "version": "0.1.0",
+  "description": "ACSlider UI plugins — pagination, autoplay, arrows, thumbnails, and more",
+  "type": "module",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./css/*": "./dist/css/*",
+    "./scss/*": "./src/scss/*"
+  },
+  "files": [
+    "dist",
+    "src/scss"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "scripts": {
+    "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@acslider/core": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^5.2.12",
+    "vite-plugin-dts": "^3.9.1",
+    "typescript": "^5.4.5",
+    "@acslider/core": "workspace:*"
+  },
+  "keywords": ["slider", "carousel", "acslider", "plugins"],
+  "author": "Andres Clua",
+  "license": "MIT"
+}

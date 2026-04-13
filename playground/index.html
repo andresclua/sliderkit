@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACSlider Playground</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f0f0f0; padding: 32px; }
+    h1 { margin-bottom: 24px; font-size: 1.5rem; color: #6C2BD9; }
+    h2 { margin: 40px 0 12px; font-size: 1rem; color: #333; }
+
+    /* ── Slider core ── */
+    .c--slider-a {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #ddd;
+      /* bottom padding so pagination doesn't overlap slides */
+      padding-bottom: 48px;
+    }
+
+    .c--slider-a__wrapper {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      will-change: transform;
+      user-select: none;
+    }
+
+    .c--slider-a__slide {
+      flex-shrink: 0;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .slide-1 { background: #6C2BD9; }
+    .slide-2 { background: #3B82F6; }
+    .slide-3 { background: #10B981; }
+    .slide-4 { background: #F59E0B; }
+    .slide-5 { background: #EF4444; }
+
+    /* ── Arrows ── */
+    .c--slider-a__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      /* offset up a bit to stay in slide area, not pagination */
+      margin-top: -24px;
+      z-index: 10;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.9);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: background 0.2s, opacity 0.2s;
+      padding: 0;
+    }
+    .c--slider-a__arrow:hover { background: #fff; }
+    .c--slider-a__arrow--disabled { opacity: 0.35; cursor: default; }
+    .c--slider-a__arrow--prev { left: 12px; }
+    .c--slider-a__arrow--next { right: 12px; }
+    .c--slider-a__arrow svg { width: 20px; height: 20px; color: #333; }
+
+    /* ── Pagination ── */
+    .c--slider-a__pagination {
+      position: absolute;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .c--slider-a__pagination-bullet {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.25);
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .c--slider-a__pagination-bullet--active {
+      background: #6C2BD9;
+      transform: scale(1.25);
+    }
+
+    .c--slider-a__pagination-fraction {
+      font-size: 0.85rem;
+      color: #555;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+  <h1>ACSlider Playground</h1>
+
+  <h2>Basic slider (loop + pagination + arrows)</h2>
+  <div class="c--slider-a" data-slider id="slider-basic">
+    <div class="c--slider-a__wrapper">
+      <div class="c--slider-a__slide slide-1" data-slide>1</div>
+      <div class="c--slider-a__slide slide-2" data-slide>2</div>
+      <div class="c--slider-a__slide slide-3" data-slide>3</div>
+      <div class="c--slider-a__slide slide-4" data-slide>4</div>
+      <div class="c--slider-a__slide slide-5" data-slide>5</div>
+    </div>
+  </div>
+
+  <h2>3 per page + gutter + rewind</h2>
+  <div class="c--slider-a" data-slider id="slider-multi">
+    <div class="c--slider-a__wrapper">
+      <div class="c--slider-a__slide slide-1" data-slide>A</div>
+      <div class="c--slider-a__slide slide-2" data-slide>B</div>
+      <div class="c--slider-a__slide slide-3" data-slide>C</div>
+      <div class="c--slider-a__slide slide-4" data-slide>D</div>
+      <div class="c--slider-a__slide slide-5" data-slide>E</div>
+    </div>
+  </div>
+
+  <script type="module" src="/main.ts"></script>
+</body>
+</html>
