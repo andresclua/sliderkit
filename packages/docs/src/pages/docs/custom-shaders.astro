@@ -1,7 +1,81 @@
 ---
 import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
-<DocsLayout title="Docs">
-  <h1>Documentation</h1>
-  <p class="lead">This page is coming soon.</p>
+<DocsLayout title="Custom Shaders">
+  <h1>Custom Shaders</h1>
+  <p class="lead">Write your own GLSL fragment shader to create fully custom WebGL transitions between slides.</p>
+
+  <h2>How it works</h2>
+  <p>The <code>@acslider/webgl</code> renderer passes two textures to every fragment shader — <code>uTexture0</code> (current slide) and <code>uTexture1</code> (next slide) — plus a <code>uProgress</code> uniform that animates from 0 to 1 during a transition.</p>
+
+  <h2>Shader uniforms</h2>
+  <table>
+    <thead><tr><th>Uniform</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>uTexture0</code></td><td><code>sampler2D</code></td><td>Current (outgoing) slide texture</td></tr>
+      <tr><td><code>uTexture1</code></td><td><code>sampler2D</code></td><td>Next (incoming) slide texture</td></tr>
+      <tr><td><code>uProgress</code></td><td><code>float</code></td><td>Transition progress 0.0 → 1.0</td></tr>
+      <tr><td><code>uResolution</code></td><td><code>vec2</code></td><td>Canvas size in pixels</td></tr>
+      <tr><td><code>uTime</code></td><td><code>float</code></td><td>Elapsed time in seconds (permanent effects only)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Minimal example — cross-dissolve</h2>
+  <pre><code>{`// dissolve.frag
+precision mediump float;
+
+uniform sampler2D uTexture0;
+uniform sampler2D uTexture1;
+uniform float     uProgress;
+
+varying vec2 vUv;
+
+void main() {
+  vec4 t0 = texture2D(uTexture0, vUv);
+  vec4 t1 = texture2D(uTexture1, vUv);
+  gl_FragColor = mix(t0, t1, uProgress);
+}`}</code></pre>
+
+  <h2>Using a custom shader</h2>
+  <pre><code>{`import { Slider } from '@acslider/core'
+import { webglRenderer } from '@acslider/webgl'
+import dissolveShader from './dissolve.frag?raw'
+
+new Slider('#el', {
+  plugins: [
+    webglRenderer({
+      shader: dissolveShader,
+      duration: 800,
+    }),
+  ],
+})`}</code></pre>
+
+  <h2>Wipe effect example</h2>
+  <pre><code>{`precision mediump float;
+
+uniform sampler2D uTexture0;
+uniform sampler2D uTexture1;
+uniform float     uProgress;
+
+varying vec2 vUv;
+
+void main() {
+  float edge = smoothstep(uProgress - 0.05, uProgress + 0.05, vUv.x);
+  vec4 t0 = texture2D(uTexture0, vUv);
+  vec4 t1 = texture2D(uTexture1, vUv);
+  gl_FragColor = mix(t0, t1, edge);
+}`}</code></pre>
+
+  <h2>Importing GLSL in Vite</h2>
+  <p>Use the <code>?raw</code> suffix to import the shader as a string:</p>
+  <pre><code>import myShader from './my.frag?raw'</code></pre>
+  <p>For webpack, use <code>raw-loader</code>:</p>
+  <pre><code>{`// webpack.config.js
+{ test: /\.frag$/, use: 'raw-loader' }`}</code></pre>
+
+  <h2>See also</h2>
+  <ul>
+    <li><a href="/docs/webgl">WebGL overview</a></li>
+    <li><a href="/demos/webgl-custom-shader">Custom shader demo →</a></li>
+  </ul>
 </DocsLayout>

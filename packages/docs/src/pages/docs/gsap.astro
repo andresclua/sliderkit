@@ -1,7 +1,83 @@
 ---
 import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
-<DocsLayout title="Docs">
-  <h1>Documentation</h1>
-  <p class="lead">This page is coming soon.</p>
+<DocsLayout title="GSAP Integration">
+  <h1>GSAP Integration</h1>
+  <p class="lead">Use GSAP (GreenSock) to drive slide transitions instead of CSS. ACSlider fires events at the right moments — GSAP handles the animation.</p>
+
+  <h2>Install GSAP</h2>
+  <pre><code>npm install gsap</code></pre>
+
+  <h2>Basic pattern</h2>
+  <p>Disable the built-in CSS transition, listen to <code>beforeSlideChange</code>, and animate manually:</p>
+  <pre><code>{`import { Slider } from '@acslider/core'
+import gsap from 'gsap'
+
+const slider = new Slider('#el', {
+  speed: 0, // disable CSS transition — GSAP takes over
+  loop: true,
+})
+
+slider.on('beforeSlideChange', ({ from, to }) => {
+  const slides = slider.slides
+
+  // Slide out the current slide
+  gsap.to(slides[from], {
+    x: '-100%',
+    opacity: 0,
+    duration: 0.5,
+    ease: 'power2.inOut',
+  })
+
+  // Slide in the next slide
+  gsap.fromTo(
+    slides[to],
+    { x: '100%', opacity: 0 },
+    { x: '0%', opacity: 1, duration: 0.5, ease: 'power2.inOut' },
+  )
+})`}</code></pre>
+
+  <h2>With ScrollTrigger</h2>
+  <p>Drive the slider position with GSAP ScrollTrigger for scroll-linked slides:</p>
+  <pre><code>{`import { Slider } from '@acslider/core'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const slider = new Slider('#el', { loop: false, speed: 0 })
+
+ScrollTrigger.create({
+  trigger: '#el',
+  start: 'top top',
+  end: '+=300%',
+  pin: true,
+  onUpdate(self) {
+    const index = Math.round(self.progress * (slider.slides.length - 1))
+    if (index !== slider.activeIndex) slider.slideTo(index)
+  },
+})`}</code></pre>
+
+  <h2>Flip animation</h2>
+  <pre><code>{`slider.on('beforeSlideChange', ({ from, to }) => {
+  gsap.to(slider.slides[from], {
+    rotationY: -90,
+    duration: 0.4,
+    ease: 'power1.in',
+    onComplete() {
+      gsap.fromTo(
+        slider.slides[to],
+        { rotationY: 90 },
+        { rotationY: 0, duration: 0.4, ease: 'power1.out' },
+      )
+    },
+  })
+})`}</code></pre>
+
+  <h2>Tips</h2>
+  <ul>
+    <li>Set <code>speed: 0</code> to disable the wrapper translate animation — otherwise core and GSAP fight each other.</li>
+    <li>Use <code>beforeSlideChange</code> to start GSAP <em>before</em> the active index updates, so you still have access to both <code>from</code> and <code>to</code> slide elements.</li>
+    <li>For effects that need absolute-positioned slides (fade, flip), set <code>position: absolute</code> on slides and reset <code>wrapper.style.transform</code> as shown in the <a href="/docs/effects/fade">Fade Effect</a> docs.</li>
+  </ul>
 </DocsLayout>
