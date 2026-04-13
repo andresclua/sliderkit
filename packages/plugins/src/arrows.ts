@@ -35,7 +35,7 @@ export function arrows(options: ArrowsOptions = {}): SliderPlugin {
     container: HTMLElement
   ): HTMLElement {
     if (opt) {
-      const el = typeof opt === 'string' ? container.querySelector<HTMLElement>(opt) : opt
+      const el = typeof opt === 'string' ? document.querySelector<HTMLElement>(opt) : opt
       if (el) return el
     }
     autoCreated = true
