@@ -22,10 +22,11 @@ export function arrows(options: ArrowsOptions = {}): SliderPlugin {
   function update(): void {
     if (!slider || !prevEl || !nextEl) return
     const info = slider.getInfo() as Record<string, unknown>
-    prevEl.classList.toggle('c--slider-a__arrow--disabled', slider.isBeginning && !info.loop)
-    nextEl.classList.toggle('c--slider-a__arrow--disabled', slider.isEnd && !info.loop)
-    ;(prevEl as HTMLButtonElement).disabled = slider.isBeginning && !(slider.getInfo() as Record<string, unknown>).loop as boolean
-    ;(nextEl as HTMLButtonElement).disabled = slider.isEnd && !(slider.getInfo() as Record<string, unknown>).loop as boolean
+    const wraps = Boolean(info.loop) || Boolean(info.rewind)
+    prevEl.classList.toggle('c--slider-a__arrow--disabled', slider.isBeginning && !wraps)
+    nextEl.classList.toggle('c--slider-a__arrow--disabled', slider.isEnd && !wraps)
+    ;(prevEl as HTMLButtonElement).disabled = slider.isBeginning && !wraps
+    ;(nextEl as HTMLButtonElement).disabled = slider.isEnd && !wraps
   }
 
   function getOrCreate(
