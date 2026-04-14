@@ -1,13 +1,21 @@
 ---
 import type { NavGroup } from '../nav'
+import DemoSearch from './DemoSearch.astro'
 
 interface Props {
   nav: NavGroup[]
   currentPath: string
+  showSearch?: boolean
 }
-const { nav, currentPath } = Astro.props
+const { nav, currentPath, showSearch = false } = Astro.props
 ---
 <aside class="sidebar">
+  {showSearch && <DemoSearch />}
+  {showSearch && (
+    <a href="/demos" class={`all-demos-link${currentPath === '/demos/' || currentPath === '/demos' ? ' is-active' : ''}`}>
+      ← All demos
+    </a>
+  )}
   <nav class="sidebar-nav">
     {nav.map(group => (
       <div class="nav-group">
@@ -68,6 +76,20 @@ ul { list-style: none; }
   color: var(--brand);
   font-weight: 600;
 }
+
+.all-demos-link {
+  display: block;
+  margin: 0 0.75rem 0.5rem;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+}
+.all-demos-link:hover { background: #f3f4f6; color: var(--text); text-decoration: none; }
+.all-demos-link.is-active { color: var(--brand); font-weight: 600; }
 
 @media (max-width: 768px) {
   .sidebar { display: none; }

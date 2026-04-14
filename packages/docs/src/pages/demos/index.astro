@@ -1,0 +1,138 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import { DEMOS, GROUP_LABELS, type DemoEntry } from '../../demos-catalog'
+
+const groups = (Object.keys(GROUP_LABELS) as DemoEntry['group'][]).map(group => ({
+  key: group,
+  label: GROUP_LABELS[group],
+  demos: DEMOS.filter(d => d.group === group),
+}))
+---
+<DemoLayout title="Demos">
+  <div class="demos-index">
+    <header class="index-header">
+      <h1>Demos</h1>
+      <p>Browse all examples. Each demo includes full HTML, CSS, and JS so you can copy-paste it directly into your project.</p>
+    </header>
+
+    {groups.map(group => (
+      <section class="index-group">
+        <h2 class="group-title">{group.label}</h2>
+        <ul class="demo-grid">
+          {group.demos.map(demo => (
+            <li>
+              <a href={`/demos/${demo.slug}`} class="demo-card">
+                <span class="card-label">{demo.label}</span>
+                <span class="card-desc">{demo.description}</span>
+                <ul class="card-tags">
+                  {demo.tags.slice(0, 4).map(tag => (
+                    <li class="tag">{tag}</li>
+                  ))}
+                </ul>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</DemoLayout>
+
+<style>
+.demos-index {
+  max-width: 860px;
+}
+
+.index-header {
+  margin-bottom: 3rem;
+}
+.index-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+.index-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  max-width: 520px;
+}
+
+/* Group */
+.index-group { margin-bottom: 3rem; }
+.group-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Grid */
+.demo-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+/* Card */
+.demo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  height: 100%;
+}
+.demo-card:hover {
+  border-color: var(--brand-light);
+  box-shadow: 0 4px 12px rgba(108, 43, 217, 0.08);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.card-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.demo-card:hover .card-label {
+  color: var(--brand);
+}
+
+.card-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  list-style: none;
+  margin-top: 4px;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 500;
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+@media (max-width: 600px) {
+  .demo-grid { grid-template-columns: 1fr; }
+}
+</style>

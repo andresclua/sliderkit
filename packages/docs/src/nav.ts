@@ -1,3 +1,5 @@
+import { DEMOS, GROUP_LABELS, type DemoEntry } from './demos-catalog'
+
 export interface NavItem {
   label: string
   href: string
@@ -76,68 +78,11 @@ export const docsNav: NavGroup[] = [
   },
 ]
 
-export const demosNav: NavGroup[] = [
-  {
-    title: 'Core',
-    items: [
-      { label: 'Base', href: '/demos/base' },
-      { label: 'Non-loop', href: '/demos/non-loop' },
-      { label: 'Rewind', href: '/demos/rewind' },
-      { label: 'Start Index', href: '/demos/start-index' },
-      { label: 'Vertical', href: '/demos/vertical' },
-      { label: 'Mouse Drag', href: '/demos/mouse-drag' },
-      { label: 'Gutter & Edge Padding', href: '/demos/gutter-edgepadding' },
-      { label: 'Responsive', href: '/demos/responsive' },
-      { label: 'Auto Height', href: '/demos/auto-height' },
-      { label: 'Freeze / Disable', href: '/demos/freeze-disable' },
-    ],
-  },
-  {
-    title: 'Plugins',
-    items: [
-      { label: 'Arrows', href: '/demos/arrows' },
-      { label: 'Pagination — Dots', href: '/demos/pagination-dots' },
-      { label: 'Pagination — Fraction', href: '/demos/pagination-fraction' },
-      { label: 'Pagination — Progress', href: '/demos/pagination-progress' },
-      { label: 'Pagination — Dynamic', href: '/demos/pagination-dynamic' },
-      { label: 'Pagination — Custom', href: '/demos/pagination-custom' },
-      { label: 'Autoplay', href: '/demos/autoplay' },
-      { label: 'Thumbnails', href: '/demos/thumbnails' },
-      { label: 'Progress Bar', href: '/demos/progress-bar' },
-      { label: 'Slide Counter', href: '/demos/slide-counter' },
-      { label: 'Mouse Wheel', href: '/demos/mousewheel' },
-      { label: 'Lazy Load', href: '/demos/lazy-load' },
-      { label: 'Parallax CSS', href: '/demos/parallax-css' },
-      { label: 'Virtual Slides', href: '/demos/virtual-slides' },
-    ],
-  },
-  {
-    title: 'Effects CSS',
-    items: [
-      { label: 'Fade', href: '/demos/effect-fade' },
-      { label: 'Cube', href: '/demos/effect-cube' },
-      { label: 'Coverflow', href: '/demos/effect-coverflow' },
-      { label: 'Flip', href: '/demos/effect-flip' },
-      { label: 'Cards', href: '/demos/effect-cards' },
-      { label: 'Creative', href: '/demos/effect-creative' },
-    ],
-  },
-  {
-    title: 'Lifecycle',
-    items: [
-      { label: 'Destroy & Rebuild', href: '/demos/destroy-rebuild' },
-      { label: 'getInfo()', href: '/demos/get-info' },
-      { label: 'Events on/off', href: '/demos/events-on-off' },
-    ],
-  },
-  {
-    title: 'WebGL',
-    items: [
-      { label: 'Displacement', href: '/demos/webgl-displacement' },
-      { label: 'RGB Shift', href: '/demos/webgl-rgbshift' },
-      { label: 'Pixel Dissolve', href: '/demos/webgl-pixeldissolve' },
-      { label: 'Parallax Hover', href: '/demos/webgl-parallax-hover' },
-      { label: 'Custom Shader', href: '/demos/webgl-custom-shader' },
-    ],
-  },
-]
+const DEMO_GROUP_ORDER: DemoEntry['group'][] = ['core', 'plugins', 'effects', 'lifecycle', 'webgl']
+
+export const demosNav: NavGroup[] = DEMO_GROUP_ORDER.map(group => ({
+  title: GROUP_LABELS[group],
+  items: DEMOS
+    .filter(d => d.group === group)
+    .map(d => ({ label: d.label, href: `/demos/${d.slug}` })),
+}))

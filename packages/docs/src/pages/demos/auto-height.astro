@@ -6,12 +6,87 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <DemoViewer
     title="Auto Height"
     description="The container animates its height to match the active slide. Each slide has a different height."
-    code={`import { autoHeight } from '@acslider/plugins'
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide slide-short">Short</div>
+    <div class="c--slider-a__slide slide-medium">Medium<br/>height</div>
+    <div class="c--slider-a__slide slide-tall">Tall<br/>slide<br/>content</div>
+    <div class="c--slider-a__slide slide-short">Short again</div>
+    <div class="c--slider-a__slide slide-medium">Medium<br/>again</div>
+  </div>
+</div>
+<div id="my-pagination" class="c--slider-a__pagination"></div>`}
+    css={`.c--slider-a {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* height is animated by the autoHeight plugin */
+  transition: height 400ms ease;
+}
+.c--slider-a__wrapper {
+  display: flex;
+  will-change: transform;
+  align-items: flex-start; /* important: don't stretch slides */
+}
+.c--slider-a__slide {
+  flex-shrink: 0;
+  width: 100%;
+}
 
-new Slider('#el', {
+/* Different heights per slide */
+.slide-short  { height: 120px; }
+.slide-medium { height: 200px; }
+.slide-tall   { height: 300px; }
+
+/* Pagination dots */
+.c--slider-a__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 0;
+}
+.c--slider-a__pagination-bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d1d5db;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.c--slider-a__pagination-bullet--active {
+  background: #6C2BD9;
+  transform: scale(1.3);
+}
+
+/* Auto-created arrows */
+.c--slider-a__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination, autoHeight } from '@acslider/plugins'
+
+new Slider('#my-slider', {
+  loop: false,
+  rewind: true,
   plugins: [
     arrows(),
     autoHeight({ animationDuration: 400 }),
+    pagination({ el: '#my-pagination', type: 'dots', clickable: true }),
   ],
 })`}
   >

@@ -14,7 +14,7 @@ const currentPath = Astro.url.pathname
 <BaseLayout title={title} description={description}>
   <SiteHeader />
   <div class="demo-shell">
-    <Sidebar nav={demosNav} currentPath={currentPath} />
+    <Sidebar nav={demosNav} currentPath={currentPath} showSearch />
     <main class="demo-main">
       <slot />
     </main>

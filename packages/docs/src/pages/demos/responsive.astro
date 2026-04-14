@@ -6,7 +6,65 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <DemoViewer
     title="Responsive / Breakpoints"
     description="1 slide on mobile, 2 at 640px, 3 at 1024px. Resize the window to see it adapt."
-    code={`new Slider('#el', {
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__slide">5</div>
+    <div class="c--slider-a__slide">6</div>
+  </div>
+</div>
+<div id="my-pagination" class="c--slider-a__pagination"></div>`}
+    css={`.c--slider-a {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.c--slider-a__wrapper {
+  display: flex;
+  will-change: transform;
+}
+.c--slider-a__slide {
+  flex-shrink: 0;
+  /* width is computed by the slider (100% / slidesPerPage) */
+  height: 260px;
+}
+
+/* Fraction pagination */
+.c--slider-a__pagination {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+.c--slider-a__pagination-fraction {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Auto-created arrows */
+.c--slider-a__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
   slidesPerPage: 1,
   gutter: 8,
   loop: false,
@@ -15,7 +73,10 @@ import DemoViewer from '../../components/DemoViewer.astro'
     640:  { slidesPerPage: 2, gutter: 12 },
     1024: { slidesPerPage: 3, gutter: 20 },
   },
-  plugins: [arrows(), pagination({ type: 'fraction' })],
+  plugins: [
+    arrows(),
+    pagination({ el: '#my-pagination', type: 'fraction' }),
+  ],
 })`}
   >
     <div class="c--slider-a" id="demo-responsive">

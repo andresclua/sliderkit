@@ -6,11 +6,80 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <DemoViewer
     title="Base slider"
     description="The simplest slider. No loop, no plugins. Swipe or drag to navigate."
-    code={`import { Slider } from '@acslider/core'
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">Slide 1</div>
+    <div class="c--slider-a__slide">Slide 2</div>
+    <div class="c--slider-a__slide">Slide 3</div>
+    <div class="c--slider-a__slide">Slide 4</div>
+    <div class="c--slider-a__slide">Slide 5</div>
+  </div>
+</div>
+<div id="my-pagination" class="c--slider-a__pagination"></div>`}
+    css={`.c--slider-a {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.c--slider-a__wrapper {
+  display: flex;
+  will-change: transform;
+}
+.c--slider-a__slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 260px; /* adjust to your needs */
+}
 
-new Slider('#demo-base', {
+/* Pagination dots */
+.c--slider-a__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 0;
+}
+.c--slider-a__pagination-bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d1d5db;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.c--slider-a__pagination-bullet--active {
+  background: #6C2BD9;
+  transform: scale(1.3);
+}
+
+/* Auto-created arrows */
+.c--slider-a__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
   slidesPerPage: 1,
   speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ el: '#my-pagination', type: 'dots', clickable: true }),
+  ],
 })`}
   >
     <div class="c--slider-a" id="demo-base">

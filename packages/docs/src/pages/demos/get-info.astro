@@ -3,9 +3,53 @@ import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
 ---
 <DemoLayout title="getInfo()">
+
   <DemoViewer
-    title="getInfo()"
-    description="Live snapshot of the full slider state. Updates on every slide change."
+    title="Live slider state"
+    description="getInfo() returns a snapshot of the full slider state at any point in time: current index, total slides, direction, whether it's animating, and more. Call it inside afterInit or afterSlideChange to react to state changes — or call it imperatively from a button handler. Useful for building custom navigation UIs, analytics tracking, or syncing external state."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__slide">5</div>
+  </div>
+</div>
+<div id="my-pag" class="c--slider-a__pagination"></div>
+<pre id="info-output">Navigate to see getInfo() output…</pre>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+
+pre {
+  margin-top: 1rem; padding: 12px 16px;
+  background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;
+  font-size: 0.78rem; line-height: 1.6; overflow-x: auto;
+  max-height: 200px; overflow-y: auto;
+}`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+const output = document.getElementById('info-output')
+
+const slider = new Slider('#my-slider', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#my-pag', type: 'dots', clickable: true }),
+  ],
+  on: {
+    afterInit: () => renderInfo(),
+    afterSlideChange: () => renderInfo(),
+  },
+})
+
+function renderInfo() {
+  const { index, total, direction, isAnimating } = slider.getInfo()
+  output.textContent = JSON.stringify({ index, total, direction, isAnimating }, null, 2)
+}`}
   >
     <div class="c--slider-a" id="demo-info">
       <div class="c--slider-a__wrapper">
@@ -19,6 +63,78 @@ import DemoViewer from '../../components/DemoViewer.astro'
     <div id="demo-info-pag" class="c--slider-a__pagination"></div>
     <pre id="info-output" class="info-pre">Navigate the slider to see getInfo() output...</pre>
   </DemoViewer>
+
+  <DemoViewer
+    title="Custom navigation UI from getInfo()"
+    description="Use getInfo() to build a completely custom navigation component. Here, prev/next buttons are disabled at the boundaries and a label shows the current slide title — all driven by the slider state, not hardcoded DOM manipulation."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide" data-title="Introduction">Slide 1</div>
+    <div class="c--slider-a__slide" data-title="Features">Slide 2</div>
+    <div class="c--slider-a__slide" data-title="Pricing">Slide 3</div>
+    <div class="c--slider-a__slide" data-title="Get started">Slide 4</div>
+  </div>
+</div>
+<div class="custom-nav">
+  <button id="btn-prev">← Prev</button>
+  <span id="nav-label">Introduction</span>
+  <button id="btn-next">Next →</button>
+</div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+
+.custom-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 12px; gap: 12px;
+}
+.custom-nav button {
+  padding: 6px 14px; border: 1px solid #d1d5db; border-radius: 6px;
+  background: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 500;
+}
+.custom-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
+#nav-label { font-size: 0.9rem; font-weight: 600; color: #374151; }`}
+    js={`import { Slider } from '@acslider/core'
+
+const slides = document.querySelectorAll('.c--slider-a__slide')
+const btnPrev = document.getElementById('btn-prev')
+const btnNext = document.getElementById('btn-next')
+const label   = document.getElementById('nav-label')
+
+const slider = new Slider('#my-slider', {
+  loop: false,
+  on: {
+    afterInit:       () => sync(),
+    afterSlideChange: () => sync(),
+  },
+})
+
+function sync() {
+  const { index, total } = slider.getInfo()
+  const title = slides[index]?.getAttribute('data-title') ?? ''
+  label.textContent = title
+  btnPrev.disabled = index === 0
+  btnNext.disabled = index === total - 1
+}
+
+btnPrev.addEventListener('click', () => slider.prev())
+btnNext.addEventListener('click', () => slider.next())`}
+  >
+    <div class="c--slider-a" id="demo-info-custom">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide data-title="Introduction">Introduction</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide data-title="Features">Features</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide data-title="Pricing">Pricing</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide data-title="Get started">Get started</div>
+      </div>
+    </div>
+    <div class="custom-nav">
+      <button id="demo-info-prev" class="ctrl-btn">← Prev</button>
+      <span id="demo-info-label" class="nav-label">Introduction</span>
+      <button id="demo-info-next" class="ctrl-btn">Next →</button>
+    </div>
+  </DemoViewer>
+
 </DemoLayout>
 
 <style>
@@ -29,6 +145,18 @@ import DemoViewer from '../../components/DemoViewer.astro'
   font-size: 0.8rem;
   line-height: 1.6;
 }
+.custom-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 12px; gap: 12px;
+}
+.ctrl-btn {
+  padding: 6px 14px; border: 1px solid #d1d5db; border-radius: 6px;
+  background: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 500;
+  transition: background 0.15s;
+}
+.ctrl-btn:hover { background: #f3f4f6; }
+.ctrl-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.nav-label { font-size: 0.9rem; font-weight: 600; color: #374151; }
 </style>
 
 <script>
@@ -52,10 +180,35 @@ const slider = new Slider('#demo-info', {
 
 function renderInfo() {
   const info = slider.getInfo()
-  const printable = { ...info }
+  const printable = { ...info } as Record<string, unknown>
   delete printable.container
   delete printable.wrapper
   delete printable.slides
   output.textContent = JSON.stringify(printable, null, 2)
 }
+
+// Custom nav demo
+const slides2 = document.querySelectorAll<HTMLElement>('#demo-info-custom [data-slide]')
+const btnPrev = document.getElementById('demo-info-prev') as HTMLButtonElement
+const btnNext = document.getElementById('demo-info-next') as HTMLButtonElement
+const label   = document.getElementById('demo-info-label')!
+
+const slider2 = new Slider('#demo-info-custom', {
+  loop: false,
+  on: {
+    afterInit:        () => sync(),
+    afterSlideChange: () => sync(),
+  },
+})
+
+function sync() {
+  const { index, total } = slider2.getInfo()
+  const title = slides2[index]?.getAttribute('data-title') ?? ''
+  label.textContent = title
+  btnPrev.disabled = index === 0
+  btnNext.disabled = index === total - 1
+}
+
+btnPrev.addEventListener('click', () => slider2.prev())
+btnNext.addEventListener('click', () => slider2.next())
 </script>

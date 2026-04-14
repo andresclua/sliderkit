@@ -7,7 +7,72 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <DemoViewer
     title="Fraction — 1 slide per page"
     description='Standard "2 / 5" counter. Each step advances one slide.'
-    code={`pagination({ type: 'fraction' })`}
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">Slide 1</div>
+    <div class="c--slider-a__slide">Slide 2</div>
+    <div class="c--slider-a__slide">Slide 3</div>
+    <div class="c--slider-a__slide">Slide 4</div>
+    <div class="c--slider-a__slide">Slide 5</div>
+    <div class="c--slider-a__slide">Slide 6</div>
+  </div>
+</div>
+<div id="my-pagination" class="c--slider-a__pagination"></div>`}
+    css={`.c--slider-a {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.c--slider-a__wrapper {
+  display: flex;
+  will-change: transform;
+}
+.c--slider-a__slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 260px;
+}
+
+/* Fraction pagination */
+.c--slider-a__pagination {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+.c--slider-a__pagination-fraction {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Auto-created arrows */
+.c--slider-a__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#my-pagination', type: 'fraction' }),
+  ],
+})`}
   >
     <div class="c--slider-a" id="demo-pag-frac">
       <div class="c--slider-a__wrapper">
@@ -25,12 +90,72 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <DemoViewer
     title="Fraction — 2 slides per page"
     description='With slidesPerPage: 2 the fraction advances in pages: "1 / 3", "2 / 3", "3 / 3".'
-    code={`new Slider('#el', {
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">Slide 1</div>
+    <div class="c--slider-a__slide">Slide 2</div>
+    <div class="c--slider-a__slide">Slide 3</div>
+    <div class="c--slider-a__slide">Slide 4</div>
+    <div class="c--slider-a__slide">Slide 5</div>
+    <div class="c--slider-a__slide">Slide 6</div>
+  </div>
+</div>
+<div id="my-pagination" class="c--slider-a__pagination"></div>`}
+    css={`.c--slider-a {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.c--slider-a__wrapper {
+  display: flex;
+  will-change: transform;
+}
+.c--slider-a__slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 260px;
+}
+
+/* Fraction pagination */
+.c--slider-a__pagination {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+.c--slider-a__pagination-fraction {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Auto-created arrows */
+.c--slider-a__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
   slidesPerPage: 2,
   gutter: 16,
+  loop: false,
+  rewind: true,
   plugins: [
     arrows(),
-    pagination({ type: 'fraction' }),
+    pagination({ el: '#my-pagination', type: 'fraction' }),
   ],
 })`}
   >

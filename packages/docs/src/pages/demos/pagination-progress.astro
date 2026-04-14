@@ -6,7 +6,78 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <DemoViewer
     title="Pagination — Progress Bar"
     description="Horizontal fill bar that grows as you advance through slides."
-    code={`pagination({ type: 'progress' })`}
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__slide">5</div>
+  </div>
+</div>
+<!-- Progress bar is injected into this element by the plugin -->
+<div id="my-pagination" class="c--slider-a__pagination"></div>`}
+    css={`.c--slider-a {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.c--slider-a__wrapper {
+  display: flex;
+  will-change: transform;
+}
+.c--slider-a__slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 260px;
+}
+
+/* Progress bar pagination */
+.c--slider-a__pagination {
+  padding: 12px 0 8px;
+}
+.c--slider-a__pagination-progress {
+  width: 100%;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.c--slider-a__pagination-progress-fill {
+  height: 100%;
+  background: #6C2BD9;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Auto-created arrows */
+.c--slider-a__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#my-pagination', type: 'progress' }),
+  ],
+})`}
   >
     <div class="c--slider-a" id="demo-pag-prog">
       <div class="c--slider-a__wrapper">

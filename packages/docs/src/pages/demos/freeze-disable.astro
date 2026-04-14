@@ -3,52 +3,273 @@ import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
 ---
 <DemoLayout title="Freeze / Disable">
+
+  <!-- ── Example 1: responsive card row ── -->
   <DemoViewer
-    title="Freeze & Disable"
-    description="freeze: auto-triggers when all slides fit on one page. disable: manual control."
+    title="Responsive card row"
+    description="The most common use case. On wide screens all cards fit at once so the slider freezes — no arrows, no drag, no pagination. Resize the window narrower and it wakes up automatically as slidesPerPage drops via breakpoints."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide card">...</div>
+    <div class="c--slider-a__slide card">...</div>
+    <div class="c--slider-a__slide card">...</div>
+    <div class="c--slider-a__slide card">...</div>
+  </div>
+</div>
+<div id="my-pag" class="c--slider-a__pagination"></div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; }
+
+/* Arrows */
+.c--slider-a__arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 10; width: 40px; height: 40px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,0.9);
+  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
+  gutter: 16,
+  freezable: true,   // freeze when all cards fit on screen
+  breakpoints: {
+    0:   { slidesPerPage: 1 },
+    480: { slidesPerPage: 2 },
+    768: { slidesPerPage: 3 },
+    1024: { slidesPerPage: 4 }, // on wide screens, all 4 fit → freezes
+  },
+  plugins: [
+    arrows(),
+    pagination({ el: '#my-pag', type: 'dots', clickable: true }),
+  ],
+})`}
   >
-    <div class="c--slider-a" id="demo-freeze">
+    <div class="c--slider-a" id="demo-freeze-cards">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-card-slide" data-slide>
+          <div class="card-inner s-purple"><span>Plan A</span><small>$9 / mo</small></div>
+        </div>
+        <div class="c--slider-a__slide demo-card-slide" data-slide>
+          <div class="card-inner s-blue"><span>Plan B</span><small>$19 / mo</small></div>
+        </div>
+        <div class="c--slider-a__slide demo-card-slide" data-slide>
+          <div class="card-inner s-green"><span>Plan C</span><small>$39 / mo</small></div>
+        </div>
+        <div class="c--slider-a__slide demo-card-slide" data-slide>
+          <div class="card-inner s-amber"><span>Plan D</span><small>$79 / mo</small></div>
+        </div>
+      </div>
+    </div>
+    <div id="demo-freeze-cards-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+
+  <!-- ── Example 2: logo / partner strip ── -->
+  <DemoViewer
+    title="Logo / partner strip"
+    description="A row of partner logos that sits static on desktop (all logos visible, slider frozen) and becomes a swipeable carousel on mobile. No conditional rendering — one component handles both states."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide logo-slide">Logo A</div>
+    <div class="c--slider-a__slide logo-slide">Logo B</div>
+    <div class="c--slider-a__slide logo-slide">Logo C</div>
+    <div class="c--slider-a__slide logo-slide">Logo D</div>
+    <div class="c--slider-a__slide logo-slide">Logo E</div>
+  </div>
+</div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; }
+
+.logo-slide {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+/* When frozen, wrapper sits as a normal flex row */
+.c--slider-a--frozen .c--slider-a__wrapper {
+  justify-content: space-between;
+}`}
+    js={`import { Slider } from '@acslider/core'
+
+new Slider('#my-slider', {
+  gutter: 16,
+  freezable: true,
+  breakpoints: {
+    0:   { slidesPerPage: 2 },
+    640: { slidesPerPage: 3 },
+    960: { slidesPerPage: 5 }, // all 5 logos fit → freezes, looks like a static row
+  },
+})`}
+  >
+    <div class="c--slider-a" id="demo-freeze-logos">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-logo-slide" data-slide>Acme</div>
+        <div class="c--slider-a__slide demo-logo-slide" data-slide>Globex</div>
+        <div class="c--slider-a__slide demo-logo-slide" data-slide>Initech</div>
+        <div class="c--slider-a__slide demo-logo-slide" data-slide>Umbrella</div>
+        <div class="c--slider-a__slide demo-logo-slide" data-slide>Hooli</div>
+      </div>
+    </div>
+  </DemoViewer>
+
+  <!-- ── Example 3: manual disable during loading ── -->
+  <DemoViewer
+    title="Disable during async loading"
+    description="Call disable() while new content is being fetched so the user can't navigate mid-load, then re-enable once the data is ready. No need to destroy and rebuild the whole slider."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <!-- slides populated by JS -->
+  </div>
+</div>
+<div id="my-pag" class="c--slider-a__pagination"></div>
+<button id="btn-reload">Simulate reload</button>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+
+/* Dim the slider while disabled */
+.c--slider-a--disabled { opacity: 0.4; pointer-events: none; transition: opacity 0.2s; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+const slider = new Slider('#my-slider', {
+  loop: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#my-pag', type: 'dots', clickable: true }),
+  ],
+})
+
+async function loadSlides() {
+  slider.disable()               // lock navigation
+  // ... await fetch('/api/slides')
+  await new Promise(r => setTimeout(r, 1500)) // simulated delay
+  slider.enable()                // unlock once data is ready
+}
+
+document.getElementById('btn-reload').addEventListener('click', loadSlides)`}
+  >
+    <div class="c--slider-a" id="demo-freeze-async">
       <div class="c--slider-a__wrapper">
         <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
         <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
         <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
       </div>
     </div>
-    <div id="demo-freeze-pag" class="c--slider-a__pagination"></div>
+    <div id="demo-freeze-async-pag" class="c--slider-a__pagination"></div>
     <div class="ctrl-row">
-      <button id="btn-enable"  class="ctrl-btn ctrl-btn--on">enable()</button>
-      <button id="btn-disable" class="ctrl-btn ctrl-btn--off">disable()</button>
+      <button id="btn-async-reload" class="ctrl-btn">Simulate reload (1.5 s)</button>
+      <span id="async-status" class="async-status"></span>
     </div>
-    <p class="hint">The slider auto-froze because all 3 slides fit with <code>slidesPerPage: 3</code>. Use <code>enable()</code>/<code>disable()</code> for manual control.</p>
   </DemoViewer>
+
 </DemoLayout>
 
 <style>
-.ctrl-row { display: flex; gap: 8px; margin-top: 12px; }
+/* Card slides */
+.demo-card-slide { padding: 4px; }
+.card-inner {
+  height: 140px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #fff;
+  font-weight: 700;
+}
+.card-inner span { font-size: 1.1rem; }
+.card-inner small { font-size: 0.8rem; opacity: 0.85; }
+
+/* Logo slides */
+.demo-logo-slide {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  letter-spacing: 0.05em;
+}
+
+/* Async demo controls */
+.ctrl-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
 .ctrl-btn {
   padding: 7px 14px; border: 1px solid #d1d5db; border-radius: 6px;
   background: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 500;
   transition: background 0.15s;
 }
-.ctrl-btn--on  { border-color: #6ee7b7; color: #065f46; }
-.ctrl-btn--off { border-color: #fca5a5; color: #dc2626; }
-.hint { margin-top: 10px; font-size: 0.82rem; color: var(--text-muted); }
+.ctrl-btn:hover { background: #f3f4f6; }
+.async-status { font-size: 0.8rem; color: var(--text-muted); }
 </style>
 
 <script>
 import { Slider } from '@acslider/core'
 import { arrows, pagination } from '@acslider/plugins'
 
-const slider = new Slider('#demo-freeze', {
-  slidesPerPage: 3,
+// ── Example 1: responsive card row ──────────────────────────────────────────
+new Slider('#demo-freeze-cards', {
   gutter: 12,
   freezable: true,
+  breakpoints: {
+    480: { slidesPerPage: 2 },
+    768: { slidesPerPage: 3 },
+    960: { slidesPerPage: 4 },
+  },
   plugins: [
     arrows(),
-    pagination({ el: '#demo-freeze-pag', type: 'dots', clickable: true }),
+    pagination({ el: '#demo-freeze-cards-pag', type: 'dots', clickable: true }),
   ],
 })
 
-document.getElementById('btn-enable')?.addEventListener('click',  () => slider.enable())
-document.getElementById('btn-disable')?.addEventListener('click', () => slider.disable())
+// ── Example 2: logo strip ────────────────────────────────────────────────────
+new Slider('#demo-freeze-logos', {
+  gutter: 12,
+  freezable: true,
+  breakpoints: {
+    480: { slidesPerPage: 3 },
+    768: { slidesPerPage: 5 },
+  },
+  plugins: [arrows()],
+})
+
+// ── Example 3: disable during async load ────────────────────────────────────
+const asyncSlider = new Slider('#demo-freeze-async', {
+  loop: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#demo-freeze-async-pag', type: 'dots', clickable: true }),
+  ],
+})
+
+const status = document.getElementById('async-status')!
+const reloadBtn = document.getElementById('btn-async-reload') as HTMLButtonElement
+
+reloadBtn.addEventListener('click', async () => {
+  reloadBtn.disabled = true
+  status.textContent = 'Loading…'
+  asyncSlider.disable()
+  await new Promise(r => setTimeout(r, 1500))
+  asyncSlider.enable()
+  status.textContent = 'Done!'
+  reloadBtn.disabled = false
+  setTimeout(() => { status.textContent = '' }, 2000)
+})
 </script>

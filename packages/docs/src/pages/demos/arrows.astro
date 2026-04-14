@@ -6,13 +6,86 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <DemoViewer
     title="Arrows"
     description="Auto-created arrow buttons. Can also point to existing DOM elements with prevEl/nextEl."
-    code={`import { arrows } from '@acslider/plugins'
+    html={`<!-- Option A: auto-created arrows (no extra HTML needed) -->
+<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">Slide 1</div>
+    <div class="c--slider-a__slide">Slide 2</div>
+    <div class="c--slider-a__slide">Slide 3</div>
+    <div class="c--slider-a__slide">Slide 4</div>
+    <div class="c--slider-a__slide">Slide 5</div>
+  </div>
+</div>
 
-// Auto-create arrows inside container
-new Slider('#el', { plugins: [arrows()] })
+<!-- Option B: external arrows you supply yourself -->
+<div class="slider-nav">
+  <button id="my-prev" class="my-arrow">←</button>
+  <div class="c--slider-a" id="my-slider">...</div>
+  <button id="my-next" class="my-arrow">→</button>
+</div>`}
+    css={`.c--slider-a {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.c--slider-a__wrapper {
+  display: flex;
+  will-change: transform;
+}
+.c--slider-a__slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 260px;
+}
 
-// Or point to existing elements
-new Slider('#el', {
+/* Auto-created arrows */
+.c--slider-a__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }
+
+/* External / custom arrows (Option B) */
+.slider-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.my-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+.my-arrow:hover { border-color: #6C2BD9; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+// Option A: auto-create arrows inside the container
+new Slider('#my-slider', {
+  plugins: [arrows()],
+})
+
+// Option B: point to existing DOM elements
+new Slider('#my-slider', {
+  loop: false,
+  rewind: true,
   plugins: [
     arrows({ prevEl: '#my-prev', nextEl: '#my-next' }),
   ],

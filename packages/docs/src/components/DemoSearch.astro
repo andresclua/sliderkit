@@ -1,0 +1,244 @@
+---
+// No props — the catalog is embedded at build time and search runs client-side
+import { DEMOS } from '../demos-catalog'
+const catalogJson = JSON.stringify(
+  DEMOS.map(d => ({
+    slug: d.slug,
+    label: d.label,
+    title: d.title,
+    description: d.description,
+    tags: d.tags,
+    group: d.group,
+    href: `/demos/${d.slug}`,
+  }))
+)
+---
+
+<div class="demo-search" id="demo-search">
+  <div class="search-input-wrap">
+    <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="8.5" cy="8.5" r="5.5"/>
+      <line x1="13" y1="13" x2="18" y2="18"/>
+    </svg>
+    <input
+      id="demo-search-input"
+      type="search"
+      placeholder="Search demos…"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <kbd class="search-kbd">⌘K</kbd>
+  </div>
+  <ul id="demo-search-results" class="search-results" hidden></ul>
+</div>
+
+<script define:vars={{ catalogJson }}>
+const catalog = JSON.parse(catalogJson)
+
+const input   = document.getElementById('demo-search-input')
+const results = document.getElementById('demo-search-results')
+
+const GROUP_LABELS = {
+  core:      'Core',
+  plugins:   'Plugins',
+  effects:   'Effects CSS',
+  lifecycle: 'Lifecycle',
+  webgl:     'WebGL',
+}
+
+function search(q) {
+  const query = q.toLowerCase().trim()
+  if (!query) return []
+  return catalog.filter(d =>
+    d.title.toLowerCase().includes(query) ||
+    d.label.toLowerCase().includes(query) ||
+    d.description.toLowerCase().includes(query) ||
+    d.tags.some(t => t.includes(query))
+  )
+}
+
+function highlight(text, q) {
+  if (!q) return text
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+  return text.replace(re, '<mark>$1</mark>')
+}
+
+function render(q) {
+  const matches = search(q)
+  results.innerHTML = ''
+  if (!q.trim() || matches.length === 0) {
+    results.hidden = true
+    return
+  }
+  matches.forEach(d => {
+    const li = document.createElement('li')
+    li.innerHTML = `
+      <a href="${d.href}" class="search-result-link">
+        <span class="sr-title">${highlight(d.label, q)}</span>
+        <span class="sr-group">${GROUP_LABELS[d.group]}</span>
+        <span class="sr-desc">${highlight(d.description, q)}</span>
+      </a>`
+    results.appendChild(li)
+  })
+  results.hidden = false
+}
+
+input.addEventListener('input', () => render(input.value))
+
+// Keyboard: ⌘K / Ctrl+K focuses the input
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault()
+    input.focus()
+    input.select()
+  }
+  if (e.key === 'Escape') {
+    results.hidden = true
+    input.blur()
+  }
+})
+
+// Close on click outside
+document.addEventListener('click', e => {
+  if (!document.getElementById('demo-search')?.contains(e.target)) {
+    results.hidden = true
+  }
+})
+
+// Navigate results with arrow keys
+input.addEventListener('keydown', e => {
+  const items = [...results.querySelectorAll('a')]
+  const active = results.querySelector('a:focus')
+  const idx = items.indexOf(active)
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    items[idx + 1]?.focus() ?? items[0]?.focus()
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    if (idx <= 0) input.focus()
+    else items[idx - 1]?.focus()
+  }
+})
+</script>
+
+<style>
+.demo-search {
+  position: relative;
+  margin: 0 0.75rem 0.75rem;
+}
+
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f4f6;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 10px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.search-input-wrap:focus-within {
+  border-color: var(--brand-light);
+  box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.1);
+  background: #fff;
+}
+
+.search-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+#demo-search-input {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 0.82rem;
+  color: var(--text);
+  padding: 7px 0;
+  min-width: 0;
+}
+#demo-search-input::placeholder { color: var(--text-muted); }
+
+.search-kbd {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: #e5e7eb;
+  border-radius: 4px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+.search-input-wrap:focus-within .search-kbd { display: none; }
+
+/* Results dropdown */
+.search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  list-style: none;
+  overflow: hidden;
+  z-index: 100;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.search-result-link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 1px 8px;
+  padding: 9px 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.1s;
+}
+.search-result-link:hover,
+.search-result-link:focus {
+  background: #f3f4f6;
+  outline: none;
+}
+
+.sr-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  grid-column: 1;
+  grid-row: 1;
+}
+.sr-group {
+  font-size: 0.72rem;
+  color: var(--brand);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+}
+.sr-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  grid-column: 1 / -1;
+  grid-row: 2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-result-link mark {
+  background: #fef08a;
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+li + li { border-top: 1px solid var(--border); }
+</style>

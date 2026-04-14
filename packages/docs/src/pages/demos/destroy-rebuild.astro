@@ -3,9 +3,56 @@ import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
 ---
 <DemoLayout title="Destroy & Rebuild">
+
   <DemoViewer
-    title="Destroy & Rebuild"
-    description="destroy() tears down everything. rebuild() re-initializes, optionally with new options."
+    title="Destroy & rebuild"
+    description="destroy() tears down the slider completely — removes all event listeners, resets the DOM to its original pre-init state, and clears the internal instance. Call rebuild() on the same instance to re-initialize, optionally passing new options. This is useful when you need to reconfigure the slider at runtime — for example, switching from single-slide to multi-slide layout on window resize, or toggling effects on user request."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__slide">5</div>
+  </div>
+</div>
+<div id="my-pag" class="c--slider-a__pagination"></div>
+<div class="ctrl-row">
+  <button id="btn-destroy">Destroy</button>
+  <button id="btn-rebuild">Rebuild (1 per page)</button>
+  <button id="btn-rebuild3">Rebuild (3 per page)</button>
+</div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+
+.ctrl-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+button {
+  padding: 7px 14px; border: 1px solid #d1d5db; border-radius: 6px;
+  background: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 500;
+}`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+let slider = new Slider('#my-slider', {
+  loop: true,
+  plugins: [
+    arrows(),
+    pagination({ el: '#my-pag', type: 'dots', clickable: true }),
+  ],
+})
+
+document.getElementById('btn-destroy').addEventListener('click', () => {
+  slider.destroy()
+})
+
+document.getElementById('btn-rebuild').addEventListener('click', () => {
+  slider = slider.rebuild({ slidesPerPage: 1, loop: true })
+})
+
+document.getElementById('btn-rebuild3').addEventListener('click', () => {
+  slider = slider.rebuild({ slidesPerPage: 3, gutter: 12, loop: false, rewind: true })
+})`}
   >
     <div class="c--slider-a" id="demo-destroy">
       <div class="c--slider-a__wrapper">
@@ -24,24 +71,72 @@ import DemoViewer from '../../components/DemoViewer.astro'
     </div>
     <p id="destroy-status" class="status-msg"></p>
   </DemoViewer>
+
+  <DemoViewer
+    title="Responsive rebuild on resize"
+    description="A common pattern: initialize with mobile settings, then rebuild with different options when the viewport crosses a breakpoint. destroy() + rebuild() is simpler than maintaining multiple slider instances or patching options after init. The slider below switches between 1 and 3 slides per page as you resize the window."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__slide">5</div>
+    <div class="c--slider-a__slide">6</div>
+  </div>
+</div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; height: 180px; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows } from '@acslider/plugins'
+
+function getOptions() {
+  return window.innerWidth >= 768
+    ? { slidesPerPage: 3, gutter: 16, loop: false, rewind: true }
+    : { slidesPerPage: 1, loop: false, rewind: true }
+}
+
+let slider = new Slider('#my-slider', {
+  ...getOptions(),
+  plugins: [arrows()],
+})
+
+let resizeTimer: ReturnType<typeof setTimeout>
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(() => {
+    slider = slider.rebuild(getOptions())
+  }, 150)
+})`}
+  >
+    <div class="c--slider-a" id="demo-destroy-responsive">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>6</div>
+      </div>
+    </div>
+    <p class="hint">Resize the window to trigger a rebuild with different options.</p>
+  </DemoViewer>
+
 </DemoLayout>
 
 <style>
 .ctrl-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 .ctrl-btn {
-  padding: 7px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: #fff;
-  cursor: pointer;
-  font-size: 0.82rem;
-  font-weight: 500;
+  padding: 7px 14px; border: 1px solid #d1d5db; border-radius: 6px;
+  background: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 500;
   transition: background 0.15s;
 }
 .ctrl-btn:hover { background: #f3f4f6; }
 .ctrl-btn--danger { border-color: #fca5a5; color: #dc2626; }
 .ctrl-btn--danger:hover { background: #fef2f2; }
 .status-msg { margin-top: 8px; font-size: 0.82rem; color: var(--text-muted); min-height: 20px; }
+.hint { font-size: 0.82rem; color: var(--text-muted); margin-top: 8px; }
 </style>
 
 <script>
@@ -66,12 +161,32 @@ document.getElementById('btn-destroy')?.addEventListener('click', () => {
 })
 
 document.getElementById('btn-rebuild')?.addEventListener('click', () => {
-  slider = slider.rebuild({ slidesPerPage: 1, loop: true })
+  slider = slider.rebuild({ slidesPerPage: 1, loop: true, plugins: makePlugins('#demo-destroy-pag') })
   status.textContent = 'Rebuilt with 1 slide per page.'
 })
 
 document.getElementById('btn-rebuild3')?.addEventListener('click', () => {
-  slider = slider.rebuild({ slidesPerPage: 3, gutter: 12, loop: false, rewind: true })
+  slider = slider.rebuild({ slidesPerPage: 3, gutter: 12, loop: false, rewind: true, plugins: makePlugins('#demo-destroy-pag') })
   status.textContent = 'Rebuilt with 3 slides per page.'
+})
+
+// Responsive demo
+function getOpts() {
+  return window.innerWidth >= 768
+    ? { slidesPerPage: 3, gutter: 16, loop: false, rewind: true }
+    : { slidesPerPage: 1, loop: false, rewind: true }
+}
+
+let sliderResponsive = new Slider('#demo-destroy-responsive', {
+  ...getOpts(),
+  plugins: [arrows()],
+})
+
+let resizeTimer: ReturnType<typeof setTimeout>
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(() => {
+    sliderResponsive = sliderResponsive.rebuild(getOpts())
+  }, 150)
 })
 </script>

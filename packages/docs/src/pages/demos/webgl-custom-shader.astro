@@ -3,80 +3,302 @@ import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
 ---
 <DemoLayout title="WebGL — Custom Shader">
+
   <DemoViewer
-    title="WebGL — Custom Shader"
-    description="Write your own GLSL fragment shader. uTexture0 is the outgoing slide, uTexture1 the incoming, uProgress goes 0→1 during the transition."
-    code={`// wipe.frag
-precision mediump float;
-uniform sampler2D uTexture0;
-uniform sampler2D uTexture1;
-uniform float     uProgress;
-varying vec2 vUv;
+    title="Horizontal soft wipe"
+    description="A fragment shader that sweeps a soft edge from left to right across the canvas, revealing the incoming slide beneath. The edge is blended with smoothstep over a 0.1-wide band — widen the band (0.2+) for a blurry transition, narrow it (0.02) for a hard cut. Three uniforms are always available: uFrom (outgoing texture), uTo (incoming texture), uProgress (0 → 1 over the duration)."
+    html={`<div class="wgl-slider" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <!-- Slides are empty — WebGL renders the images -->
+    <div class="wgl-slide" data-slide></div>
+    <div class="wgl-slide" data-slide></div>
+    <div class="wgl-slide" data-slide></div>
+    <div class="wgl-slide" data-slide></div>
+  </div>
+</div>`}
+    css={`.wgl-slider { position: relative; height: 400px; overflow: hidden; background: #000; }
+.wgl-slider .c--slider-a__wrapper { display: flex; }
+.wgl-slide { flex-shrink: 0; width: 100%; height: 100%; }
+.wgl-slider canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }`}
+    js={`// wipe.frag — soft horizontal wipe
+const FRAG = \`
+  precision highp float;
+  uniform sampler2D uFrom;  // outgoing slide texture
+  uniform sampler2D uTo;    // incoming slide texture
+  uniform float uProgress;  // 0 → 1
+  varying vec2 vUv;
 
-void main() {
-  float edge = smoothstep(uProgress - 0.05, uProgress + 0.05, vUv.x);
-  gl_FragColor = mix(
-    texture2D(uTexture0, vUv),
-    texture2D(uTexture1, vUv),
-    edge
-  );
-}
+  void main() {
+    float edge = smoothstep(uProgress - 0.05, uProgress + 0.05, vUv.x);
+    gl_FragColor = mix(
+      texture2D(uFrom, vUv),
+      texture2D(uTo,   vUv),
+      1.0 - edge
+    );
+  }
+\`
 
-// --- main.ts ---
-import wipeShader from './wipe.frag?raw'
-import { webglRenderer } from '@acslider/webgl'
+import { Slider } from '@acslider/core'
+import { arrows } from '@acslider/plugins'
 
-new Slider('#el', {
-  plugins: [
-    webglRenderer({ shader: wipeShader, duration: 700 }),
-    arrows(),
-  ],
+// Standard WebGL setup (see displacement demo for boilerplate)
+// Compile FRAG, create quad, load textures …
+
+const slider = new Slider('#my-slider', {
+  loop: true, speed: 1,
+  plugins: [arrows()],
+})
+slider.on('afterSlideChange', ({ index, previousIndex }) => {
+  animateTransition(textures[previousIndex], textures[index], 800)
 })`}
   >
-    <div class="c--slider-a c--slider-a--effect" id="demo-webgl-custom">
+    <div class="wgl-slider" id="demo-wipe">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide" data-slide>
-          <img src="https://picsum.photos/seed/cs1/900/500" alt="Slide 1" loading="lazy" />
-        </div>
-        <div class="c--slider-a__slide" data-slide>
-          <img src="https://picsum.photos/seed/cs2/900/500" alt="Slide 2" loading="lazy" />
-        </div>
-        <div class="c--slider-a__slide" data-slide>
-          <img src="https://picsum.photos/seed/cs3/900/500" alt="Slide 3" loading="lazy" />
-        </div>
-        <div class="c--slider-a__slide" data-slide>
-          <img src="https://picsum.photos/seed/cs4/900/500" alt="Slide 4" loading="lazy" />
-        </div>
+        <div class="wgl-slide" data-slide></div>
+        <div class="wgl-slide" data-slide></div>
+        <div class="wgl-slide" data-slide></div>
+        <div class="wgl-slide" data-slide></div>
       </div>
     </div>
-    <div class="webgl-note">
-      Custom GLSL runs as a canvas overlay. Full guide in <a href="/docs/custom-shaders">Custom Shaders docs</a>.
+  </DemoViewer>
+
+  <DemoViewer
+    title="Radial iris wipe"
+    description="An expanding circle reveals the incoming slide from the centre of the frame outward. The radius is driven by uProgress scaled to the maximum corner distance (√2 / 2 ≈ 0.707), so the circle always covers the full canvas at progress = 1. Adjust the smoothstep band width for a hard or soft edge."
+    html={`<div class="wgl-slider" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="wgl-slide" data-slide></div>
+    <div class="wgl-slide" data-slide></div>
+    <div class="wgl-slide" data-slide></div>
+    <div class="wgl-slide" data-slide></div>
+  </div>
+</div>`}
+    css={`.wgl-slider { position: relative; height: 400px; overflow: hidden; background: #000; }
+.wgl-slider .c--slider-a__wrapper { display: flex; }
+.wgl-slide { flex-shrink: 0; width: 100%; height: 100%; }
+.wgl-slider canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }`}
+    js={`// iris.frag — radial wipe from centre
+const FRAG = \`
+  precision highp float;
+  uniform sampler2D uFrom;
+  uniform sampler2D uTo;
+  uniform float uProgress;
+  varying vec2 vUv;
+
+  void main() {
+    // Distance from centre; max corner distance = sqrt(0.5) ≈ 0.707
+    float dist  = length(vUv - vec2(0.5));
+    float radius = uProgress * 0.707;
+    float edge  = smoothstep(radius - 0.04, radius + 0.04, dist);
+    // edge=0 inside circle → show uTo; edge=1 outside → show uFrom
+    gl_FragColor = mix(texture2D(uTo, vUv), texture2D(uFrom, vUv), edge);
+  }
+\`
+
+// Same Slider integration as the wipe demo above
+const slider = new Slider('#my-slider', {
+  loop: true, speed: 1,
+  plugins: [arrows()],
+})`}
+  >
+    <div class="wgl-slider" id="demo-iris">
+      <div class="c--slider-a__wrapper">
+        <div class="wgl-slide" data-slide></div>
+        <div class="wgl-slide" data-slide></div>
+        <div class="wgl-slide" data-slide></div>
+        <div class="wgl-slide" data-slide></div>
+      </div>
     </div>
   </DemoViewer>
+
 </DemoLayout>
 
 <style>
-.c--slider-a--effect .c--slider-a__slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.webgl-note {
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-  color: var(--text-muted, #888);
-  text-align: center;
-}
+.wgl-slider { position: relative; aspect-ratio: 2/1; overflow: hidden; background: #111; }
+.wgl-slider .c--slider-a__wrapper { display: flex; }
+.wgl-slide  { flex-shrink: 0; width: 100%; height: 100%; }
+.wgl-slider canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.wgl-slider :global(.c--slider-a__arrow) { z-index: 2; }
 </style>
 
 <script>
 import { Slider } from '@acslider/core'
 import { arrows } from '@acslider/plugins'
 
-new Slider('#demo-webgl-custom', {
-  loop: true,
-  speed: 600,
-  plugins: [arrows()],
-})
+// ─── Vertex shader (shared by all demos) ─────────────────────────────────────
+const VERT = `
+  attribute vec2 a_pos;
+  attribute vec2 a_uv;
+  varying vec2 vUv;
+  void main() { vUv = a_uv; gl_Position = vec4(a_pos, 0.0, 1.0); }
+`
+
+// ─── Fragment shaders ─────────────────────────────────────────────────────────
+const FRAG_WIPE = `
+  precision highp float;
+  uniform sampler2D uFrom;
+  uniform sampler2D uTo;
+  uniform float uProgress;
+  uniform vec2  uCanvas;
+  uniform float uImg;
+  varying vec2 vUv;
+
+  vec2 cover(vec2 uv, vec2 canvas, float img) {
+    float ca = canvas.x / canvas.y;
+    vec2 s = ca > img ? vec2(ca / img, 1.0) : vec2(1.0, img / ca);
+    return (uv - 0.5) / s + 0.5;
+  }
+
+  void main() {
+    vec2  uv   = cover(vUv, uCanvas, uImg);
+    float edge = smoothstep(uProgress - 0.05, uProgress + 0.05, vUv.x);
+    gl_FragColor = mix(texture2D(uTo, uv), texture2D(uFrom, uv), edge);
+  }
+`
+
+const FRAG_IRIS = `
+  precision highp float;
+  uniform sampler2D uFrom;
+  uniform sampler2D uTo;
+  uniform float uProgress;
+  uniform vec2  uCanvas;
+  uniform float uImg;
+  varying vec2 vUv;
+
+  vec2 cover(vec2 uv, vec2 canvas, float img) {
+    float ca = canvas.x / canvas.y;
+    vec2 s = ca > img ? vec2(ca / img, 1.0) : vec2(1.0, img / ca);
+    return (uv - 0.5) / s + 0.5;
+  }
+
+  void main() {
+    vec2  uv     = cover(vUv, uCanvas, uImg);
+    float dist   = length(vUv - vec2(0.5));
+    float radius = uProgress * 0.707;
+    float edge   = smoothstep(radius - 0.04, radius + 0.04, dist);
+    gl_FragColor = mix(texture2D(uTo, uv), texture2D(uFrom, uv), edge);
+  }
+`
+
+// ─── Generic GL setup ─────────────────────────────────────────────────────────
+function initShader(container: HTMLElement, fragSrc: string) {
+  const canvas = document.createElement('canvas')
+  container.insertBefore(canvas, container.firstChild)
+  const gl = canvas.getContext('webgl')!
+
+  let _redraw: (() => void) | null = null
+  function resize() {
+    const w = container.offsetWidth, h = container.offsetHeight
+    canvas.width  = w * Math.min(devicePixelRatio, 2)
+    canvas.height = h * Math.min(devicePixelRatio, 2)
+    canvas.style.width = w + 'px'
+    canvas.style.height = h + 'px'
+    gl.viewport(0, 0, canvas.width, canvas.height)
+    _redraw?.()
+  }
+  resize()
+  window.addEventListener('resize', resize)
+
+  const compile = (type: number, src: string) => {
+    const s = gl.createShader(type)!; gl.shaderSource(s, src); gl.compileShader(s); return s
+  }
+  const prog = gl.createProgram()!
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT))
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fragSrc))
+  gl.linkProgram(prog)
+
+  const posData = new Float32Array([-1,-1, 1,-1, -1,1, 1,1])
+  const uvData  = new Float32Array([0,1,  1,1,  0,0,  1,0])
+  const posBuf  = gl.createBuffer()!; gl.bindBuffer(gl.ARRAY_BUFFER, posBuf); gl.bufferData(gl.ARRAY_BUFFER, posData, gl.STATIC_DRAW)
+  const uvBuf   = gl.createBuffer()!; gl.bindBuffer(gl.ARRAY_BUFFER, uvBuf);  gl.bufferData(gl.ARRAY_BUFFER, uvData,  gl.STATIC_DRAW)
+
+  const aPos    = gl.getAttribLocation(prog, 'a_pos')
+  const aUv     = gl.getAttribLocation(prog, 'a_uv')
+  const uFrom   = gl.getUniformLocation(prog, 'uFrom')!
+  const uTo     = gl.getUniformLocation(prog, 'uTo')!
+  const uProg   = gl.getUniformLocation(prog, 'uProgress')!
+  const uCanvas = gl.getUniformLocation(prog, 'uCanvas')!
+  const uImgLoc = gl.getUniformLocation(prog, 'uImg')!
+
+  const texAspects = new Map<WebGLTexture, number>()
+
+  function draw(from: WebGLTexture, to: WebGLTexture, progress: number) {
+    _redraw = () => draw(from, to, progress)
+    gl.useProgram(prog)
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0)
+    gl.bindBuffer(gl.ARRAY_BUFFER, uvBuf);  gl.enableVertexAttribArray(aUv);  gl.vertexAttribPointer(aUv,  2, gl.FLOAT, false, 0, 0)
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, from); gl.uniform1i(uFrom, 0)
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, to);   gl.uniform1i(uTo, 1)
+    gl.uniform1f(uProg, progress)
+    gl.uniform2f(uCanvas, canvas.width, canvas.height)
+    gl.uniform1f(uImgLoc, texAspects.get(from) ?? 1.0)
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+  }
+
+  function loadTex(src: string): Promise<WebGLTexture> {
+    return new Promise(resolve => {
+      const img = new Image(); img.crossOrigin = 'anonymous'
+      img.onload = () => {
+        const t = gl.createTexture()!
+        gl.bindTexture(gl.TEXTURE_2D, t)
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+        texAspects.set(t, img.naturalWidth / img.naturalHeight)
+        resolve(t)
+      }
+      img.src = src
+    })
+  }
+
+  return { draw, loadTex }
+}
+
+function runSlider(containerId: string, fragSrc: string, images: string[], dur: number) {
+  const el = document.getElementById(containerId)!
+  const { draw, loadTex } = initShader(el, fragSrc)
+
+  Promise.all(images.map(loadTex)).then(textures => {
+    draw(textures[0], textures[0], 0)
+
+    const slider = new Slider('#' + containerId, {
+      loop: true,
+      speed: 1,
+      plugins: [arrows()],
+    })
+
+    let rafId: number | null = null
+    slider.on('afterSlideChange', ({ index, previousIndex }: { index: number; previousIndex: number }) => {
+      if (rafId !== null) cancelAnimationFrame(rafId)
+      const from = textures[previousIndex], to = textures[index]
+      const start = performance.now()
+      const tick = (now: number) => {
+        const t = Math.min((now - start) / dur, 1)
+        const ease = t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t
+        draw(from, to, ease)
+        if (t < 1) rafId = requestAnimationFrame(tick)
+        else { draw(to, to, 0); rafId = null }
+      }
+      rafId = requestAnimationFrame(tick)
+    })
+  })
+}
+
+// ─── Horizontal wipe ─────────────────────────────────────────────────────────
+runSlider('demo-wipe', FRAG_WIPE, [
+  'https://picsum.photos/seed/wipe1/900/400',
+  'https://picsum.photos/seed/wipe2/900/400',
+  'https://picsum.photos/seed/wipe3/900/400',
+  'https://picsum.photos/seed/wipe4/900/400',
+], 800)
+
+// ─── Iris / radial wipe ───────────────────────────────────────────────────────
+runSlider('demo-iris', FRAG_IRIS, [
+  'https://picsum.photos/seed/iris1/900/400',
+  'https://picsum.photos/seed/iris2/900/400',
+  'https://picsum.photos/seed/iris3/900/400',
+  'https://picsum.photos/seed/iris4/900/400',
+], 900)
 </script>

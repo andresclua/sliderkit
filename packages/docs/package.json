@@ -10,9 +10,10 @@
   },
   "dependencies": {
     "@acslider/core": "workspace:*",
-    "@acslider/plugins": "workspace:*",
     "@acslider/effects": "workspace:*",
+    "@acslider/plugins": "workspace:*",
     "@acslider/webgl": "workspace:*",
-    "astro": "^4.11.0"
+    "astro": "^4.11.0",
+    "gsap": "^3.15.0"
   }
 }

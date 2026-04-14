@@ -3,13 +3,39 @@ import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
 ---
 <DemoLayout title="Pagination — Custom">
+
   <DemoViewer
-    title="Pagination — Custom render"
-    description="Render any HTML you want inside the pagination container using renderCustom."
-    code={`pagination({
-  type: 'custom',
-  renderCustom: ({ current, total }) =>
-    \`<strong>\${current}</strong> <span>of</span> \${total}\`,
+    title="Styled text counter"
+    description="renderCustom lets you return any HTML string as the pagination. The function receives current and total on every slide change."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+  </div>
+</div>
+<div id="my-pag" class="c--slider-a__pagination custom-pag"></div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+.custom-pag { font-size: 1.1rem; font-weight: 300; color: #374151; padding: 12px 0; text-align: center; }
+.custom-pag strong { font-size: 1.8rem; font-weight: 800; color: #6C2BD9; }
+.custom-pag span { color: #9ca3af; font-size: 0.85rem; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    pagination({
+      el: '#my-pag',
+      type: 'custom',
+      renderCustom: ({ current, total }) =>
+        '<strong>' + current + '</strong> <span>of ' + total + '</span>',
+    }),
+  ],
 })`}
   >
     <div class="c--slider-a" id="demo-pag-cust">
@@ -23,12 +49,81 @@ import DemoViewer from '../../components/DemoViewer.astro'
     </div>
     <div id="demo-pag-cust-pag" class="c--slider-a__pagination custom-pag"></div>
   </DemoViewer>
+
+  <DemoViewer
+    title="Step indicator"
+    description="A step indicator renders numbered bubbles showing current progress. Use renderCustom with a loop to generate each step pill dynamically."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">Step 1</div>
+    <div class="c--slider-a__slide">Step 2</div>
+    <div class="c--slider-a__slide">Step 3</div>
+    <div class="c--slider-a__slide">Step 4</div>
+  </div>
+</div>
+<div id="my-pag" class="step-pag"></div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+.step-pag { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 16px 0; }
+.step-bubble { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; background: #e5e7eb; color: #6b7280; }
+.step-bubble.is-done { background: #6C2BD9; color: #fff; }
+.step-bubble.is-active { background: #fff; border: 2px solid #6C2BD9; color: #6C2BD9; }
+.step-line { width: 32px; height: 2px; background: #e5e7eb; }
+.step-line.is-done { background: #6C2BD9; }`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, pagination } from '@acslider/plugins'
+
+function buildSteps(current, total) {
+  let html = ''
+  for (let i = 1; i <= total; i++) {
+    if (i > 1) {
+      const lineClass = i <= current ? 'step-line is-done' : 'step-line'
+      html += '<span class="' + lineClass + '"></span>'
+    }
+    const cls = i < current ? 'is-done' : i === current ? 'is-active' : ''
+    html += '<span class="step-bubble ' + cls + '">' + i + '</span>'
+  }
+  return html
+}
+
+new Slider('#my-slider', {
+  loop: false,
+  rewind: false,
+  plugins: [
+    arrows(),
+    pagination({
+      el: '#my-pag',
+      type: 'custom',
+      renderCustom: ({ current, total }) => buildSteps(current, total),
+    }),
+  ],
+})`}
+  >
+    <div class="c--slider-a" id="demo-pag-step">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>Step 1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>Step 2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>Step 3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>Step 4</div>
+      </div>
+    </div>
+    <div id="demo-pag-step-pag" class="step-pag"></div>
+  </DemoViewer>
+
 </DemoLayout>
 
 <style>
-.custom-pag { font-size: 1.1rem; font-weight: 300; color: #374151; letter-spacing: 0.05em; }
-.custom-pag :global(strong) { font-size: 1.6rem; font-weight: 800; color: var(--brand); }
+.custom-pag { font-size: 1.1rem; font-weight: 300; color: #374151; padding: 12px 0; text-align: center; }
+.custom-pag :global(strong) { font-size: 1.8rem; font-weight: 800; color: var(--brand); }
 .custom-pag :global(span) { color: #9ca3af; font-size: 0.85rem; }
+
+.step-pag { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 16px 0; }
+.step-pag :global(.step-bubble) { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; background: #e5e7eb; color: #6b7280; }
+.step-pag :global(.step-bubble.is-done) { background: var(--brand); color: #fff; }
+.step-pag :global(.step-bubble.is-active) { background: #fff; border: 2px solid var(--brand); color: var(--brand); }
+.step-pag :global(.step-line) { width: 32px; height: 2px; background: #e5e7eb; }
+.step-pag :global(.step-line.is-done) { background: var(--brand); }
 </style>
 
 <script>
@@ -43,8 +138,35 @@ new Slider('#demo-pag-cust', {
     pagination({
       el: '#demo-pag-cust-pag',
       type: 'custom',
-      renderCustom: ({ current, total }) =>
-        `<strong>${current}</strong> <span>of</span> ${total}`,
+      renderCustom: ({ current, total }: { current: number; total: number }) =>
+        '<strong>' + current + '</strong> <span>of ' + total + '</span>',
+    }),
+  ],
+})
+
+function buildSteps(current: number, total: number): string {
+  let html = ''
+  for (let i = 1; i <= total; i++) {
+    if (i > 1) {
+      const lineClass = i <= current ? 'step-line is-done' : 'step-line'
+      html += '<span class="' + lineClass + '"></span>'
+    }
+    const cls = i < current ? 'is-done' : i === current ? 'is-active' : ''
+    html += '<span class="step-bubble ' + cls + '">' + i + '</span>'
+  }
+  return html
+}
+
+new Slider('#demo-pag-step', {
+  loop: false,
+  rewind: false,
+  plugins: [
+    arrows(),
+    pagination({
+      el: '#demo-pag-step-pag',
+      type: 'custom',
+      renderCustom: ({ current, total }: { current: number; total: number }) =>
+        buildSteps(current, total),
     }),
   ],
 })

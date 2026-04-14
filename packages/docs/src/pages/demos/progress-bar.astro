@@ -3,15 +3,43 @@ import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
 ---
 <DemoLayout title="Progress Bar">
-  <DemoViewer
-    title="Progress Bar"
-    description="A thin bar that fills as you advance through slides."
-    code={`import { progressBar } from '@acslider/plugins'
 
-new Slider('#el', {
+  <DemoViewer
+    title="Basic progress bar"
+    description="A thin bar pinned to the top of the slider that fills proportionally as you advance. Works best in linear (non-loop) sliders so the bar has a clear start and end."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__slide">5</div>
+  </div>
+</div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+
+/* Progress bar — injected by plugin at the top of the container */
+.c--slider-a__progress-bar {
+  position: absolute;
+  top: 0; left: 0;
+  height: 3px;
+  background: #6C2BD9;
+  transition: width 0.3s linear;
+  z-index: 10;
+}`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, progressBar, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
   loop: false,
   rewind: true,
-  plugins: [arrows(), progressBar()],
+  plugins: [
+    arrows(),
+    progressBar(),
+    pagination({ type: 'fraction' }),
+  ],
 })`}
   >
     <div class="c--slider-a" id="demo-pbar">
@@ -25,11 +53,121 @@ new Slider('#el', {
     </div>
     <div id="demo-pbar-pag" class="c--slider-a__pagination"></div>
   </DemoViewer>
+
+  <DemoViewer
+    title="Progress bar + autoplay"
+    description="Combined with autoplay, the bar gives users a visual sense of how long until the next slide. Pair a thin bar with a slow autoplay delay (3–5 s) for hero banners where you don't want intrusive pagination."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__slide">5</div>
+  </div>
+</div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+
+.c--slider-a__progress-bar {
+  position: absolute;
+  top: 0; left: 0;
+  height: 3px;
+  background: #6C2BD9;
+  transition: width 0.3s linear;
+  z-index: 10;
+}`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, progressBar, autoplay } from '@acslider/plugins'
+
+new Slider('#my-slider', {
+  loop: true,
+  plugins: [
+    autoplay({ delay: 2500, pauseOnHover: true }),
+    arrows(),
+    progressBar(),
+  ],
+})`}
+  >
+    <div class="c--slider-a" id="demo-pbar-autoplay">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Custom bar style"
+    description="Override .c--slider-a__progress-bar in CSS to match your design. Here it's moved to the bottom edge and styled thicker with a gradient fill."
+    html={`<div class="c--slider-a" id="my-slider">
+  <div class="c--slider-a__wrapper">
+    <div class="c--slider-a__slide">1</div>
+    <div class="c--slider-a__slide">2</div>
+    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__slide">5</div>
+  </div>
+</div>`}
+    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+
+/* Thick bar at the bottom with gradient */
+.c--slider-a__progress-bar {
+  position: absolute;
+  bottom: 0; left: 0;
+  top: auto;
+  height: 5px;
+  background: linear-gradient(to right, #6C2BD9, #EC4899);
+  transition: width 0.3s linear;
+  z-index: 10;
+  border-radius: 0 3px 3px 0;
+}`}
+    js={`import { Slider } from '@acslider/core'
+import { arrows, progressBar, pagination } from '@acslider/plugins'
+
+new Slider('#my-slider', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    progressBar(),
+    pagination({ type: 'fraction' }),
+  ],
+})`}
+  >
+    <div class="c--slider-a" id="demo-pbar-styled">
+      <div class="c--slider-a__wrapper">
+        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+      </div>
+    </div>
+    <div id="demo-pbar-styled-pag" class="c--slider-a__pagination"></div>
+  </DemoViewer>
+
 </DemoLayout>
+
+<style>
+#demo-pbar-styled .c--slider-a__progress-bar {
+  bottom: 0; top: auto;
+  height: 5px;
+  background: linear-gradient(to right, var(--brand), #EC4899);
+  border-radius: 0 3px 3px 0;
+}
+</style>
 
 <script>
 import { Slider } from '@acslider/core'
-import { arrows, progressBar, pagination } from '@acslider/plugins'
+import { arrows, progressBar, autoplay, pagination } from '@acslider/plugins'
+
 new Slider('#demo-pbar', {
   loop: false,
   rewind: true,
@@ -37,6 +175,25 @@ new Slider('#demo-pbar', {
     arrows(),
     progressBar(),
     pagination({ el: '#demo-pbar-pag', type: 'fraction' }),
+  ],
+})
+
+new Slider('#demo-pbar-autoplay', {
+  loop: true,
+  plugins: [
+    autoplay({ delay: 2500, pauseOnHover: true }),
+    arrows(),
+    progressBar(),
+  ],
+})
+
+new Slider('#demo-pbar-styled', {
+  loop: false,
+  rewind: true,
+  plugins: [
+    arrows(),
+    progressBar(),
+    pagination({ el: '#demo-pbar-styled-pag', type: 'fraction' }),
   ],
 })
 </script>

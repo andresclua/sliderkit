@@ -2,9 +2,21 @@
 interface Props {
   title: string
   description?: string
-  code?: string
+  code?: string   // JS (legacy single-block)
+  html?: string
+  css?: string
+  js?: string
 }
-const { title, description, code } = Astro.props
+const { title, description, code, html, css, js } = Astro.props
+
+const jsCode = js ?? code  // support both prop names
+const hasTabs = !!(html || css || jsCode)
+const tabs = [
+  html   ? { id: 'html', label: 'HTML',  content: html }   : null,
+  css    ? { id: 'css',  label: 'CSS',   content: css }    : null,
+  jsCode ? { id: 'js',   label: 'JS',    content: jsCode } : null,
+].filter(Boolean) as { id: string; label: string; content: string }[]
+const multiTab = tabs.length > 1
 ---
 <section class="demo-viewer">
   <header class="demo-header">
@@ -16,10 +28,29 @@ const { title, description, code } = Astro.props
     <slot />
   </div>
 
-  {code && (
-    <details class="demo-code">
+  {hasTabs && (
+    <details class="demo-code" open>
       <summary>View code</summary>
-      <pre><code>{code}</code></pre>
+      {multiTab ? (
+        <div class="demo-tabs" data-tabs>
+          <div class="demo-tab-bar">
+            {tabs.map((tab, i) => (
+              <button
+                class={`demo-tab-btn${i === 0 ? ' is-active' : ''}`}
+                data-tab={tab.id}
+                type="button"
+              >{tab.label}</button>
+            ))}
+          </div>
+          {tabs.map((tab, i) => (
+            <div class={`demo-tab-panel${i === 0 ? ' is-active' : ''}`} data-panel={tab.id}>
+              <pre><code>{tab.content}</code></pre>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <pre><code>{tabs[0].content}</code></pre>
+      )}
     </details>
   )}
 </section>
@@ -61,4 +92,45 @@ const { title, description, code } = Astro.props
 }
 .demo-code summary:hover { background: #f3f4f6; }
 .demo-code pre { margin: 0; border-radius: 0; }
+
+/* Tabs */
+.demo-tab-bar {
+  display: flex;
+  gap: 0;
+  background: #1e1e2e;
+  border-bottom: 1px solid #333;
+}
+.demo-tab-btn {
+  padding: 0.5rem 1.1rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #888;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.demo-tab-btn:hover { color: #ccc; }
+.demo-tab-btn.is-active { color: #fff; border-bottom-color: var(--brand); }
+
+.demo-tab-panel { display: none; }
+.demo-tab-panel.is-active { display: block; }
+.demo-tab-panel pre { margin: 0; border-radius: 0; }
 </style>
+
+<script>
+document.querySelectorAll('[data-tabs]').forEach(tabs => {
+  tabs.querySelectorAll('.demo-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-tab')
+      tabs.querySelectorAll('.demo-tab-btn').forEach(b => b.classList.remove('is-active'))
+      tabs.querySelectorAll('.demo-tab-panel').forEach(p => p.classList.remove('is-active'))
+      btn.classList.add('is-active')
+      tabs.querySelector(`[data-panel="${id}"]`)?.classList.add('is-active')
+    })
+  })
+})
+</script>
