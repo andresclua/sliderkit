@@ -580,6 +580,9 @@ requestAnimationFrame(() => applyFilmBlur(filmSlider.activeIndex, true))
 
 filmSlider.on('afterSlideChange', ({ index }: { index: number }) => applyFilmBlur(index))
 
+// Snap blur to clone-zone positions before the loop boundary animation plays
+filmSlider.on('beforeLoopBoundary', ({ targetIndex }: { targetIndex: number }) => applyFilmBlur(targetIndex, true))
+
 // ── Demo 4: fan rotation (infinite loop) ─────────────────────────────────────
 const fanSlider = new Slider('#demo-fan', {
   slidesPerPage: 5,
@@ -613,4 +616,10 @@ function applyFanRotation(snap = false) {
 // Direct call — slider sets wrapper.style.transform synchronously in its constructor
 applyFanRotation(true)
 fanSlider.on('afterSlideChange', () => applyFanRotation())
+
+// Before the loop boundary animation plays, wrapper.style.transform is already set
+// to the clone-zone target. Snap all slide rotations now so clones look correct
+// as they animate into view (otherwise clones would show stale rotations from their
+// last off-screen position and visually "jump" into place after the transition).
+fanSlider.on('beforeLoopBoundary', () => applyFanRotation(true))
 </script>

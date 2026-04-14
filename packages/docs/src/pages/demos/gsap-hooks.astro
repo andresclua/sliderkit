@@ -311,9 +311,10 @@ const slider = new Slider('#my-cards', {
 })
 
 const cards = [...slider.slides].map(s => s.querySelector('.card-body'))
+const n = cards.length
 
 function animateIn(index) {
-  const card = cards[index]
+  const card = cards[index % n]
   if (!card) return
   gsap.fromTo(card.children,
     { y: 24, opacity: 0 },
@@ -321,17 +322,36 @@ function animateIn(index) {
   )
 }
 
-// Animate initial visible slides
-const info = slider.getInfo()
-for (let i = info.index; i < info.index + info.slidesPerPage; i++) {
-  animateIn(i % cards.length)
-}
+// Animate the initial visible cards
+const spp = slider.getInfo().slidesPerPage
+for (let i = 0; i < spp; i++) animateIn(i)
 
-slider.on('afterSlideChange', ({ index }) => {
-  // Animate the newly visible page of cards
-  for (let i = index; i < index + slider.getInfo().slidesPerPage; i++) {
-    animateIn(i % cards.length)
+// Track direction so we know which side the new card enters from
+let dir = 'next'
+slider.on('beforeSlideChange', ({ direction }) => { dir = direction })
+
+slider.on('afterSlideChange', ({ index, previousIndex }) => {
+  const spp = slider.getInfo().slidesPerPage
+  const entering = []
+
+  if (dir === 'next') {
+    // New card(s) sliding in from the right
+    for (let i = Math.max(index, previousIndex + spp); i < index + spp; i++) {
+      entering.push(i % n)
+    }
+  } else {
+    // New card(s) sliding in from the left
+    for (let i = index; i <= Math.min(index + spp - 1, previousIndex - 1); i++) {
+      entering.push(i % n)
+    }
   }
+
+  // Loop boundary or large jump: animate all visible cards
+  if (entering.length === 0) {
+    for (let i = 0; i < spp; i++) entering.push((index + i) % n)
+  }
+
+  entering.forEach(animateIn)
 })`}
   >
     <div class="card-slider" id="demo-cards-gsap">
@@ -530,10 +550,34 @@ for (let i = 0; i < initInfo.slidesPerPage; i++) {
   animateCardIn(i)
 }
 
-cardSlider.on('afterSlideChange', ({ index }: { index: number }) => {
-  const info = cardSlider.getInfo()
-  for (let i = index; i < index + info.slidesPerPage; i++) {
-    animateCardIn(i)
+// Track direction so afterSlideChange knows which side cards enter from
+let cardDir: 'next' | 'prev' = 'next'
+cardSlider.on('beforeSlideChange', ({ direction }: { direction: 'next' | 'prev' }) => {
+  cardDir = direction
+})
+
+cardSlider.on('afterSlideChange', ({ index, previousIndex }: { index: number; previousIndex: number }) => {
+  const spp  = cardSlider.getInfo().slidesPerPage as number
+  const n    = cardBodies.length
+  const newSlides: number[] = []
+
+  if (cardDir === 'next') {
+    // Cards entering from the right: those in the new range beyond the old range
+    for (let i = Math.max(index, previousIndex + spp); i < index + spp; i++) {
+      newSlides.push(i % n)
+    }
+  } else {
+    // Cards entering from the left: those in the new range before the old range started
+    for (let i = index; i <= Math.min(index + spp - 1, previousIndex - 1); i++) {
+      newSlides.push(i % n)
+    }
   }
+
+  // Fallback for loop boundary jumps (no overlap between old and new range)
+  if (newSlides.length === 0) {
+    for (let i = 0; i < spp; i++) newSlides.push((index + i) % n)
+  }
+
+  newSlides.forEach(animateCardIn)
 })
 </script>

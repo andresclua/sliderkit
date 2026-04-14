@@ -8,13 +8,138 @@ interface Props {
   js?: string
 }
 const { title, description, code, html, css, js } = Astro.props
+const jsCode = js ?? code
 
-const jsCode = js ?? code  // support both prop names
+// ── CSS → SCSS auto-converter ─────────────────────────────────────────────────
+function cssToScss(raw: string): string {
+  if (!raw?.trim()) return raw ?? ''
+
+  // Strip block comments so they don't contaminate selector strings
+  const stripped = raw.replace(/\/\*[\s\S]*?\*\//g, '')
+
+  // Parse all rules: { selector, body }
+  const rules: { selector: string; body: string }[] = []
+  const re = /([^{}]+)\{([^}]*)\}/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(stripped)) !== null) {
+    const sel  = m[1].trim()
+    const body = m[2]
+    if (sel && body.trim()) rules.push({ selector: sel, body })
+  }
+  if (!rules.length) return raw
+
+  // Find BEM roots: selectors that are "simple" (only letters/numbers/hyphens after the dot)
+  // AND have at least one child selector starting with sel + '__'
+  const candidateRoots = rules
+    .map(r => r.selector)
+    .filter(sel => {
+      const isSimple = /^\.[a-zA-Z][a-zA-Z0-9-]*$/.test(sel)
+      const hasChildren = rules.some(r2 => r2.selector !== sel && r2.selector.startsWith(sel + '__'))
+      return isSimple && hasChildren
+    })
+
+  if (!candidateRoots.length) return raw
+
+  // Format a declarations block with a given indent
+  const formatBody = (body: string, indent: string) =>
+    body.split(';')
+      .map(p => p.trim())
+      .filter(Boolean)
+      .map(p => `${indent}${p};`)
+      .join('\n')
+
+  // Mark everything that belongs to a BEM root as "accounted for"
+  const isBemChild = (sel: string) =>
+    candidateRoots.some(
+      root => sel !== root && (sel.startsWith(root + '__') || sel.startsWith(root + '--'))
+    )
+
+  const processedSelectors = new Set<string>()
+  const output: string[] = []
+
+  // ── 1. Standalone rules (not a BEM root and not a BEM child) ────────────────
+  rules.forEach(rule => {
+    if (candidateRoots.includes(rule.selector)) return
+    if (isBemChild(rule.selector)) return
+
+    output.push(`${rule.selector} {`)
+    output.push(formatBody(rule.body, '  '))
+    output.push('}\n')
+    processedSelectors.add(rule.selector)
+  })
+
+  // ── 2. BEM roots with nested children ───────────────────────────────────────
+  candidateRoots.forEach(root => {
+    const rootRule = rules.find(r => r.selector === root)
+    const children = rules.filter(
+      r => r.selector !== root &&
+           (r.selector.startsWith(root + '__') || r.selector.startsWith(root + '--'))
+    )
+
+    output.push(`${root} {`)
+    if (rootRule) output.push(formatBody(rootRule.body, '  '))
+
+    // Group children by their element segment (the part up to the first --)
+    const elementMap = new Map<string, typeof children>()
+    const directMods: typeof children = []
+
+    children.forEach(child => {
+      const rest = child.selector.slice(root.length) // e.g. "__wrapper", "__arrow--prev"
+
+      if (rest.startsWith('__')) {
+        // Element name = everything up to the first standalone '--'
+        // "__pagination-bullet--active" → "__pagination-bullet"
+        // "__arrow--prev"               → "__arrow"
+        const dashIdx = rest.indexOf('--', 2)           // skip the leading "__"
+        const elemKey = dashIdx > 0 ? rest.slice(0, dashIdx) : rest
+        if (!elementMap.has(elemKey)) elementMap.set(elemKey, [])
+        elementMap.get(elemKey)!.push(child)
+      } else if (rest.startsWith('--')) {
+        directMods.push(child)
+      }
+    })
+
+    // Output each element group (with modifiers nested inside if present)
+    elementMap.forEach((elemChildren, elemSuffix) => {
+      const elemSelector = root + elemSuffix
+      const elemRule     = elemChildren.find(c => c.selector === elemSelector)
+      const elemMods     = elemChildren.filter(c => c.selector !== elemSelector)
+
+      output.push(`\n  &${elemSuffix} {`)
+      if (elemRule) output.push(formatBody(elemRule.body, '    '))
+
+      elemMods.forEach(mod => {
+        const modSuffix = mod.selector.slice(elemSelector.length) // e.g. "--active"
+        output.push(`\n    &${modSuffix} {`)
+        output.push(formatBody(mod.body, '      '))
+        output.push(`    }`)
+      })
+
+      output.push(`  }`)
+    })
+
+    // Direct root modifiers (e.g. .c--slider-a--disabled)
+    directMods.forEach(mod => {
+      const modSuffix = mod.selector.slice(root.length)
+      output.push(`\n  &${modSuffix} {`)
+      output.push(formatBody(mod.body, '    '))
+      output.push(`  }`)
+    })
+
+    output.push(`}\n`)
+  })
+
+  return output.join('\n').replace(/\n{3,}/g, '\n\n').trim()
+}
+
+const scss = css ? cssToScss(css) : undefined
+
 const hasTabs = !!(html || css || jsCode)
 const tabs = [
-  html   ? { id: 'html', label: 'HTML',  content: html }   : null,
-  css    ? { id: 'css',  label: 'CSS',   content: css }    : null,
-  jsCode ? { id: 'js',   label: 'JS',    content: jsCode } : null,
+  html  ? { id: 'html', label: 'HTML', content: html }    : null,
+  css   ? { id: 'css',  label: 'CSS',  content: css }     : null,
+  scss  ? { id: 'scss', label: 'SCSS', content: scss }    : null,
+  jsCode ? { id: 'js',  label: 'JS',   content: jsCode }  : null,
 ].filter(Boolean) as { id: string; label: string; content: string }[]
 const multiTab = tabs.length > 1
 ---

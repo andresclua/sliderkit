@@ -565,6 +565,11 @@ export class Slider implements SliderInstance {
     // Animate to the clone position
     this.applyLayout({ virtualIndex })
 
+    // Fire after the wrapper.style.transform is already set to the clone-zone target.
+    // Listeners can read wrapper.style.transform to snap GSAP effects (rotation, blur, etc.)
+    // so clones look correct as they animate into view.
+    this.eventBus.emit('beforeLoopBoundary', { direction, targetIndex, slider: this })
+
     // After the CSS transition ends, silently teleport to the real slide position
     this.loopEndListener = (e: TransitionEvent) => {
       if (e.target !== this.wrapper || e.propertyName !== 'transform') return

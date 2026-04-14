@@ -65,6 +65,9 @@ importers:
       astro:
         specifier: ^4.11.0
         version: 4.16.19(rollup@4.60.1)(typescript@5.9.3)
+      boostify:
+        specifier: ^0.0.20
+        version: 0.0.20
       gsap:
         specifier: ^3.15.0
         version: 3.15.0
@@ -1084,6 +1087,9 @@ packages:
 
   bidi-js@1.0.3:
     resolution: {integrity: sha512-RKshQI1R3YQ+n9YJz2QQ147P66ELpa1FQEg20Dk8oW9t2KgLbpDLLp9aGZ7y8WHSshDknG0bknqGw5/tyCs5tw==}
+
+  boostify@0.0.20:
+    resolution: {integrity: sha512-Kmnh1QKDEAGBi3IBfdA6oqmo23B/EM30u2Hf6TLN1ohJXCwztUublR2YUa9trJ2rdhSamzQty/fcB6W8nN3qtg==}
 
   boxen@8.0.1:
     resolution: {integrity: sha512-F3PH5k5juxom4xktynS7MoFY+NUWH5LC4CnH11YB8NPew+HLpmBLCybSAEyb2F+4pRXhuhWqFesoQd6DAyc2hw==}
@@ -3740,6 +3746,8 @@ snapshots:
   bidi-js@1.0.3:
     dependencies:
       require-from-string: 2.0.2
+
+  boostify@0.0.20: {}
 
   boxen@8.0.1:
     dependencies:

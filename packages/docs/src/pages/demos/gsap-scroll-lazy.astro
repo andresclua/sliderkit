@@ -1,0 +1,384 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Boostify + GSAP — Lazy Load on Scroll">
+
+  <DemoViewer
+    title="boostify.scroll() — lazy load slider + GSAP"
+    description="boostify.scroll({ distance: 300 }) fires once the user has scrolled 300 px. Inside the async callback, @acslider/core, @acslider/plugins and gsap are all fetched in parallel — zero bundle cost before that point. Two animations: staggered y-fade for cards visible on arrival, x-slide from the correct side for cards that enter during navigation."
+    html={`<!-- A tall intro block forces the user to scroll before reaching the slider -->
+<div class="lazy-intro">
+  <p class="lazy-intro__eyebrow">Scroll down to load</p>
+  <h2 class="lazy-intro__title">Nothing loaded yet</h2>
+  <p class="lazy-intro__sub">
+    @acslider/core, @acslider/plugins and gsap are all <strong>absent from the initial bundle</strong>.<br>
+    Scroll 300 px and watch the Network tab.
+  </p>
+  <div class="lazy-intro__arrow">↓</div>
+</div>
+
+<!-- Slider shell — no JS touches it until after scroll -->
+<div class="lazy-slider-wrap">
+  <div class="c--slider-a" id="my-slider">
+    <div class="c--slider-a__wrapper">
+      <div class="c--slider-a__slide lazy-card" data-slide>
+        <div class="lazy-card__body">
+          <div class="lazy-card__icon">🚀</div>
+          <h3 class="lazy-card__title">Fast by default</h3>
+          <p class="lazy-card__text">Zero-cost abstractions. Ships only what you use.</p>
+        </div>
+      </div>
+      <div class="c--slider-a__slide lazy-card" data-slide>
+        <div class="lazy-card__body">
+          <div class="lazy-card__icon">🎯</div>
+          <h3 class="lazy-card__title">Event-driven</h3>
+          <p class="lazy-card__text">Fine-grained lifecycle hooks for any integration.</p>
+        </div>
+      </div>
+      <div class="c--slider-a__slide lazy-card" data-slide>
+        <div class="lazy-card__body">
+          <div class="lazy-card__icon">🧩</div>
+          <h3 class="lazy-card__title">Plugin system</h3>
+          <p class="lazy-card__text">Tree-shaken, typed, and fully composable.</p>
+        </div>
+      </div>
+      <div class="c--slider-a__slide lazy-card" data-slide>
+        <div class="lazy-card__body">
+          <div class="lazy-card__icon">♿</div>
+          <h3 class="lazy-card__title">Accessible</h3>
+          <p class="lazy-card__text">ARIA roles, keyboard nav, reduced-motion built in.</p>
+        </div>
+      </div>
+      <div class="c--slider-a__slide lazy-card" data-slide>
+        <div class="lazy-card__body">
+          <div class="lazy-card__icon">🌊</div>
+          <h3 class="lazy-card__title">WebGL effects</h3>
+          <p class="lazy-card__text">GLSL shaders speaking the same event language.</p>
+        </div>
+      </div>
+      <div class="c--slider-a__slide lazy-card" data-slide>
+        <div class="lazy-card__body">
+          <div class="lazy-card__icon">📐</div>
+          <h3 class="lazy-card__title">Responsive</h3>
+          <p class="lazy-card__text">Breakpoints via ResizeObserver — no window resize hacks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`}
+    css={`.lazy-intro {
+  text-align: center;
+  padding: 60px 24px 80px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 48px;
+}
+.lazy-intro__eyebrow {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #6C2BD9; margin-bottom: 12px;
+}
+.lazy-intro__title {
+  font-size: 2rem; font-weight: 700; margin-bottom: 12px; color: #111827;
+}
+.lazy-intro__sub {
+  font-size: 0.95rem; color: #6b7280; line-height: 1.6; max-width: 480px; margin: 0 auto 28px;
+}
+.lazy-intro__arrow {
+  font-size: 2rem; animation: bounce 1.2s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(10px); }
+}
+
+.lazy-slider-wrap {
+  position: relative;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 32px 0;
+}
+.c--slider-a {
+  position: relative;
+  overflow: hidden;
+}
+.c--slider-a__wrapper { display: flex; will-change: transform; }
+
+.lazy-card { flex-shrink: 0; padding: 8px; }
+.lazy-card__body {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 28px 20px 22px;
+  height: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lazy-card__icon  { font-size: 1.8rem; line-height: 1; }
+.lazy-card__title { font-size: 1rem; font-weight: 700; color: #111827; margin: 0; }
+.lazy-card__text  { font-size: 0.84rem; color: #6b7280; line-height: 1.5; flex: 1; margin: 0; }
+
+.c--slider-a__arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 10; width: 36px; height: 36px; border-radius: 50%;
+  border: none; background: #fff; cursor: pointer;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+}
+.c--slider-a__arrow--prev { left: 8px; }
+.c--slider-a__arrow--next { right: 8px; }`}
+    js={`import Boostify from 'boostify'
+
+const boostify = new Boostify()
+
+boostify.scroll({
+  distance: 300,
+  callback: async () => {
+    // All three modules fetched in parallel — zero cost before scroll
+    const [{ Slider }, { arrows }, { gsap }] = await Promise.all([
+      import('@acslider/core'),
+      import('@acslider/plugins'),
+      import('gsap'),
+    ])
+
+    const slider = new Slider('#my-slider', {
+      slidesPerPage: 3,
+      gutter: 0,
+      loop: true,
+      speed: 420,
+      plugins: [arrows()],
+    })
+
+    const cards = [...slider.slides].map(s => s.querySelector('.lazy-card__body'))
+    const n     = cards.length
+    let dir     = 'next'
+    slider.on('beforeSlideChange', ({ direction }) => { dir = direction })
+
+    // ── Entrance animation — cards visible on arrival ──────────────────────
+    const spp = slider.getInfo().slidesPerPage
+    for (let i = 0; i < spp; i++) {
+      gsap.fromTo(cards[i]?.children ?? [],
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.55, stagger: 0.09,
+          ease: 'power3.out', delay: i * 0.08 }
+      )
+    }
+
+    // ── Navigation animation — new card slides in from the side ───────────
+    slider.on('afterSlideChange', ({ index, previousIndex }) => {
+      const spp      = slider.getInfo().slidesPerPage
+      const entering = []
+
+      if (dir === 'next') {
+        for (let i = Math.max(index, previousIndex + spp); i < index + spp; i++)
+          entering.push(i % n)
+      } else {
+        for (let i = index; i <= Math.min(index + spp - 1, previousIndex - 1); i++)
+          entering.push(i % n)
+      }
+      if (!entering.length)
+        for (let i = 0; i < spp; i++) entering.push((index + i) % n)
+
+      const fromX = dir === 'next' ? 36 : -36
+      entering.forEach(i => {
+        const card = cards[i]
+        if (!card) return
+        gsap.fromTo(card.children,
+          { x: fromX, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.38, stagger: 0.07, ease: 'power2.out' }
+        )
+      })
+    })
+  },
+})`}
+  >
+    <!-- Intro block forces scrolling -->
+    <div class="lazy-intro" id="demo-lazy-intro">
+      <p class="lazy-intro__eyebrow">Scroll down to load</p>
+      <h2 class="lazy-intro__title">Nothing loaded yet</h2>
+      <p class="lazy-intro__sub">
+        <code>@acslider/core</code>, <code>@acslider/plugins</code> and <code>gsap</code> are absent from the initial bundle.<br>
+        Scroll 300 px and watch the Network tab.
+      </p>
+      <div class="lazy-intro__arrow">↓</div>
+    </div>
+
+    <!-- Slider shell -->
+    <div class="lazy-slider-wrap" id="demo-lazy-wrap">
+      <div class="c--slider-a" id="demo-lazy-slider">
+        <div class="c--slider-a__wrapper">
+          <div class="c--slider-a__slide lazy-card" data-slide>
+            <div class="lazy-card__body">
+              <div class="lazy-card__icon">🚀</div>
+              <h3 class="lazy-card__title">Fast by default</h3>
+              <p class="lazy-card__text">Zero-cost abstractions. Ships only what you use.</p>
+            </div>
+          </div>
+          <div class="c--slider-a__slide lazy-card" data-slide>
+            <div class="lazy-card__body">
+              <div class="lazy-card__icon">🎯</div>
+              <h3 class="lazy-card__title">Event-driven</h3>
+              <p class="lazy-card__text">Fine-grained lifecycle hooks for any integration.</p>
+            </div>
+          </div>
+          <div class="c--slider-a__slide lazy-card" data-slide>
+            <div class="lazy-card__body">
+              <div class="lazy-card__icon">🧩</div>
+              <h3 class="lazy-card__title">Plugin system</h3>
+              <p class="lazy-card__text">Tree-shaken, typed, and fully composable.</p>
+            </div>
+          </div>
+          <div class="c--slider-a__slide lazy-card" data-slide>
+            <div class="lazy-card__body">
+              <div class="lazy-card__icon">♿</div>
+              <h3 class="lazy-card__title">Accessible</h3>
+              <p class="lazy-card__text">ARIA roles, keyboard nav, reduced-motion built in.</p>
+            </div>
+          </div>
+          <div class="c--slider-a__slide lazy-card" data-slide>
+            <div class="lazy-card__body">
+              <div class="lazy-card__icon">🌊</div>
+              <h3 class="lazy-card__title">WebGL effects</h3>
+              <p class="lazy-card__text">GLSL shaders speaking the same event language.</p>
+            </div>
+          </div>
+          <div class="c--slider-a__slide lazy-card" data-slide>
+            <div class="lazy-card__body">
+              <div class="lazy-card__icon">📐</div>
+              <h3 class="lazy-card__title">Responsive</h3>
+              <p class="lazy-card__text">Breakpoints via ResizeObserver, no window resize hacks.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </DemoViewer>
+
+</DemoLayout>
+
+<style>
+/* Intro */
+#demo-lazy-intro {
+  text-align: center;
+  padding: 56px 24px 64px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 40px;
+}
+#demo-lazy-intro .lazy-intro__eyebrow {
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #6C2BD9; margin-bottom: 10px;
+}
+#demo-lazy-intro .lazy-intro__title {
+  font-size: 1.7rem; font-weight: 700; color: #111827; margin-bottom: 10px;
+}
+#demo-lazy-intro .lazy-intro__sub {
+  font-size: 0.9rem; color: #6b7280; line-height: 1.65;
+  max-width: 420px; margin: 0 auto 24px;
+}
+#demo-lazy-intro .lazy-intro__arrow {
+  font-size: 1.8rem;
+  animation: lazy-bounce 1.2s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes lazy-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(8px); }
+}
+
+/* Slider wrap */
+#demo-lazy-wrap {
+  position: relative;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 28px 0;
+}
+#demo-lazy-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Cards */
+#demo-lazy-slider .lazy-card { flex-shrink: 0; padding: 8px; }
+#demo-lazy-slider .lazy-card__body {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px 18px 20px;
+  height: 185px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#demo-lazy-slider .lazy-card__icon  { font-size: 1.7rem; line-height: 1; }
+#demo-lazy-slider .lazy-card__title { font-size: 0.95rem; font-weight: 700; color: #111827; margin: 0; }
+#demo-lazy-slider .lazy-card__text  { font-size: 0.82rem; color: #6b7280; line-height: 1.5; flex: 1; margin: 0; }
+</style>
+
+<script>
+import Boostify from 'boostify'
+
+const boostify = new Boostify()
+
+boostify.scroll({
+  distance: 300,
+  callback: async () => {
+    const [{ Slider }, { arrows }, { gsap }] = await Promise.all([
+      import('@acslider/core'),
+      import('@acslider/plugins'),
+      import('gsap'),
+    ])
+
+    const slider = new Slider('#demo-lazy-slider', {
+      slidesPerPage: 3,
+      gutter: 0,
+      loop: true,
+      speed: 420,
+      plugins: [arrows()],
+    })
+
+    const cards = [...slider.slides].map(s => s.querySelector('.lazy-card__body'))
+    const n     = cards.length
+    let dir: 'next' | 'prev' = 'next'
+    slider.on('beforeSlideChange', ({ direction }: { direction: 'next' | 'prev' }) => {
+      dir = direction
+    })
+
+    // ── Entrance animation ─────────────────────────────────────────────────
+    const spp = slider.getInfo().slidesPerPage as number
+    for (let i = 0; i < spp; i++) {
+      gsap.fromTo(cards[i]?.children ?? [],
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.55, stagger: 0.09,
+          ease: 'power3.out', delay: i * 0.08 }
+      )
+    }
+
+    // ── Navigation animation ───────────────────────────────────────────────
+    slider.on('afterSlideChange', ({ index, previousIndex }: { index: number; previousIndex: number }) => {
+      const spp      = slider.getInfo().slidesPerPage as number
+      const entering: number[] = []
+
+      if (dir === 'next') {
+        for (let i = Math.max(index, previousIndex + spp); i < index + spp; i++)
+          entering.push(i % n)
+      } else {
+        for (let i = index; i <= Math.min(index + spp - 1, previousIndex - 1); i++)
+          entering.push(i % n)
+      }
+      if (!entering.length)
+        for (let i = 0; i < spp; i++) entering.push((index + i) % n)
+
+      const fromX = dir === 'next' ? 36 : -36
+      entering.forEach(i => {
+        const card = cards[i]
+        if (!card) return
+        gsap.fromTo(card.children,
+          { x: fromX, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.38, stagger: 0.07, ease: 'power2.out' }
+        )
+      })
+    })
+  },
+})
+</script>

@@ -111,6 +111,12 @@ export type InitPayload = {
   slider: SliderInstance
 }
 
+export type LoopBoundaryPayload = {
+  direction: 'next' | 'prev'
+  targetIndex: number
+  slider: SliderInstance
+}
+
 export type SliderEventMap = {
   beforeInit: InitPayload
   afterInit: InitPayload
@@ -118,6 +124,11 @@ export type SliderEventMap = {
   afterSlideChange: AfterSlideChangePayload
   beforeTransitionStart: BeforeSlideChangePayload
   afterTransitionEnd: AfterSlideChangePayload
+  /** Fires after the wrapper transform is set to the clone position, before the CSS transition plays.
+   *  wrapper.style.transform already reflects the virtual (clone-zone) position at this point.
+   *  Use this to snap visual effects (GSAP rotations, blur, etc.) to their correct final values
+   *  so clones look right as they animate into view. */
+  beforeLoopBoundary: LoopBoundaryPayload
   progress: ProgressPayload
   touchStart: TouchPayload
   touchMove: TouchMovePayload
