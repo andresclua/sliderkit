@@ -3,12 +3,12 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="SSR / Server-Side Rendering">
   <h1>SSR</h1>
-  <p class="lead">ACSlider is a client-side library that manipulates the DOM. It must only be instantiated in browser environments.</p>
+  <p class="lead">SliderKit is a client-side library that manipulates the DOM. It must only be instantiated in browser environments.</p>
 
   <h2>Next.js</h2>
   <pre><code>{`'use client'
 import { useEffect, useRef } from 'react'
-import { Slider } from '@acslider/core'
+import { Slider } from '@andresclua/sliderkit'
 
 export function MySlider() {
   const ref = useRef(null)
@@ -40,7 +40,7 @@ export function MySlider() {
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { Slider } from '@acslider/core'
+import { Slider } from '@andresclua/sliderkit'
 
 const sliderEl = ref(null)
 let slider = null
@@ -61,14 +61,14 @@ onBeforeUnmount(() => slider?.destroy())
 
 <script>
   // client-side only — runs in browser
-  import { Slider } from '@acslider/core'
+  import { Slider } from '@andresclua/sliderkit'
   new Slider('#my-slider')
 </script>`}</code></pre>
 
   <h2>SvelteKit</h2>
   <pre><code>{`<script>
   import { onMount, onDestroy } from 'svelte'
-  import { Slider } from '@acslider/core'
+  import { Slider } from '@andresclua/sliderkit'
 
   let el
   let slider
@@ -86,7 +86,7 @@ onBeforeUnmount(() => slider?.destroy())
   <h2>Dynamic import guard</h2>
   <p>If you cannot use framework lifecycle hooks, guard the import:</p>
   <pre><code>{`if (typeof window !== 'undefined') {
-  const { Slider } = await import('@acslider/core')
+  const { Slider } = await import('@andresclua/sliderkit')
   new Slider('#el')
 }`}</code></pre>
 </DocsLayout>

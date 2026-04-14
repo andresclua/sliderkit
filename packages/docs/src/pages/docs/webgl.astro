@@ -3,15 +3,15 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="WebGL">
   <h1>WebGL</h1>
-  <p class="lead"><code>@acslider/webgl</code> adds a WebGL transition and hover-effect layer powered by <a href="https://github.com/oframe/ogl" target="_blank">OGL</a> (~10kb gzipped). It detects WebGL support automatically and falls back gracefully.</p>
+  <p class="lead"><code>@andresclua/sliderkit-webgl</code> adds a WebGL transition and hover-effect layer powered by <a href="https://github.com/oframe/ogl" target="_blank">OGL</a> (~10kb gzipped). It detects WebGL support automatically and falls back gracefully.</p>
 
   <h2>Installation</h2>
-  <pre><code>pnpm add @acslider/webgl</code></pre>
+  <pre><code>pnpm add @andresclua/sliderkit-webgl</code></pre>
 
   <h2>Usage</h2>
-  <pre><code>{`import { Slider } from '@acslider/core'
-import { WebGLRenderer } from '@acslider/webgl'
-import { displacement } from '@acslider/webgl/effects'
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
+import { WebGLRenderer } from '@andresclua/sliderkit-webgl'
+import { displacement } from '@andresclua/sliderkit-webgl/effects'
 
 new Slider('#el', {
   plugins: [
@@ -36,7 +36,7 @@ new Slider('#el', {
   </table>
 
   <h2>Custom shaders</h2>
-  <pre><code>{`import { WebGLRenderer } from '@acslider/webgl'
+  <pre><code>{`import { WebGLRenderer } from '@andresclua/sliderkit-webgl'
 
 new Slider('#el', {
   plugins: [

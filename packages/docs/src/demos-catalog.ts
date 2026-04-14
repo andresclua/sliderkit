@@ -272,7 +272,7 @@ export const DEMOS: DemoEntry[] = [
     slug: 'gsap-scroll-lazy',
     label: 'Boostify + GSAP',
     title: 'boostify.scroll() — Lazy Load + GSAP',
-    description: 'boostify.scroll({ distance: 300 }) fires once the user scrolls 300 px. @acslider/core, @acslider/plugins and gsap are all absent from the initial bundle — fetched in parallel inside the async callback. Two animations: staggered entrance on arrival, side-slide on navigation.',
+    description: 'boostify.scroll({ distance: 300 }) fires once the user scrolls 300 px. @andresclua/sliderkit, @andresclua/sliderkit-plugins and gsap are all absent from the initial bundle — fetched in parallel inside the async callback. Two animations: staggered entrance on arrival, side-slide on navigation.',
     tags: ['gsap', 'lazy', 'dynamic-import', 'scroll', 'boostify', 'performance', 'animation'],
     group: 'lifecycle',
   },

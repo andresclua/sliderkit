@@ -22,8 +22,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 .wgl-slide { flex-shrink: 0; width: 100%; height: 100%; }
 /* Canvas injected by JS sits above slides */
 .wgl-slider canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const IMAGES = [
   'https://picsum.photos/seed/wgl1/900/400',
@@ -291,8 +291,8 @@ el.addEventListener('mouseleave', () => animateTo(0))`}
 }
 .slide-text.is-leaving { animation: textLeave 0.3s ease forwards; }
 .slide-text.is-entering { animation: textEnter 0.4s ease forwards; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
 
 // ... WebGL displacement setup (same as first demo) ...
 
@@ -397,8 +397,8 @@ slider.on('afterSlideChange', ({ index, previousIndex }) => {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 // ─── Shared WebGL helpers ─────────────────────────────────────────────────────
 

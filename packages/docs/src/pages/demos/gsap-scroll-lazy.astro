@@ -6,13 +6,13 @@ import DemoViewer from '../../components/DemoViewer.astro'
 
   <DemoViewer
     title="boostify.scroll() — lazy load slider + GSAP"
-    description="boostify.scroll({ distance: 300 }) fires once the user has scrolled 300 px. Inside the async callback, @acslider/core, @acslider/plugins and gsap are all fetched in parallel — zero bundle cost before that point. Two animations: staggered y-fade for cards visible on arrival, x-slide from the correct side for cards that enter during navigation."
+    description="boostify.scroll({ distance: 300 }) fires once the user has scrolled 300 px. Inside the async callback, @andresclua/sliderkit, @andresclua/sliderkit-plugins and gsap are all fetched in parallel — zero bundle cost before that point. Two animations: staggered y-fade for cards visible on arrival, x-slide from the correct side for cards that enter during navigation."
     html={`<!-- A tall intro block forces the user to scroll before reaching the slider -->
 <div class="lazy-intro">
   <p class="lazy-intro__eyebrow">Scroll down to load</p>
   <h2 class="lazy-intro__title">Nothing loaded yet</h2>
   <p class="lazy-intro__sub">
-    @acslider/core, @acslider/plugins and gsap are all <strong>absent from the initial bundle</strong>.<br>
+    @andresclua/sliderkit, @andresclua/sliderkit-plugins and gsap are all <strong>absent from the initial bundle</strong>.<br>
     Scroll 300 px and watch the Network tab.
   </p>
   <div class="lazy-intro__arrow">↓</div>
@@ -136,8 +136,8 @@ boostify.scroll({
   callback: async () => {
     // All three modules fetched in parallel — zero cost before scroll
     const [{ Slider }, { arrows }, { gsap }] = await Promise.all([
-      import('@acslider/core'),
-      import('@acslider/plugins'),
+      import('@andresclua/sliderkit'),
+      import('@andresclua/sliderkit-plugins'),
       import('gsap'),
     ])
 
@@ -197,7 +197,7 @@ boostify.scroll({
       <p class="lazy-intro__eyebrow">Scroll down to load</p>
       <h2 class="lazy-intro__title">Nothing loaded yet</h2>
       <p class="lazy-intro__sub">
-        <code>@acslider/core</code>, <code>@acslider/plugins</code> and <code>gsap</code> are absent from the initial bundle.<br>
+        <code>@andresclua/sliderkit</code>, <code>@andresclua/sliderkit-plugins</code> and <code>gsap</code> are absent from the initial bundle.<br>
         Scroll 300 px and watch the Network tab.
       </p>
       <div class="lazy-intro__arrow">↓</div>
@@ -324,8 +324,8 @@ boostify.scroll({
   distance: 300,
   callback: async () => {
     const [{ Slider }, { arrows }, { gsap }] = await Promise.all([
-      import('@acslider/core'),
-      import('@acslider/plugins'),
+      import('@andresclua/sliderkit'),
+      import('@andresclua/sliderkit-plugins'),
       import('gsap'),
     ])
 

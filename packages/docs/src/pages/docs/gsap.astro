@@ -3,14 +3,14 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="GSAP Integration">
   <h1>GSAP Integration</h1>
-  <p class="lead">Use GSAP (GreenSock) to drive slide transitions instead of CSS. ACSlider fires events at the right moments — GSAP handles the animation.</p>
+  <p class="lead">Use GSAP (GreenSock) to drive slide transitions instead of CSS. SliderKit fires events at the right moments — GSAP handles the animation.</p>
 
   <h2>Install GSAP</h2>
   <pre><code>npm install gsap</code></pre>
 
   <h2>Basic pattern</h2>
   <p>Disable the built-in CSS transition, listen to <code>beforeSlideChange</code>, and animate manually:</p>
-  <pre><code>{`import { Slider } from '@acslider/core'
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
 import gsap from 'gsap'
 
 const slider = new Slider('#el', {
@@ -39,7 +39,7 @@ slider.on('beforeSlideChange', ({ from, to }) => {
 
   <h2>With ScrollTrigger</h2>
   <p>Drive the slider position with GSAP ScrollTrigger for scroll-linked slides:</p>
-  <pre><code>{`import { Slider } from '@acslider/core'
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 

@@ -21,8 +21,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 .wgl-slider .c--slider-a__wrapper { display: flex; }
 .wgl-slide { flex-shrink: 0; width: 100%; height: 100%; }
 .wgl-slider canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const IMAGES = [
   'https://picsum.photos/seed/rgb1/900/400',
@@ -202,8 +202,8 @@ range.addEventListener('input', () => {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 // ─── Shared shaders ───────────────────────────────────────────────────────────
 const VERT = `

@@ -86,8 +86,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
   font-size: 0.85rem;
   font-weight: 500;
 }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination, autoplay } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, autoplay } from '@andresclua/sliderkit-plugins'
 
 const slider = new Slider('#my-slider', {
   loop: true,
@@ -134,8 +134,8 @@ document.getElementById('btn-pause').addEventListener('click', () => slider.paus
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination, autoplay } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, autoplay } from '@andresclua/sliderkit-plugins'
 
 const slider = new Slider('#demo-autoplay', {
   loop: true,

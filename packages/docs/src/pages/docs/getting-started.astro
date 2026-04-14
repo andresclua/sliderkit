@@ -4,20 +4,20 @@ import SponsorBanner from '../../components/SponsorBanner.astro'
 ---
 <DocsLayout title="Getting Started">
   <h1>Getting Started</h1>
-  <p class="lead">ACSlider is a modular, accessible slider library written in TypeScript. The core is always required; plugins, effects, and WebGL are optional.</p>
+  <p class="lead">SliderKit is a modular, accessible slider library written in TypeScript. The core is always required; plugins, effects, and WebGL are optional.</p>
 
   <h2>Installation</h2>
   <p>Install with your preferred package manager:</p>
-  <pre><code>pnpm add @acslider/core
-pnpm add @acslider/plugins    # optional
-pnpm add @acslider/effects    # optional
-pnpm add @acslider/webgl      # optional</code></pre>
+  <pre><code>pnpm add @andresclua/sliderkit
+pnpm add @andresclua/sliderkit-plugins    # optional
+pnpm add @andresclua/sliderkit-effects    # optional
+pnpm add @andresclua/sliderkit-webgl      # optional</code></pre>
 
-  <pre><code>npm install @acslider/core @acslider/plugins
-yarn add @acslider/core @acslider/plugins</code></pre>
+  <pre><code>npm install @andresclua/sliderkit @andresclua/sliderkit-plugins
+yarn add @andresclua/sliderkit @andresclua/sliderkit-plugins</code></pre>
 
   <h2>HTML structure</h2>
-  <p>ACSlider expects a container element with a wrapper and slides inside:</p>
+  <p>SliderKit expects a container element with a wrapper and slides inside:</p>
   <pre><code>{`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
     <div class="c--slider-a__slide">Slide 1</div>
@@ -29,7 +29,7 @@ yarn add @acslider/core @acslider/plugins</code></pre>
   <p>Alternatively, you can use the <code>data-slide</code> attribute instead of the class name to mark slides.</p>
 
   <h2>Basic usage</h2>
-  <pre><code>{`import { Slider } from '@acslider/core'
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
 
 const slider = new Slider('#my-slider', {
   slidesPerPage: 1,
@@ -38,8 +38,8 @@ const slider = new Slider('#my-slider', {
 })`}</code></pre>
 
   <h2>With plugins</h2>
-  <pre><code>{`import { Slider } from '@acslider/core'
-import { arrows, pagination, autoplay } from '@acslider/plugins'
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, autoplay } from '@andresclua/sliderkit-plugins'
 
 const slider = new Slider('#my-slider', {
   slidesPerPage: 1,
@@ -53,14 +53,14 @@ const slider = new Slider('#my-slider', {
 })`}</code></pre>
 
   <h2>Styling</h2>
-  <p>Import the SCSS from <code>@acslider/core</code>:</p>
-  <pre><code>@use '@acslider/core/scss/slider';</code></pre>
+  <p>Import the SCSS from <code>@andresclua/sliderkit</code>:</p>
+  <pre><code>@use '@andresclua/sliderkit/scss/slider';</code></pre>
   <p>Or import the CSS directly if you don't use SCSS:</p>
-  <pre><code>import '@acslider/core/dist/slider.css'</code></pre>
+  <pre><code>import '@andresclua/sliderkit/dist/slider.css'</code></pre>
   <p>Variables can be overridden before the import:</p>
   <pre><code>{`$slider-bg: transparent;
 $slider-width: 100%;
-@use '@acslider/core/scss/slider';`}</code></pre>
+@use '@andresclua/sliderkit/scss/slider';`}</code></pre>
 
   <h2>Next steps</h2>
   <ul>

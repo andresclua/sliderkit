@@ -31,8 +31,8 @@ button {
   padding: 7px 14px; border: 1px solid #d1d5db; border-radius: 6px;
   background: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 500;
 }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 let slider = new Slider('#my-slider', {
   loop: true,
@@ -88,8 +88,8 @@ document.getElementById('btn-rebuild3').addEventListener('click', () => {
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
 .c--slider-a__slide { flex-shrink: 0; height: 180px; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
 
 function getOptions() {
   return window.innerWidth >= 768
@@ -140,8 +140,8 @@ window.addEventListener('resize', () => {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const makePlugins = (pagEl: string) => [
   arrows(),

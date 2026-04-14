@@ -32,9 +32,9 @@ import DemoViewer from '../../components/DemoViewer.astro'
   transition: transform 0.6s ease;
   backface-visibility: hidden;
 }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
-import { flipEffect } from '@acslider/effects'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { flipEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#my-slider', {
   loop: false,
@@ -83,9 +83,9 @@ new Slider('#my-slider', {
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   backface-visibility: hidden;
 }`}
-    js={`import { Slider } from '@acslider/core'
-import { autoplay } from '@acslider/plugins'
-import { flipEffect } from '@acslider/effects'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { autoplay } from '@andresclua/sliderkit-plugins'
+import { flipEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#my-slider', {
   loop: true,
@@ -117,9 +117,9 @@ new Slider('#my-slider', {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination, autoplay } from '@acslider/plugins'
-import { flipEffect } from '@acslider/effects'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, autoplay } from '@andresclua/sliderkit-plugins'
+import { flipEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#demo-flip', {
   slidesPerPage: 1,

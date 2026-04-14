@@ -27,9 +27,9 @@ import DemoViewer from '../../components/DemoViewer.astro'
   opacity: 0; transition: opacity 600ms ease;
 }
 .c--slider-a--effect .c--slider-a__slide.is-active { opacity: 1; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
-import { fadeEffect } from '@acslider/effects'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { fadeEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#my-slider', {
   loop: false,
@@ -71,9 +71,9 @@ new Slider('#my-slider', {
 .c--slider-a--effect .c--slider-a__wrapper { height: 100%; }
 .img-slide { position: absolute; inset: 0; overflow: hidden; }
 .img-slide img { width: 100%; height: 100%; object-fit: cover; }`}
-    js={`import { Slider } from '@acslider/core'
-import { autoplay } from '@acslider/plugins'
-import { fadeEffect } from '@acslider/effects'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { autoplay } from '@andresclua/sliderkit-plugins'
+import { fadeEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#my-slider', {
   loop: true,
@@ -110,9 +110,9 @@ new Slider('#my-slider', {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination, autoplay } from '@acslider/plugins'
-import { fadeEffect } from '@acslider/effects'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, autoplay } from '@andresclua/sliderkit-plugins'
+import { fadeEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#demo-fade', {
   loop: false,

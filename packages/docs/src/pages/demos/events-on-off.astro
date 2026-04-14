@@ -35,8 +35,8 @@ button { padding: 7px 14px; border: 1px solid #d1d5db; border-radius: 6px; backg
   border: 1px solid #e5e7eb; border-radius: 6px;
   padding: 8px 12px; font-size: 0.82rem; font-family: monospace;
 }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const log = document.getElementById('event-log')
 let listening = false
@@ -105,8 +105,8 @@ document.getElementById('btn-clear').addEventListener('click', () => { log.inner
 }
 #multi-log li.before { color: #2563eb; }
 #multi-log li.after  { color: #059669; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const log = document.getElementById('multi-log')
 
@@ -172,8 +172,8 @@ document.getElementById('btn-clear-multi').addEventListener('click', () => { log
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const log = document.getElementById('event-log')!
 let listening = false

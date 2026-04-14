@@ -6,12 +6,12 @@ const isDocs = currentPath.startsWith('/docs')
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="logo">
-      <span class="logo-ac">AC</span><span class="logo-slider">Slider</span>
+      <span class="logo-slider">Slider</span><span class="logo-kit">Kit</span>
     </a>
     <nav class="header-nav">
       <a href="/docs/getting-started" class:list={['nav-link', isDocs && 'nav-link--active']}>Docs</a>
       <a href="/demos/base" class:list={['nav-link', isDemo && 'nav-link--active']}>Demos</a>
-      <a href="https://github.com/andresclua/acslider" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+      <a href="https://github.com/andresclua/sliderkit" target="_blank" rel="noopener" class="nav-link">GitHub</a>
       <a href="/docs/sponsor" class="nav-link nav-link--sponsor">♥ Sponsor</a>
     </nav>
   </div>
@@ -41,8 +41,8 @@ const isDocs = currentPath.startsWith('/docs')
   text-decoration: none;
   letter-spacing: -0.03em;
 }
-.logo-ac     { color: var(--brand); }
 .logo-slider { color: var(--text); }
+.logo-kit    { color: var(--brand); }
 
 .header-nav { display: flex; align-items: center; gap: 0.25rem; }
 .nav-link {

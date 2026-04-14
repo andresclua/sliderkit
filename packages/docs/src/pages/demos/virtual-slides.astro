@@ -15,8 +15,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
 .c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, virtualSlides, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, virtualSlides, pagination } from '@andresclua/sliderkit-plugins'
 
 // Build slides in JS before init
 const wrapper = document.getElementById('my-wrapper')
@@ -61,8 +61,8 @@ new Slider('#my-slider', {
 .slide-loaded {
   font-size: 2rem; font-weight: 700; color: #fff;
 }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, virtualSlides, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, virtualSlides, pagination } from '@andresclua/sliderkit-plugins'
 
 const TOTAL = 100
 const wrapper = document.getElementById('my-wrapper')
@@ -111,8 +111,8 @@ new Slider('#my-slider', {
 </DemoLayout>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, virtualSlides, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, virtualSlides, pagination } from '@andresclua/sliderkit-plugins'
 
 // ── Demo 1: 50 static slides ─────────────────────────────────────────────────
 const colors = ['#6C2BD9','#3B82F6','#10B981','#F59E0B','#EF4444','#EC4899','#14B8A6','#6366F1']

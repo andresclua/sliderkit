@@ -120,8 +120,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 }
 .c--slider-a__arrow--prev { left: 16px; }
 .c--slider-a__arrow--next { right: 16px; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 import { gsap } from 'gsap'
 
 const slider = new Slider('#my-slider', {
@@ -295,8 +295,8 @@ slider.on('afterSlideChange', ({ index }) => {
 }
 .c--slider-a__arrow--prev { left: 4px; }
 .c--slider-a__arrow--next { right: 4px; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 import { gsap } from 'gsap'
 
 const slider = new Slider('#my-cards', {
@@ -484,8 +484,8 @@ slider.on('afterSlideChange', ({ index, previousIndex }) => {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 import { gsap } from 'gsap'
 
 // ── Demo 1: Hero slider with text animation ───────────────────────────────────

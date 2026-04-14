@@ -31,8 +31,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 .c--slider-a__arrow--prev { left: 12px; }
 .c--slider-a__arrow--next { right: 12px; }
 .c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   gutter: 16,
@@ -100,7 +100,7 @@ new Slider('#my-slider', {
 .c--slider-a--frozen .c--slider-a__wrapper {
   justify-content: space-between;
 }`}
-    js={`import { Slider } from '@acslider/core'
+    js={`import { Slider } from '@andresclua/sliderkit'
 
 new Slider('#my-slider', {
   gutter: 16,
@@ -140,8 +140,8 @@ new Slider('#my-slider', {
 
 /* Dim the slider while disabled */
 .c--slider-a--disabled { opacity: 0.4; pointer-events: none; transition: opacity 0.2s; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const slider = new Slider('#my-slider', {
   loop: true,
@@ -221,8 +221,8 @@ document.getElementById('btn-reload').addEventListener('click', loadSlides)`}
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 // ── Example 1: responsive card row ──────────────────────────────────────────
 new Slider('#demo-freeze-cards', {

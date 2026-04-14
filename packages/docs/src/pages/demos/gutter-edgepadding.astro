@@ -62,8 +62,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 .c--slider-a__arrow--prev { left: 12px; }
 .c--slider-a__arrow--next { right: 12px; }
 .c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   slidesPerPage: 3,
@@ -138,8 +138,8 @@ new Slider('#my-slider', {
 }
 .c--slider-a__arrow--prev { left: 12px; }
 .c--slider-a__arrow--next { right: 12px; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
 import { gsap } from 'gsap'
 
 const slider = new Slider('#my-slider', {
@@ -221,8 +221,8 @@ slider.on('afterSlideChange', syncScale)`}
 }
 .c--slider-a__arrow--prev { left: 4px; }
 .c--slider-a__arrow--next { right: 4px; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
 import { gsap } from 'gsap'
 
 // Blur by visual distance from container centre — works on real slides AND loop clones
@@ -365,8 +365,8 @@ slider.on('afterSlideChange', applyBlur)`}
 }
 .c--slider-a__arrow--prev { left: 8px; }
 .c--slider-a__arrow--next { right: 8px; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
 import { gsap } from 'gsap'
 
 // Rotation by visual position: center slot = 0°, ±6° per step, capped ±12°
@@ -505,8 +505,8 @@ slider.on('afterSlideChange', () => applyRotation())`}
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 import { gsap } from 'gsap'
 
 // ── Demo 1: gutter + fraction pagination ─────────────────────────────────────

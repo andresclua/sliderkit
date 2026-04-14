@@ -3,30 +3,30 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Installation">
   <h1>Installation</h1>
-  <p class="lead">ACSlider is split into focused packages. Install only what you need.</p>
+  <p class="lead">SliderKit is split into focused packages. Install only what you need.</p>
 
   <h2>Core</h2>
   <p>The core slider engine — required by everything else.</p>
-  <pre><code>npm install @acslider/core
+  <pre><code>npm install @andresclua/sliderkit
 # or
-pnpm add @acslider/core</code></pre>
+pnpm add @andresclua/sliderkit</code></pre>
 
   <h2>Plugins</h2>
   <p>Optional UI plugins: arrows, pagination, autoplay, thumbnails, and more.</p>
-  <pre><code>npm install @acslider/plugins</code></pre>
+  <pre><code>npm install @andresclua/sliderkit-plugins</code></pre>
 
   <h2>CSS Effects</h2>
   <p>Fade, flip, cards, cube, coverflow, and creative effects.</p>
-  <pre><code>npm install @acslider/effects</code></pre>
+  <pre><code>npm install @andresclua/sliderkit-effects</code></pre>
 
   <h2>WebGL Effects</h2>
   <p>GPU-powered transition effects using Three.js.</p>
-  <pre><code>npm install @acslider/webgl</code></pre>
+  <pre><code>npm install @andresclua/sliderkit-webgl</code></pre>
 
   <h2>CDN (no bundler)</h2>
   <pre><code>{`<!-- Core -->
 <script type="module">
-  import { Slider } from 'https://cdn.jsdelivr.net/npm/@acslider/core/dist/index.mjs'
+  import { Slider } from 'https://cdn.jsdelivr.net/npm/@andresclua/sliderkit/dist/index.mjs'
   new Slider('#el')
 </script>`}</code></pre>
 

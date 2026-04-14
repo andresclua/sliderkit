@@ -25,9 +25,9 @@ import DemoViewer from '../../components/DemoViewer.astro'
 /* Coverflow: show sides, don't clip them */
 .c--slider-a--coverflow { overflow: visible; background: transparent; }
 .c--slider-a--coverflow .c--slider-a__slide { transition: transform 0.4s ease; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
-import { coverflowEffect } from '@acslider/effects'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { coverflowEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#my-slider', {
   slidesPerPage: 3,
@@ -73,9 +73,9 @@ new Slider('#my-slider', {
 
 .c--slider-a--coverflow { overflow: visible; background: transparent; }
 .c--slider-a--coverflow .c--slider-a__slide { transition: transform 0.5s ease; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
-import { coverflowEffect } from '@acslider/effects'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { coverflowEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#my-slider', {
   slidesPerPage: 2,
@@ -110,9 +110,9 @@ new Slider('#my-slider', {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
-import { coverflowEffect } from '@acslider/effects'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { coverflowEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#demo-coverflow', {
   slidesPerPage: 3,

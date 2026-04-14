@@ -23,8 +23,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 .c--slider-a__pagination { display: flex; justify-content: center; gap: 6px; padding: 12px 0; }
 .c--slider-a__pagination-bullet { width: 10px; height: 10px; border-radius: 50%; background: #d1d5db; border: none; cursor: pointer; transition: background 0.2s, transform 0.2s; }
 .c--slider-a__pagination-bullet--active { background: #6C2BD9; transform: scale(1.3); }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, mouseWheel, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, mouseWheel, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   loop: false,
@@ -68,8 +68,8 @@ new Slider('#my-slider', {
 /* Vertical mode */
 .c--slider-a--vertical { height: 300px; }
 .c--slider-a--vertical .c--slider-a__wrapper { flex-direction: column; height: 100%; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, mouseWheel, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, mouseWheel, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   direction: 'vertical',
@@ -114,8 +114,8 @@ new Slider('#my-slider', {
 .c--slider-a__slide { flex-shrink: 0; height: 200px; }
 .c--slider-a__pagination { display: flex; justify-content: center; padding: 12px 0; }
 .c--slider-a__pagination-fraction { font-size: 0.85rem; color: #6b7280; font-variant-numeric: tabular-nums; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, mouseWheel, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, mouseWheel, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   slidesPerPage: 3,
@@ -150,8 +150,8 @@ new Slider('#my-slider', {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, mouseWheel, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, mouseWheel, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-wheel', {
   loop: false,

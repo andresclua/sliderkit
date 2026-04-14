@@ -3,14 +3,14 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Effects">
   <h1>CSS Effects</h1>
-  <p class="lead"><code>@acslider/effects</code> provides 6 pure-CSS transition effects. No JavaScript animations — everything is driven by CSS transforms and transitions applied as classes.</p>
+  <p class="lead"><code>@andresclua/sliderkit-effects</code> provides 6 pure-CSS transition effects. No JavaScript animations — everything is driven by CSS transforms and transitions applied as classes.</p>
 
   <h2>Installation</h2>
-  <pre><code>pnpm add @acslider/effects</code></pre>
+  <pre><code>pnpm add @andresclua/sliderkit-effects</code></pre>
 
   <h2>Usage</h2>
-  <pre><code>{`import { Slider } from '@acslider/core'
-import { fade } from '@acslider/effects'
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
+import { fade } from '@andresclua/sliderkit-effects'
 
 new Slider('#el', {
   plugins: [fade()],
@@ -30,7 +30,7 @@ new Slider('#el', {
   </table>
 
   <h2>Fade example</h2>
-  <pre><code>{`import { fade } from '@acslider/effects'
+  <pre><code>{`import { fade } from '@andresclua/sliderkit-effects'
 
 new Slider('#el', {
   slidesPerPage: 1,
@@ -41,7 +41,7 @@ new Slider('#el', {
 })`}</code></pre>
 
   <h2>Creative (custom) example</h2>
-  <pre><code>{`import { creative } from '@acslider/effects'
+  <pre><code>{`import { creative } from '@andresclua/sliderkit-effects'
 
 new Slider('#el', {
   plugins: [

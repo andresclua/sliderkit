@@ -3,7 +3,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Plugins">
   <h1>Plugins</h1>
-  <p class="lead">Plugins extend the slider with UI features. Import only what you need from <code>@acslider/plugins</code>.</p>
+  <p class="lead">Plugins extend the slider with UI features. Import only what you need from <code>@andresclua/sliderkit-plugins</code>.</p>
 
   <div class="maintainer-card">
     <p class="maintainer-card__headline">Plugins live in a separate package — added as extras to each project</p>
@@ -18,11 +18,11 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   </div>
 
   <h2>Installation</h2>
-  <pre><code>pnpm add @acslider/plugins</code></pre>
+  <pre><code>pnpm add @andresclua/sliderkit-plugins</code></pre>
 
   <h2>Usage</h2>
-  <pre><code>{`import { Slider } from '@acslider/core'
-import { arrows, pagination, autoplay } from '@acslider/plugins'
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, autoplay } from '@andresclua/sliderkit-plugins'
 
 new Slider('#el', {
   plugins: [
@@ -56,7 +56,7 @@ slider.use(mouseWheel())`}</code></pre>
   </table>
 
   <h2>Writing your own plugin</h2>
-  <pre><code>{`import type { SliderPlugin } from '@acslider/core'
+  <pre><code>{`import type { SliderPlugin } from '@andresclua/sliderkit'
 
 function myPlugin(): SliderPlugin {
   return {

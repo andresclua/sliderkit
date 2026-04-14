@@ -61,8 +61,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 .c--slider-a__arrow--prev { left: 12px; }
 .c--slider-a__arrow--next { right: 12px; }
 .c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   slidesPerPage: 1,
@@ -94,8 +94,8 @@ new Slider('#my-slider', {
 </DemoLayout>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-responsive', {
   slidesPerPage: 1,

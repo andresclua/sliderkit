@@ -6,7 +6,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   <p class="lead">Write your own GLSL fragment shader to create fully custom WebGL transitions between slides.</p>
 
   <h2>How it works</h2>
-  <p>The <code>@acslider/webgl</code> renderer passes two textures to every fragment shader — <code>uTexture0</code> (current slide) and <code>uTexture1</code> (next slide) — plus a <code>uProgress</code> uniform that animates from 0 to 1 during a transition.</p>
+  <p>The <code>@andresclua/sliderkit-webgl</code> renderer passes two textures to every fragment shader — <code>uTexture0</code> (current slide) and <code>uTexture1</code> (next slide) — plus a <code>uProgress</code> uniform that animates from 0 to 1 during a transition.</p>
 
   <h2>Shader uniforms</h2>
   <table>
@@ -37,8 +37,8 @@ void main() {
 }`}</code></pre>
 
   <h2>Using a custom shader</h2>
-  <pre><code>{`import { Slider } from '@acslider/core'
-import { webglRenderer } from '@acslider/webgl'
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
+import { webglRenderer } from '@andresclua/sliderkit-webgl'
 import dissolveShader from './dissolve.frag?raw'
 
 new Slider('#el', {

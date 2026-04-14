@@ -28,8 +28,8 @@ pre {
   font-size: 0.78rem; line-height: 1.6; overflow-x: auto;
   max-height: 200px; overflow-y: auto;
 }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const output = document.getElementById('info-output')
 
@@ -94,7 +94,7 @@ function renderInfo() {
 }
 .custom-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
 #nav-label { font-size: 0.9rem; font-weight: 600; color: #374151; }`}
-    js={`import { Slider } from '@acslider/core'
+    js={`import { Slider } from '@andresclua/sliderkit'
 
 const slides = document.querySelectorAll('.c--slider-a__slide')
 const btnPrev = document.getElementById('btn-prev')
@@ -160,8 +160,8 @@ btnNext.addEventListener('click', () => slider.next())`}
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 const output = document.getElementById('info-output')!
 

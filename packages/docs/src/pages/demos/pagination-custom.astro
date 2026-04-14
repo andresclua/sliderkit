@@ -21,8 +21,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 .custom-pag { font-size: 1.1rem; font-weight: 300; color: #374151; padding: 12px 0; text-align: center; }
 .custom-pag strong { font-size: 1.8rem; font-weight: 800; color: #6C2BD9; }
 .custom-pag span { color: #9ca3af; font-size: 0.85rem; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   loop: false,
@@ -71,8 +71,8 @@ new Slider('#my-slider', {
 .step-bubble.is-active { background: #fff; border: 2px solid #6C2BD9; color: #6C2BD9; }
 .step-line { width: 32px; height: 2px; background: #e5e7eb; }
 .step-line.is-done { background: #6C2BD9; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 function buildSteps(current, total) {
   let html = ''
@@ -127,8 +127,8 @@ new Slider('#my-slider', {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-pag-cust', {
   loop: false,

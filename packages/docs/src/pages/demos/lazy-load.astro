@@ -28,8 +28,8 @@ import DemoViewer from '../../components/DemoViewer.astro'
 
 .img-slide { height: 260px; position: relative; overflow: hidden; background: #e5e7eb; }
 .img-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, lazyLoad, pagination } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, lazyLoad, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   loop: false,
@@ -96,8 +96,8 @@ new Slider('#my-slider', {
   opacity: 0; transition: opacity 0.3s ease;
 }
 .lazy-img.loaded { opacity: 1; }`}
-    js={`import { Slider } from '@acslider/core'
-import { arrows, lazyLoad } from '@acslider/plugins'
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, lazyLoad } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   loop: false,
@@ -157,8 +157,8 @@ new Slider('#my-slider', {
 </style>
 
 <script>
-import { Slider } from '@acslider/core'
-import { arrows, lazyLoad, pagination } from '@acslider/plugins'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, lazyLoad, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-lazy', {
   loop: false,
