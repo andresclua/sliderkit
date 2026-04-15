@@ -1,5 +1,8 @@
 // Factory function
 export { webglRenderer } from './webglRenderer'
+
+// Optional helper
+export { preloadImages } from './preloadImages'
 export type { WebGLRendererOptions } from './types'
 
 // Effects

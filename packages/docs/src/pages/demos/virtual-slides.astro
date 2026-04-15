@@ -14,7 +14,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }`}
+.c--slider-a__item { flex-shrink: 0; width: 100%; height: 260px; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, virtualSlides, pagination } from '@andresclua/sliderkit-plugins'
 
@@ -22,7 +22,7 @@ import { arrows, virtualSlides, pagination } from '@andresclua/sliderkit-plugins
 const wrapper = document.getElementById('my-wrapper')
 for (let i = 0; i < 50; i++) {
   const slide = document.createElement('div')
-  slide.className = 'c--slider-a__slide'
+  slide.className = 'c--slider-a__item'
   slide.setAttribute('data-slide', '')
   slide.textContent = String(i + 1)
   wrapper.appendChild(slide)
@@ -53,7 +53,7 @@ new Slider('#my-slider', {
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide {
+.c--slider-a__item {
   flex-shrink: 0; width: 100%; height: 260px;
   display: flex; align-items: center; justify-content: center;
   font-size: 1rem; color: #6b7280;
@@ -70,7 +70,7 @@ const wrapper = document.getElementById('my-wrapper')
 // Create empty placeholder slides
 for (let i = 0; i < TOTAL; i++) {
   const slide = document.createElement('div')
-  slide.className = 'c--slider-a__slide'
+  slide.className = 'c--slider-a__item'
   slide.setAttribute('data-slide', '')
   slide.setAttribute('data-index', String(i))
   slide.textContent = 'Loading…'
@@ -119,7 +119,7 @@ const colors = ['#6C2BD9','#3B82F6','#10B981','#F59E0B','#EF4444','#EC4899','#14
 const wrapper1 = document.getElementById('demo-virtual-wrapper')!
 for (let i = 0; i < 50; i++) {
   const slide = document.createElement('div')
-  slide.className = 'c--slider-a__slide demo-slide'
+  slide.className = 'c--slider-a__item demo-slide'
   slide.setAttribute('data-slide', '')
   slide.style.background = colors[i % colors.length]
   slide.textContent = String(i + 1)
@@ -139,7 +139,7 @@ new Slider('#demo-virtual', {
 const wrapper2 = document.getElementById('demo-virtual-async-wrapper')!
 for (let i = 0; i < 100; i++) {
   const slide = document.createElement('div')
-  slide.className = 'c--slider-a__slide'
+  slide.className = 'c--slider-a__item'
   slide.setAttribute('data-slide', '')
   slide.setAttribute('data-index', String(i))
   slide.style.height = '260px'

@@ -10,10 +10,10 @@ import DemoViewer from '../../components/DemoViewer.astro'
     html={`<div class="c--slider-a wgl-slider" id="my-slider">
   <div class="c--slider-a__wrapper">
     <!-- Slides are empty — WebGL renders the images -->
-    <div class="c--slider-a__slide wgl-slide" data-slide></div>
-    <div class="c--slider-a__slide wgl-slide" data-slide></div>
-    <div class="c--slider-a__slide wgl-slide" data-slide></div>
-    <div class="c--slider-a__slide wgl-slide" data-slide></div>
+    <div class="c--slider-a__item wgl-slide" data-slide></div>
+    <div class="c--slider-a__item wgl-slide" data-slide></div>
+    <div class="c--slider-a__item wgl-slide" data-slide></div>
+    <div class="c--slider-a__item wgl-slide" data-slide></div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
@@ -188,10 +188,10 @@ Promise.all(IMAGES.map(loadTex)).then(textures => {
   >
     <div class="c--slider-a wgl-slider" id="demo-displacement">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide wgl-slide" data-slide></div>
-        <div class="c--slider-a__slide wgl-slide" data-slide></div>
-        <div class="c--slider-a__slide wgl-slide" data-slide></div>
-        <div class="c--slider-a__slide wgl-slide" data-slide></div>
+        <div class="c--slider-a__item wgl-slide" data-slide></div>
+        <div class="c--slider-a__item wgl-slide" data-slide></div>
+        <div class="c--slider-a__item wgl-slide" data-slide></div>
+        <div class="c--slider-a__item wgl-slide" data-slide></div>
       </div>
     </div>
     <div id="demo-disp-pag" class="c--slider-a__pagination"></div>

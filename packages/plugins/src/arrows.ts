@@ -60,10 +60,12 @@ export function arrows(options: ArrowsOptions = {}): SliderPlugin {
 
       update()
       slider.on('afterSlideChange', update as () => void)
+      slider.on('resize', update as () => void)
     },
 
     destroy() {
       slider?.off('afterSlideChange', update as () => void)
+      slider?.off('resize', update as () => void)
       if (autoCreated) {
         prevEl?.remove()
         nextEl?.remove()

@@ -9,9 +9,9 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="Slides enter from below and exit upward — a dramatic reveal common in full-page section scrollers. Configure prev/active/next transforms with translate Y values: prev slides are above (-110%), next slides wait below (110%). perspective: false keeps everything flat and avoids unwanted 3D distortion."
     html={`<div class="c--slider-a c--slider-a--effect" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
@@ -21,7 +21,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
 /* Effect layout: stacked absolute slides */
 .c--slider-a--effect { height: 260px; }
 .c--slider-a--effect .c--slider-a__wrapper { height: 100%; }
-.c--slider-a--effect .c--slider-a__slide {
+.c--slider-a--effect .c--slider-a__item {
   position: absolute; inset: 0; width: 100%; height: 100%;
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
 }`}
@@ -47,11 +47,11 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a c--slider-a--effect" id="demo-creative">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
       </div>
     </div>
     <div id="demo-creative-pag" class="c--slider-a__pagination"></div>
@@ -62,9 +62,9 @@ new Slider('#my-slider', {
     description="The active slide is at full size; prev/next slides scale down to 80% and fade to transparent. This creates a zoom-in-from-nothing entrance that draws focus to the content. Combine with opacity for a clean, modern presentation style — works especially well for image galleries or hero sections."
     html={`<div class="c--slider-a c--slider-a--effect" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
@@ -73,7 +73,7 @@ new Slider('#my-slider', {
 
 .c--slider-a--effect { height: 260px; }
 .c--slider-a--effect .c--slider-a__wrapper { height: 100%; }
-.c--slider-a--effect .c--slider-a__slide {
+.c--slider-a--effect .c--slider-a__item {
   position: absolute; inset: 0; width: 100%; height: 100%;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }`}
@@ -99,11 +99,11 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a c--slider-a--effect" id="demo-creative-scale">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
       </div>
     </div>
     <div id="demo-creative-scale-pag" class="c--slider-a__pagination"></div>
@@ -114,9 +114,9 @@ new Slider('#my-slider', {
     description="The outgoing slide is pushed off to the left while the incoming slide enters from the right — but both are offset at 30% depth on the Z axis, giving a subtle parallax-within-the-wipe feel. This is a good default for content-heavy slides where you want a clear directional transition without the complexity of a full cube or flip effect."
     html={`<div class="c--slider-a c--slider-a--effect" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
@@ -125,7 +125,7 @@ new Slider('#my-slider', {
 
 .c--slider-a--effect { height: 260px; }
 .c--slider-a--effect .c--slider-a__wrapper { height: 100%; }
-.c--slider-a--effect .c--slider-a__slide {
+.c--slider-a--effect .c--slider-a__item {
   position: absolute; inset: 0; width: 100%; height: 100%;
   transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.55s ease;
 }`}
@@ -151,11 +151,11 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a c--slider-a--effect" id="demo-creative-wipe">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
       </div>
     </div>
     <div id="demo-creative-wipe-pag" class="c--slider-a__pagination"></div>
@@ -164,9 +164,9 @@ new Slider('#my-slider', {
 </DemoLayout>
 
 <style>
-#demo-creative .c--slider-a__slide,
-#demo-creative-scale .c--slider-a__slide,
-#demo-creative-wipe .c--slider-a__slide {
+#demo-creative .c--slider-a__item,
+#demo-creative-scale .c--slider-a__item,
+#demo-creative-wipe .c--slider-a__item {
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
 }
 </style>

@@ -15,7 +15,7 @@
 
   // In permanent mode, slide images are hidden (canvas renders them)
   &[data-webgl-mode="permanent"] {
-    .c--slider-a__slide img {
+    .c--slider-a__item img {
       visibility: hidden;
     }
   }

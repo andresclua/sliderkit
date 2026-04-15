@@ -8,13 +8,13 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="Nearby dots scale smaller, creating a shrinking effect around the active bullet."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">Slide 1</div>
-    <div class="c--slider-a__slide">Slide 2</div>
-    <div class="c--slider-a__slide">Slide 3</div>
-    <div class="c--slider-a__slide">Slide 4</div>
-    <div class="c--slider-a__slide">Slide 5</div>
-    <div class="c--slider-a__slide">Slide 6</div>
-    <div class="c--slider-a__slide">Slide 7</div>
+    <div class="c--slider-a__item">Slide 1</div>
+    <div class="c--slider-a__item">Slide 2</div>
+    <div class="c--slider-a__item">Slide 3</div>
+    <div class="c--slider-a__item">Slide 4</div>
+    <div class="c--slider-a__item">Slide 5</div>
+    <div class="c--slider-a__item">Slide 6</div>
+    <div class="c--slider-a__item">Slide 7</div>
   </div>
 </div>
 <div id="my-pagination" class="c--slider-a__pagination"></div>`}
@@ -27,7 +27,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
   display: flex;
   will-change: transform;
 }
-.c--slider-a__slide {
+.c--slider-a__item {
   flex-shrink: 0;
   width: 100%;
   height: 260px;
@@ -95,13 +95,13 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a" id="demo-pag-dyn">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
-        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>6</div>
-        <div class="c--slider-a__slide demo-slide s-teal"   data-slide>7</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-pink"   data-slide>6</div>
+        <div class="c--slider-a__item demo-slide s-teal"   data-slide>7</div>
       </div>
     </div>
     <div id="demo-pag-dyn-pag" class="c--slider-a__pagination"></div>

@@ -6,31 +6,33 @@ import DemoViewer from '../../components/DemoViewer.astro'
 
   <DemoViewer
     title="Background parallax"
-    description="A full-bleed background element moves at 40% of the slide speed, creating depth. The oversized inset (-40px) ensures no gap appears at the edges during the offset."
+    description="A full-bleed background element moves at 15% of the slide speed. Key: the bg is oversized by the same percentage as depth (depth: 0.15 → width: 130%, left: -15%) so edges never show."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide pslide" data-slide>
-      <div class="pslide-bg" data-parallax></div>
+    <div class="c--slider-a__item pslide" data-slide>
+      <div class="pslide-bg" data-parallax style="background:#6C2BD9"></div>
       <span class="pslide-label">Slide 1</span>
     </div>
-    <div class="c--slider-a__slide pslide" data-slide>
-      <div class="pslide-bg" data-parallax></div>
+    <div class="c--slider-a__item pslide" data-slide>
+      <div class="pslide-bg" data-parallax style="background:#2563EB"></div>
       <span class="pslide-label">Slide 2</span>
     </div>
-    <!-- data-parallax marks the element that moves slower -->
+    <!-- data-parallax marks the element that moves slower than the slide -->
   </div>
 </div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; width: 100%; }
+.c--slider-a__item { flex-shrink: 0; width: 100%; }
 
 .pslide { height: 260px; position: relative; overflow: hidden; }
 
-/* Oversized so parallax offset never shows edges */
+/* depth: 0.15 → max shift = 15% of slide width
+   so bg must be 15% wider on each side: width=130%, left=-15% */
 .pslide-bg {
   position: absolute;
-  inset: -40px;
-  background: #6C2BD9; /* or a background-image */
+  top: 0; bottom: 0;
+  left: -15%;
+  width: 130%;
 }
 
 .pslide-label {
@@ -46,7 +48,7 @@ new Slider('#my-slider', {
   loop: false,
   rewind: true,
   plugins: [
-    parallax({ depth: 0.4 }), // background moves at 40% of slide speed
+    parallax({ depth: 0.15 }), // depth must match CSS overshoot: left:-15% width:130%
     arrows(),
     pagination({ type: 'dots', clickable: true }),
   ],
@@ -54,19 +56,19 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a" id="demo-parallax">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide pslide" data-slide>
+        <div class="c--slider-a__item pslide" data-slide>
           <div class="pslide-bg s-purple" data-parallax></div>
           <span class="pslide-label">Slide 1</span>
         </div>
-        <div class="c--slider-a__slide pslide" data-slide>
+        <div class="c--slider-a__item pslide" data-slide>
           <div class="pslide-bg s-blue" data-parallax></div>
           <span class="pslide-label">Slide 2</span>
         </div>
-        <div class="c--slider-a__slide pslide" data-slide>
+        <div class="c--slider-a__item pslide" data-slide>
           <div class="pslide-bg s-green" data-parallax></div>
           <span class="pslide-label">Slide 3</span>
         </div>
-        <div class="c--slider-a__slide pslide" data-slide>
+        <div class="c--slider-a__item pslide" data-slide>
           <div class="pslide-bg s-amber" data-parallax></div>
           <span class="pslide-label">Slide 4</span>
         </div>
@@ -80,7 +82,7 @@ new Slider('#my-slider', {
     description="The same technique with a real photo as the background. The image is larger than the slide and overflows, so the parallax offset reveals different portions of it — giving a natural camera-pan feel."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide img-pslide" data-slide>
+    <div class="c--slider-a__item img-pslide" data-slide>
       <img src="/photo.jpg" alt="..." data-parallax class="pslide-img" />
       <span class="pslide-label">Mountains</span>
     </div>
@@ -89,15 +91,16 @@ new Slider('#my-slider', {
 </div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; width: 100%; }
+.c--slider-a__item { flex-shrink: 0; width: 100%; }
 
 .img-pslide { height: 280px; position: relative; overflow: hidden; }
 
-/* Wider than 100% so there's room to shift */
+/* depth: 0.15 → max shift = 15% → img must be 30% wider, offset -15% */
 .pslide-img {
   position: absolute;
-  inset: 0 -60px;
-  width: calc(100% + 120px);
+  top: 0; bottom: 0;
+  left: -15%;
+  width: 130%;
   height: 100%;
   object-fit: cover;
 }
@@ -116,26 +119,26 @@ new Slider('#my-slider', {
   loop: false,
   rewind: true,
   plugins: [
-    parallax({ depth: 0.3 }),
+    parallax({ depth: 0.15 }), // depth must match CSS overshoot: left:-15% width:130%
     arrows(),
   ],
 })`}
   >
     <div class="c--slider-a" id="demo-parallax-img">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide img-pslide" data-slide>
+        <div class="c--slider-a__item img-pslide" data-slide>
           <img src="https://picsum.photos/seed/par1/1100/280" alt="Landscape 1" data-parallax class="pslide-img" />
           <span class="pslide-overlay-label">Mountains</span>
         </div>
-        <div class="c--slider-a__slide img-pslide" data-slide>
+        <div class="c--slider-a__item img-pslide" data-slide>
           <img src="https://picsum.photos/seed/par2/1100/280" alt="Landscape 2" data-parallax class="pslide-img" />
           <span class="pslide-overlay-label">Forest</span>
         </div>
-        <div class="c--slider-a__slide img-pslide" data-slide>
+        <div class="c--slider-a__item img-pslide" data-slide>
           <img src="https://picsum.photos/seed/par3/1100/280" alt="Landscape 3" data-parallax class="pslide-img" />
           <span class="pslide-overlay-label">Ocean</span>
         </div>
-        <div class="c--slider-a__slide img-pslide" data-slide>
+        <div class="c--slider-a__item img-pslide" data-slide>
           <img src="https://picsum.photos/seed/par4/1100/280" alt="Landscape 4" data-parallax class="pslide-img" />
           <span class="pslide-overlay-label">Desert</span>
         </div>
@@ -147,21 +150,44 @@ new Slider('#my-slider', {
 </DemoLayout>
 
 <style>
+/* ── Color backgrounds for the CSS demo ── */
+.s-purple { background: linear-gradient(135deg, #6C2BD9, #9B59B6); }
+.s-blue   { background: linear-gradient(135deg, #2563EB, #3B82F6); }
+.s-green  { background: linear-gradient(135deg, #059669, #10B981); }
+.s-amber  { background: linear-gradient(135deg, #D97706, #F59E0B); }
+
+/* ── CSS parallax demo ── */
 .pslide { height: 260px; position: relative; overflow: hidden; }
-.pslide-bg { position: absolute; inset: -40px; }
+/* depth: 0.15 → bg must be 130% wide, starting at -15% */
+.pslide-bg {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -15%;
+  width: 130%;
+}
 .pslide-label {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 2rem; font-weight: 700; color: #fff; z-index: 1;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
+/* ── Image parallax demo ── */
 .img-pslide { height: 280px; position: relative; overflow: hidden; }
-.pslide-img { position: absolute; inset: 0 -60px; width: calc(100% + 120px); height: 100%; object-fit: cover; }
+/* depth: 0.15 → img must be 130% wide, starting at -15% */
+.pslide-img {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -15%;
+  width: 130%;
+  height: 100%;
+  object-fit: cover;
+}
 .pslide-overlay-label {
   position: absolute; inset: 0;
   display: flex; align-items: flex-end; padding: 20px;
   font-size: 1.4rem; font-weight: 700; color: #fff;
-  background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+  background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
   z-index: 1;
 }
 </style>
@@ -174,7 +200,7 @@ new Slider('#demo-parallax', {
   loop: false,
   rewind: true,
   plugins: [
-    parallax({ depth: 0.4 }),
+    parallax({ depth: 0.15 }),
     arrows(),
     pagination({ el: '#demo-parallax-pag', type: 'dots', clickable: true }),
   ],
@@ -184,7 +210,7 @@ new Slider('#demo-parallax-img', {
   loop: false,
   rewind: true,
   plugins: [
-    parallax({ depth: 0.3 }),
+    parallax({ depth: 0.15 }),
     arrows(),
     pagination({ el: '#demo-parallax-img-pag', type: 'dots', clickable: true }),
   ],

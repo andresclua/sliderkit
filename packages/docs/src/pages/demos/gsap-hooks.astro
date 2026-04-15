@@ -10,7 +10,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
     html={`<div class="hero-slider" id="my-slider">
   <div class="c--slider-a__wrapper">
 
-    <div class="c--slider-a__slide hs-slide" data-slide
+    <div class="c--slider-a__item hs-slide" data-slide
          style="background-image:url('https://picsum.photos/seed/hs1/900/420')">
       <div class="hs-content">
         <span class="hs-tag">Architecture</span>
@@ -19,7 +19,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
       </div>
     </div>
 
-    <div class="c--slider-a__slide hs-slide" data-slide
+    <div class="c--slider-a__item hs-slide" data-slide
          style="background-image:url('https://picsum.photos/seed/hs2/900/420')">
       <div class="hs-content">
         <span class="hs-tag">Performance</span>
@@ -28,7 +28,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
       </div>
     </div>
 
-    <div class="c--slider-a__slide hs-slide" data-slide
+    <div class="c--slider-a__item hs-slide" data-slide
          style="background-image:url('https://picsum.photos/seed/hs3/900/420')">
       <div class="hs-content">
         <span class="hs-tag">Plugins</span>
@@ -37,7 +37,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
       </div>
     </div>
 
-    <div class="c--slider-a__slide hs-slide" data-slide
+    <div class="c--slider-a__item hs-slide" data-slide
          style="background-image:url('https://picsum.photos/seed/hs4/900/420')">
       <div class="hs-content">
         <span class="hs-tag">WebGL</span>
@@ -163,28 +163,28 @@ slider.on('afterSlideChange', ({ index }) => {
   >
     <div class="hero-slider" id="demo-hero">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide hs-slide" data-slide style="background-image:url('https://picsum.photos/seed/hs1/900/420')">
+        <div class="c--slider-a__item hs-slide" data-slide style="background-image:url('https://picsum.photos/seed/hs1/900/420')">
           <div class="hs-content">
             <span class="hs-tag">Architecture</span>
             <h2 class="hs-title">Built for the modern web</h2>
             <p class="hs-desc">Lightweight, accessible, and dependency-free at its core.</p>
           </div>
         </div>
-        <div class="c--slider-a__slide hs-slide" data-slide style="background-image:url('https://picsum.photos/seed/hs2/900/420')">
+        <div class="c--slider-a__item hs-slide" data-slide style="background-image:url('https://picsum.photos/seed/hs2/900/420')">
           <div class="hs-content">
             <span class="hs-tag">Performance</span>
             <h2 class="hs-title">Zero layout thrash</h2>
             <p class="hs-desc">Transforms only — no reflow on every frame.</p>
           </div>
         </div>
-        <div class="c--slider-a__slide hs-slide" data-slide style="background-image:url('https://picsum.photos/seed/hs3/900/420')">
+        <div class="c--slider-a__item hs-slide" data-slide style="background-image:url('https://picsum.photos/seed/hs3/900/420')">
           <div class="hs-content">
             <span class="hs-tag">Plugins</span>
             <h2 class="hs-title">Extend without the weight</h2>
             <p class="hs-desc">Import only the plugins you need — tree-shaking does the rest.</p>
           </div>
         </div>
-        <div class="c--slider-a__slide hs-slide" data-slide style="background-image:url('https://picsum.photos/seed/hs4/900/420')">
+        <div class="c--slider-a__item hs-slide" data-slide style="background-image:url('https://picsum.photos/seed/hs4/900/420')">
           <div class="hs-content">
             <span class="hs-tag">WebGL</span>
             <h2 class="hs-title">GPU-powered transitions</h2>
@@ -201,7 +201,7 @@ slider.on('afterSlideChange', ({ index }) => {
     description="A multi-slide layout where each card's inner elements animate in individually on afterSlideChange. The stagger creates a ripple feel — icon, title, description, and badge each appear 80ms apart. Touch or click an arrow to see the wave re-trigger."
     html={`<div class="card-slider" id="my-cards">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide card-slide" data-slide>
+    <div class="c--slider-a__item card-slide" data-slide>
       <div class="card-body">
         <div class="card-icon">⚡</div>
         <h3 class="card-title">Instant setup</h3>
@@ -209,7 +209,7 @@ slider.on('afterSlideChange', ({ index }) => {
         <span class="card-badge">Core</span>
       </div>
     </div>
-    <div class="c--slider-a__slide card-slide" data-slide>
+    <div class="c--slider-a__item card-slide" data-slide>
       <div class="card-body">
         <div class="card-icon">🎯</div>
         <h3 class="card-title">Events API</h3>
@@ -217,7 +217,7 @@ slider.on('afterSlideChange', ({ index }) => {
         <span class="card-badge">Lifecycle</span>
       </div>
     </div>
-    <div class="c--slider-a__slide card-slide" data-slide>
+    <div class="c--slider-a__item card-slide" data-slide>
       <div class="card-body">
         <div class="card-icon">🧩</div>
         <h3 class="card-title">Plugin system</h3>
@@ -225,7 +225,7 @@ slider.on('afterSlideChange', ({ index }) => {
         <span class="card-badge">Plugins</span>
       </div>
     </div>
-    <div class="c--slider-a__slide card-slide" data-slide>
+    <div class="c--slider-a__item card-slide" data-slide>
       <div class="card-body">
         <div class="card-icon">🌊</div>
         <h3 class="card-title">WebGL effects</h3>
@@ -233,7 +233,7 @@ slider.on('afterSlideChange', ({ index }) => {
         <span class="card-badge">WebGL</span>
       </div>
     </div>
-    <div class="c--slider-a__slide card-slide" data-slide>
+    <div class="c--slider-a__item card-slide" data-slide>
       <div class="card-body">
         <div class="card-icon">♿</div>
         <h3 class="card-title">Accessible</h3>
@@ -356,7 +356,7 @@ slider.on('afterSlideChange', ({ index, previousIndex }) => {
   >
     <div class="card-slider" id="demo-cards-gsap">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide card-slide" data-slide>
+        <div class="c--slider-a__item card-slide" data-slide>
           <div class="card-body">
             <div class="card-icon">⚡</div>
             <h3 class="card-title">Instant setup</h3>
@@ -364,7 +364,7 @@ slider.on('afterSlideChange', ({ index, previousIndex }) => {
             <span class="card-badge">Core</span>
           </div>
         </div>
-        <div class="c--slider-a__slide card-slide" data-slide>
+        <div class="c--slider-a__item card-slide" data-slide>
           <div class="card-body">
             <div class="card-icon">🎯</div>
             <h3 class="card-title">Events API</h3>
@@ -372,7 +372,7 @@ slider.on('afterSlideChange', ({ index, previousIndex }) => {
             <span class="card-badge">Lifecycle</span>
           </div>
         </div>
-        <div class="c--slider-a__slide card-slide" data-slide>
+        <div class="c--slider-a__item card-slide" data-slide>
           <div class="card-body">
             <div class="card-icon">🧩</div>
             <h3 class="card-title">Plugin system</h3>
@@ -380,7 +380,7 @@ slider.on('afterSlideChange', ({ index, previousIndex }) => {
             <span class="card-badge">Plugins</span>
           </div>
         </div>
-        <div class="c--slider-a__slide card-slide" data-slide>
+        <div class="c--slider-a__item card-slide" data-slide>
           <div class="card-body">
             <div class="card-icon">🌊</div>
             <h3 class="card-title">WebGL effects</h3>
@@ -388,7 +388,7 @@ slider.on('afterSlideChange', ({ index, previousIndex }) => {
             <span class="card-badge">WebGL</span>
           </div>
         </div>
-        <div class="c--slider-a__slide card-slide" data-slide>
+        <div class="c--slider-a__item card-slide" data-slide>
           <div class="card-body">
             <div class="card-icon">♿</div>
             <h3 class="card-title">Accessible</h3>

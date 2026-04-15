@@ -21,7 +21,7 @@ test.describe('ACSlider e2e', () => {
   test('clicking next arrow advances slide', async ({ page }) => {
     const nextBtn = page.locator('.c--slider-a__arrow--next').first()
     await nextBtn.click()
-    const activeSlide = page.locator('.c--slider-a__slide--active').first()
+    const activeSlide = page.locator('.c--slider-a__item--active').first()
     await expect(activeSlide).toContainText('2')
   })
 
@@ -30,7 +30,7 @@ test.describe('ACSlider e2e', () => {
     await nextBtn.click()
     const prevBtn = page.locator('.c--slider-a__arrow--prev').first()
     await prevBtn.click()
-    const activeSlide = page.locator('.c--slider-a__slide--active').first()
+    const activeSlide = page.locator('.c--slider-a__item--active').first()
     await expect(activeSlide).toContainText('1')
   })
 
@@ -38,7 +38,7 @@ test.describe('ACSlider e2e', () => {
   test('ArrowRight key advances slide', async ({ page }) => {
     await page.locator('#slider-basic').click()
     await page.keyboard.press('ArrowRight')
-    const activeSlide = page.locator('#slider-basic .c--slider-a__slide--active')
+    const activeSlide = page.locator('#slider-basic .c--slider-a__item--active')
     await expect(activeSlide).toContainText('2')
   })
 
@@ -46,7 +46,7 @@ test.describe('ACSlider e2e', () => {
     await page.locator('#slider-basic').click()
     await page.keyboard.press('ArrowRight')
     await page.keyboard.press('ArrowLeft')
-    const activeSlide = page.locator('#slider-basic .c--slider-a__slide--active')
+    const activeSlide = page.locator('#slider-basic .c--slider-a__item--active')
     await expect(activeSlide).toContainText('1')
   })
 
@@ -57,12 +57,12 @@ test.describe('ACSlider e2e', () => {
   })
 
   test('slides have role=group', async ({ page }) => {
-    const firstSlide = page.locator('#slider-basic .c--slider-a__slide').first()
+    const firstSlide = page.locator('#slider-basic .c--slider-a__item').first()
     await expect(firstSlide).toHaveAttribute('role', 'group')
   })
 
   test('slides have aria-roledescription=slide', async ({ page }) => {
-    const firstSlide = page.locator('#slider-basic .c--slider-a__slide').first()
+    const firstSlide = page.locator('#slider-basic .c--slider-a__item').first()
     await expect(firstSlide).toHaveAttribute('aria-roledescription', 'slide')
   })
 

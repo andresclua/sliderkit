@@ -8,8 +8,8 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   <h2>HTML structure</h2>
   <pre><code>{`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide" data-slide>Slide 1</div>
-    <div class="c--slider-a__slide" data-slide>Slide 2</div>
+    <div class="c--slider-a__item" data-slide>Slide 1</div>
+    <div class="c--slider-a__item" data-slide>Slide 2</div>
   </div>
 </div>`}</code></pre>
 
@@ -19,7 +19,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
     <tbody>
       <tr><td><code>.c--slider-a</code></td><td>Container</td><td>Overflow hidden, position relative, sets the viewport</td></tr>
       <tr><td><code>.c--slider-a__wrapper</code></td><td>Wrapper</td><td>Flex row (or column in vertical mode); translate animates here</td></tr>
-      <tr><td><code>.c--slider-a__slide</code></td><td>Each slide</td><td>Flex shrink 0; width set by <code>applyLayout()</code></td></tr>
+      <tr><td><code>.c--slider-a__item</code></td><td>Each slide</td><td>Flex shrink 0; width set by <code>applyLayout()</code></td></tr>
     </tbody>
   </table>
 
@@ -27,9 +27,14 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Class</th><th>Applied to</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>.is-active</code></td><td>Active slide</td><td>The current visible slide</td></tr>
-      <tr><td><code>.is-prev</code></td><td>Previous slide</td><td>Slide immediately before active</td></tr>
-      <tr><td><code>.is-next</code></td><td>Next slide</td><td>Slide immediately after active</td></tr>
+      <tr><td><code>.c--slider-a__item--active</code></td><td>Item</td><td>The current visible slide</td></tr>
+      <tr><td><code>.c--slider-a__item--prev</code></td><td>Item</td><td>Slide immediately before active</td></tr>
+      <tr><td><code>.c--slider-a__item--next</code></td><td>Item</td><td>Slide immediately after active</td></tr>
+      <tr><td><code>.c--slider-a__item--clone</code></td><td>Item</td><td>DOM clone added by the loop manager</td></tr>
+      <tr><td><code>.c--slider-a--initialized</code></td><td>Container</td><td>Added once JS layout is complete</td></tr>
+      <tr><td><code>.c--slider-a--frozen</code></td><td>Container</td><td>All items fit — interaction disabled</td></tr>
+      <tr><td><code>.c--slider-a--disabled</code></td><td>Container</td><td>Manually disabled via <code>disable()</code></td></tr>
+      <tr><td><code>.c--slider-a--vertical</code></td><td>Container</td><td>Vertical direction mode</td></tr>
     </tbody>
   </table>
 
@@ -44,7 +49,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   will-change: transform;
 }
 
-.c--slider-a__slide {
+.c--slider-a__item {
   flex-shrink: 0;
 }`}</code></pre>
 
@@ -60,7 +65,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
     </tbody>
   </table>
   <p>Use these to scope slide transition CSS:</p>
-  <pre><code>{`.c--slider-effect-fade .c--slider-a__slide {
+  <pre><code>{`.c--slider-effect-fade .c--slider-a__item {
   transition: opacity 400ms ease;
 }`}</code></pre>
 

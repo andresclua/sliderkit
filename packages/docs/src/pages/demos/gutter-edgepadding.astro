@@ -8,13 +8,13 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="3 slides per page with 16px gutters. Edge padding peeks the prev/next slide."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">A</div>
-    <div class="c--slider-a__slide">B</div>
-    <div class="c--slider-a__slide">C</div>
-    <div class="c--slider-a__slide">D</div>
-    <div class="c--slider-a__slide">E</div>
-    <div class="c--slider-a__slide">F</div>
-    <div class="c--slider-a__slide">G</div>
+    <div class="c--slider-a__item">A</div>
+    <div class="c--slider-a__item">B</div>
+    <div class="c--slider-a__item">C</div>
+    <div class="c--slider-a__item">D</div>
+    <div class="c--slider-a__item">E</div>
+    <div class="c--slider-a__item">F</div>
+    <div class="c--slider-a__item">G</div>
   </div>
 </div>
 <div id="my-pagination" class="c--slider-a__pagination"></div>`}
@@ -27,7 +27,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
   display: flex;
   will-change: transform;
 }
-.c--slider-a__slide {
+.c--slider-a__item {
   flex-shrink: 0;
   /* width is calculated by the slider based on slidesPerPage + gutter */
   height: 260px;
@@ -79,13 +79,13 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a" id="demo-gutter">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>A</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>B</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>C</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>D</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>E</div>
-        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>F</div>
-        <div class="c--slider-a__slide demo-slide s-teal"   data-slide>G</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>A</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>B</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>C</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>D</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>E</div>
+        <div class="c--slider-a__item demo-slide s-pink"   data-slide>F</div>
+        <div class="c--slider-a__item demo-slide s-teal"   data-slide>G</div>
       </div>
     </div>
     <div id="demo-gutter-pag" class="c--slider-a__pagination"></div>
@@ -97,11 +97,11 @@ new Slider('#my-slider', {
     html={`<div class="center-wrap">
   <div class="c--slider-a" id="my-slider">
     <div class="c--slider-a__wrapper">
-      <div class="c--slider-a__slide slide-img" style="background-image:url('https://picsum.photos/seed/cf1/800/400')"></div>
-      <div class="c--slider-a__slide slide-img" style="background-image:url('https://picsum.photos/seed/cf2/800/400')"></div>
-      <div class="c--slider-a__slide slide-img" style="background-image:url('https://picsum.photos/seed/cf3/800/400')"></div>
-      <div class="c--slider-a__slide slide-img" style="background-image:url('https://picsum.photos/seed/cf4/800/400')"></div>
-      <div class="c--slider-a__slide slide-img" style="background-image:url('https://picsum.photos/seed/cf5/800/400')"></div>
+      <div class="c--slider-a__item slide-img" style="background-image:url('https://picsum.photos/seed/cf1/800/400')"></div>
+      <div class="c--slider-a__item slide-img" style="background-image:url('https://picsum.photos/seed/cf2/800/400')"></div>
+      <div class="c--slider-a__item slide-img" style="background-image:url('https://picsum.photos/seed/cf3/800/400')"></div>
+      <div class="c--slider-a__item slide-img" style="background-image:url('https://picsum.photos/seed/cf4/800/400')"></div>
+      <div class="c--slider-a__item slide-img" style="background-image:url('https://picsum.photos/seed/cf5/800/400')"></div>
     </div>
   </div>
 </div>`}
@@ -154,27 +154,27 @@ const slider = new Slider('#my-slider', {
 const el = document.querySelector('#my-slider')
 
 function syncScale() {
-  const all    = el.querySelectorAll('.c--slider-a__slide')
-  const active = el.querySelector('.c--slider-a__slide--active')
+  const all    = el.querySelectorAll('.c--slider-a__item')
+  const active = el.querySelector('.c--slider-a__item--active')
   gsap.to(all,    { scale: 0.85, duration: 0.4, ease: 'power2.out' })
   if (active)
     gsap.to(active, { scale: 1,    duration: 0.4, ease: 'power2.out', overwrite: 'auto' })
 }
 
 // Initialise scale without animation
-gsap.set(el.querySelectorAll('.c--slider-a__slide'), { scale: 0.85 })
-gsap.set(el.querySelector('.c--slider-a__slide--active'), { scale: 1 })
+gsap.set(el.querySelectorAll('.c--slider-a__item'), { scale: 0.85 })
+gsap.set(el.querySelector('.c--slider-a__item--active'), { scale: 1 })
 
 slider.on('afterSlideChange', syncScale)`}
   >
     <div class="center-wrap" id="center-outer">
       <div class="c--slider-a" id="demo-center">
         <div class="c--slider-a__wrapper">
-          <div class="c--slider-a__slide slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf1/800/400')"></div>
-          <div class="c--slider-a__slide slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf2/800/400')"></div>
-          <div class="c--slider-a__slide slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf3/800/400')"></div>
-          <div class="c--slider-a__slide slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf4/800/400')"></div>
-          <div class="c--slider-a__slide slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf5/800/400')"></div>
+          <div class="c--slider-a__item slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf1/800/400')"></div>
+          <div class="c--slider-a__item slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf2/800/400')"></div>
+          <div class="c--slider-a__item slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf3/800/400')"></div>
+          <div class="c--slider-a__item slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf4/800/400')"></div>
+          <div class="c--slider-a__item slide-img" data-slide style="background-image:url('https://picsum.photos/seed/cf5/800/400')"></div>
         </div>
       </div>
     </div>
@@ -185,16 +185,16 @@ slider.on('afterSlideChange', syncScale)`}
     html={`<div class="film-wrap">
   <div class="c--slider-a" id="my-slider">
     <div class="c--slider-a__wrapper">
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof1/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof2/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof3/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof4/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof5/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof6/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof7/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof8/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof9/600/360')"></div>
-      <div class="c--slider-a__slide film-slide" style="background-image:url('https://picsum.photos/seed/dof10/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof1/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof2/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof3/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof4/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof5/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof6/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof7/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof8/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof9/600/360')"></div>
+      <div class="c--slider-a__item film-slide" style="background-image:url('https://picsum.photos/seed/dof10/600/360')"></div>
     </div>
   </div>
 </div>`}
@@ -244,7 +244,7 @@ const container = document.querySelector('#my-slider')
 function applyBlur() {
   const cRect      = container.getBoundingClientRect()
   const centerX    = cRect.left + cRect.width / 2
-  const allSlides  = container.querySelectorAll('.c--slider-a__slide')
+  const allSlides  = container.querySelectorAll('.c--slider-a__item')
   const slideW     = allSlides[0]?.getBoundingClientRect().width ?? 1
 
   allSlides.forEach(slide => {
@@ -262,16 +262,16 @@ slider.on('afterSlideChange', applyBlur)`}
     <div class="film-wrap" id="film-outer">
       <div class="c--slider-a" id="demo-film">
         <div class="c--slider-a__wrapper">
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof1/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof2/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof3/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof4/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof5/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof6/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof7/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof8/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof9/600/360')"></div>
-          <div class="c--slider-a__slide film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof10/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof1/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof2/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof3/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof4/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof5/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof6/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof7/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof8/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof9/600/360')"></div>
+          <div class="c--slider-a__item film-slide" data-slide style="background-image:url('https://picsum.photos/seed/dof10/600/360')"></div>
         </div>
       </div>
     </div>
@@ -283,34 +283,34 @@ slider.on('afterSlideChange', applyBlur)`}
     html={`<div class="fan-wrap">
   <div class="c--slider-a" id="my-slider">
     <div class="c--slider-a__wrapper">
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan1/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan1/600/400')">
         <span class="rot-label">Mountain</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan2/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan2/600/400')">
         <span class="rot-label">Ocean</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan3/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan3/600/400')">
         <span class="rot-label">Forest</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan4/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan4/600/400')">
         <span class="rot-label">Desert</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan5/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan5/600/400')">
         <span class="rot-label">City</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan6/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan6/600/400')">
         <span class="rot-label">Coast</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan7/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan7/600/400')">
         <span class="rot-label">Valley</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan8/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan8/600/400')">
         <span class="rot-label">Canyon</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan9/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan9/600/400')">
         <span class="rot-label">Lake</span>
       </div>
-      <div class="c--slider-a__slide rot-card" style="background-image:url('https://picsum.photos/seed/fan10/600/400')">
+      <div class="c--slider-a__item rot-card" style="background-image:url('https://picsum.photos/seed/fan10/600/400')">
         <span class="rot-label">Meadow</span>
       </div>
     </div>
@@ -391,7 +391,7 @@ function applyRotation(snap = false) {
   const cx     = container.offsetWidth / 2
   const slideW = slider.slides[0].offsetWidth || 1
 
-  container.querySelectorAll('.c--slider-a__slide').forEach(slide => {
+  container.querySelectorAll('.c--slider-a__item').forEach(slide => {
     const center = slide.offsetLeft + tx + slide.offsetWidth / 2
     const slot   = Math.round((center - cx) / (slideW + 24))
     const deg    = Math.max(-12, Math.min(12, slot * 6))
@@ -406,16 +406,16 @@ slider.on('afterSlideChange', () => applyRotation())`}
     <div class="fan-wrap" id="fan-outer">
       <div class="c--slider-a" id="demo-fan">
         <div class="c--slider-a__wrapper">
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan1/600/400')"><span class="rot-label">Mountain</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan2/600/400')"><span class="rot-label">Ocean</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan3/600/400')"><span class="rot-label">Forest</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan4/600/400')"><span class="rot-label">Desert</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan5/600/400')"><span class="rot-label">City</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan6/600/400')"><span class="rot-label">Coast</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan7/600/400')"><span class="rot-label">Valley</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan8/600/400')"><span class="rot-label">Canyon</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan9/600/400')"><span class="rot-label">Lake</span></div>
-          <div class="c--slider-a__slide rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan10/600/400')"><span class="rot-label">Meadow</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan1/600/400')"><span class="rot-label">Mountain</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan2/600/400')"><span class="rot-label">Ocean</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan3/600/400')"><span class="rot-label">Forest</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan4/600/400')"><span class="rot-label">Desert</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan5/600/400')"><span class="rot-label">City</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan6/600/400')"><span class="rot-label">Coast</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan7/600/400')"><span class="rot-label">Valley</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan8/600/400')"><span class="rot-label">Canyon</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan9/600/400')"><span class="rot-label">Lake</span></div>
+          <div class="c--slider-a__item rot-card" data-slide style="background-image:url('https://picsum.photos/seed/fan10/600/400')"><span class="rot-label">Meadow</span></div>
         </div>
       </div>
     </div>
@@ -534,15 +534,15 @@ const centerSlider = new Slider('#demo-center', {
 const centerEl = document.querySelector('#demo-center')!
 
 function syncCenterScale() {
-  const all    = centerEl.querySelectorAll('.c--slider-a__slide')
-  const active = centerEl.querySelector('.c--slider-a__slide--active')
+  const all    = centerEl.querySelectorAll('.c--slider-a__item')
+  const active = centerEl.querySelector('.c--slider-a__item--active')
   gsap.to(all,    { scale: 0.85, duration: 0.4, ease: 'power2.out' })
   if (active)
     gsap.to(active, { scale: 1,    duration: 0.4, ease: 'power2.out', overwrite: 'auto' })
 }
 
-gsap.set(centerEl.querySelectorAll('.c--slider-a__slide'), { scale: 0.85 })
-gsap.set(centerEl.querySelector('.c--slider-a__slide--active'), { scale: 1 })
+gsap.set(centerEl.querySelectorAll('.c--slider-a__item'), { scale: 0.85 })
+gsap.set(centerEl.querySelector('.c--slider-a__item--active'), { scale: 1 })
 
 centerSlider.on('afterSlideChange', syncCenterScale)
 
@@ -604,7 +604,7 @@ function applyFanRotation(snap = false) {
   const cx      = cw / 2                                          // container center
   const slideW  = (fanSlider.slides[0] as HTMLElement).offsetWidth || 1
 
-  fanContainer.querySelectorAll<HTMLElement>('.c--slider-a__slide').forEach(slide => {
+  fanContainer.querySelectorAll<HTMLElement>('.c--slider-a__item').forEach(slide => {
     const slideCenter = slide.offsetLeft + tx + slide.offsetWidth / 2
     const slot = Math.round((slideCenter - cx) / (slideW + 24))
     const deg  = Math.max(-12, Math.min(12, slot * 6))

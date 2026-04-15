@@ -21,6 +21,31 @@
 html { scroll-behavior: smooth; }
 body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
 
+/* ── GitHub corner ribbon ── */
+.github-corner {
+  position: fixed;
+  top: 0; right: 0;
+  z-index: 200;
+  color: #fff;
+}
+.github-corner svg {
+  color: var(--brand);
+  fill: #24292e;
+}
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+.github-corner .octo-arm { color: var(--brand); }
+.github-corner .octo-body { color: #fff; }
+@keyframes octocat-wave {
+  0%, 100% { transform: rotate(0); }
+  20%, 60% { transform: rotate(-25deg); }
+  40%, 80% { transform: rotate(10deg); }
+}
+@media (max-width: 500px) {
+  .github-corner { display: none; }
+}
+
 a { color: var(--brand); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
@@ -57,6 +82,11 @@ pre code { background: none; padding: 0; font-size: inherit; }
   flex-wrap: nowrap;
   will-change: transform;
   user-select: none;
+  opacity: 0;
+}
+.c--slider-a--initialized .c--slider-a__wrapper {
+  opacity: 1;
+  transition: opacity 0.15s ease;
 }
 /* Vertical mode */
 .c--slider-a--vertical {
@@ -67,7 +97,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
   height: 100%;
 }
 
-.c--slider-a__slide {
+.c--slider-a__item {
   flex-shrink: 0;
   position: relative;
 }
@@ -117,6 +147,10 @@ pre code { background: none; padding: 0; font-size: inherit; }
 .c--slider-a__arrow--prev { left: 12px; }
 .c--slider-a__arrow--next { right: 12px; }
 .c--slider-a__arrow svg { width: 20px; height: 20px; color: #374151; }
+
+/* ── Frozen: hide arrows and pagination ── */
+.c--slider-a--frozen .c--slider-a__arrow,
+.c--slider-a--frozen .c--slider-a__pagination { display: none; }
 
 /* ── Pagination ── */
 .c--slider-a__pagination {

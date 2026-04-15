@@ -2,34 +2,20 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Creative Effect">
-  <h1>creativeEffect</h1>
-  <p class="lead">A fully configurable effect where you define the exact 3D transform for the previous, active, and next slide positions — enabling unlimited custom transitions.</p>
+  <h1>Creative Effect</h1>
+  <p class="lead">A fully configurable effect where you define the exact 3D transform for the previous, active, and next slide positions — enabling unlimited custom transitions including slides, cubes, coverfows, and more.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} creativeEffect {"}"} from '@andresclua/sliderkit-effects'</code></pre>
-
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
-  loop: true,
-  plugins: [
-    creativeEffect({
-      prev: { translate: [0, '-100%', 0] },
-      active: { translate: [0, 0, 0] },
-      next: { translate: [0, '100%', 0] },
-      perspective: true,
-    }),
-    arrows(),
-  ],
-})`}</code></pre>
 
   <h2>CreativeTransform type</h2>
   <table>
     <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>translate</code></td><td><code>[x, y, z]</code></td><td>Values can be numbers (treated as px) or strings like <code>'100%'</code>. Becomes <code>translate3d(x, y, z)</code>.</td></tr>
+      <tr><td><code>translate</code></td><td><code>[x, y, z]</code></td><td>Values can be numbers (treated as px) or strings like <code>'100%'</code>. Compiles to <code>translate3d(x, y, z)</code>.</td></tr>
       <tr><td><code>rotate</code></td><td><code>[rx, ry, rz]</code></td><td>Degrees. Non-zero axes emit <code>rotateX/Y/Z(Ndeg)</code>.</td></tr>
       <tr><td><code>scale</code></td><td><code>number</code></td><td>Uniform scale factor, e.g. <code>0.8</code>.</td></tr>
-      <tr><td><code>opacity</code></td><td><code>number</code></td><td>0–1 opacity. Defaults to <code>1</code> if omitted.</td></tr>
+      <tr><td><code>opacity</code></td><td><code>number</code></td><td>0–1. Defaults to <code>1</code> if omitted.</td></tr>
     </tbody>
   </table>
 
@@ -41,27 +27,53 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
       <tr><td><code>active</code></td><td><code>CreativeTransform</code></td><td><code>translate(0, 0, 0)</code></td><td>Transform applied to the active slide.</td></tr>
       <tr><td><code>next</code></td><td><code>CreativeTransform</code></td><td><code>translate(100%, 0, 0)</code></td><td>Transform applied to slides after the active one.</td></tr>
       <tr><td><code>perspective</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Adds <code>preserve-3d</code> and <code>perspective: 1200px</code> on the wrapper for 3D depth.</td></tr>
+      <tr><td><code>limitProgress</code></td><td><code>number</code></td><td>—</td><td>Reserved option for clamping the offset used in transform calculations.</td></tr>
     </tbody>
   </table>
 
-  <h2>Preset examples</h2>
-  <h3>Slide up</h3>
-  <pre><code>{`creativeEffect({
-  prev:   { translate: [0, '-100%', 0] },
-  active: { translate: [0, 0, 0] },
-  next:   { translate: [0, '100%', 0] },
-})`}</code></pre>
+  <h2>CSS class</h2>
+  <p>The container receives <code>.c--slider-effect-creative</code> while the plugin is active.</p>
 
-  <h3>Cube (simplified)</h3>
+  <h2>Example</h2>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { creativeEffect } from '@andresclua/sliderkit-effects'
+import { arrows } from '@andresclua/sliderkit-plugins'
+
+// Slide up
+createSlider('#my-slider', {
+  loop: true,
+  plugins: [
+    creativeEffect({
+      prev:   { translate: [0, '-100%', 0] },
+      active: { translate: [0, 0, 0] },
+      next:   { translate: [0, '100%', 0] },
+    }),
+    arrows(),
+  ],
+})
+`}</code></pre>
+
+  <pre><code>{`/* CSS — the transition duration is set per slide */
+.c--slider-effect-creative .c--slider-a__item {
+  transition: transform 500ms ease, opacity 500ms ease;
+}
+`}</code></pre>
+
+  <h2>Preset examples</h2>
+  <h3>Cube</h3>
   <pre><code>{`creativeEffect({
   prev:   { translate: ['-100%', 0, 0], rotate: [0, 90, 0] },
   active: { translate: [0, 0, 0] },
   next:   { translate: ['100%', 0, 0], rotate: [0, -90, 0] },
 })`}</code></pre>
 
-  <h2>CSS class</h2>
-  <p>The container receives <code>.c--slider-effect-creative</code> while the plugin is active.</p>
+  <h3>Coverflow-style</h3>
+  <pre><code>{`creativeEffect({
+  perspective: true,
+  prev:   { translate: ['-60%', 0, -200], rotate: [0, 45, 0], opacity: 0.5 },
+  active: { translate: [0, 0, 0], opacity: 1 },
+  next:   { translate: ['60%', 0, -200], rotate: [0, -45, 0], opacity: 0.5 },
+})`}</code></pre>
 
-  <h2>Demo</h2>
-  <p><a href="/demos/effect-creative">View creative effect demo →</a></p>
+  <p><a href="/demos/effect-creative">View creative effect demo</a></p>
 </DocsLayout>

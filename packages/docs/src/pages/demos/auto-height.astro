@@ -8,11 +8,11 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="The container animates its height to match the active slide. Each slide has a different height."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide slide-short">Short</div>
-    <div class="c--slider-a__slide slide-medium">Medium<br/>height</div>
-    <div class="c--slider-a__slide slide-tall">Tall<br/>slide<br/>content</div>
-    <div class="c--slider-a__slide slide-short">Short again</div>
-    <div class="c--slider-a__slide slide-medium">Medium<br/>again</div>
+    <div class="c--slider-a__item slide-short">Short</div>
+    <div class="c--slider-a__item slide-medium">Medium<br/>height</div>
+    <div class="c--slider-a__item slide-tall">Tall<br/>slide<br/>content</div>
+    <div class="c--slider-a__item slide-short">Short again</div>
+    <div class="c--slider-a__item slide-medium">Medium<br/>again</div>
   </div>
 </div>
 <div id="my-pagination" class="c--slider-a__pagination"></div>`}
@@ -28,7 +28,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
   will-change: transform;
   align-items: flex-start; /* important: don't stretch slides */
 }
-.c--slider-a__slide {
+.c--slider-a__item {
   flex-shrink: 0;
   width: 100%;
 }
@@ -92,11 +92,11 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a" id="demo-autoheight">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple ah-1" data-slide>Short</div>
-        <div class="c--slider-a__slide demo-slide s-blue   ah-2" data-slide>Medium<br/>height</div>
-        <div class="c--slider-a__slide demo-slide s-green  ah-3" data-slide>Tall<br/>slide<br/>content</div>
-        <div class="c--slider-a__slide demo-slide s-amber  ah-1" data-slide>Short again</div>
-        <div class="c--slider-a__slide demo-slide s-red    ah-2" data-slide>Medium<br/>again</div>
+        <div class="c--slider-a__item demo-slide s-purple ah-1" data-slide>Short</div>
+        <div class="c--slider-a__item demo-slide s-blue   ah-2" data-slide>Medium<br/>height</div>
+        <div class="c--slider-a__item demo-slide s-green  ah-3" data-slide>Tall<br/>slide<br/>content</div>
+        <div class="c--slider-a__item demo-slide s-amber  ah-1" data-slide>Short again</div>
+        <div class="c--slider-a__item demo-slide s-red    ah-2" data-slide>Medium<br/>again</div>
       </div>
     </div>
     <div id="demo-autoheight-pag" class="c--slider-a__pagination"></div>

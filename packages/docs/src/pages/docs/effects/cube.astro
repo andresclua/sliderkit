@@ -3,44 +3,44 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Cube Effect">
   <h1>Cube Effect</h1>
-  <p class="lead">Simulates a rotating 3D cube by configuring <code>creativeEffect</code> with rotateY and translate offsets. No separate package — uses the Creative Effect plugin.</p>
+  <p class="lead">Simulates a rotating 3D cube transition. The plugin enables <code>preserve-3d</code> and a <code>perspective</code> on the wrapper. Pair it with a CSS transition on the slides to animate the rotation.</p>
 
   <h2>Import</h2>
-  <pre><code>import {"{"} creativeEffect {"}"} from '@andresclua/sliderkit-effects'</code></pre>
+  <pre><code>import {"{"} cubeEffect {"}"} from '@andresclua/sliderkit-effects'</code></pre>
 
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
-  loop: true,
-  plugins: [
-    creativeEffect({
-      perspective: true,
-      prev: {
-        translate: ['-100%', 0, 0],
-        rotate:    [0, 90, 0],
-      },
-      active: {
-        translate: [0, 0, 0],
-      },
-      next: {
-        translate: ['100%', 0, 0],
-        rotate:    [0, -90, 0],
-      },
-    }),
-    arrows(),
-  ],
-})`}</code></pre>
-
-  <h2>CSS for the cube face transition</h2>
-  <pre><code>{`.c--slider-effect-creative .c--slider-a__slide {
-  transition: transform 500ms ease;
-}`}</code></pre>
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>shadow</code></td><td><code>boolean</code></td><td>—</td><td>Reserved for a future shadow layer beneath the cube.</td></tr>
+      <tr><td><code>slideShadows</code></td><td><code>boolean</code></td><td>—</td><td>Reserved for per-face shadow overlays.</td></tr>
+    </tbody>
+  </table>
 
   <h2>How it works</h2>
-  <p>The cube illusion comes from combining a 100% horizontal translate with a 90° Y-axis rotation on each face. The wrapper has <code>perspective: 1200px</code> and <code>transform-style: preserve-3d</code> so the 3D transforms compose correctly.</p>
+  <p>On install the plugin adds the class <code>c--slider-effect-cube</code> to the container and sets <code>transform-style: preserve-3d</code> and <code>perspective: 1200px</code> on the wrapper. Use CSS to position slides as cube faces and add transition animations.</p>
 
-  <h2>See also</h2>
-  <ul>
-    <li><a href="/docs/effects/creative">Creative Effect</a> — full options reference</li>
-    <li><a href="/demos/effect-cube">View cube demo →</a></li>
-  </ul>
+  <h2>Example</h2>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { cubeEffect } from '@andresclua/sliderkit-effects'
+import { arrows } from '@andresclua/sliderkit-plugins'
+
+createSlider('#my-slider', {
+  loop: true,
+  plugins: [
+    cubeEffect(),
+    arrows(),
+  ],
+})
+`}</code></pre>
+
+  <pre><code>{`/* CSS — animate slide transforms */
+.c--slider-effect-cube .c--slider-a__item {
+  transition: transform 500ms ease;
+}
+`}</code></pre>
+
+  <p>For a full cube rotation preset using translate + rotateY, see the <a href="/docs/effects/creative">Creative Effect</a> page.</p>
+
+  <p><a href="/demos/effect-cube">View cube effect demo</a></p>
 </DocsLayout>

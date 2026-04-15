@@ -3,52 +3,49 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Coverflow Effect">
   <h1>Coverflow Effect</h1>
-  <p class="lead">An iTunes-style coverflow built with <code>creativeEffect</code>. Side slides are rotated and pushed back in Z to create depth, while the active slide faces forward.</p>
+  <p class="lead">An iTunes-style coverflow that rotates and depth-shifts side slides around the active one. Uses <code>rotateY</code> and <code>translateZ</code> to create a perspective fan of cards.</p>
 
   <h2>Import</h2>
-  <pre><code>import {"{"} creativeEffect {"}"} from '@andresclua/sliderkit-effects'</code></pre>
+  <pre><code>import {"{"} coverflowEffect {"}"} from '@andresclua/sliderkit-effects'</code></pre>
 
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>rotate</code></td><td><code>number</code></td><td><code>50</code></td><td>Degrees of Y-axis rotation applied per offset step from the active slide.</td></tr>
+      <tr><td><code>stretch</code></td><td><code>number</code></td><td><code>0</code></td><td>Additional Z translate reduction per offset step, pulling side slides further back.</td></tr>
+      <tr><td><code>depth</code></td><td><code>number</code></td><td><code>100</code></td><td>Base Z-depth offset. Higher values push inactive slides further behind the active one.</td></tr>
+      <tr><td><code>modifier</code></td><td><code>number</code></td><td><code>1</code></td><td>Multiplier applied to the per-slide offset before rotation and depth calculations.</td></tr>
+      <tr><td><code>slideShadows</code></td><td><code>boolean</code></td><td>—</td><td>Reserved for per-slide shadow overlays.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How it works</h2>
+  <p>For each slide at offset <code>o</code> from the active index, the plugin computes:</p>
+  <pre><code>{`rotateY(o * modifier * rotate deg)
+translateZ(depth - |o| * depth px)
+scaleX(1 - |o| * 0.1)
+z-index: 100 - |o|`}</code></pre>
+
+  <h2>Example</h2>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { coverflowEffect } from '@andresclua/sliderkit-effects'
+import { arrows } from '@andresclua/sliderkit-plugins'
+
+createSlider('#my-slider', {
   loop: true,
   plugins: [
-    creativeEffect({
-      perspective: true,
-      prev: {
-        translate: ['-60%', 0, -200],
-        rotate:    [0, 45, 0],
-        opacity:   0.5,
-      },
-      active: {
-        translate: [0, 0, 0],
-        opacity:   1,
-      },
-      next: {
-        translate: ['60%', 0, -200],
-        rotate:    [0, -45, 0],
-        opacity:   0.5,
-      },
-    }),
+    coverflowEffect({ rotate: 50, depth: 100 }),
     arrows(),
   ],
-})`}</code></pre>
+})
+`}</code></pre>
 
-  <h2>CSS for smooth animation</h2>
-  <pre><code>{`.c--slider-effect-creative .c--slider-a__slide {
-  transition: transform 500ms ease, opacity 500ms ease;
-}`}</code></pre>
+  <pre><code>{`/* CSS */
+.c--slider-effect-coverflow .c--slider-a__item {
+  transition: transform 500ms ease;
+}
+`}</code></pre>
 
-  <h2>Tuning tips</h2>
-  <ul>
-    <li>Increase the <code>-200</code> Z translate to push side slides further back.</li>
-    <li>Adjust the <code>45</code> degree rotation to flatten or exaggerate the fan angle.</li>
-    <li>Lower <code>opacity: 0.5</code> to make inactive slides more ghostly.</li>
-    <li>Use <code>scale: 0.8</code> on prev/next for an additional size reduction.</li>
-  </ul>
-
-  <h2>See also</h2>
-  <ul>
-    <li><a href="/docs/effects/creative">Creative Effect</a> — full options reference</li>
-    <li><a href="/demos/effect-coverflow">View coverflow demo →</a></li>
-  </ul>
+  <p><a href="/demos/effect-coverflow">View coverflow effect demo</a></p>
 </DocsLayout>

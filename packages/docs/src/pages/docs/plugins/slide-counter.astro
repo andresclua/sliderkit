@@ -2,30 +2,33 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Slide Counter Plugin">
-  <h1>slideCounter</h1>
-  <p class="lead">Overlay badge showing "2 / 5" in a corner of the slider. Useful for galleries.</p>
+  <h1>Slide Counter</h1>
+  <p class="lead">Displays a text counter showing the current slide index and total slide count. The format is controlled by a template string containing <code>{"{{current}}"}</code> and <code>{"{{total}}"}</code> placeholders.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} slideCounter {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
-
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
-  plugins: [
-    slideCounter({
-      template: ({ current, total }) => \`\${current} / \${total}\`,
-    }),
-  ],
-})`}</code></pre>
 
   <h2>Options</h2>
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Target element. Auto-created inside container if omitted.</td></tr>
-      <tr><td><code>template</code></td><td><code>{"({"} current, total {"}"}) => string</code></td><td><code>'current / total'</code></td><td>Custom format function.</td></tr>
+      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Target element. Auto-created with class <code>c--slider-a__counter</code> if omitted.</td></tr>
+      <tr><td><code>template</code></td><td><code>string</code></td><td><code>'{"{{current}}"} / {"{{total}}"}'</code></td><td>Template string. Use <code>{"{{current}}"}</code> and <code>{"{{total}}"}</code> as placeholders.</td></tr>
     </tbody>
   </table>
 
-  <h2>Demo</h2>
-  <p><a href="/demos/slide-counter">View slide counter demo →</a></p>
+  <h2>Example</h2>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { slideCounter } from '@andresclua/sliderkit-plugins'
+
+createSlider('#my-slider', {
+  plugins: [
+    slideCounter({
+      el: '#counter',
+      template: '{{current}} of {{total}}',
+    }),
+  ],
+})`}</code></pre>
+
+  <p><a href="/demos/slide-counter">View slide counter demo</a></p>
 </DocsLayout>

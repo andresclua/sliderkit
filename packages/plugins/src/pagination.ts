@@ -101,10 +101,12 @@ export function pagination(options: PaginationOptions = {}): SliderPlugin {
       render()
 
       slider.on('afterSlideChange', render as () => void)
+      slider.on('resize', render as () => void)
     },
 
     destroy() {
       slider?.off('afterSlideChange', render as () => void)
+      slider?.off('resize', render as () => void)
       if (autoCreated && container) {
         container.remove()
       }

@@ -9,18 +9,18 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="getInfo() returns a snapshot of the full slider state at any point in time: current index, total slides, direction, whether it's animating, and more. Call it inside afterInit or afterSlideChange to react to state changes — or call it imperatively from a button handler. Useful for building custom navigation UIs, analytics tracking, or syncing external state."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
-    <div class="c--slider-a__slide">4</div>
-    <div class="c--slider-a__slide">5</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
+    <div class="c--slider-a__item">4</div>
+    <div class="c--slider-a__item">5</div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>
 <pre id="info-output">Navigate to see getInfo() output…</pre>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+.c--slider-a__item { flex-shrink: 0; width: 100%; height: 260px; }
 
 pre {
   margin-top: 1rem; padding: 12px 16px;
@@ -53,11 +53,11 @@ function renderInfo() {
   >
     <div class="c--slider-a" id="demo-info">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
       </div>
     </div>
     <div id="demo-info-pag" class="c--slider-a__pagination"></div>
@@ -69,10 +69,10 @@ function renderInfo() {
     description="Use getInfo() to build a completely custom navigation component. Here, prev/next buttons are disabled at the boundaries and a label shows the current slide title — all driven by the slider state, not hardcoded DOM manipulation."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide" data-title="Introduction">Slide 1</div>
-    <div class="c--slider-a__slide" data-title="Features">Slide 2</div>
-    <div class="c--slider-a__slide" data-title="Pricing">Slide 3</div>
-    <div class="c--slider-a__slide" data-title="Get started">Slide 4</div>
+    <div class="c--slider-a__item" data-title="Introduction">Slide 1</div>
+    <div class="c--slider-a__item" data-title="Features">Slide 2</div>
+    <div class="c--slider-a__item" data-title="Pricing">Slide 3</div>
+    <div class="c--slider-a__item" data-title="Get started">Slide 4</div>
   </div>
 </div>
 <div class="custom-nav">
@@ -82,7 +82,7 @@ function renderInfo() {
 </div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+.c--slider-a__item { flex-shrink: 0; width: 100%; height: 260px; }
 
 .custom-nav {
   display: flex; align-items: center; justify-content: space-between;
@@ -96,7 +96,7 @@ function renderInfo() {
 #nav-label { font-size: 0.9rem; font-weight: 600; color: #374151; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 
-const slides = document.querySelectorAll('.c--slider-a__slide')
+const slides = document.querySelectorAll('.c--slider-a__item')
 const btnPrev = document.getElementById('btn-prev')
 const btnNext = document.getElementById('btn-next')
 const label   = document.getElementById('nav-label')
@@ -122,10 +122,10 @@ btnNext.addEventListener('click', () => slider.next())`}
   >
     <div class="c--slider-a" id="demo-info-custom">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide data-title="Introduction">Introduction</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide data-title="Features">Features</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide data-title="Pricing">Pricing</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide data-title="Get started">Get started</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide data-title="Introduction">Introduction</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide data-title="Features">Features</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide data-title="Pricing">Pricing</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide data-title="Get started">Get started</div>
       </div>
     </div>
     <div class="custom-nav">

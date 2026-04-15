@@ -48,6 +48,7 @@ export class Slider implements SliderInstance {
   private disabled: boolean = false
   private originalContainer: HTMLElement
   private loopEndListener: ((e: TransitionEvent) => void) | null = null
+  private _hideStyle: HTMLStyleElement | null = null
 
   constructor(container: HTMLElement | string, options: SliderOptions = {}) {
     if (!isBrowser()) {
@@ -61,7 +62,7 @@ export class Slider implements SliderInstance {
       this.mergedOptions = options
       this.eventBus = new EventBus()
       this.pluginManager = new PluginManager(this)
-      this.slideEngine = new SlideEngine({ activeIndex: 0, previousIndex: 0, slideCount: 0, slidesPerPage: 1, loop: false, rewind: false })
+      this.slideEngine = new SlideEngine({ activeIndex: 0, previousIndex: 0, slideCount: 0, slidesPerPage: 1, loop: false, rewind: false, slideBy: 1 })
       this.touchHandler = null as unknown as TouchHandler
       this.dragHandler = null as unknown as DragHandler
       this.keyboardNav = null as unknown as KeyboardNav
@@ -87,6 +88,15 @@ export class Slider implements SliderInstance {
     this.originalContainer = el
     this.container = el
 
+    // Inject a synchronous <style> to hide the wrapper before the first paint,
+    // preventing a flash of un-laid-out slides. Removed after applyLayout().
+    this._hideStyle = document.createElement('style')
+    const uid = `sk-${Math.random().toString(36).slice(2, 8)}`
+    el.setAttribute('data-sk-uid', uid)
+    this._hideStyle.textContent =
+      `[data-sk-uid="${uid}"] .c--slider-a__wrapper{opacity:0!important;transition:none!important}`
+    document.head.appendChild(this._hideStyle)
+
     // Merge options with defaults
     this.options = options
     this.mergedOptions = { ...DEFAULT_OPTIONS, ...options }
@@ -108,7 +118,7 @@ export class Slider implements SliderInstance {
     this.wrapper = wrapperEl
 
     this.slides = getChildren(wrapperEl).filter((child) =>
-      child.classList.contains('c--slider-a__slide') || child.hasAttribute('data-slide')
+      child.classList.contains('c--slider-a__item') || child.hasAttribute('data-slide')
     )
 
     if (this.slides.length === 0) {
@@ -120,6 +130,8 @@ export class Slider implements SliderInstance {
 
     // Init engine
     const slidesPerPage = (this.mergedOptions.slidesPerPage as number) || 1
+    const slideByOpt = this.mergedOptions.slideBy ?? 1
+    const slideBy = slideByOpt === 'page' ? slidesPerPage : slideByOpt
     this.slideEngine = new SlideEngine({
       activeIndex: this.activeIndex,
       previousIndex: this.previousIndex,
@@ -127,6 +139,7 @@ export class Slider implements SliderInstance {
       slidesPerPage,
       loop: this.mergedOptions.loop ?? false,
       rewind: this.mergedOptions.rewind ?? false,
+      slideBy,
     })
 
     // Init plugin manager
@@ -216,6 +229,14 @@ export class Slider implements SliderInstance {
 
     this.eventBus.emit('beforeInit', { slider: this })
     this.applyLayout()
+
+    // Layout is done — remove the hide style so the CSS transition in _base.scss
+    // fades the wrapper in smoothly (opacity: 0 → 1 via --initialized class).
+    if (this._hideStyle) {
+      this._hideStyle.remove()
+      this._hideStyle = null
+    }
+
     this.ariaManager.update(this.activeIndex)
     this.eventBus.emit('afterInit', { slider: this })
 
@@ -503,6 +524,8 @@ export class Slider implements SliderInstance {
     const slidesPerPage = (this.mergedOptions.slidesPerPage as number) || 1
     const gutter = this.mergedOptions.gutter ?? 0
     const edgePadding = this.mergedOptions.edgePadding ?? 0
+    const fixedWidth = this.mergedOptions.fixedWidth || false
+    const autoWidth = this.mergedOptions.autoWidth ?? false
     const baseSpeed = this.reducedMotion.isReduced() ? 0 : (this.mergedOptions.speed ?? 300)
     const speed = overrides.instant ? 0 : baseSpeed
     const activeIndex = overrides.virtualIndex ?? this.activeIndex
@@ -511,27 +534,51 @@ export class Slider implements SliderInstance {
       ? this.container.offsetWidth - edgePadding * 2
       : this.container.offsetHeight - edgePadding * 2
 
-    const slideSize = (containerSize - gutter * (slidesPerPage - 1)) / slidesPerPage
-
-    // Apply width/height to ALL wrapper children (original slides + loop clones)
     const allChildren = getChildren(this.wrapper)
-    allChildren.forEach((child, i) => {
-      if (isHorizontal) {
-        setStyle(child, {
-          width: `${slideSize}px`,
-          marginRight: i < allChildren.length - 1 ? `${gutter}px` : '0',
-        })
-      } else {
-        setStyle(child, {
-          height: `${slideSize}px`,
-          marginBottom: i < allChildren.length - 1 ? `${gutter}px` : '0',
-        })
-      }
-    })
-
-    // Account for prepended loop clones in the translate offset
     const clonesBeforeCount = this.loopManager?.clonesBefore ?? 0
-    const offset = -((activeIndex + clonesBeforeCount) * (slideSize + gutter)) + edgePadding
+    const targetChildIndex = activeIndex + clonesBeforeCount
+
+    let offset: number
+
+    if (autoWidth) {
+      // Slides keep their natural width — only apply gutter between them
+      allChildren.forEach((child, i) => {
+        if (isHorizontal) {
+          setStyle(child, { marginRight: i < allChildren.length - 1 ? `${gutter}px` : '0' })
+        } else {
+          setStyle(child, { marginBottom: i < allChildren.length - 1 ? `${gutter}px` : '0' })
+        }
+      })
+      // Offset = sum of widths/heights of all children before the target
+      offset = edgePadding
+      for (let i = 0; i < targetChildIndex; i++) {
+        const child = allChildren[i]
+        if (!child) break
+        offset -= (isHorizontal ? child.offsetWidth : child.offsetHeight) + gutter
+      }
+    } else {
+      // fixedWidth or calculated width from slidesPerPage
+      const slideSize = fixedWidth
+        ? fixedWidth
+        : (containerSize - gutter * (slidesPerPage - 1)) / slidesPerPage
+
+      allChildren.forEach((child, i) => {
+        if (isHorizontal) {
+          setStyle(child, {
+            width: `${slideSize}px`,
+            marginRight: i < allChildren.length - 1 ? `${gutter}px` : '0',
+          })
+        } else {
+          setStyle(child, {
+            height: `${slideSize}px`,
+            marginBottom: i < allChildren.length - 1 ? `${gutter}px` : '0',
+          })
+        }
+      })
+
+      offset = -(targetChildIndex * (slideSize + gutter)) + edgePadding
+    }
+
     setTransition(this.wrapper, speed)
 
     if (isHorizontal) {
@@ -614,17 +661,17 @@ export class Slider implements SliderInstance {
     this.slides.forEach((slide, i) => {
       removeClass(
         slide,
-        'c--slider-a__slide--active',
-        'c--slider-a__slide--prev',
-        'c--slider-a__slide--next',
-        'c--slider-a__slide--visible'
+        'c--slider-a__item--active',
+        'c--slider-a__item--prev',
+        'c--slider-a__item--next',
+        'c--slider-a__item--visible'
       )
       if (i === this.activeIndex) {
-        addClass(slide, 'c--slider-a__slide--active')
+        addClass(slide, 'c--slider-a__item--active')
       } else if (i === this.activeIndex - 1) {
-        addClass(slide, 'c--slider-a__slide--prev')
+        addClass(slide, 'c--slider-a__item--prev')
       } else if (i === this.activeIndex + 1) {
-        addClass(slide, 'c--slider-a__slide--next')
+        addClass(slide, 'c--slider-a__item--next')
       }
     })
   }
@@ -632,7 +679,22 @@ export class Slider implements SliderInstance {
   private checkFreeze(): void {
     if (!this.mergedOptions.freezable) return
     const slidesPerPage = (this.mergedOptions.slidesPerPage as number) || 1
-    if (this.slides.length <= slidesPerPage) {
+    const fixedWidth = this.mergedOptions.fixedWidth || false
+    const autoWidth = this.mergedOptions.autoWidth ?? false
+    const gutter = this.mergedOptions.gutter ?? 0
+
+    let shouldFreeze: boolean
+    if (fixedWidth) {
+      const totalWidth = this.slides.length * (fixedWidth + gutter) - gutter
+      shouldFreeze = totalWidth <= this.container.offsetWidth
+    } else if (autoWidth) {
+      const totalWidth = this.slides.reduce((sum, s) => sum + s.offsetWidth + gutter, -gutter)
+      shouldFreeze = totalWidth <= this.container.offsetWidth
+    } else {
+      shouldFreeze = this.slides.length <= slidesPerPage
+    }
+
+    if (shouldFreeze) {
       this.frozen = true
       addClass(this.container, 'c--slider-a--frozen')
     } else {
@@ -643,7 +705,10 @@ export class Slider implements SliderInstance {
 
   private applyBreakpoint(merged: SliderOptions): void {
     this.mergedOptions = merged
-    this.slideEngine.update((merged.slidesPerPage as number) || 1)
+    const spp = (merged.slidesPerPage as number) || 1
+    const slideByOpt = merged.slideBy ?? 1
+    const slideBy = slideByOpt === 'page' ? spp : slideByOpt
+    this.slideEngine.update(spp, slideBy)
     this.applyLayout()
     this.checkFreeze()
   }

@@ -22,6 +22,11 @@
     .c--slider-a__wrapper {
       transform: none !important;
     }
+    // Hide arrows and pagination when frozen — no interaction possible
+    .c--slider-a__arrow,
+    .c--slider-a__pagination {
+      display: none;
+    }
   }
 
   &--disabled {
@@ -36,6 +41,14 @@
     will-change: transform;
     touch-action: pan-y;
     user-select: none;
+    // Hide until JS has calculated slide widths and applied the initial transform.
+    // Prevents a flash of un-laid-out slides before initialization completes.
+    opacity: 0;
+  }
+
+  &--initialized &__wrapper {
+    opacity: 1;
+    transition: opacity 0.15s ease;
   }
 
   &__slide {

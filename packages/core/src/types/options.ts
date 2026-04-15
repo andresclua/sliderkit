@@ -38,11 +38,14 @@ export interface SliderOptions extends BreakpointOptions {
   edgePadding?: number
   direction?: Direction
   centered?: boolean
+  fixedWidth?: number | false
+  autoWidth?: boolean
 
   // Behavior
   loop?: boolean
   rewind?: boolean
   speed?: number
+  slideBy?: number | 'page'
   grabCursor?: boolean
   startIndex?: number
   freezable?: boolean
@@ -80,9 +83,12 @@ export const DEFAULT_OPTIONS: Required<
   edgePadding: 0,
   direction: 'horizontal',
   centered: false,
+  fixedWidth: false,
+  autoWidth: false,
   loop: false,
   rewind: false,
   speed: 300,
+  slideBy: 1,
   grabCursor: true,
   startIndex: 0,
   freezable: true,

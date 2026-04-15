@@ -21,8 +21,8 @@ export function MySlider() {
   return (
     <div className="c--slider-a" ref={ref}>
       <div className="c--slider-a__wrapper">
-        <div className="c--slider-a__slide" data-slide>Slide 1</div>
-        <div className="c--slider-a__slide" data-slide>Slide 2</div>
+        <div className="c--slider-a__item" data-slide>Slide 1</div>
+        <div className="c--slider-a__item" data-slide>Slide 2</div>
       </div>
     </div>
   )
@@ -32,8 +32,8 @@ export function MySlider() {
   <pre><code>{`<template>
   <div class="c--slider-a" ref="sliderEl">
     <div class="c--slider-a__wrapper">
-      <div class="c--slider-a__slide" data-slide>Slide 1</div>
-      <div class="c--slider-a__slide" data-slide>Slide 2</div>
+      <div class="c--slider-a__item" data-slide>Slide 1</div>
+      <div class="c--slider-a__item" data-slide>Slide 2</div>
     </div>
   </div>
 </template>
@@ -55,7 +55,7 @@ onBeforeUnmount(() => slider?.destroy())
 ---
 <div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide" data-slide>Slide 1</div>
+    <div class="c--slider-a__item" data-slide>Slide 1</div>
   </div>
 </div>
 
@@ -79,7 +79,7 @@ onBeforeUnmount(() => slider?.destroy())
 
 <div class="c--slider-a" bind:this={el}>
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide" data-slide>Slide 1</div>
+    <div class="c--slider-a__item" data-slide>Slide 1</div>
   </div>
 </div>`}</code></pre>
 

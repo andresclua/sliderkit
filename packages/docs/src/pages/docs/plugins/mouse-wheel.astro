@@ -2,33 +2,36 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Mouse Wheel Plugin">
-  <h1>mouseWheel</h1>
-  <p class="lead">Navigate with the mouse wheel or trackpad. A built-in debounce prevents accidental multi-slide skips.</p>
+  <h1>Mouse Wheel</h1>
+  <p class="lead">Navigate with the mouse wheel or trackpad. A built-in 300ms debounce prevents accidental multi-slide skips, and axis locking ensures only the correct scroll direction triggers navigation.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} mouseWheel {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
-
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
-  plugins: [
-    mouseWheel({
-      forceToAxis: true,
-      sensitivity: 1,
-      releaseOnEdges: false,
-    }),
-  ],
-})`}</code></pre>
 
   <h2>Options</h2>
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>forceToAxis</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Only trigger when scroll matches the slider direction.</td></tr>
-      <tr><td><code>releaseOnEdges</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Release scroll propagation at first/last slide.</td></tr>
-      <tr><td><code>sensitivity</code></td><td><code>number</code></td><td><code>1</code></td><td>Multiplier applied to delta to determine direction.</td></tr>
+      <tr><td><code>forceToAxis</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Only trigger navigation when the scroll delta is dominant on the slider's primary axis (horizontal sliders ignore vertical-only scrolls).</td></tr>
+      <tr><td><code>releaseOnEdges</code></td><td><code>boolean</code></td><td>—</td><td>Reserved option — present in the interface but not yet implemented.</td></tr>
+      <tr><td><code>sensitivity</code></td><td><code>number</code></td><td><code>1</code></td><td>Multiplier applied to the raw delta. A negative value inverts the scroll direction.</td></tr>
     </tbody>
   </table>
 
-  <h2>Demo</h2>
-  <p><a href="/demos/mousewheel">View mouse wheel demo →</a></p>
+  <h2>Example</h2>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { mouseWheel } from '@andresclua/sliderkit-plugins'
+
+createSlider('#my-slider', {
+  plugins: [
+    mouseWheel({
+      forceToAxis: true,
+      sensitivity: 1,
+    }),
+  ],
+})`}</code></pre>
+
+  <p>The plugin attaches a non-passive <code>wheel</code> event listener and calls <code>e.preventDefault()</code> on qualifying events to prevent the page from scrolling while navigating the slider.</p>
+
+  <p><a href="/demos/mousewheel">View mouse wheel demo</a></p>
 </DocsLayout>

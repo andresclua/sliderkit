@@ -9,6 +9,7 @@ export interface SlideEngineState {
   slidesPerPage: number
   loop: boolean
   rewind: boolean
+  slideBy: number
 }
 
 export class SlideEngine {
@@ -18,6 +19,7 @@ export class SlideEngine {
   private slidesPerPage: number
   private loop: boolean
   private rewind: boolean
+  private slideBy: number
 
   constructor(state: SlideEngineState) {
     this.activeIndex = state.activeIndex
@@ -26,6 +28,7 @@ export class SlideEngine {
     this.slidesPerPage = state.slidesPerPage
     this.loop = state.loop
     this.rewind = state.rewind
+    this.slideBy = state.slideBy
   }
 
   get isBeginning(): boolean {
@@ -44,23 +47,26 @@ export class SlideEngine {
   resolve(target: GoToTarget): number | null {
     const current = this.activeIndex
     const last = Math.max(this.slideCount - this.slidesPerPage, 0)
+    const step = this.slideBy
 
     switch (target) {
       case 'next': {
+        const next = Math.min(current + step, last)
         if (current >= last) {
           if (this.loop) return 0
           if (this.rewind) return 0
           return null
         }
-        return current + 1
+        return next
       }
       case 'prev': {
+        const prev = Math.max(current - step, 0)
         if (current <= 0) {
           if (this.loop) return last
           if (this.rewind) return last
           return null
         }
-        return current - 1
+        return prev
       }
       case 'first':
         return 0
@@ -82,8 +88,9 @@ export class SlideEngine {
     this.activeIndex = index
   }
 
-  update(slidesPerPage: number): void {
+  update(slidesPerPage: number, slideBy?: number): void {
     this.slidesPerPage = slidesPerPage
+    if (slideBy !== undefined) this.slideBy = slideBy
     // Clamp activeIndex after layout changes
     const last = Math.max(this.slideCount - this.slidesPerPage, 0)
     if (this.activeIndex > last) {

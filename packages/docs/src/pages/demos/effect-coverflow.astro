@@ -9,22 +9,22 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="Adjacent slides are visible and rotated in 3D, creating the classic album-art coverflow look. Use slidesPerPage: 3 (or more) so the neighbours peek from the sides — that's what makes the effect work. The rotate option controls the Y-axis angle of the side cards, and depth pushes them back on the Z axis."
     html={`<div class="c--slider-a c--slider-a--coverflow" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
-    <div class="c--slider-a__slide">4</div>
-    <div class="c--slider-a__slide">5</div>
-    <div class="c--slider-a__slide">6</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
+    <div class="c--slider-a__item">4</div>
+    <div class="c--slider-a__item">5</div>
+    <div class="c--slider-a__item">6</div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; height: 220px; }
+.c--slider-a__item { flex-shrink: 0; height: 220px; }
 
 /* Coverflow: show sides, don't clip them */
 .c--slider-a--coverflow { overflow: visible; background: transparent; }
-.c--slider-a--coverflow .c--slider-a__slide { transition: transform 0.4s ease; }`}
+.c--slider-a--coverflow .c--slider-a__item { transition: transform 0.4s ease; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 import { coverflowEffect } from '@andresclua/sliderkit-effects'
@@ -43,12 +43,12 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a c--slider-a--coverflow" id="demo-coverflow">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
-        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>6</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-pink"   data-slide>6</div>
       </div>
     </div>
     <div id="demo-coverflow-pag" class="c--slider-a__pagination"></div>
@@ -59,20 +59,20 @@ new Slider('#my-slider', {
     description="Lower the rotate value (e.g. 25) for a softer, more modern feel — side cards angle gently instead of fully turning. Combine with edgePadding so the very edges of neighbouring slides peek in, hinting that there's more content to explore."
     html={`<div class="c--slider-a c--slider-a--coverflow" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
-    <div class="c--slider-a__slide">4</div>
-    <div class="c--slider-a__slide">5</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
+    <div class="c--slider-a__item">4</div>
+    <div class="c--slider-a__item">5</div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; height: 220px; }
+.c--slider-a__item { flex-shrink: 0; height: 220px; }
 
 .c--slider-a--coverflow { overflow: visible; background: transparent; }
-.c--slider-a--coverflow .c--slider-a__slide { transition: transform 0.5s ease; }`}
+.c--slider-a--coverflow .c--slider-a__item { transition: transform 0.5s ease; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 import { coverflowEffect } from '@andresclua/sliderkit-effects'
@@ -92,11 +92,11 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a c--slider-a--coverflow" id="demo-coverflow-soft">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
       </div>
     </div>
     <div id="demo-coverflow-soft-pag" class="c--slider-a__pagination"></div>
@@ -106,7 +106,7 @@ new Slider('#my-slider', {
 
 <style>
 .c--slider-a--coverflow { overflow: visible; background: transparent; }
-.c--slider-a--coverflow .c--slider-a__slide { transition: transform 0.4s ease; }
+.c--slider-a--coverflow .c--slider-a__item { transition: transform 0.4s ease; }
 </style>
 
 <script>

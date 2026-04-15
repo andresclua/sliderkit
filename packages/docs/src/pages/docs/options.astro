@@ -63,9 +63,22 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
       <tr><td><code>a11y.enabled</code></td><td><code>boolean</code></td><td><code>true</code></td></tr>
       <tr><td><code>a11y.prevSlideMessage</code></td><td><code>string</code></td><td><code>'Previous slide'</code></td></tr>
       <tr><td><code>a11y.nextSlideMessage</code></td><td><code>string</code></td><td><code>'Next slide'</code></td></tr>
-      <tr><td><code>a11y.slideLabel</code></td><td><code>string</code></td><td><code>'{"{"}"{"{"}"index{"}"}{"}"} of {"{"}"{"{"}"total{"}"}{"}"}' </code></td></tr>
+      <tr><td><code>a11y.slideLabel</code></td><td><code>string</code></td><td><code>'&#123;&#123;index&#125;&#125; of &#123;&#123;total&#125;&#125;'</code></td></tr>
     </tbody>
   </table>
+  <p>
+    <code>slideLabel</code> supports two placeholders: <code>&#123;&#123;index&#125;&#125;</code> (1-based active slide number) and <code>&#123;&#123;total&#125;&#125;</code> (total slides).
+    Use them to localise or customise the screen-reader announcement:
+  </p>
+  <pre><code>{`new Slider('#my-slider', {
+  a11y: {
+    slideLabel: '{{index}} of {{total}}',          // default  → "1 of 4"
+    slideLabel: 'Slide {{index}} of {{total}}',    // verbose  → "Slide 1 of 4"
+    slideLabel: 'Imagen {{index}} de {{total}}',   // Spanish  → "Imagen 1 de 4"
+    prevSlideMessage: 'Diapositiva anterior',
+    nextSlideMessage: 'Siguiente diapositiva',
+  },
+})`}</code></pre>
 
   <h2>Plugins</h2>
   <pre><code>{`import { arrows, pagination } from '@andresclua/sliderkit-plugins'

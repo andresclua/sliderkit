@@ -2,25 +2,29 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Auto Height Plugin">
-  <h1>autoHeight</h1>
-  <p class="lead">Animates the slider wrapper height to match the active slide on each navigation. Perfect for slides with variable content height.</p>
+  <h1>Auto Height</h1>
+  <p class="lead">Animates the slider wrapper height to match the active slide on each navigation. Useful for slides with variable content height.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} autoHeight {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
-
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
-  plugins: [autoHeight({ animationDuration: 300 })],
-})`}</code></pre>
 
   <h2>Options</h2>
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>animationDuration</code></td><td><code>number</code></td><td><code>300</code></td><td>Height transition duration in ms.</td></tr>
+      <tr><td><code>animationDuration</code></td><td><code>number</code></td><td><code>300</code></td><td>Duration in milliseconds for the CSS height transition when the wrapper resizes.</td></tr>
     </tbody>
   </table>
 
-  <h2>Demo</h2>
-  <p><a href="/demos/auto-height">View auto height demo →</a></p>
+  <h2>Example</h2>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { autoHeight } from '@andresclua/sliderkit-plugins'
+
+createSlider('#my-slider', {
+  plugins: [autoHeight({ animationDuration: 400 })],
+})`}</code></pre>
+
+  <p>The wrapper height is set via an inline style with a CSS <code>transition</code>. On destroy the inline styles are cleared, restoring default layout behaviour.</p>
+
+  <p><a href="/demos/auto-height">View auto height demo</a></p>
 </DocsLayout>

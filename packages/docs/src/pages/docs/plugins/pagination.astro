@@ -2,60 +2,64 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Pagination Plugin">
-  <h1>pagination</h1>
-  <p class="lead">Five pagination modes: dots, fraction, progress bar, dynamic bullets, and fully custom HTML.</p>
+  <h1>Pagination</h1>
+  <p class="lead">Five pagination modes: clickable dot bullets, dynamic (scaling) bullets, a fraction counter, a progress bar fill, and fully custom HTML output.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} pagination {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
-
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
-  plugins: [
-    pagination({
-      type: 'dots',
-      clickable: true,
-    }),
-  ],
-})`}</code></pre>
 
   <h2>Options</h2>
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>type</code></td><td><code>'dots' | 'fraction' | 'progress' | 'dynamic' | 'custom'</code></td><td><code>'dots'</code></td><td>Pagination style.</td></tr>
-      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Target element. Auto-created inside container if omitted.</td></tr>
-      <tr><td><code>clickable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Allow clicking dots to navigate (dots/dynamic only).</td></tr>
-      <tr><td><code>dynamicBullets</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Scale nearby bullets smaller (dynamic mode).</td></tr>
-      <tr><td><code>renderCustom</code></td><td><code>{"({"} current, total {"}"}) => string</code></td><td>—</td><td>Custom HTML renderer (custom mode).</td></tr>
+      <tr><td><code>type</code></td><td><code>'dots' | 'fraction' | 'progress' | 'dynamic' | 'custom'</code></td><td><code>'dots'</code></td><td>Pagination display style.</td></tr>
+      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Target container. Auto-created with class <code>c--slider-a__pagination</code> if omitted.</td></tr>
+      <tr><td><code>clickable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Allow clicking dot bullets to navigate (applies to <code>dots</code> and <code>dynamic</code> types).</td></tr>
+      <tr><td><code>dynamicBullets</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Scale neighbouring bullets smaller than the active one.</td></tr>
+      <tr><td><code>renderCustom</code></td><td><code>{"({"} current: number; total: number {"}"}) =&gt; string</code></td><td>—</td><td>HTML string renderer. Required when <code>type</code> is <code>'custom'</code>.</td></tr>
     </tbody>
   </table>
 
-  <h2>Types</h2>
-  <pre><code>{`// Dots
-pagination({ type: 'dots', clickable: true })
+  <h2>Example</h2>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { pagination } from '@andresclua/sliderkit-plugins'
+
+// Dots
+createSlider('#my-slider', {
+  plugins: [pagination({ type: 'dots', clickable: true })],
+})
 
 // Fraction "2 / 5"
-pagination({ type: 'fraction' })
+createSlider('#my-slider', {
+  plugins: [pagination({ type: 'fraction' })],
+})
 
 // Horizontal fill bar
-pagination({ type: 'progress' })
+createSlider('#my-slider', {
+  plugins: [pagination({ type: 'progress' })],
+})
 
 // Shrinking dots around active
-pagination({ type: 'dynamic', dynamicBullets: true })
+createSlider('#my-slider', {
+  plugins: [pagination({ type: 'dynamic', dynamicBullets: true })],
+})
 
 // Custom HTML
-pagination({
-  type: 'custom',
-  renderCustom: ({ current, total }) =>
-    \`<strong>\${current}</strong> of \${total}\`,
+createSlider('#my-slider', {
+  plugins: [
+    pagination({
+      type: 'custom',
+      renderCustom: ({ current, total }) =>
+        \`<strong>\${current}</strong> of \${total}\`,
+    }),
+  ],
 })`}</code></pre>
 
-  <h2>Demos</h2>
-  <ul>
-    <li><a href="/demos/pagination-dots">Dots</a></li>
-    <li><a href="/demos/pagination-fraction">Fraction</a></li>
-    <li><a href="/demos/pagination-progress">Progress</a></li>
-    <li><a href="/demos/pagination-dynamic">Dynamic</a></li>
-    <li><a href="/demos/pagination-custom">Custom</a></li>
-  </ul>
+  <p>
+    <a href="/demos/pagination-dots">Dots</a> &bull;
+    <a href="/demos/pagination-fraction">Fraction</a> &bull;
+    <a href="/demos/pagination-progress">Progress</a> &bull;
+    <a href="/demos/pagination-dynamic">Dynamic</a> &bull;
+    <a href="/demos/pagination-custom">Custom</a>
+  </p>
 </DocsLayout>

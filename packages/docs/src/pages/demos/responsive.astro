@@ -8,12 +8,12 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="1 slide on mobile, 2 at 640px, 3 at 1024px. Resize the window to see it adapt."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
-    <div class="c--slider-a__slide">4</div>
-    <div class="c--slider-a__slide">5</div>
-    <div class="c--slider-a__slide">6</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
+    <div class="c--slider-a__item">4</div>
+    <div class="c--slider-a__item">5</div>
+    <div class="c--slider-a__item">6</div>
   </div>
 </div>
 <div id="my-pagination" class="c--slider-a__pagination"></div>`}
@@ -26,7 +26,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
   display: flex;
   will-change: transform;
 }
-.c--slider-a__slide {
+.c--slider-a__item {
   flex-shrink: 0;
   /* width is computed by the slider (100% / slidesPerPage) */
   height: 260px;
@@ -81,12 +81,12 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a" id="demo-responsive">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
-        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>6</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-pink"   data-slide>6</div>
       </div>
     </div>
     <div id="demo-responsive-pag" class="c--slider-a__pagination"></div>

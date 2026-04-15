@@ -42,7 +42,7 @@ export class LoopManager {
     clonesBefore.forEach((slide) => {
       const clone = slide.cloneNode(true) as HTMLElement
       clone.setAttribute('aria-hidden', 'true')
-      clone.classList.add('c--slider-a__slide--clone')
+      clone.classList.add('c--slider-a__item--clone')
       this.wrapper.insertBefore(clone, this.wrapper.firstChild)
       this.clones.push(clone)
     })
@@ -50,7 +50,7 @@ export class LoopManager {
     clonesAfter.forEach((slide) => {
       const clone = slide.cloneNode(true) as HTMLElement
       clone.setAttribute('aria-hidden', 'true')
-      clone.classList.add('c--slider-a__slide--clone')
+      clone.classList.add('c--slider-a__item--clone')
       this.wrapper.appendChild(clone)
       this.clones.push(clone)
     })

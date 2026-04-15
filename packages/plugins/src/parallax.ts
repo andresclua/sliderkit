@@ -15,7 +15,9 @@ export function parallax(options: ParallaxOptions = {}): SliderPlugin {
     if (!slider) return
     slider.slides.forEach((slide: HTMLElement, i: number) => {
       const els = slide.querySelectorAll<HTMLElement>(selector)
-      const offset = (i - slider!.activeIndex) * depth * 100
+      if (!els.length) return
+      const slideWidth = slide.offsetWidth || 1
+      const offset = (i - slider!.activeIndex) * slideWidth * depth
       els.forEach((el: HTMLElement) => {
         el.style.transform = `translate3d(${offset}px, 0, 0)`
       })

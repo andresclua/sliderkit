@@ -62,6 +62,29 @@ new Slider('#el', {
   ],
 })`}</code></pre>
 
+  <h2>Image preloading</h2>
+  <div class="callout callout--warning">
+    <strong>How WebGL textures work:</strong> before a slide can be rendered, its image must be fully decoded and uploaded to the GPU. If the browser hasn't finished loading the image when the slider initialises, the first frame will appear blank or flash. This is a browser constraint, not a bug.
+  </div>
+  <p>
+    The library ships an optional <code>preloadImages</code> helper for cases where you need to guarantee textures are ready before the slider starts. It is <strong>not loaded automatically</strong> — import it only if you need it.
+  </p>
+  <pre><code>{`import { Slider } from '@andresclua/sliderkit'
+import { webglRenderer, preloadImages } from '@andresclua/sliderkit-webgl'
+
+// Wait for all <img> inside #my-slider to decode, then init
+await preloadImages('#my-slider')
+
+new Slider('#my-slider', {
+  plugins: [webglRenderer({ effect: ... })],
+})`}</code></pre>
+  <p>The helper accepts a CSS selector, an <code>Element</code>, or an array of elements, plus an optional image selector (default <code>'img'</code>). Images that are already cached resolve instantly. Errors are swallowed so a single broken image never blocks the slider.</p>
+  <pre><code>{`// custom image selector
+await preloadImages('#my-slider', '[data-src]')
+
+// multiple containers
+await preloadImages([containerA, containerB])`}</code></pre>
+
   <h2>Reduced motion</h2>
   <p>When <code>prefers-reduced-motion: reduce</code> is active, WebGL transitions are skipped and an instant cut is used instead. No configuration needed.</p>
 

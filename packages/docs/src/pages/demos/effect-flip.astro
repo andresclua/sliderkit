@@ -9,10 +9,10 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="Each slide flips like a playing card on the Y axis. The outgoing slide rotates 90° away while the incoming slides in from −90°. Requires the effect layout (stacked absolute slides) and CSS perspective on the container. backface-visibility: hidden prevents the back of the card from showing through."
     html={`<div class="c--slider-a c--slider-a--effect c--slider-a--flip" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
-    <div class="c--slider-a__slide">4</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
+    <div class="c--slider-a__item">4</div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>`}
@@ -22,13 +22,13 @@ import DemoViewer from '../../components/DemoViewer.astro'
 /* Effect layout: stacked absolute slides */
 .c--slider-a--effect { height: 260px; }
 .c--slider-a--effect .c--slider-a__wrapper { height: 100%; }
-.c--slider-a--effect .c--slider-a__slide {
+.c--slider-a--effect .c--slider-a__item {
   position: absolute; inset: 0; width: 100%; height: 100%;
 }
 
 /* Flip: perspective + no back-face bleed */
 .c--slider-a--flip { perspective: 1200px; }
-.c--slider-a--flip .c--slider-a__slide {
+.c--slider-a--flip .c--slider-a__item {
   transition: transform 0.6s ease;
   backface-visibility: hidden;
 }`}
@@ -49,11 +49,11 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a c--slider-a--effect c--slider-a--flip" id="demo-flip">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
       </div>
     </div>
     <div id="demo-flip-pag" class="c--slider-a__pagination"></div>
@@ -64,9 +64,9 @@ new Slider('#my-slider', {
     description="Flip combined with autoplay creates a rotating info-card display — great for testimonial carousels, feature highlights, or rotating announcements. Keep speed (800ms) and delay (3000ms) generous enough for users to read the content before it flips."
     html={`<div class="c--slider-a c--slider-a--effect c--slider-a--flip" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">Card A</div>
-    <div class="c--slider-a__slide">Card B</div>
-    <div class="c--slider-a__slide">Card C</div>
+    <div class="c--slider-a__item">Card A</div>
+    <div class="c--slider-a__item">Card B</div>
+    <div class="c--slider-a__item">Card C</div>
   </div>
 </div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
@@ -74,12 +74,12 @@ new Slider('#my-slider', {
 
 .c--slider-a--effect { height: 260px; }
 .c--slider-a--effect .c--slider-a__wrapper { height: 100%; }
-.c--slider-a--effect .c--slider-a__slide {
+.c--slider-a--effect .c--slider-a__item {
   position: absolute; inset: 0; width: 100%; height: 100%;
 }
 
 .c--slider-a--flip { perspective: 1200px; }
-.c--slider-a--flip .c--slider-a__slide {
+.c--slider-a--flip .c--slider-a__item {
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   backface-visibility: hidden;
 }`}
@@ -98,10 +98,10 @@ new Slider('#my-slider', {
   >
     <div class="c--slider-a c--slider-a--effect c--slider-a--flip" id="demo-flip-auto">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>Card A</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>Card B</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>Card C</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>Card D</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>Card A</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>Card B</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>Card C</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>Card D</div>
       </div>
     </div>
   </DemoViewer>
@@ -110,7 +110,7 @@ new Slider('#my-slider', {
 
 <style>
 .c--slider-a--flip { perspective: 1200px; }
-.c--slider-a--flip .c--slider-a__slide {
+.c--slider-a--flip .c--slider-a__item {
   transition: transform 0.6s ease;
   backface-visibility: hidden;
 }

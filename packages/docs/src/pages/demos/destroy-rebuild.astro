@@ -9,11 +9,11 @@ import DemoViewer from '../../components/DemoViewer.astro'
     description="destroy() tears down the slider completely — removes all event listeners, resets the DOM to its original pre-init state, and clears the internal instance. Call rebuild() on the same instance to re-initialize, optionally passing new options. This is useful when you need to reconfigure the slider at runtime — for example, switching from single-slide to multi-slide layout on window resize, or toggling effects on user request."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
-    <div class="c--slider-a__slide">4</div>
-    <div class="c--slider-a__slide">5</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
+    <div class="c--slider-a__item">4</div>
+    <div class="c--slider-a__item">5</div>
   </div>
 </div>
 <div id="my-pag" class="c--slider-a__pagination"></div>
@@ -24,7 +24,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
 </div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; width: 100%; height: 260px; }
+.c--slider-a__item { flex-shrink: 0; width: 100%; height: 260px; }
 
 .ctrl-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 button {
@@ -56,11 +56,11 @@ document.getElementById('btn-rebuild3').addEventListener('click', () => {
   >
     <div class="c--slider-a" id="demo-destroy">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
       </div>
     </div>
     <div id="demo-destroy-pag" class="c--slider-a__pagination"></div>
@@ -77,17 +77,17 @@ document.getElementById('btn-rebuild3').addEventListener('click', () => {
     description="A common pattern: initialize with mobile settings, then rebuild with different options when the viewport crosses a breakpoint. destroy() + rebuild() is simpler than maintaining multiple slider instances or patching options after init. The slider below switches between 1 and 3 slides per page as you resize the window."
     html={`<div class="c--slider-a" id="my-slider">
   <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__slide">1</div>
-    <div class="c--slider-a__slide">2</div>
-    <div class="c--slider-a__slide">3</div>
-    <div class="c--slider-a__slide">4</div>
-    <div class="c--slider-a__slide">5</div>
-    <div class="c--slider-a__slide">6</div>
+    <div class="c--slider-a__item">1</div>
+    <div class="c--slider-a__item">2</div>
+    <div class="c--slider-a__item">3</div>
+    <div class="c--slider-a__item">4</div>
+    <div class="c--slider-a__item">5</div>
+    <div class="c--slider-a__item">6</div>
   </div>
 </div>`}
     css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
 .c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__slide { flex-shrink: 0; height: 180px; }`}
+.c--slider-a__item { flex-shrink: 0; height: 180px; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows } from '@andresclua/sliderkit-plugins'
 
@@ -112,12 +112,12 @@ window.addEventListener('resize', () => {
   >
     <div class="c--slider-a" id="demo-destroy-responsive">
       <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__slide demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__slide demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__slide demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__slide demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__slide demo-slide s-red"    data-slide>5</div>
-        <div class="c--slider-a__slide demo-slide s-pink"   data-slide>6</div>
+        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
+        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
+        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
+        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
+        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
+        <div class="c--slider-a__item demo-slide s-pink"   data-slide>6</div>
       </div>
     </div>
     <p class="hint">Resize the window to trigger a rebuild with different options.</p>

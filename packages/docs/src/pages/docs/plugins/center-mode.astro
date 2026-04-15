@@ -2,23 +2,29 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Center Mode Plugin">
-  <h1>centerMode</h1>
-  <p class="lead">Centers the active slide in the container, with partial prev/next slides peeking on both sides.</p>
+  <h1>Center Mode</h1>
+  <p class="lead">Centers the active slide by applying equal padding on both sides of the slider container and setting <code>overflow: visible</code>, allowing the edges of adjacent slides to peek in from either side.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} centerMode {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
-
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
-  slidesPerPage: 1,
-  plugins: [centerMode({ padding: 60 })],
-})`}</code></pre>
 
   <h2>Options</h2>
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>padding</code></td><td><code>number</code></td><td><code>60</code></td><td>Visible width of prev/next slides in px.</td></tr>
+      <tr><td><code>centerPadding</code></td><td><code>string</code></td><td><code>'50px'</code></td><td>CSS length applied as equal left and right padding on the slider container. Any valid CSS length unit is accepted (e.g. <code>'80px'</code>, <code>'10%'</code>).</td></tr>
     </tbody>
   </table>
+
+  <h2>Notes</h2>
+  <p>The plugin sets <code>paddingLeft</code>, <code>paddingRight</code>, and <code>overflow: visible</code> on the slider container. Wrap the slider in a parent with <code>overflow: hidden</code> if you want to clip content beyond the visible area. All styles are removed on destroy.</p>
+
+  <h2>Example</h2>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { centerMode } from '@andresclua/sliderkit-plugins'
+
+createSlider('#my-slider', {
+  slidesPerPage: 1,
+  plugins: [centerMode({ centerPadding: '80px' })],
+})`}</code></pre>
 </DocsLayout>

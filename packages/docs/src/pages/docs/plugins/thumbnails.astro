@@ -2,40 +2,44 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Thumbnails Plugin">
-  <h1>thumbnails</h1>
-  <p class="lead">Renders a clickable thumbnail strip synced with the active slide. Thumbnails are generated from slide <code>data-src</code> or <code>img[src]</code>.</p>
+  <h1>Thumbnails</h1>
+  <p class="lead">Renders a clickable thumbnail strip synced with the active slide. Thumbnails are generated from a slide's <code>data-src</code> attribute or the <code>src</code> of the first <code>&lt;img&gt;</code> inside it.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} thumbnails {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
-
-  <h2>Usage</h2>
-  <pre><code>{`new Slider('#el', {
-  plugins: [thumbnails({ clickable: true })],
-})`}</code></pre>
 
   <h2>Options</h2>
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Container for thumbnails. Auto-created after slider container if omitted.</td></tr>
-      <tr><td><code>clickable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Click thumbnails to navigate.</td></tr>
+      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Container for the thumbnail strip. Auto-created and inserted after the slider container if omitted.</td></tr>
+      <tr><td><code>clickable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Make thumbnails keyboard-accessible and navigable on click.</td></tr>
     </tbody>
   </table>
 
-  <h2>Image source</h2>
-  <p>The plugin reads thumbnail images from:</p>
+  <h2>Image source priority</h2>
   <ol>
-    <li><code>data-src</code> attribute on the slide</li>
-    <li><code>src</code> of the first <code>img</code> inside the slide</li>
+    <li><code>data-src</code> attribute on the slide element</li>
+    <li><code>src</code> of the first <code>&lt;img&gt;</code> inside the slide</li>
   </ol>
+
+  <h2>Example</h2>
   <pre><code>{`<!-- data-src on slide -->
-<div class="c--slider-a__slide" data-src="/thumb-1.jpg">...</div>
+<div class="slide" data-src="/thumb-1.jpg">...</div>
 
 <!-- img inside slide -->
-<div class="c--slider-a__slide">
-  <img src="/full-1.jpg" alt="..." />
+<div class="slide">
+  <img src="/full-1.jpg" alt="Slide 1" />
 </div>`}</code></pre>
 
-  <h2>Demo</h2>
-  <p><a href="/demos/thumbnails">View thumbnails demo →</a></p>
+  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
+import { thumbnails } from '@andresclua/sliderkit-plugins'
+
+createSlider('#my-slider', {
+  plugins: [thumbnails({ el: '#my-thumbs', clickable: true })],
+})`}</code></pre>
+
+  <p>The active thumbnail receives the class <code>c--slider-a__thumb--active</code>.</p>
+
+  <p><a href="/demos/thumbnails">View thumbnails demo</a></p>
 </DocsLayout>

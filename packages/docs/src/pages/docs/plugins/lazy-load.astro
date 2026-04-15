@@ -2,32 +2,38 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Lazy Load Plugin">
-  <h1>lazyLoad</h1>
-  <p class="lead">IntersectionObserver-based lazy loading. Images load only when they enter the viewport. Falls back to immediate load in browsers without IntersectionObserver.</p>
+  <h1>Lazy Load</h1>
+  <p class="lead">IntersectionObserver-based lazy loading. Images and background elements load only when they approach the viewport. Falls back to immediate loading in browsers without <code>IntersectionObserver</code>.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} lazyLoad {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
-
-  <h2>Usage</h2>
-  <pre><code>{`// Use data-src instead of src on images
-new Slider('#el', {
-  plugins: [lazyLoad({ rootMargin: '200px' })],
-})`}</code></pre>
-
-  <h2>HTML</h2>
-  <pre><code>{`<div class="c--slider-a__slide" data-slide>
-  <img data-src="/photo-large.jpg" alt="..." />
-</div>`}</code></pre>
 
   <h2>Options</h2>
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>selector</code></td><td><code>string</code></td><td><code>'[data-src]'</code></td><td>CSS selector for lazy elements.</td></tr>
-      <tr><td><code>rootMargin</code></td><td><code>string</code></td><td><code>'200px'</code></td><td>IntersectionObserver rootMargin — how early to start loading.</td></tr>
+      <tr><td><code>selector</code></td><td><code>string</code></td><td><code>'[data-src]'</code></td><td>CSS selector used to find lazy-loadable elements inside each slide.</td></tr>
+      <tr><td><code>rootMargin</code></td><td><code>string</code></td><td><code>'200px'</code></td><td>Margin passed to <code>IntersectionObserver</code>. Larger values pre-load elements further from the viewport.</td></tr>
     </tbody>
   </table>
 
-  <h2>Demo</h2>
-  <p><a href="/demos/lazy-load">View lazy load demo →</a></p>
+  <h2>How it works</h2>
+  <p>Use <code>data-src</code> instead of <code>src</code> on <code>&lt;img&gt;</code> elements (or any element for background images). When the element intersects, the plugin moves the value to <code>src</code> or <code>background-image</code>, removes <code>data-src</code>, and adds the class <code>c--slider-a--loaded</code>.</p>
+
+  <h2>Example</h2>
+  <pre><code>{`<!-- HTML -->
+<div id="my-slider">
+  <div class="slide"><img data-src="/photo-1.jpg" alt="Photo 1" /></div>
+  <div class="slide"><img data-src="/photo-2.jpg" alt="Photo 2" /></div>
+</div>
+
+<!-- JS -->
+import { createSlider } from '@andresclua/sliderkit'
+import { lazyLoad } from '@andresclua/sliderkit-plugins'
+
+createSlider('#my-slider', {
+  plugins: [lazyLoad({ rootMargin: '300px' })],
+})`}</code></pre>
+
+  <p><a href="/demos/lazy-load">View lazy load demo</a></p>
 </DocsLayout>

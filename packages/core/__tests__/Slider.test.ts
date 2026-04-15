@@ -8,7 +8,7 @@ function createContainer(slideCount = 3): HTMLElement {
   wrapper.className = 'c--slider-a__wrapper'
   for (let i = 0; i < slideCount; i++) {
     const slide = document.createElement('div')
-    slide.className = 'c--slider-a__slide'
+    slide.className = 'c--slider-a__item'
     slide.setAttribute('data-slide', '')
     slide.textContent = String(i + 1)
     wrapper.appendChild(slide)
