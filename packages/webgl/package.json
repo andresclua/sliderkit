@@ -1,7 +1,7 @@
 {
   "name": "@andresclua/sliderkit-webgl",
-  "version": "0.1.0",
-  "description": "ACSlider WebGL renderer — OGL-powered effects with displacement, rgb-shift, pixel-dissolve, parallax",
+  "version": "0.1.1",
+  "description": "SliderKit WebGL renderer — OGL-powered effects with displacement, rgb-shift, pixel-dissolve, parallax",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
@@ -16,8 +16,9 @@
     "./scss/*": "./src/scss/*",
     "./textures/*": "./textures/*"
   },
-  "files": ["dist", "src/scss", "textures"],
+  "files": ["dist", "src/scss", "textures", "README.md"],
   "sideEffects": ["**/*.css", "**/*.scss"],
+  "homepage": "https://sliderkit.andresclua.com/docs/webgl",
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
     "typecheck": "tsc --noEmit"
@@ -38,6 +39,12 @@
     "typescript": "^5.4.5",
     "@andresclua/sliderkit": "workspace:*"
   },
+  "keywords": ["slider", "carousel", "sliderkit", "webgl", "ogl", "displacement", "shader"],
   "author": "Andres Clua",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andresclua/sliderkit",
+    "directory": "packages/webgl"
+  }
 }

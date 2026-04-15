@@ -1,6 +1,6 @@
 {
   "name": "@andresclua/sliderkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "SliderKit core engine — accessible, TypeScript-first slider",
   "type": "module",
   "main": "./dist/index.umd.js",
@@ -17,8 +17,10 @@
   },
   "files": [
     "dist",
-    "src/scss"
+    "src/scss",
+    "README.md"
   ],
+  "homepage": "https://sliderkit.andresclua.com",
   "sideEffects": [
     "**/*.css",
     "**/*.scss"
@@ -45,6 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andresclua/acslider"
+    "url": "https://github.com/andresclua/sliderkit",
+    "directory": "packages/core"
   }
 }

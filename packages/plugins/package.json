@@ -1,7 +1,7 @@
 {
   "name": "@andresclua/sliderkit-plugins",
-  "version": "0.1.0",
-  "description": "ACSlider UI plugins — pagination, autoplay, arrows, thumbnails, and more",
+  "version": "0.1.1",
+  "description": "SliderKit UI plugins — pagination, autoplay, arrows, thumbnails, and more",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
@@ -17,12 +17,14 @@
   },
   "files": [
     "dist",
-    "src/scss"
+    "src/scss",
+    "README.md"
   ],
   "sideEffects": [
     "**/*.css",
     "**/*.scss"
   ],
+  "homepage": "https://sliderkit.andresclua.com/docs/plugins",
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
     "typecheck": "tsc --noEmit"
@@ -36,7 +38,12 @@
     "typescript": "^5.4.5",
     "@andresclua/sliderkit": "workspace:*"
   },
-  "keywords": ["slider", "carousel", "acslider", "plugins"],
+  "keywords": ["slider", "carousel", "sliderkit", "plugins", "pagination", "autoplay"],
   "author": "Andres Clua",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andresclua/sliderkit",
+    "directory": "packages/plugins"
+  }
 }
