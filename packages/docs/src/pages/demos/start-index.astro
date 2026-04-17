@@ -3,181 +3,73 @@ import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
 ---
 <DemoLayout title="Start Index">
-
   <DemoViewer
-    title="Fixed start index"
+    title="startIndex — open at slide 3"
     description="Pass startIndex to open the slider at any slide on init. Index is 0-based. The slider is fully functional from there — navigation, loop, everything works normally."
-    html={`<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item">1</div>
-    <div class="c--slider-a__item">2</div>
-    <div class="c--slider-a__item">3 ← starts here</div>
-    <div class="c--slider-a__item">4</div>
-    <div class="c--slider-a__item">5</div>
-  </div>
-</div>
-<div id="my-pag" class="c--slider-a__pagination"></div>`}
-    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
-.c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__item { flex-shrink: 0; width: 100%; height: 260px; }
-.c--slider-a__pagination { display: flex; justify-content: center; gap: 6px; padding: 12px 0; }
-.c--slider-a__pagination-bullet { width: 10px; height: 10px; border-radius: 50%; background: #d1d5db; border: none; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3 ← starts here</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`.c--slider-a__item { height: 260px; }
+
+.c--slider-a__arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 10; width: 40px; height: 40px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,0.9); cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+}
+.c--slider-a__arrow--prev { left: 12px; }
+.c--slider-a__arrow--next { right: 12px; }
+
+.c--slider-a__pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 12px 0;
+}
+.c--slider-a__pagination-bullet {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #d1d5db; border: none; cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
 .c--slider-a__pagination-bullet--active { background: #6C2BD9; transform: scale(1.3); }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
+  items: 1,
   startIndex: 2, // 0-based — opens at slide 3
   loop: true,
+  speed: 300,
   plugins: [
     arrows(),
-    pagination({ el: '#my-pag', type: 'dots', clickable: true }),
+    pagination({ type: 'dots', clickable: true }),
   ],
 })`}
   >
-    <div class="c--slider-a" id="demo-startidx">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__item demo-slide s-green"  data-slide>3 ← starts here</div>
-        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
-      </div>
+    <div id="demo-startidx">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3 ← starts here</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
     </div>
-    <div id="demo-startidx-pag" class="c--slider-a__pagination"></div>
   </DemoViewer>
-
-  <DemoViewer
-    title="From URL query param"
-    description="Read the slide index from the URL (?slide=N) so users can deep-link directly to a specific item. Useful for shared links, notifications, or pagination state in the browser history."
-    html={`<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item">1</div>
-    <div class="c--slider-a__item">2</div>
-    <div class="c--slider-a__item">3</div>
-    <div class="c--slider-a__item">4</div>
-    <div class="c--slider-a__item">5</div>
-  </div>
-</div>
-<!-- Add ?slide=2 to the URL to open at slide 3 -->`}
-    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
-.c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__item { flex-shrink: 0; width: 100%; height: 260px; }`}
-    js={`import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination } from '@andresclua/sliderkit-plugins'
-
-// Read ?slide=N from the URL (0-based)
-const params = new URLSearchParams(window.location.search)
-const startIndex = Math.max(0, parseInt(params.get('slide') ?? '0', 10))
-
-new Slider('#my-slider', {
-  startIndex,
-  loop: true,
-  plugins: [arrows(), pagination({ type: 'dots', clickable: true })],
-})`}
-  >
-    <div class="c--slider-a" id="demo-startidx-url">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
-      </div>
-    </div>
-    <div id="demo-startidx-url-pag" class="c--slider-a__pagination"></div>
-    <p class="hint">Add <code>?slide=3</code> to the URL and refresh to open at slide 4.</p>
-  </DemoViewer>
-
-  <DemoViewer
-    title="Remember last visited slide"
-    description="Persist the active slide index in sessionStorage so users come back to where they left off — useful in tabs, modal galleries, or multi-step flows where the user might navigate away and return."
-    html={`<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item">1</div>
-    <div class="c--slider-a__item">2</div>
-    <div class="c--slider-a__item">3</div>
-    <div class="c--slider-a__item">4</div>
-    <div class="c--slider-a__item">5</div>
-  </div>
-</div>`}
-    css={`.c--slider-a { position: relative; width: 100%; overflow: hidden; }
-.c--slider-a__wrapper { display: flex; will-change: transform; }
-.c--slider-a__item { flex-shrink: 0; width: 100%; height: 260px; }`}
-    js={`import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination } from '@andresclua/sliderkit-plugins'
-
-const KEY = 'my-slider-index'
-const saved = parseInt(sessionStorage.getItem(KEY) ?? '0', 10)
-
-const slider = new Slider('#my-slider', {
-  startIndex: saved,
-  loop: true,
-  plugins: [arrows(), pagination({ type: 'dots', clickable: true })],
-})
-
-// Persist on every slide change
-slider.on('afterSlideChange', ({ index }) => {
-  sessionStorage.setItem(KEY, String(index))
-})`}
-  >
-    <div class="c--slider-a" id="demo-startidx-storage">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
-      </div>
-    </div>
-    <div id="demo-startidx-storage-pag" class="c--slider-a__pagination"></div>
-    <p class="hint">Navigate to a different slide, then refresh the page — it will reopen at the same slide.</p>
-  </DemoViewer>
-
 </DemoLayout>
-
-<style>
-.hint { margin-top: 8px; font-size: 0.82rem; color: var(--text-muted); }
-</style>
 
 <script>
 import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
-// Demo 1 — fixed index
 new Slider('#demo-startidx', {
+  items: 1,
   startIndex: 2,
   loop: true,
+  speed: 300,
   plugins: [
     arrows(),
-    pagination({ el: '#demo-startidx-pag', type: 'dots', clickable: true }),
+    pagination({ type: 'dots', clickable: true }),
   ],
-})
-
-// Demo 2 — from URL
-const params = new URLSearchParams(window.location.search)
-const urlIndex = Math.max(0, parseInt(params.get('slide') ?? '0', 10))
-new Slider('#demo-startidx-url', {
-  startIndex: urlIndex,
-  loop: true,
-  plugins: [
-    arrows(),
-    pagination({ el: '#demo-startidx-url-pag', type: 'dots', clickable: true }),
-  ],
-})
-
-// Demo 3 — sessionStorage
-const KEY = 'demo-startidx-storage'
-const saved = parseInt(sessionStorage.getItem(KEY) ?? '0', 10)
-const storageSlider = new Slider('#demo-startidx-storage', {
-  startIndex: saved,
-  loop: true,
-  plugins: [
-    arrows(),
-    pagination({ el: '#demo-startidx-storage-pag', type: 'dots', clickable: true }),
-  ],
-})
-storageSlider.on('afterSlideChange', ({ index }: { index: number }) => {
-  sessionStorage.setItem(KEY, String(index))
 })
 </script>

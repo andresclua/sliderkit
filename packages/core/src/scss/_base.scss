@@ -1,67 +1,71 @@
 @use 'variables' as *;
 
-.c--slider-a {
+// ── Injected outer wrapper ────────────────────────────────────────────────
+.c--slider-a__outer {
   position: relative;
-  width: $slider-width;
-  overflow: hidden;
-  background: $slider-bg;
   box-sizing: border-box;
 
   *,
   *::before,
-  *::after {
-    box-sizing: inherit;
-  }
+  *::after { box-sizing: inherit; }
+}
 
-  &--initialized {
-    // Applied by JS on init
-  }
+// ── Overflow/viewport div (overflow hidden) ───────────────────────────────
+.c--slider-a__overflow {
+  overflow: hidden;
+  position: relative;
+
+  // Auto-height transition
+  &--ah { transition: height 0.3s ease; }
+}
+
+// ── Inner margin div (edge padding) ──────────────────────────────────────
+.c--slider-a__inner {
+  // margin set by JS dynamic stylesheet for edgePadding
+}
+
+// ── Track (the user's element — gets translated by JS) ───────────────────
+.c--slider-a {
+  user-select: none;
+  will-change: transform;
+
+  &--horizontal { touch-action: pan-y; }
+  &--vertical   { touch-action: pan-x; }
 
   &--frozen {
-    // All slides visible, no interaction needed
-    .c--slider-a__wrapper {
-      transform: none !important;
-    }
-    // Hide arrows and pagination when frozen — no interaction possible
-    .c--slider-a__arrow,
-    .c--slider-a__pagination {
-      display: none;
-    }
+    // Hide arrows/pagination when frozen
+    ~ .c--slider-a__pagination,
+    .c--slider-a__arrow { display: none; }
+  }
+}
+
+// ── Slide items ───────────────────────────────────────────────────────────
+.c--slider-a__item {
+  display: inline-block;
+  vertical-align: top;
+  min-height: 1px;
+  position: relative;
+
+  img {
+    display: block;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
   }
 
-  &--disabled {
-    pointer-events: none;
-    opacity: 0.5;
-  }
+  &--active  { /* visible slide */ }
+  &--clone   { /* loop clone — aria-hidden via JS */ }
+  &--hidden  { visibility: hidden; } // frozen clones
+}
 
-  &__wrapper {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    will-change: transform;
-    touch-action: pan-y;
-    user-select: none;
-    // Hide until JS has calculated slide widths and applied the initial transform.
-    // Prevents a flash of un-laid-out slides before initialization completes.
-    opacity: 0;
-  }
-
-  &--initialized &__wrapper {
-    opacity: 1;
-    transition: opacity 0.15s ease;
-  }
-
-  &__slide {
-    flex-shrink: 0;
-    min-height: 1px;
-    position: relative;
-
-    &--active {
-      // Active slide state
-    }
-
-    &--clone {
-      // Loop clones: hidden from a11y via aria-hidden
-    }
-  }
+// ── A11y live region (visually hidden) ───────────────────────────────────
+.c--slider-a__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

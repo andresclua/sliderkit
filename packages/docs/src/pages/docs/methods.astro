@@ -9,30 +9,46 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Method</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>slider.goTo(target)</code></td><td>Navigate to a slide. Target can be a number (index), <code>'next'</code>, <code>'prev'</code>, <code>'first'</code>, or <code>'last'</code>.</td></tr>
-      <tr><td><code>slider.next()</code></td><td>Go to next slide. Shorthand for <code>goTo('next')</code>.</td></tr>
-      <tr><td><code>slider.prev()</code></td><td>Go to previous slide. Shorthand for <code>goTo('prev')</code>.</td></tr>
+      <tr>
+        <td><code>goTo(target)</code></td>
+        <td>Navigate to a slide. <code>target</code> can be a number (0-based index), <code>'next'</code>, <code>'prev'</code>, <code>'first'</code>, or <code>'last'</code>.</td>
+      </tr>
+      <tr><td><code>next()</code></td><td>Go to the next slide. Shorthand for <code>goTo('next')</code>.</td></tr>
+      <tr><td><code>prev()</code></td><td>Go to the previous slide. Shorthand for <code>goTo('prev')</code>.</td></tr>
     </tbody>
   </table>
 
-  <h2>Autoplay proxy</h2>
+  <pre><code>const slider = new Slider('#my-slider', {"{"} loop: true {"}"})
+
+slider.next()
+slider.prev()
+slider.goTo(2)       // jump to slide 3 (0-based)
+slider.goTo('last')  // jump to last slide</code></pre>
+
+  <h2>Events</h2>
   <table>
     <thead><tr><th>Method</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>slider.play()</code></td><td>Start autoplay. Requires the <code>autoplay</code> plugin.</td></tr>
-      <tr><td><code>slider.pause()</code></td><td>Pause autoplay. Requires the <code>autoplay</code> plugin.</td></tr>
+      <tr><td><code>on(event, fn)</code></td><td>Subscribe to a slider event. <code>fn</code> receives a <a href="/docs/events"><code>SliderInfo</code></a> object.</td></tr>
+      <tr><td><code>off(event, fn)</code></td><td>Unsubscribe the exact same function reference.</td></tr>
+      <tr><td><code>emit(event, data?)</code></td><td>Manually emit an event on this slider instance.</td></tr>
     </tbody>
   </table>
 
-  <h2>State</h2>
+  <pre><code>function onChanged(info) {"{"}
+  console.log('active slide:', info.displayIndex)
+{"}"}
+
+slider.on('indexChanged', onChanged)
+
+// later
+slider.off('indexChanged', onChanged)</code></pre>
+
+  <h2>Info</h2>
   <table>
     <thead><tr><th>Method</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>slider.update()</code></td><td>Recalculate layout. Useful after DOM mutations (adding/removing slides).</td></tr>
-      <tr><td><code>slider.updateSliderHeight()</code></td><td>Force a height recalculation based on the active slide (useful with <code>autoHeight</code>).</td></tr>
-      <tr><td><code>slider.getInfo()</code></td><td>Returns a full snapshot of the slider state as a plain object.</td></tr>
-      <tr><td><code>slider.enable()</code></td><td>Enable the slider (unfreezes and un-disables).</td></tr>
-      <tr><td><code>slider.disable()</code></td><td>Disable the slider (pointer-events off, visual opacity).</td></tr>
+      <tr><td><code>getInfo()</code></td><td>Returns a <a href="/docs/events"><code>SliderInfo</code></a> snapshot of the current slider state.</td></tr>
     </tbody>
   </table>
 
@@ -40,42 +56,24 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Method</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>slider.destroy()</code></td><td>Full teardown. Removes clones, event listeners, plugins, ARIA attributes, and inline styles.</td></tr>
-      <tr><td><code>slider.rebuild(opts?)</code></td><td>Calls <code>destroy()</code> then creates a new slider with the same (or merged) options. Returns the new instance.</td></tr>
+      <tr><td><code>destroy()</code></td><td>Full teardown — removes clones, event listeners, injected CSS, ARIA attributes, and calls each plugin's <code>destroy()</code>.</td></tr>
     </tbody>
   </table>
 
-  <h2>Events (post-init)</h2>
-  <pre><code>{`// Add listener after init
-slider.on('afterSlideChange', ({ index }) => {
-  console.log('Active:', index)
-})
-
-// Remove it later
-slider.off('afterSlideChange', myHandler)`}</code></pre>
-
-  <h2>Plugin access</h2>
-  <pre><code>{`import { mouseWheel } from '@andresclua/sliderkit-plugins'
-
-// Register a plugin after init
-slider.use(mouseWheel())`}</code></pre>
-
-  <h2>Getters</h2>
+  <h2>Properties</h2>
   <table>
-    <thead><tr><th>Getter</th><th>Type</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>slider.activeIndex</code></td><td><code>number</code></td><td>Current active slide index.</td></tr>
-      <tr><td><code>slider.previousIndex</code></td><td><code>number</code></td><td>Previously active slide index.</td></tr>
-      <tr><td><code>slider.slides</code></td><td><code>HTMLElement[]</code></td><td>Array of original slide elements (no clones).</td></tr>
-      <tr><td><code>slider.slideCount</code></td><td><code>number</code></td><td>Number of original slides.</td></tr>
-      <tr><td><code>slider.isBeginning</code></td><td><code>boolean</code></td><td>True when at the first slide.</td></tr>
-      <tr><td><code>slider.isEnd</code></td><td><code>boolean</code></td><td>True when at the last slide (or last page).</td></tr>
-      <tr><td><code>slider.progress</code></td><td><code>number</code></td><td>Progress from 0 (first) to 1 (last).</td></tr>
-      <tr><td><code>slider.isDestroyed</code></td><td><code>boolean</code></td><td>True after <code>destroy()</code> was called.</td></tr>
-      <tr><td><code>slider.isOn</code></td><td><code>boolean</code></td><td>True when active (not destroyed, frozen, or disabled).</td></tr>
-      <tr><td><code>slider.container</code></td><td><code>HTMLElement</code></td><td>The container element.</td></tr>
-      <tr><td><code>slider.wrapper</code></td><td><code>HTMLElement</code></td><td>The wrapper element (slides parent).</td></tr>
-      <tr><td><code>slider.version</code></td><td><code>string</code></td><td>Library version string.</td></tr>
+      <tr><td><code>activeIndex</code></td><td>number</td><td>Current 0-based slide index.</td></tr>
+      <tr><td><code>currentItems</code></td><td>number</td><td>Currently active items count (respects responsive breakpoints).</td></tr>
+      <tr><td><code>slideCount</code></td><td>number</td><td>Total number of real slides (no clones).</td></tr>
+      <tr><td><code>isBeginning</code></td><td>boolean</td><td><code>true</code> when on the first slide.</td></tr>
+      <tr><td><code>isEnd</code></td><td>boolean</td><td><code>true</code> when on the last slide.</td></tr>
+      <tr><td><code>container</code></td><td>HTMLElement</td><td>The user's original container element.</td></tr>
+      <tr><td><code>outerWrapper</code></td><td>HTMLElement</td><td>The outer wrapper injected by the slider.</td></tr>
+      <tr><td><code>innerWrapper</code></td><td>HTMLElement</td><td>The inner wrapper (applies edge padding).</td></tr>
+      <tr><td><code>slides</code></td><td>HTMLElement[]</td><td>All slide elements including clones.</td></tr>
+      <tr><td><code>options</code></td><td>Required&lt;SliderOptions&gt;</td><td>Merged options object (base only, not responsive overrides).</td></tr>
     </tbody>
   </table>
 </DocsLayout>

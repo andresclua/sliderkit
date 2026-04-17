@@ -69,37 +69,65 @@ pre {
 pre code { background: none; padding: 0; font-size: inherit; }
 
 /* ── Slider core styles (inline — no SCSS preprocessor needed) ── */
-.c--slider-a {
+
+/* outerWrapper: position:relative so arrows position correctly */
+.c--slider-a__outer {
   position: relative;
-  width: 100%;
-  overflow: hidden;
   border-radius: var(--radius);
   background: #e5e7eb;
 }
-.c--slider-a__wrapper {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  will-change: transform;
-  user-select: none;
-  opacity: 0;
-}
-.c--slider-a--initialized .c--slider-a__wrapper {
-  opacity: 1;
-  transition: opacity 0.15s ease;
-}
-/* Vertical mode */
-.c--slider-a--vertical {
-  height: 300px;
-}
-.c--slider-a--vertical .c--slider-a__wrapper {
-  flex-direction: column;
-  height: 100%;
+
+/* overflow div: clips the track */
+.c--slider-a__overflow {
+  overflow: hidden;
 }
 
+/* inner margin div: applies edgePadding offset */
+.c--slider-a__inner { }
+
+/* track (the user's element, translates on slide) */
+.c--slider-a {
+  will-change: transform;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+}
+.c--slider-a:active { cursor: grabbing; }
+
+/* Horizontal carousel: slides must be inline-block to sit side-by-side */
+.c--slider-a--horizontal {
+  white-space: nowrap;
+}
+.c--slider-a--horizontal > .c--slider-a__item {
+  display: inline-block;
+  white-space: normal;
+  vertical-align: top;
+}
+
+/* Vertical mode */
+.c--slider-a--vertical {
+  touch-action: pan-x;
+}
+.c--slider-a__outer--vertical {
+  height: 300px;
+}
+
+/* a11y live region — visually hidden, readable by screen readers */
+.c--slider-a__live {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* slides */
 .c--slider-a__item {
-  flex-shrink: 0;
   position: relative;
+  min-height: 1px;
+  box-sizing: border-box;
 }
 
 /* ── Demo slide colors ── */

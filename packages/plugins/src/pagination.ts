@@ -1,117 +1,121 @@
-import type { SliderPlugin } from '@andresclua/sliderkit'
-import type { SliderInstance } from '@andresclua/sliderkit'
+import type { SliderPlugin, SliderInstance, SliderInfo } from '@andresclua/sliderkit'
 
-export type PaginationType = 'dots' | 'fraction' | 'progress' | 'dynamic' | 'custom'
+export type PaginationType = 'dots' | 'fraction' | 'progress'
 
 export interface PaginationOptions {
-  type?: PaginationType
-  el?: string | HTMLElement
+  type?:      PaginationType
   clickable?: boolean
-  dynamicBullets?: boolean
-  renderCustom?: (payload: { current: number; total: number }) => string
+  container?: HTMLElement | string | null
 }
 
-export function pagination(options: PaginationOptions = {}): SliderPlugin {
-  const { type = 'dots', clickable = true, dynamicBullets = false } = options
+const CLS_WRAP     = 'c--slider-a__pagination'
+const CLS_BULLET   = 'c--slider-a__pagination-bullet'
+const CLS_ACTIVE   = 'c--slider-a__pagination-bullet--active'
+const CLS_FRACTION = 'c--slider-a__pagination-fraction'
+const CLS_PROGRESS = 'c--slider-a__pagination-progress'
+const CLS_FILL     = 'c--slider-a__pagination-progress-fill'
 
-  let slider: SliderInstance | null = null
-  let container: HTMLElement | null = null
-  let autoCreated = false
+export function pagination(opts: PaginationOptions = {}): SliderPlugin {
+  const type      = opts.type ?? 'dots'
+  const clickable = opts.clickable ?? true
+  let slider: SliderInstance
+  let wrap: HTMLElement
+  let bullets: HTMLButtonElement[] = []
+  let fillEl: HTMLElement | null = null
 
-  function getOrCreateContainer(sliderInstance: SliderInstance): HTMLElement {
-    if (options.el) {
-      const el =
-        typeof options.el === 'string'
-          ? sliderInstance.container.querySelector<HTMLElement>(options.el)
-          : options.el
-      if (el) return el
-    }
-    // Auto-create
-    autoCreated = true
-    const el = document.createElement('div')
-    el.className = 'c--slider-a__pagination'
-    sliderInstance.container.appendChild(el)
-    return el
+  function getItems(): number {
+    return Math.max(1, slider.currentItems)
   }
 
-  function render(): void {
-    if (!slider || !container) return
-    const { activeIndex, slideCount } = slider
+  function currentPage(): number {
+    return Math.floor(slider.activeIndex / getItems())
+  }
 
-    container.innerHTML = ''
+  function totalPages(): number {
+    return Math.ceil(slider.slideCount / getItems())
+  }
 
-    switch (type) {
-      case 'dots':
-      case 'dynamic': {
-        for (let i = 0; i < slideCount; i++) {
-          const bullet = document.createElement('button')
-          bullet.className = 'c--slider-a__pagination-bullet'
-          bullet.setAttribute('aria-label', `Go to slide ${i + 1}`)
-          if (i === activeIndex) {
-            bullet.classList.add('c--slider-a__pagination-bullet--active')
-            bullet.setAttribute('aria-current', 'true')
-          }
-          if (dynamicBullets) {
-            const distance = Math.abs(i - activeIndex)
-            const scale = distance === 0 ? 1 : distance === 1 ? 0.7 : 0.4
-            bullet.style.transform = `scale(${scale})`
-          }
-          if (clickable) {
-            bullet.addEventListener('click', () => slider?.goTo(i))
-          }
-          container!.appendChild(bullet)
-        }
-        break
+  function buildDots(): void {
+    // clear old
+    bullets.forEach(b => b.remove())
+    bullets = []
+
+    const total = totalPages()
+    for (let i = 0; i < total; i++) {
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = CLS_BULLET
+      btn.setAttribute('aria-label', `Go to slide ${i * getItems() + 1}`)
+      if (clickable) {
+        btn.addEventListener('click', () => slider.goTo(i * slider.currentItems))
       }
-      case 'fraction': {
-        const span = document.createElement('span')
-        span.className = 'c--slider-a__pagination-fraction'
-        span.textContent = `${activeIndex + 1} / ${slideCount}`
-        container.appendChild(span)
-        break
-      }
-      case 'progress': {
-        const bar = document.createElement('div')
-        bar.className = 'c--slider-a__pagination-progress'
-        const fill = document.createElement('div')
-        fill.className = 'c--slider-a__pagination-progress-fill'
-        fill.style.width = `${slider.progress * 100}%`
-        bar.appendChild(fill)
-        container.appendChild(bar)
-        break
-      }
-      case 'custom': {
-        if (options.renderCustom) {
-          container.innerHTML = options.renderCustom({
-            current: activeIndex + 1,
-            total: slideCount,
-          })
-        }
-        break
-      }
+      wrap.appendChild(btn)
+      bullets.push(btn)
     }
+  }
+
+  function update(): void {
+    const page  = currentPage()
+    const total = totalPages()
+
+    if (type === 'dots') {
+      bullets.forEach((b, i) => {
+        if (i === page) b.classList.add(CLS_ACTIVE)
+        else b.classList.remove(CLS_ACTIVE)
+      })
+    } else if (type === 'fraction') {
+      wrap.textContent = `${slider.activeIndex + 1} / ${slider.slideCount}`
+    } else if (type === 'progress') {
+      const pct = total > 1 ? (page / (total - 1)) * 100 : 100
+      if (fillEl) fillEl.style.width = pct + '%'
+    }
+  }
+
+  function onBreakpoint(): void {
+    if (type === 'dots') {
+      buildDots()
+    }
+    update()
   }
 
   return {
     name: 'pagination',
 
-    install(sliderInstance: SliderInstance) {
-      slider = sliderInstance
-      container = getOrCreateContainer(sliderInstance)
-      render()
+    install(s: SliderInstance): void {
+      slider = s
 
-      slider.on('afterSlideChange', render as () => void)
-      slider.on('resize', render as () => void)
+      wrap = document.createElement('div')
+      wrap.className = CLS_WRAP
+
+      if (type === 'progress') {
+        const bar = document.createElement('div')
+        bar.className = CLS_PROGRESS
+        fillEl = document.createElement('div')
+        fillEl.className = CLS_FILL
+        bar.appendChild(fillEl)
+        wrap.appendChild(bar)
+      } else if (type === 'fraction') {
+        wrap.classList.add(CLS_FRACTION)
+      } else {
+        buildDots()
+      }
+
+      const target = opts.container
+        ? (typeof opts.container === 'string' ? document.querySelector<HTMLElement>(opts.container) : opts.container)
+        : s.outerWrapper
+      if (!target) return
+      target.appendChild(wrap)
+
+      update()
+      s.on('indexChanged', update as (d: SliderInfo) => void)
+      s.on('transitionEnd', update as (d: SliderInfo) => void)
+      s.on('newBreakpointEnd', onBreakpoint as (d: SliderInfo) => void)
     },
 
-    destroy() {
-      slider?.off('afterSlideChange', render as () => void)
-      slider?.off('resize', render as () => void)
-      if (autoCreated && container) {
-        container.remove()
-      }
-      slider = null
-      container = null
+    destroy(): void {
+      wrap?.remove()
+      bullets = []
+      fillEl  = null
     },
   }
 }

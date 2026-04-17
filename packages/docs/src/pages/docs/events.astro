@@ -3,70 +3,78 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Events">
   <h1>Events</h1>
-  <p class="lead">SliderKit fires typed events at every stage of its lifecycle. Listen via the <code>on</code> option or <code>slider.on()</code> post-init.</p>
+  <p class="lead">SliderKit emits events at every stage of its lifecycle. Subscribe via <code>slider.on(event, fn)</code> after init, or via <code>onInit</code> to get the instance first.</p>
 
   <h2>Usage</h2>
-  <pre><code>{`// On init
-new Slider('#el', {
-  on: {
-    afterSlideChange: ({ index }) => console.log(index),
-  },
-})
+  <pre><code>const slider = new Slider('#my-slider', {"{"} loop: true {"}"})
 
-// Post init
-slider.on('afterSlideChange', ({ index }) => console.log(index))
-slider.off('afterSlideChange', myHandler)`}</code></pre>
+slider.on('indexChanged', (info) => {"{"} console.log(info.displayIndex) {"}"})
+slider.on('transitionEnd', (info) => {"{"} console.log('done') {"}"})
 
-  <h2>Lifecycle events</h2>
+// unsubscribe
+slider.off('indexChanged', myHandler)</code></pre>
+
+  <h2>SliderInfo object</h2>
+  <p>Every event handler receives a <code>SliderInfo</code> snapshot:</p>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>beforeInit</code></td><td><code>{"{"} slider {"}"}</code></td><td>Before the slider initializes.</td></tr>
-      <tr><td><code>afterInit</code></td><td><code>{"{"} slider {"}"}</code></td><td>After initialization is complete.</td></tr>
-      <tr><td><code>beforeDestroy</code></td><td><code>{"{"} slider {"}"}</code></td><td>Before destroy() runs.</td></tr>
-      <tr><td><code>afterDestroy</code></td><td><code>{"{"} slider {"}"}</code></td><td>After destroy() completes.</td></tr>
+      <tr><td><code>container</code></td><td>HTMLElement</td><td>The slider container element.</td></tr>
+      <tr><td><code>slideItems</code></td><td>HTMLCollectionOf&lt;Element&gt;</td><td>All slide elements including clones.</td></tr>
+      <tr><td><code>items</code></td><td>number</td><td>Currently active items count.</td></tr>
+      <tr><td><code>slideBy</code></td><td>number | 'page'</td><td>Current slideBy setting.</td></tr>
+      <tr><td><code>index</code></td><td>number</td><td>Internal index (includes clone offset).</td></tr>
+      <tr><td><code>indexCached</code></td><td>number</td><td>Previous internal index.</td></tr>
+      <tr><td><code>displayIndex</code></td><td>number</td><td>1-based current slide number (what you show users).</td></tr>
+      <tr><td><code>slideCount</code></td><td>number</td><td>Total real slides (no clones).</td></tr>
+      <tr><td><code>slideCountNew</code></td><td>number</td><td>Total slides including clones.</td></tr>
+      <tr><td><code>cloneCount</code></td><td>number</td><td>Number of clones on each side.</td></tr>
+      <tr><td><code>isOn</code></td><td>boolean</td><td><code>true</code> when the slider is active.</td></tr>
+      <tr><td><code>event</code></td><td>Event | undefined</td><td>The original DOM event (touch/drag/keyboard), if any.</td></tr>
     </tbody>
   </table>
 
-  <h2>Slide change events</h2>
+  <h2>Slide events</h2>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>beforeSlideChange</code></td><td><code>{"{"} from, to, direction, slider {"}"}</code></td><td>Before the active index changes.</td></tr>
-      <tr><td><code>afterSlideChange</code></td><td><code>{"{"} index, previousIndex, slide, slider {"}"}</code></td><td>After the active index changes.</td></tr>
-      <tr><td><code>beforeTransitionStart</code></td><td><code>{"{"} from, to, direction, slider {"}"}</code></td><td>Alias for beforeSlideChange (transition timing).</td></tr>
-      <tr><td><code>afterTransitionEnd</code></td><td><code>{"{"} index, previousIndex, slide, slider {"}"}</code></td><td>Alias for afterSlideChange (transition timing).</td></tr>
-      <tr><td><code>progress</code></td><td><code>{"{"} progress, activeIndex, slider {"}"}</code></td><td>Fires after each slide change. <code>progress</code> is 0–1.</td></tr>
+      <tr><td><code>indexChanged</code></td><td>The active index changes. Fires before the CSS transition starts.</td></tr>
+      <tr><td><code>transitionStart</code></td><td>The CSS transition begins.</td></tr>
+      <tr><td><code>transitionEnd</code></td><td>The CSS transition completes (or immediately if <code>speed:0</code>).</td></tr>
     </tbody>
   </table>
 
   <h2>Touch events</h2>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>touchStart</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
-      <tr><td><code>touchMove</code></td><td><code>{"{"} event, delta, direction, slider {"}"}</code></td></tr>
-      <tr><td><code>touchEnd</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
+      <tr><td><code>touchStart</code></td><td>Touch begins on the slider.</td></tr>
+      <tr><td><code>touchMove</code></td><td>Touch moves while panning.</td></tr>
+      <tr><td><code>touchEnd</code></td><td>Touch ends or is cancelled.</td></tr>
     </tbody>
   </table>
 
   <h2>Drag events</h2>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>dragStart</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
-      <tr><td><code>dragMove</code></td><td><code>{"{"} event, delta, direction, slider {"}"}</code></td></tr>
-      <tr><td><code>dragEnd</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
+      <tr><td><code>dragStart</code></td><td>Mouse button pressed on the slider (requires <code>mouseDrag:true</code>).</td></tr>
+      <tr><td><code>dragMove</code></td><td>Mouse dragged while button is held.</td></tr>
+      <tr><td><code>dragEnd</code></td><td>Mouse button released.</td></tr>
     </tbody>
   </table>
 
   <h2>Responsive events</h2>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>newBreakpointStart</code></td><td><code>{"{"} previousBreakpoint, currentBreakpoint, options, slider {"}"}</code></td></tr>
-      <tr><td><code>newBreakpointEnd</code></td><td><code>{"{"} previousBreakpoint, currentBreakpoint, options, slider {"}"}</code></td></tr>
-      <tr><td><code>resize</code></td><td><code>{"{"} width, height, slidesPerPage, slider {"}"}</code></td></tr>
+      <tr><td><code>newBreakpointStart</code></td><td>Window crosses a responsive breakpoint — before recalculation.</td></tr>
+      <tr><td><code>newBreakpointEnd</code></td><td>After the slider recalculates for the new breakpoint. Plugins use this to rebuild UI.</td></tr>
     </tbody>
   </table>
+
+  <h2>Example: sync an external counter</h2>
+  <pre><code>const counter = document.querySelector('#counter')
+
+slider.on('indexChanged', (info) => {"{"} counter.textContent = info.displayIndex + ' / ' + info.slideCount {"}"})</code></pre>
 </DocsLayout>

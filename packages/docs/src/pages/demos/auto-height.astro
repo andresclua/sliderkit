@@ -5,101 +5,37 @@ import DemoViewer from '../../components/DemoViewer.astro'
 <DemoLayout title="Auto Height">
   <DemoViewer
     title="Auto Height"
-    description="The container animates its height to match the active slide. Each slide has a different height."
-    html={`<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item slide-short">Short</div>
-    <div class="c--slider-a__item slide-medium">Medium<br/>height</div>
-    <div class="c--slider-a__item slide-tall">Tall<br/>slide<br/>content</div>
-    <div class="c--slider-a__item slide-short">Short again</div>
-    <div class="c--slider-a__item slide-medium">Medium<br/>again</div>
-  </div>
-</div>
-<div id="my-pagination" class="c--slider-a__pagination"></div>`}
-    css={`.c--slider-a {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  /* height is animated by the autoHeight plugin */
-  transition: height 400ms ease;
-}
-.c--slider-a__wrapper {
-  display: flex;
-  will-change: transform;
-  align-items: flex-start; /* important: don't stretch slides */
-}
-.c--slider-a__item {
-  flex-shrink: 0;
-  width: 100%;
-}
-
-/* Different heights per slide */
-.slide-short  { height: 120px; }
-.slide-medium { height: 200px; }
-.slide-tall   { height: 300px; }
-
-/* Pagination dots */
-.c--slider-a__pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px 0;
-}
-.c--slider-a__pagination-bullet {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #d1d5db;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-}
-.c--slider-a__pagination-bullet--active {
-  background: #6C2BD9;
-  transform: scale(1.3);
-}
-
-/* Auto-created arrows */
-.c--slider-a__arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-}
-.c--slider-a__arrow--prev { left: 12px; }
-.c--slider-a__arrow--next { right: 12px; }
-.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    description="autoHeight:true animates the container height to match each slide's natural height on every navigation."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple ah-short">Short</div>
+  <div class="demo-slide s-blue ah-medium">Medium height</div>
+  <div class="demo-slide s-green ah-tall">Tall slide content</div>
+  <div class="demo-slide s-amber ah-short">Short again</div>
+  <div class="demo-slide s-red ah-medium">Medium again</div>
+</div>`}
+    css={`.ah-short  { height: 120px; }
+.ah-medium { height: 200px; }
+.ah-tall   { height: 300px; }
+.demo-slide { display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:700; color:#fff; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination, autoHeight } from '@andresclua/sliderkit-plugins'
+import { arrows } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
+  items: 1,
   loop: false,
   rewind: true,
-  plugins: [
-    arrows(),
-    autoHeight({ animationDuration: 400 }),
-    pagination({ el: '#my-pagination', type: 'dots', clickable: true }),
-  ],
+  autoHeight: true,
+  speed: 300,
+  plugins: [arrows()],
 })`}
   >
-    <div class="c--slider-a" id="demo-autoheight">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item demo-slide s-purple ah-1" data-slide>Short</div>
-        <div class="c--slider-a__item demo-slide s-blue   ah-2" data-slide>Medium<br/>height</div>
-        <div class="c--slider-a__item demo-slide s-green  ah-3" data-slide>Tall<br/>slide<br/>content</div>
-        <div class="c--slider-a__item demo-slide s-amber  ah-1" data-slide>Short again</div>
-        <div class="c--slider-a__item demo-slide s-red    ah-2" data-slide>Medium<br/>again</div>
-      </div>
+    <div id="demo-autoheight">
+      <div class="demo-slide s-purple ah-1">Short</div>
+      <div class="demo-slide s-blue   ah-2">Medium height</div>
+      <div class="demo-slide s-green  ah-3">Tall slide content</div>
+      <div class="demo-slide s-amber  ah-1">Short again</div>
+      <div class="demo-slide s-red    ah-2">Medium again</div>
     </div>
-    <div id="demo-autoheight-pag" class="c--slider-a__pagination"></div>
   </DemoViewer>
 </DemoLayout>
 
@@ -111,15 +47,14 @@ new Slider('#my-slider', {
 
 <script>
 import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination, autoHeight } from '@andresclua/sliderkit-plugins'
+import { arrows } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-autoheight', {
+  items: 1,
   loop: false,
   rewind: true,
-  plugins: [
-    arrows(),
-    autoHeight({ animationDuration: 400 }),
-    pagination({ el: '#demo-autoheight-pag', type: 'dots', clickable: true }),
-  ],
+  autoHeight: true,
+  speed: 300,
+  plugins: [arrows()],
 })
 </script>
