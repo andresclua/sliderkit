@@ -1,5 +1,5 @@
 /**
- * Playwright e2e tests for ACSlider.
+ * Playwright e2e tests for SliderKit.
  *
  * These tests require the playground dev server to be running:
  *   pnpm dev
@@ -12,7 +12,7 @@ import { test, expect } from '@playwright/test'
 
 const BASE_URL = 'http://localhost:5173'
 
-test.describe('ACSlider e2e', () => {
+test.describe('SliderKit e2e', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(BASE_URL)
   })

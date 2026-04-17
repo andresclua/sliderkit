@@ -1,8 +1,8 @@
 {
-  "name": "acslider-monorepo",
+  "name": "sliderkit-monorepo",
   "private": true,
   "version": "0.1.0",
-  "description": "ACSlider monorepo — a modern, accessible slider library",
+  "description": "SliderKit monorepo — a modern, accessible slider library",
   "type": "module",
   "scripts": {
     "build": "pnpm -r --filter='@andresclua/*' build",
@@ -10,9 +10,9 @@
     "build:plugins": "pnpm --filter @andresclua/sliderkit-plugins build",
     "build:effects": "pnpm --filter @andresclua/sliderkit-effects build",
     "build:webgl": "pnpm --filter @andresclua/sliderkit-webgl build",
-    "dev": "pnpm --filter acslider-playground dev",
-    "docs": "pnpm --filter acslider-docs dev",
-    "docs:build": "pnpm --filter acslider-docs build",
+    "dev": "pnpm --filter sliderkit-playground dev",
+    "docs": "pnpm --filter sliderkit-docs dev",
+    "docs:build": "pnpm --filter sliderkit-docs build",
     "lint": "eslint packages/*/src --ext .ts",
     "typecheck": "pnpm -r typecheck",
     "test": "vitest run",

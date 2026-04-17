@@ -6,13 +6,13 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'ACSliderEffects',
+      name: 'SliderKitEffects',
       formats: ['es', 'umd'],
       fileName: (format) => (format === 'es' ? 'index.mjs' : 'index.umd.js'),
     },
     rollupOptions: {
       external: ['@andresclua/sliderkit'],
-      output: { globals: { '@andresclua/sliderkit': 'ACSliderCore' } },
+      output: { globals: { '@andresclua/sliderkit': 'SliderKitCore' } },
     },
     minify: true,
     sourcemap: true,

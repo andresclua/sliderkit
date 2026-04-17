@@ -201,14 +201,6 @@ export const DEMOS: DemoEntry[] = [
     group: 'plugins',
   },
   {
-    slug: 'parallax-css',
-    label: 'Parallax CSS',
-    title: 'Parallax CSS',
-    description: 'Any element inside a slide with `data-parallax` moves at a fraction of the slide\'s speed, creating a sense of depth. Set the `depth` factor (0–1) to control intensity. Pure CSS transforms — no canvas, no WebGL required.',
-    tags: ['plugin', 'parallax', 'depth', 'css', 'effect', 'transform'],
-    group: 'plugins',
-  },
-  {
     slug: 'virtual-slides',
     label: 'Virtual Slides',
     title: 'Virtual Slides',

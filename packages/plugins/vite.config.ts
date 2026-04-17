@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'ACSliderPlugins',
+      name: 'SliderKitPlugins',
       formats: ['es', 'umd'],
       fileName: (format) => (format === 'es' ? 'index.mjs' : 'index.umd.js'),
     },
@@ -14,7 +14,7 @@ export default defineConfig({
       external: ['@andresclua/sliderkit'],
       output: {
         globals: {
-          '@andresclua/sliderkit': 'ACSliderCore',
+          '@andresclua/sliderkit': 'SliderKitCore',
         },
       },
     },

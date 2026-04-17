@@ -25,9 +25,6 @@ export type { MouseWheelOptions } from './mouseWheel'
 export { virtualSlides } from './virtualSlides'
 export type { VirtualSlidesOptions } from './virtualSlides'
 
-export { parallax } from './parallax'
-export type { ParallaxOptions } from './parallax'
-
 export { autoHeight } from './autoHeight'
 export type { AutoHeightOptions } from './autoHeight'
 

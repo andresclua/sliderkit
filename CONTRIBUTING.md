@@ -1,12 +1,16 @@
-# Contributing to ACSlider
+# Contributing to SliderKit
 
 Thank you for your interest in contributing!
+
+## Reporting a bug
+
+Found something broken? [Open a bug report](https://github.com/andresclua/sliderkit/issues/new/choose) — the form will guide you through the details we need to reproduce and fix it quickly.
 
 ## Setup
 
 ```bash
-git clone https://github.com/andresclua/acslider
-cd acslider
+git clone https://github.com/andresclua/sliderkit
+cd sliderkit
 pnpm install
 ```
 

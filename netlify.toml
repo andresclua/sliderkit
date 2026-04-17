@@ -1,5 +1,5 @@
 [build]
-  command   = "pnpm --filter acslider-docs build"
+  command   = "pnpm --filter sliderkit-docs build"
   publish   = "packages/docs/dist"
 
 [build.environment]

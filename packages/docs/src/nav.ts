@@ -43,7 +43,6 @@ export const docsNav: NavGroup[] = [
       { label: 'Slide Counter', href: '/docs/plugins/slide-counter' },
       { label: 'Mouse Wheel', href: '/docs/plugins/mouse-wheel' },
       { label: 'Lazy Load', href: '/docs/plugins/lazy-load' },
-      { label: 'Parallax', href: '/docs/plugins/parallax' },
       { label: 'Auto Height', href: '/docs/plugins/auto-height' },
       { label: 'Virtual Slides', href: '/docs/plugins/virtual-slides' },
       { label: 'Center Mode', href: '/docs/plugins/center-mode' },

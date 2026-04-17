@@ -5,10 +5,11 @@ export interface MouseWheelOptions {
   forceToAxis?: boolean
   releaseOnEdges?: boolean
   sensitivity?: number
+  deltaThreshold?: number
 }
 
 export function mouseWheel(options: MouseWheelOptions = {}): SliderPlugin {
-  const { forceToAxis = true, sensitivity = 1 } = options
+  const { forceToAxis = true, releaseOnEdges = false, sensitivity = 1, deltaThreshold = 50 } = options
 
   let slider: SliderInstance | null = null
   let lastEventTime = 0
@@ -16,19 +17,32 @@ export function mouseWheel(options: MouseWheelOptions = {}): SliderPlugin {
 
   function onWheel(e: WheelEvent): void {
     if (!slider) return
+
+    const info = slider.getInfo() as Record<string, unknown>
+    const isHorizontal = info.direction !== 'vertical'
+    const delta = isHorizontal ? e.deltaX || e.deltaY : e.deltaY
+
+    if (Math.abs(delta) < deltaThreshold) return
+
     const now = Date.now()
     if (now - lastEventTime < minDelay) return
     lastEventTime = now
 
     if (forceToAxis) {
-      const isHorizontal = (slider.getInfo() as Record<string, unknown>).direction !== 'vertical'
       const dominantAxis = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? 'x' : 'y'
       if (isHorizontal && dominantAxis !== 'x') return
       if (!isHorizontal && dominantAxis !== 'y') return
     }
 
-    const delta =
-      (slider.getInfo() as Record<string, unknown>).direction !== 'vertical' ? e.deltaX || e.deltaY : e.deltaY
+    if (releaseOnEdges) {
+      const index = info.index as number
+      const total = info.slideCount as number
+      const loop = info.loop as boolean
+      if (!loop) {
+        if (delta > 0 && index >= total - 1) return
+        if (delta < 0 && index <= 0) return
+      }
+    }
 
     if (delta * sensitivity > 0) {
       slider.next()

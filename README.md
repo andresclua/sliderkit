@@ -142,7 +142,6 @@ import {
   slideCounter,
   mouseWheel,
   lazyLoad,
-  parallax,
   autoHeight,
   virtualSlides,
   centerMode,
@@ -213,11 +212,6 @@ mouseWheel({ sensitivity: 1, releaseOnEdges: true })
 ### `lazyLoad()`
 ```typescript
 lazyLoad({ selector: '.lazy', preloadPrev: 1, preloadNext: 2 })
-```
-
-### `parallax()`
-```typescript
-parallax() // reads data-parallax-speed on child elements
 ```
 
 ### `autoHeight()`
@@ -479,8 +473,14 @@ pnpm build
 # Build a single package
 pnpm --filter @andresclua/sliderkit build
 
-# Start docs dev server
+# Start playground dev server
 pnpm dev
+
+# Start docs dev server
+pnpm docs
+# or directly:
+pnpm --filter sliderkit-docs dev
+# then open http://localhost:4321
 ```
 
 ---

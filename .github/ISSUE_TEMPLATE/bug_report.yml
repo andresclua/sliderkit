@@ -1,0 +1,60 @@
+name: Bug Report
+description: Something isn't working as expected
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill in as much detail as you can.
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: e.g. 0.1.1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Affected package
+      options:
+        - "@andresclua/sliderkit (core)"
+        - "@andresclua/sliderkit-plugins"
+        - "@andresclua/sliderkit-effects"
+        - "@andresclua/sliderkit-webgl"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      placeholder: Describe the bug clearly. What did you expect vs what actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: A minimal code snippet or CodePen/StackBlitz link that reproduces the issue.
+      placeholder: |
+        import { Slider } from '@andresclua/sliderkit'
+
+        const slider = new Slider('#my-slider', { ... })
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: |
+        - Browser: Chrome 123
+        - OS: macOS 14
+        - Framework: Vanilla / Vue / React / etc.
+    validations:
+      required: false

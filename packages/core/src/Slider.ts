@@ -82,7 +82,7 @@ export class Slider implements SliderInstance {
 
     if (!el) {
       logger.error(`Container element not found: "${String(container)}"`)
-      throw new Error(`ACSlider: container not found`)
+      throw new Error(`SliderKit: container not found`)
     }
 
     this.originalContainer = el

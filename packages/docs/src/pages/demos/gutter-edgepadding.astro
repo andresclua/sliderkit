@@ -69,8 +69,7 @@ new Slider('#my-slider', {
   slidesPerPage: 3,
   gutter: 16,
   edgePadding: 40,
-  loop: false,
-  rewind: true,
+  loop: true,
   plugins: [
     arrows(),
     pagination({ el: '#my-pagination', type: 'fraction' }),
@@ -381,27 +380,40 @@ const slider = new Slider('#my-slider', {
 })
 
 const container = document.querySelector('#my-slider')
-const wrapper   = container.querySelector('.c--slider-a__wrapper')
+const GUTTER = 24, HALF = 2, DEG_STEP = 6, DEG_MAX = 12
 
-function applyRotation(snap = false) {
-  // offsetLeft is layout-based (unaffected by CSS rotation on slides).
-  // Adding wrapper.style.transform's translateX gives position within the container.
-  // Works at init AND on loop clones without any timing issues.
-  const tx     = new DOMMatrix(wrapper.style.transform).m41
-  const cx     = container.offsetWidth / 2
-  const slideW = slider.slides[0].offsetWidth || 1
-
-  container.querySelectorAll('.c--slider-a__item').forEach(slide => {
-    const center = slide.offsetLeft + tx + slide.offsetWidth / 2
-    const slot   = Math.round((center - cx) / (slideW + 24))
-    const deg    = Math.max(-12, Math.min(12, slot * 6))
+// Real slides: pure index math — no DOM geometry, loop-safe
+function applyLogical(activeIdx, snap = false) {
+  const n = slider.slides.length
+  slider.slides.forEach((slide, i) => {
+    const raw  = ((i - activeIdx - HALF) % n + n) % n
+    const dist = raw <= n / 2 ? raw : raw - n
+    const deg  = Math.max(-DEG_MAX, Math.min(DEG_MAX, dist * DEG_STEP))
     if (snap) gsap.set(slide, { rotation: deg })
-    else      gsap.to(slide,  { rotation: deg, duration: 0.45, ease: 'power2.out' })
+    else      gsap.to(slide, { rotation: deg, duration: 0.45, ease: 'power2.out' })
   })
 }
 
-applyRotation(true)
-slider.on('afterSlideChange', () => applyRotation())`}
+// Clones: bounding rect (they are visually in place at call time)
+function applyClones(snap = false) {
+  const cRect  = container.getBoundingClientRect()
+  const cx     = cRect.left + cRect.width / 2
+  const slideW = slider.slides[0].offsetWidth || 1
+  container.querySelectorAll('.c--slider-a__item--clone').forEach(slide => {
+    const r    = slide.getBoundingClientRect()
+    const slot = Math.round((r.left + r.width / 2 - cx) / (slideW + GUTTER))
+    const deg  = Math.max(-DEG_MAX, Math.min(DEG_MAX, slot * DEG_STEP))
+    if (snap) gsap.set(slide, { rotation: deg })
+    else      gsap.to(slide, { rotation: deg, duration: 0.45, ease: 'power2.out' })
+  })
+}
+
+applyLogical(slider.activeIndex, true)
+slider.on('afterSlideChange', ({ index }) => { applyLogical(index); applyClones() })
+slider.on('beforeLoopBoundary', ({ targetIndex }) => {
+  applyClones(true)             // snap visible clones to correct angles
+  applyLogical(targetIndex, true) // pre-set real slides to post-snap angles
+})`}
   >
     <div class="fan-wrap" id="fan-outer">
       <div class="c--slider-a" id="demo-fan">
@@ -514,8 +526,7 @@ new Slider('#demo-gutter', {
   slidesPerPage: 3,
   gutter: 16,
   edgePadding: 40,
-  loop: false,
-  rewind: true,
+  loop: true,
   plugins: [
     arrows(),
     pagination({ el: '#demo-gutter-pag', type: 'fraction' }),
@@ -592,34 +603,49 @@ const fanSlider = new Slider('#demo-fan', {
   plugins: [arrows()],
 })
 
-const fanContainer  = document.querySelector('#demo-fan')!
-const fanWrapper    = fanContainer.querySelector<HTMLElement>('.c--slider-a__wrapper')!
+const fanContainer = document.querySelector('#demo-fan')!
+const FAN_GUTTER   = 24
+const FAN_HALF     = 2   // floor(slidesPerPage / 2)
+const FAN_STEP     = 6
+const FAN_MAX      = 12
 
-function applyFanRotation(snap = false) {
-  // Use offsetLeft (layout coords, unaffected by rotation transforms) +
-  // the wrapper's translateX so we get position relative to the container.
-  // This works at init AND for clones without any timing issues.
-  const tx      = new DOMMatrix(fanWrapper.style.transform).m41   // wrapper translateX
-  const cw      = (fanContainer as HTMLElement).offsetWidth
-  const cx      = cw / 2                                          // container center
-  const slideW  = (fanSlider.slides[0] as HTMLElement).offsetWidth || 1
-
-  fanContainer.querySelectorAll<HTMLElement>('.c--slider-a__item').forEach(slide => {
-    const slideCenter = slide.offsetLeft + tx + slide.offsetWidth / 2
-    const slot = Math.round((slideCenter - cx) / (slideW + 24))
-    const deg  = Math.max(-12, Math.min(12, slot * 6))
+// Real slides: pure index math — no DOM geometry, loop-safe
+function applyFanLogical(activeIdx: number, snap = false) {
+  const n = fanSlider.slides.length
+  ;(fanSlider.slides as HTMLElement[]).forEach((slide, i) => {
+    const raw  = ((i - activeIdx - FAN_HALF) % n + n) % n
+    const dist = raw <= n / 2 ? raw : raw - n
+    const deg  = Math.max(-FAN_MAX, Math.min(FAN_MAX, dist * FAN_STEP))
     if (snap) gsap.set(slide, { rotation: deg })
-    else      gsap.to(slide,  { rotation: deg, duration: 0.45, ease: 'power2.out' })
+    else      gsap.to(slide, { rotation: deg, duration: 0.45, ease: 'power2.out' })
   })
 }
 
-// Direct call — slider sets wrapper.style.transform synchronously in its constructor
-applyFanRotation(true)
-fanSlider.on('afterSlideChange', () => applyFanRotation())
+// Clones: bounding rect (they are visually in place at call time)
+function applyFanClones(snap = false) {
+  const cRect  = fanContainer.getBoundingClientRect()
+  const cx     = cRect.left + cRect.width / 2
+  const slideW = (fanSlider.slides[0] as HTMLElement).offsetWidth || 1
+  fanContainer.querySelectorAll<HTMLElement>('.c--slider-a__item--clone').forEach(slide => {
+    const r    = slide.getBoundingClientRect()
+    const slot = Math.round((r.left + r.width / 2 - cx) / (slideW + FAN_GUTTER))
+    const deg  = Math.max(-FAN_MAX, Math.min(FAN_MAX, slot * FAN_STEP))
+    if (snap) gsap.set(slide, { rotation: deg })
+    else      gsap.to(slide, { rotation: deg, duration: 0.45, ease: 'power2.out' })
+  })
+}
 
-// Before the loop boundary animation plays, wrapper.style.transform is already set
-// to the clone-zone target. Snap all slide rotations now so clones look correct
-// as they animate into view (otherwise clones would show stale rotations from their
-// last off-screen position and visually "jump" into place after the transition).
-fanSlider.on('beforeLoopBoundary', () => applyFanRotation(true))
+applyFanLogical(fanSlider.activeIndex, true)
+
+fanSlider.on('afterSlideChange', ({ index }: { index: number }) => {
+  applyFanLogical(index)
+  applyFanClones()
+})
+
+fanSlider.on('beforeLoopBoundary', ({ targetIndex }: { targetIndex: number }) => {
+  // At this point applyLayout() has already moved the wrapper to the clone zone,
+  // so ALL real slides are off-screen — safe to snap every one of them.
+  applyFanLogical(targetIndex, true)
+  applyFanClones(true)
+})
 </script>

@@ -4,7 +4,7 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@andresclua/sliderkit-plugins?style=flat-square&label=gzip)](https://bundlephobia.com/package/@andresclua/sliderkit-plugins)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-UI plugins for **SliderKit** — arrows, pagination, autoplay, thumbnails, progress bar, lazy load, parallax, and more.
+UI plugins for **SliderKit** — arrows, pagination, autoplay, thumbnails, progress bar, lazy load, and more.
 
 **[Full documentation & demos →](https://sliderkit.andresclua.com/docs/plugins)**
 
@@ -31,7 +31,6 @@ import {
   slideCounter,
   mouseWheel,
   lazyLoad,
-  parallax,
   autoHeight,
 } from '@andresclua/sliderkit-plugins'
 
@@ -103,12 +102,6 @@ mouseWheel({ sensitivity: 1, releaseOnEdges: true })
 Load images only when they enter the viewport.
 ```typescript
 lazyLoad({ selector: '.lazy', preloadPrev: 1, preloadNext: 2 })
-```
-
-### `parallax()`
-Move child elements at a different speed. Add `data-parallax-speed` to any child.
-```typescript
-parallax()
 ```
 
 ### `autoHeight()`
