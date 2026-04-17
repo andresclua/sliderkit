@@ -214,6 +214,8 @@ export class Slider implements SliderInstance {
     this.events   = new Events()
     this._plugins = this.options.plugins ?? []
 
+    this.events.emit('beforeInit', this.info())
+
     const doc = document
 
     // ── Core vars (mirrors Tiny Slider) ───────────────────────────────────
@@ -829,6 +831,8 @@ export class Slider implements SliderInstance {
 
     // install plugins
     this._plugins.forEach(p => p.install(this))
+
+    this.events.emit('afterInit', this.info())
   }
 
   // ════════════════════════════════════════════════════════════════════════
@@ -1659,6 +1663,7 @@ export class Slider implements SliderInstance {
     }
 
     if (bpChanged) { this.events.emit('newBreakpointEnd', this.info(e)) }
+    this.events.emit('resize', this.info(e))
   }
 
   // ════════════════════════════════════════════════════════════════════════
@@ -1735,6 +1740,8 @@ export class Slider implements SliderInstance {
   }
 
   destroy(): void {
+    this.events.emit('beforeDestroy', this.info())
+
     // sheet
     this.sheet.disabled = true
     const ownerNode = this.sheet.ownerNode as HTMLElement | null
@@ -1780,6 +1787,7 @@ export class Slider implements SliderInstance {
     // destroy plugins
     this._plugins.forEach(p => p.destroy())
 
+    this.events.emit('afterDestroy', this.info())
     this.events.removeAll()
     this.isOn = false
   }

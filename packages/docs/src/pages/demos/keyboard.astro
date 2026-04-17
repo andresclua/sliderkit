@@ -1,0 +1,68 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Keyboard">
+  <DemoViewer
+    title="Keyboard navigation"
+    description="Click the slider to focus it, then press ← → to navigate. The blue outline tells you when the slider is focused."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; border-radius:8px; }
+
+/* show a clear focus ring so the user knows the slider is active */
+.c--slider-a__outer:focus {
+  outline: 3px solid #6C2BD9;
+  outline-offset: 4px;
+}`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, keyboard } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    keyboard(),   // ← that's it
+  ],
+})`}
+  >
+    <div id="demo-keyboard">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+:global(#demo-keyboard-ow).c--slider-a__outer:focus {
+  outline: 3px solid #6C2BD9;
+  outline-offset: 4px;
+}
+</style>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, keyboard } from '@andresclua/sliderkit-plugins'
+
+new Slider('#demo-keyboard', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    keyboard(),
+  ],
+})
+</script>

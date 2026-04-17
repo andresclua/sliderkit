@@ -1,0 +1,55 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Mouse Wheel">
+  <DemoViewer
+    title="Mouse Wheel"
+    description="Scroll over the slider with the trackpad or mouse wheel to navigate. A cooldown prevents skipping slides mid-transition."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, mouseWheel } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    mouseWheel(),
+  ],
+})`}
+  >
+    <div id="demo-mousewheel">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, mouseWheel } from '@andresclua/sliderkit-plugins'
+
+new Slider('#demo-mousewheel', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    mouseWheel(),
+  ],
+})
+</script>

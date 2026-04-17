@@ -1,0 +1,113 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Styling">
+  <h1>Styling</h1>
+  <p class="lead">SliderKit adds BEM class names to every element it creates. Override them with plain CSS — no preprocessor needed.</p>
+
+  <h2>DOM structure</h2>
+  <p>After init, the slider wraps your container in this structure:</p>
+  <pre><code>div.c--slider-a__outer          ← position:relative, arrows mount here
+  div.c--slider-a__overflow     ← overflow:hidden, clips the track
+    div.c--slider-a__inner      ← applies edgePadding margin
+      div#your-id               ← your original container (the track)
+        div.c--slider-a__item   ← each slide
+      /div
+    /div
+  /div
+  div.c--slider-a__pagination   ← pagination mounts here
+/div</code></pre>
+
+  <h2>State classes</h2>
+  <table>
+    <thead><tr><th>Class</th><th>Applied to</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td><code>.c--slider-a--horizontal</code></td><td>container</td><td>Always (horizontal axis).</td></tr>
+      <tr><td><code>.c--slider-a--vertical</code></td><td>container</td><td>When <code>axis:'vertical'</code>.</td></tr>
+      <tr><td><code>.c--slider-a__item--active</code></td><td>slide</td><td>Slide is in the visible range.</td></tr>
+      <tr><td><code>.c--slider-a__item--clone</code></td><td>slide</td><td>Clone slide (loop only).</td></tr>
+      <tr><td><code>.c--slider-a--frozen</code></td><td>outer wrapper</td><td>Slider is frozen (all slides fit, <code>freezable:true</code>).</td></tr>
+      <tr><td><code>.c--slider-a--autoplay-playing</code></td><td>outer wrapper</td><td>Autoplay is running.</td></tr>
+      <tr><td><code>.c--slider-a--autoplay-paused</code></td><td>outer wrapper</td><td>Autoplay is paused.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Customising arrows</h2>
+  <pre><code>/* size and position */
+.c--slider-a__arrow {"{"}
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;          /* square instead of circle */
+  background: rgba(0,0,0,0.5);
+{"}"}
+
+/* placement */
+.c--slider-a__arrow--prev {"{"} left: 0; {"}"}
+.c--slider-a__arrow--next {"{"} right: 0; {"}"}
+
+/* disabled state */
+.c--slider-a__arrow--disabled {"{"}
+  opacity: 0;
+  pointer-events: none;
+{"}"}</code></pre>
+
+  <h2>Customising dots</h2>
+  <pre><code>/* dot shape */
+.c--slider-a__pagination-bullet {"{"}
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;          /* square dots */
+  background: #d1d5db;
+{"}"}
+
+/* active dot */
+.c--slider-a__pagination-bullet--active {"{"}
+  background: #6C2BD9;
+  transform: scale(1.4);
+{"}"}</code></pre>
+
+  <h2>Highlighting the active slide</h2>
+  <pre><code>/* dim all slides, brighten the active one */
+.c--slider-a__item {"{"}
+  opacity: 0.4;
+  transition: opacity 0.3s;
+{"}"}
+.c--slider-a__item--active {"{"}
+  opacity: 1;
+{"}"}</code></pre>
+
+  <h2>Vertical arrows</h2>
+  <p>For <code>axis:'vertical'</code> the default arrow positions (left/right) don't make sense. Override them to top/bottom:</p>
+  <pre><code>.c--slider-a__arrow {"{"}
+  left: 50%;
+  transform: translateX(-50%);
+{"}"}
+.c--slider-a__arrow--prev {"{"} top: 8px; {"}"}
+.c--slider-a__arrow--next {"{"} bottom: 8px; top: auto; {"}"}</code></pre>
+
+  <h2>Hide controls when frozen</h2>
+  <p>When <code>freezable:true</code> and all slides fit, the outer wrapper gets <code>.c--slider-a--frozen</code>. You can use this to hide controls:</p>
+  <pre><code>.c--slider-a--frozen .c--slider-a__arrow,
+.c--slider-a--frozen .c--slider-a__pagination {"{"}
+  display: none;
+{"}"}</code></pre>
+
+  <h2>Autoplay state styling</h2>
+  <pre><code>/* show a pause icon when playing, play icon when paused */
+.c--slider-a--autoplay-playing .my-play-btn  {"{"} display: none; {"}"}
+.c--slider-a--autoplay-paused  .my-pause-btn {"{"} display: none; {"}"}</code></pre>
+
+  <h2>Dark mode</h2>
+  <pre><code>@media (prefers-color-scheme: dark) {"{"}
+  .c--slider-a__arrow {"{"}
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  {"}"}
+  .c--slider-a__pagination-bullet {"{"}
+    background: rgba(255, 255, 255, 0.3);
+  {"}"}
+  .c--slider-a__pagination-bullet--active {"{"}
+    background: #a78bfa;
+  {"}"}
+{"}"}</code></pre>
+</DocsLayout>

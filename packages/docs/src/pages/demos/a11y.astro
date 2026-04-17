@@ -1,0 +1,187 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Accessibility">
+  <DemoViewer
+    title="Accessibility (a11y plugin)"
+    description="Adds the full WAI-ARIA carousel pattern. Open DevTools → Elements to see the roles and labels, or use a screen reader — it will announce the carousel region and each slide's position."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, a11y } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    a11y({
+      containerLabel: 'Image carousel',
+      slideLabel: '{{index}} of {{total}}',
+    }),
+  ],
+})`}
+  >
+    <div id="demo-a11y">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Translated labels"
+    description="containerLabel and slideLabel are fully translatable. This example uses Spanish."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, a11y } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    a11y({
+      containerLabel: 'Galería de imágenes',
+      slideLabel: 'Imagen {{index}} de {{total}}',
+    }),
+  ],
+})`}
+  >
+    <div id="demo-a11y-es">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<section class="a11y-inspector">
+  <h2>What the screen reader sees</h2>
+  <p>Navigate the slider above and watch this panel update in real time.</p>
+  <div class="a11y-tree" id="a11y-tree">
+    <div class="a11y-row"><span class="a11y-role">region</span> <span class="a11y-label" id="region-label">—</span></div>
+    <div class="a11y-row a11y-indent"><span class="a11y-role">carousel</span> <span class="a11y-label" id="carousel-label">—</span></div>
+    <div class="a11y-row a11y-indent2"><span class="a11y-role">slide (active)</span> <span class="a11y-label" id="slide-label">—</span></div>
+    <div class="a11y-row a11y-indent2"><span class="a11y-role">live region</span> <span class="a11y-label" id="live-label">—</span></div>
+  </div>
+</section>
+
+<style>
+.a11y-inspector {
+  margin-top: 2.5rem;
+  background: #0f1117;
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  color: #e2e8f0;
+}
+.a11y-inspector h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.4rem;
+}
+.a11y-inspector p {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0 0 1.25rem;
+}
+.a11y-tree { display: flex; flex-direction: column; gap: 6px; font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+.a11y-row { display: flex; align-items: baseline; gap: 10px; }
+.a11y-indent  { padding-left: 1.5rem; }
+.a11y-indent2 { padding-left: 3rem; }
+.a11y-role {
+  flex-shrink: 0;
+  background: #1e293b;
+  color: #7dd3fc;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+.a11y-label { color: #a3e635; }
+</style>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, a11y } from '@andresclua/sliderkit-plugins'
+
+const slider = new Slider('#demo-a11y', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    a11y({
+      containerLabel: 'Image carousel',
+      slideLabel: '{{index}} of {{total}}',
+    }),
+  ],
+})
+
+new Slider('#demo-a11y-es', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    a11y({
+      containerLabel: 'Galería de imágenes',
+      slideLabel: 'Imagen {{index}} de {{total}}',
+    }),
+  ],
+})
+
+// ── Live inspector panel ──────────────────────────────────────────────────────
+function updateInspector(info: { displayIndex: number; slideCount: number }) {
+  const outer = slider.outerWrapper
+  const activeSlide = Array.from(slider.container.children).find(
+    el => !el.classList.contains('c--slider-a__item--clone') &&
+          !el.hasAttribute('aria-hidden')
+  ) as HTMLElement | undefined
+  const liveEl = outer.querySelector('.c--slider-a__live') as HTMLElement | null
+
+  const regionLabel   = document.getElementById('region-label')!
+  const carouselLabel = document.getElementById('carousel-label')!
+  const slideLabel    = document.getElementById('slide-label')!
+  const liveLabel     = document.getElementById('live-label')!
+
+  regionLabel.textContent   = `aria-label="${outer.getAttribute('aria-label') ?? '—'}"`
+  carouselLabel.textContent = `aria-roledescription="${outer.getAttribute('aria-roledescription') ?? '—'}"`
+  slideLabel.textContent    = activeSlide
+    ? `aria-label="${activeSlide.getAttribute('aria-label') ?? '—'}" aria-roledescription="${activeSlide.getAttribute('aria-roledescription') ?? '—'}"`
+    : '—'
+  liveLabel.textContent     = liveEl ? `"${liveEl.textContent?.trim() ?? ''}"` : '—'
+}
+
+slider.on('indexChanged', updateInspector as any)
+slider.on('transitionEnd', updateInspector as any)
+
+// init
+setTimeout(() => updateInspector({ displayIndex: 1, slideCount: slider.slideCount }), 100)
+</script>

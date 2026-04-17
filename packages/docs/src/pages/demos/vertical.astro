@@ -5,27 +5,27 @@ import DemoViewer from '../../components/DemoViewer.astro'
 <DemoLayout title="Vertical">
   <DemoViewer
     title="Vertical slider"
-    description='Set axis: "vertical" for a top-to-bottom slider. Swipe up/down or use the arrows to navigate.'
-    html={`<div id="my-slider" style="height: 300px;">
+    description='Set axis:"vertical" for a top-to-bottom slider. Give the container a fixed height. Swipe up/down or use the arrows.'
+    html={`<div id="my-slider" style="height:300px">
   <div class="demo-slide s-purple">1</div>
   <div class="demo-slide s-blue">2</div>
   <div class="demo-slide s-green">3</div>
   <div class="demo-slide s-amber">4</div>
   <div class="demo-slide s-red">5</div>
 </div>`}
-    css={`/* Vertical mode: the track element needs an explicit height */
-#my-slider { height: 300px; }
+    css={`#my-slider { height: 300px; }
+.demo-slide { height: 300px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }
 
-.c--slider-a__item { height: 300px; }
-
+/* vertical arrows: top / bottom instead of left / right */
 .c--slider-a__arrow {
-  position: absolute; top: 50%; transform: translateY(-50%);
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
   z-index: 10; width: 40px; height: 40px; border-radius: 50%;
   border: none; background: rgba(255,255,255,0.9); cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,.18);
 }
-.c--slider-a__arrow--prev { left: 12px; }
-.c--slider-a__arrow--next { right: 12px; }`}
+.c--slider-a__arrow--prev { top: 8px; }
+.c--slider-a__arrow--next { bottom: 8px; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows } from '@andresclua/sliderkit-plugins'
 
@@ -37,7 +37,7 @@ new Slider('#my-slider', {
   plugins: [arrows()],
 })`}
   >
-    <div id="demo-vertical" style="height: 300px;">
+    <div id="demo-vertical" style="height:300px">
       <div class="demo-slide s-purple">1</div>
       <div class="demo-slide s-blue">2</div>
       <div class="demo-slide s-green">3</div>
@@ -46,6 +46,17 @@ new Slider('#my-slider', {
     </div>
   </DemoViewer>
 </DemoLayout>
+
+<style>
+#demo-vertical ~ :global(.c--slider-a__outer) .c--slider-a__arrow,
+:global(#demo-vertical-ow) :global(.c--slider-a__arrow) {
+  left: 50%;
+  transform: translateX(-50%);
+  top: auto;
+}
+:global(#demo-vertical-ow) :global(.c--slider-a__arrow--prev) { top: 8px; }
+:global(#demo-vertical-ow) :global(.c--slider-a__arrow--next) { bottom: 8px; top: auto; }
+</style>
 
 <script>
 import { Slider } from '@andresclua/sliderkit'

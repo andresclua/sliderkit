@@ -27,14 +27,19 @@ export const docsNav: NavGroup[] = [
       { label: 'Options',         href: '/docs/options' },
       { label: 'Methods',         href: '/docs/methods' },
       { label: 'Events',          href: '/docs/events' },
+      { label: 'Styling',         href: '/docs/styling' },
     ],
   },
   {
     title: 'Plugins',
     items: [
-      { label: 'Overview',    href: '/docs/plugins' },
-      { label: 'Arrows',      href: '/docs/plugins/arrows' },
-      { label: 'Pagination',  href: '/docs/plugins/pagination' },
+      { label: 'Overview',     href: '/docs/plugins' },
+      { label: 'Arrows',       href: '/docs/plugins/arrows' },
+      { label: 'Pagination',   href: '/docs/plugins/pagination' },
+      { label: 'Autoplay',     href: '/docs/plugins/autoplay' },
+      { label: 'A11y',         href: '/docs/plugins/a11y' },
+      { label: 'Mouse Wheel',  href: '/docs/plugins/mouseWheel' },
+      { label: 'Keyboard',     href: '/docs/plugins/keyboard' },
     ],
   },
 ]

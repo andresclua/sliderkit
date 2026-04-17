@@ -1,0 +1,58 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="mouseWheel plugin">
+  <h1>mouseWheel plugin</h1>
+  <p class="lead">Navigate slides by scrolling the mouse wheel or trackpad over the slider. A cooldown prevents skipping slides mid-transition.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} mouseWheel {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} mouseWheel {"}"} from '@andresclua/sliderkit-plugins'
+
+new Slider('#el', {"{"}
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [mouseWheel()],
+{"}"})</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>threshold</code></td>
+        <td><code>number</code></td>
+        <td><code>120</code></td>
+        <td>Accumulated <code>deltaY</code> (in pixels) required to trigger a slide change. Increase for a harder scroll, decrease for a lighter touch.</td>
+      </tr>
+      <tr>
+        <td><code>invert</code></td>
+        <td><code>boolean</code></td>
+        <td><code>false</code></td>
+        <td>Reverse scroll direction (scroll down → go backward).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Cooldown behaviour</h2>
+  <p>The plugin accumulates <code>deltaY</code> across consecutive wheel events. Once the total crosses <code>threshold</code>, a slide change fires and a cooldown locks further input for <code>speed + 200 ms</code>. This prevents trackpad momentum from jumping multiple slides. The accumulator resets automatically if the user stops scrolling for 80 ms.</p>
+
+  <h2>Full example</h2>
+  <pre><code>new Slider('#el', {"{"}
+  items: 1,
+  loop: true,
+  speed: 400,
+  plugins: [
+    mouseWheel({"{"} threshold: 200, invert: false {"}"}),
+  ],
+{"}"})</code></pre>
+
+  <p>The plugin calls <code>event.preventDefault()</code> on every wheel event, preventing the page from scrolling at the same time. The listener is attached with <code>passive: false</code> to allow this.</p>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/mouse-wheel">See the mouseWheel demo →</a></p>
+</DocsLayout>
