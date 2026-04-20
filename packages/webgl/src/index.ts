@@ -1,24 +1,3 @@
-// Factory function
-export { webglRenderer } from './webglRenderer'
-
-// Optional helper
-export { preloadImages } from './preloadImages'
-export type { WebGLRendererOptions } from './types'
-
-// Effects
-export { BaseEffect } from './effects/BaseEffect'
-export { DisplacementEffect, displacementEffect } from './effects/displacementEffect'
-export { RGBShiftEffect, rgbShiftEffect } from './effects/rgbShiftEffect'
-export { PixelDissolveEffect, pixelDissolveEffect } from './effects/pixelDissolveEffect'
-export { ParallaxDepthEffect, parallaxDepthEffect } from './effects/parallaxDepthEffect'
-
-// Types
-export type {
-  WebGLEffect,
-  WebGLRendererContext,
-  WebGLMode,
-  DisplacementEffectOptions,
-  RGBShiftEffectOptions,
-  PixelDissolveEffectOptions,
-  ParallaxDepthEffectOptions,
-} from './types'
+export { webgl }        from './webgl'
+export { preloadWebGL } from './preloadWebGL'
+export type { WebGLOptions, WebGLAssets, PreloadConfig, BuiltinEffect } from './types'

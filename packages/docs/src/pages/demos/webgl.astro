@@ -1,0 +1,485 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+
+const SLIDES_HTML = `<div class="wgl-slide" data-slide-index="0"></div>
+<div class="wgl-slide" data-slide-index="1"></div>
+<div class="wgl-slide" data-slide-index="2"></div>
+<div class="wgl-slide" data-slide-index="3"></div>
+<div class="wgl-slide" data-slide-index="4"></div>`
+
+const CSS_DISPLAY = `.wgl-slide { height: 420px; background: #111; }`
+
+const JS_DISPLAY_BASE = `import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { webgl, preloadWebGL } from '@andresclua/sliderkit-webgl'
+
+const assets = await preloadWebGL({
+  slides:       [1,2,3,4,5].map(i => \`/webgl/slide-\${i}.jpg\`),
+  displacement: '/webgl/displacement.png',
+})`
+
+const JS_DISP = JS_DISPLAY_BASE + `
+
+new Slider('#my-slider', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'displacement', assets })],
+})`
+
+const JS_RGB = JS_DISPLAY_BASE + `
+
+new Slider('#my-slider', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'rgb-shift', assets, intensity: 0.022 })],
+})`
+
+const JS_RADIAL = JS_DISPLAY_BASE + `
+
+new Slider('#my-slider', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'radial', assets })],
+})`
+
+const FRAG_WAVE = `precision mediump float;
+varying vec2 vUv;
+uniform sampler2D u_from, u_to;
+uniform float u_progress, u_ar;
+vec2 cover(vec2 uv) {
+  float a = u_ar / 1.6;
+  vec2 r = vec2(min(a, 1.0), min(1.0 / a, 1.0));
+  return uv * r + (1.0 - r) * 0.5;
+}
+void main() {
+  float p = 1.04 - u_progress * 1.08;
+  float envelope = sin(u_progress * 3.14159);
+  float wave = p + sin(vUv.y * 18.0 + u_progress * 6.283) * 0.07 * envelope;
+  float t = smoothstep(wave - 0.04, wave + 0.04, vUv.x);
+  gl_FragColor = mix(texture2D(u_from, cover(vUv)), texture2D(u_to, cover(vUv)), t);
+}`
+
+const JS_WAVE = `import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { webgl, preloadWebGL } from '@andresclua/sliderkit-webgl'
+
+const assets = await preloadWebGL({
+  slides: [1,2,3,4,5].map(i => \`/webgl/slide-\${i}.jpg\`),
+})
+
+const FRAG_WAVE = \`precision mediump float;
+varying vec2 vUv;
+uniform sampler2D u_from, u_to;
+uniform float u_progress, u_ar;
+vec2 cover(vec2 uv) {
+  float a = u_ar / 1.6;
+  vec2 r = vec2(min(a, 1.0), min(1.0 / a, 1.0));
+  return uv * r + (1.0 - r) * 0.5;
+}
+void main() {
+  float p = 1.04 - u_progress * 1.08;
+  float envelope = sin(u_progress * 3.14159);
+  float wave = p + sin(vUv.y * 18.0 + u_progress * 6.283) * 0.07 * envelope;
+  float t = smoothstep(wave - 0.04, wave + 0.04, vUv.x);
+  gl_FragColor = mix(texture2D(u_from, cover(vUv)), texture2D(u_to, cover(vUv)), t);
+}\`
+
+new Slider('#my-slider', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'custom', assets, frag: FRAG_WAVE })],
+})`
+
+const CSS_CAPTION = `.wgl-slide { height: 420px; background: #111; }
+.wgl-hero { position: relative; }
+.wgl-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  z-index: 10; pointer-events: none;
+  padding: 1.75rem 2rem;
+  background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 100%);
+  color: #fff;
+}
+.wgl-caption__label {
+  font-size: .7rem; text-transform: uppercase;
+  letter-spacing: .12em; opacity: .65; margin: 0 0 .3rem;
+}
+.wgl-caption__title { font-size: 1.6rem; font-weight: 700; margin: 0; }`
+
+const HTML_CAPTION = `<div class="wgl-hero">
+  <div id="my-slider">
+    <div class="wgl-slide" data-slide-index="0"></div>
+    <div class="wgl-slide" data-slide-index="1"></div>
+    <div class="wgl-slide" data-slide-index="2"></div>
+    <div class="wgl-slide" data-slide-index="3"></div>
+    <div class="wgl-slide" data-slide-index="4"></div>
+  </div>
+  <div class="wgl-caption">
+    <p class="wgl-caption__label">01 / 05</p>
+    <h2 class="wgl-caption__title">Slide title</h2>
+  </div>
+</div>`
+
+const JS_CAPTION = `import gsap from 'gsap'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { webgl, preloadWebGL } from '@andresclua/sliderkit-webgl'
+
+const assets = await preloadWebGL({
+  slides:       [1,2,3,4,5].map(i => \`/webgl/slide-\${i}.jpg\`),
+  displacement: '/webgl/displacement.png',
+})
+
+const SLIDES = [
+  { label: '01 / 05', title: 'Iceland Church' },
+  { label: '02 / 05', title: 'Mountain Road' },
+  { label: '03 / 05', title: 'Forest Path' },
+  { label: '04 / 05', title: 'Car Interior' },
+  { label: '05 / 05', title: 'Aerial View' },
+]
+
+const label = document.querySelector('.wgl-caption__label')
+const title = document.querySelector('.wgl-caption__title')
+
+const slider = new Slider('#my-slider', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'displacement', assets })],
+})
+
+slider.on('indexChanged', ({ displayIndex }) => {
+  const s = SLIDES[(displayIndex - 1) % SLIDES.length]
+  gsap.timeline()
+    .to([label, title], { y: -10, opacity: 0, duration: 0.18, stagger: 0.04 })
+    .call(() => { label.textContent = s.label; title.textContent = s.title })
+    .fromTo([label, title],
+      { y: 14, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.32, stagger: 0.07, ease: 'power2.out' })
+})`
+
+const CSS_HTML = `.wgl-slide {
+  height: 420px; background: #111;
+  position: relative; overflow: hidden;
+}
+.wgl-slide__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+/* sr-only: text lives in DOM for a11y, canvas covers it visually */
+.wgl-slide__label,
+.wgl-slide__title {
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+.wgl-hero { position: relative; }
+.wgl-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  z-index: 10; pointer-events: none;
+  padding: 1.75rem 2rem;
+  background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 100%);
+  color: #fff;
+}
+.wgl-caption__label {
+  font-size: .7rem; text-transform: uppercase;
+  letter-spacing: .12em; opacity: .65; margin: 0 0 .3rem;
+}
+.wgl-caption__title { font-size: 1.6rem; font-weight: 700; margin: 0; }`
+
+const HTML_HTML = `<div class="wgl-hero">
+  <div id="my-slider">
+    <div class="wgl-slide" data-slide-index="0" data-image="/webgl/slide-1.jpg">
+      <img src="/webgl/slide-1.jpg" alt="Iceland church with mountains" class="wgl-slide__img" />
+      <span class="wgl-slide__label">01 / 05</span>
+      <span class="wgl-slide__title">Iceland Church</span>
+    </div>
+    <div class="wgl-slide" data-slide-index="1" data-image="/webgl/slide-2.jpg">
+      <img src="/webgl/slide-2.jpg" alt="Mountain road" class="wgl-slide__img" />
+      <span class="wgl-slide__label">02 / 05</span>
+      <span class="wgl-slide__title">Mountain Road</span>
+    </div>
+    <!-- … repeat for remaining slides … -->
+  </div>
+  <div class="wgl-caption" aria-live="polite">
+    <p class="wgl-caption__label">01 / 05</p>
+    <h2 class="wgl-caption__title">Iceland Church</h2>
+  </div>
+</div>`
+
+const JS_HTML = `import gsap from 'gsap'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { webgl, preloadWebGL } from '@andresclua/sliderkit-webgl'
+
+// images and text come from the DOM — no hardcoded arrays
+const slideEls = [...document.querySelectorAll('#my-slider .wgl-slide')]
+
+const assets = await preloadWebGL({
+  slides:       slideEls.map(el => el.dataset.image),
+  displacement: '/webgl/displacement.png',
+})
+
+const wrap  = document.querySelector('#my-slider').closest('.wgl-hero')
+const label = wrap.querySelector('.wgl-caption__label')
+const title = wrap.querySelector('.wgl-caption__title')
+
+const slider = new Slider('#my-slider', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'radial', assets })],
+})
+
+let prev = 1
+slider.on('indexChanged', ({ displayIndex }) => {
+  const el    = slideEls[(displayIndex - 1) % slideEls.length]
+  const total = slideEls.length
+  const diff  = displayIndex - prev
+  const dir   = Math.abs(diff) > total / 2 ? -Math.sign(diff) : Math.sign(diff)
+  prev = displayIndex
+
+  gsap.timeline()
+    .to(label, { x: -20 * dir, opacity: 0, duration: 0.15 })
+    .to(title, { y: -16 * dir, opacity: 0, duration: 0.2 }, '<0.04')
+    .call(() => {
+      label.textContent = el.querySelector('.wgl-slide__label').textContent
+      title.textContent = el.querySelector('.wgl-slide__title').textContent
+    })
+    .fromTo(label, { x: 20 * dir, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: 'power2.out' })
+    .fromTo(title, { y: 18 * dir, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, ease: 'expo.out' }, '<0.06')
+})`
+---
+<DemoLayout title="WebGL Effects">
+
+  <DemoViewer
+    title="Displacement"
+    description="A displacement map warps both frames at the peak of the transition, producing a fluid liquid-ink wipe."
+    html={SLIDES_HTML}
+    css={CSS_DISPLAY}
+    js={JS_DISP}
+  >
+    <div id="demo-wgl-disp">
+      <div class="wgl-slide" data-slide-index="0"></div>
+      <div class="wgl-slide" data-slide-index="1"></div>
+      <div class="wgl-slide" data-slide-index="2"></div>
+      <div class="wgl-slide" data-slide-index="3"></div>
+      <div class="wgl-slide" data-slide-index="4"></div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="RGB Shift"
+    description="Chromatic aberration splits the R and B channels horizontally at mid-transition, then snaps back clean."
+    html={SLIDES_HTML}
+    css={CSS_DISPLAY}
+    js={JS_RGB}
+  >
+    <div id="demo-wgl-rgb">
+      <div class="wgl-slide" data-slide-index="0"></div>
+      <div class="wgl-slide" data-slide-index="1"></div>
+      <div class="wgl-slide" data-slide-index="2"></div>
+      <div class="wgl-slide" data-slide-index="3"></div>
+      <div class="wgl-slide" data-slide-index="4"></div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Radial Reveal"
+    description="Custom shader: the incoming image grows from the centre outward with a soft edge, like a spotlight opening."
+    html={SLIDES_HTML}
+    css={CSS_DISPLAY}
+    js={JS_RADIAL}
+  >
+    <div id="demo-wgl-radial">
+      <div class="wgl-slide" data-slide-index="0"></div>
+      <div class="wgl-slide" data-slide-index="1"></div>
+      <div class="wgl-slide" data-slide-index="2"></div>
+      <div class="wgl-slide" data-slide-index="3"></div>
+      <div class="wgl-slide" data-slide-index="4"></div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Wave Wipe (custom shader)"
+    description="A sine-wave curtain sweeps left-to-right; the wave amplitude peaks at mid-transition and dies away cleanly. Written as a custom GLSL fragment shader passed directly to the plugin."
+    html={SLIDES_HTML}
+    css={CSS_DISPLAY}
+    js={JS_WAVE}
+  >
+    <div id="demo-wgl-wave">
+      <div class="wgl-slide" data-slide-index="0"></div>
+      <div class="wgl-slide" data-slide-index="1"></div>
+      <div class="wgl-slide" data-slide-index="2"></div>
+      <div class="wgl-slide" data-slide-index="3"></div>
+      <div class="wgl-slide" data-slide-index="4"></div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Text Overlay + GSAP"
+    description="HTML lives above the WebGL canvas (z-index). On each slide change, GSAP animates the caption out, swaps the text, then animates it back in."
+    html={HTML_CAPTION}
+    css={CSS_CAPTION}
+    js={JS_CAPTION}
+  >
+    <div class="wgl-hero">
+      <div id="demo-wgl-caption">
+        <div class="wgl-slide" data-slide-index="0"></div>
+        <div class="wgl-slide" data-slide-index="1"></div>
+        <div class="wgl-slide" data-slide-index="2"></div>
+        <div class="wgl-slide" data-slide-index="3"></div>
+        <div class="wgl-slide" data-slide-index="4"></div>
+      </div>
+      <div class="wgl-caption">
+        <p class="wgl-caption__label">01 / 05</p>
+        <h2 class="wgl-caption__title">Iceland Church</h2>
+      </div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="HTML-driven slides (accessible)"
+    description="Images and text live in the HTML: data-image feeds the WebGL preloader, img provides the a11y fallback, and the text spans are sr-only so screen readers read them while GSAP drives the visual overlay."
+    html={HTML_HTML}
+    css={CSS_HTML}
+    js={JS_HTML}
+  >
+    <div class="wgl-hero">
+      <div id="demo-wgl-html">
+        <div class="wgl-slide" data-slide-index="0" data-image="/webgl/slide-1.jpg">
+          <img src="/webgl/slide-1.jpg" alt="Iceland church with mountains in the background" class="wgl-slide__img" />
+          <span class="wgl-slide__label">01 / 05</span>
+          <span class="wgl-slide__title">Iceland Church</span>
+        </div>
+        <div class="wgl-slide" data-slide-index="1" data-image="/webgl/slide-2.jpg">
+          <img src="/webgl/slide-2.jpg" alt="Mountain road through a valley" class="wgl-slide__img" />
+          <span class="wgl-slide__label">02 / 05</span>
+          <span class="wgl-slide__title">Mountain Road</span>
+        </div>
+        <div class="wgl-slide" data-slide-index="2" data-image="/webgl/slide-3.jpg">
+          <img src="/webgl/slide-3.jpg" alt="Forest path in autumn" class="wgl-slide__img" />
+          <span class="wgl-slide__label">03 / 05</span>
+          <span class="wgl-slide__title">Forest Path</span>
+        </div>
+        <div class="wgl-slide" data-slide-index="3" data-image="/webgl/slide-4.jpg">
+          <img src="/webgl/slide-4.jpg" alt="Car interior dashboard view" class="wgl-slide__img" />
+          <span class="wgl-slide__label">04 / 05</span>
+          <span class="wgl-slide__title">Car Interior</span>
+        </div>
+        <div class="wgl-slide" data-slide-index="4" data-image="/webgl/slide-5.jpg">
+          <img src="/webgl/slide-5.jpg" alt="Aerial landscape view" class="wgl-slide__img" />
+          <span class="wgl-slide__label">05 / 05</span>
+          <span class="wgl-slide__title">Aerial View</span>
+        </div>
+      </div>
+      <div class="wgl-caption" aria-live="polite">
+        <p class="wgl-caption__label">01 / 05</p>
+        <h2 class="wgl-caption__title">Iceland Church</h2>
+      </div>
+    </div>
+  </DemoViewer>
+
+</DemoLayout>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { webgl, preloadWebGL } from '@andresclua/sliderkit-webgl'
+
+const assets = await preloadWebGL({
+  slides:       [1,2,3,4,5].map(i => `/webgl/slide-${i}.jpg`),
+  displacement: '/webgl/displacement.png',
+})
+
+const makeSlider = (id: string, effect: Parameters<typeof webgl>[0]['effect'], opts: Partial<Parameters<typeof webgl>[0]> = {}) =>
+  new Slider(`#${id}`, {
+    items: 1,
+    loop:  true,
+    speed: 0,
+    plugins: [arrows(), webgl({ effect, assets, ...opts })],
+  })
+
+makeSlider('demo-wgl-disp',   'displacement')
+makeSlider('demo-wgl-rgb',    'rgb-shift',    { intensity: 0.022 })
+makeSlider('demo-wgl-radial', 'radial')
+
+const FRAG_WAVE = `precision mediump float;
+varying vec2 vUv;
+uniform sampler2D u_from, u_to;
+uniform float u_progress, u_ar;
+vec2 cover(vec2 uv) {
+  float a = u_ar / 1.6;
+  vec2 r = vec2(min(a, 1.0), min(1.0 / a, 1.0));
+  return uv * r + (1.0 - r) * 0.5;
+}
+void main() {
+  float p = 1.04 - u_progress * 1.08;
+  float envelope = sin(u_progress * 3.14159);
+  float wave = p + sin(vUv.y * 18.0 + u_progress * 6.283) * 0.07 * envelope;
+  float t = smoothstep(wave - 0.04, wave + 0.04, vUv.x);
+  gl_FragColor = mix(texture2D(u_from, cover(vUv)), texture2D(u_to, cover(vUv)), t);
+}`
+
+new Slider('#demo-wgl-wave', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'custom', assets, frag: FRAG_WAVE })],
+})
+
+// ── Text Overlay + GSAP ──────────────────────────────────────────────────
+import gsap from 'gsap'
+
+const SLIDES = [
+  { label: '01 / 05', title: 'Iceland Church' },
+  { label: '02 / 05', title: 'Mountain Road' },
+  { label: '03 / 05', title: 'Forest Path' },
+  { label: '04 / 05', title: 'Car Interior' },
+  { label: '05 / 05', title: 'Aerial View' },
+]
+
+const captionWrap  = document.querySelector('#demo-wgl-caption')!.closest('.wgl-hero')!
+const captionLabel = captionWrap.querySelector<HTMLElement>('.wgl-caption__label')!
+const captionTitle = captionWrap.querySelector<HTMLElement>('.wgl-caption__title')!
+
+const captionSlider = new Slider('#demo-wgl-caption', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'displacement', assets })],
+})
+
+captionSlider.on('indexChanged', ({ displayIndex }: { displayIndex: number }) => {
+  const s = SLIDES[(displayIndex - 1) % SLIDES.length]
+  gsap.timeline()
+    .to([captionLabel, captionTitle], { y: -10, opacity: 0, duration: 0.18, stagger: 0.04 })
+    .call(() => { captionLabel.textContent = s.label; captionTitle.textContent = s.title })
+    .fromTo([captionLabel, captionTitle],
+      { y: 14, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.32, stagger: 0.07, ease: 'power2.out' })
+})
+
+// ── HTML-driven accessible slides ────────────────────────────────────────
+const htmlSlideEls = [...document.querySelectorAll<HTMLElement>('#demo-wgl-html .wgl-slide')]
+
+const htmlAssets = await preloadWebGL({
+  slides:       htmlSlideEls.map(el => el.getAttribute('data-image')!),
+  displacement: '/webgl/displacement.png',
+})
+
+const htmlWrap  = document.querySelector('#demo-wgl-html')!.closest('.wgl-hero')!
+const htmlLabel = htmlWrap.querySelector<HTMLElement>('.wgl-caption__label')!
+const htmlTitle = htmlWrap.querySelector<HTMLElement>('.wgl-caption__title')!
+
+const htmlSlider = new Slider('#demo-wgl-html', {
+  items: 1, loop: true, speed: 0,
+  plugins: [arrows(), webgl({ effect: 'radial', assets: htmlAssets })],
+})
+
+let htmlPrev = 1
+htmlSlider.on('indexChanged', ({ displayIndex }: { displayIndex: number }) => {
+  const el        = htmlSlideEls[(displayIndex - 1) % htmlSlideEls.length]
+  const nextLabel = el.querySelector('.wgl-slide__label')!.textContent!
+  const nextTitle = el.querySelector('.wgl-slide__title')!.textContent!
+  const total     = htmlSlideEls.length
+  const diff      = displayIndex - htmlPrev
+  const dir       = Math.abs(diff) > total / 2 ? -Math.sign(diff) : Math.sign(diff)
+  htmlPrev = displayIndex
+
+  gsap.timeline()
+    .to(htmlLabel, { x: -20 * dir, opacity: 0, duration: 0.15 })
+    .to(htmlTitle, { y: -16 * dir, opacity: 0, duration: 0.2 }, '<0.04')
+    .call(() => { htmlLabel.textContent = nextLabel; htmlTitle.textContent = nextTitle })
+    .fromTo(htmlLabel, { x: 20 * dir, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: 'power2.out' })
+    .fromTo(htmlTitle, { y: 18 * dir, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, ease: 'expo.out' }, '<0.06')
+})
+</script>

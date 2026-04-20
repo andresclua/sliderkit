@@ -5,99 +5,36 @@ import DemoViewer from '../../components/DemoViewer.astro'
 <DemoLayout title="Mouse Drag">
   <DemoViewer
     title="Mouse Drag"
-    description="Click and drag the slider with the mouse. grabCursor shows a hand cursor on hover."
-    html={`<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item">1</div>
-    <div class="c--slider-a__item">2</div>
-    <div class="c--slider-a__item">3</div>
-    <div class="c--slider-a__item">4</div>
-    <div class="c--slider-a__item">5</div>
-  </div>
-</div>
-<div id="my-pagination" class="c--slider-a__pagination"></div>`}
-    css={`.c--slider-a {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-.c--slider-a__wrapper {
-  display: flex;
-  will-change: transform;
-}
-.c--slider-a__item {
-  flex-shrink: 0;
-  width: 100%;
-  height: 260px;
-}
-
-/* grabCursor: true adds this automatically */
-.c--slider-a--grab-cursor { cursor: grab; }
-.c--slider-a--grab-cursor:active { cursor: grabbing; }
-
-/* Pagination dots */
-.c--slider-a__pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px 0;
-}
-.c--slider-a__pagination-bullet {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #d1d5db;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-}
-.c--slider-a__pagination-bullet--active {
-  background: #6C2BD9;
-  transform: scale(1.3);
-}
-
-/* Auto-created arrows */
-.c--slider-a__arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-}
-.c--slider-a__arrow--prev { left: 12px; }
-.c--slider-a__arrow--next { right: 12px; }
-.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    description="mouseDrag:true — click and drag the slider with the mouse just like a touch swipe."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
-  mouseDrag: true,
-  grabCursor: true,
+  items: 1,
   loop: true,
-  speed: 400,
+  mouseDrag: true,
+  speed: 300,
   plugins: [
     arrows(),
-    pagination({ el: '#my-pagination', type: 'dots', clickable: true }),
+    pagination({ type: 'dots', clickable: true }),
   ],
 })`}
   >
-    <div class="c--slider-a" id="demo-drag">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
-      </div>
+    <div id="demo-drag">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
     </div>
-    <div id="demo-drag-pag" class="c--slider-a__pagination"></div>
   </DemoViewer>
 </DemoLayout>
 
@@ -106,13 +43,13 @@ import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-drag', {
-  mouseDrag: true,
-  grabCursor: true,
+  items: 1,
   loop: true,
-  speed: 400,
+  mouseDrag: true,
+  speed: 300,
   plugins: [
     arrows(),
-    pagination({ el: '#demo-drag-pag', type: 'dots', clickable: true }),
+    pagination({ type: 'dots', clickable: true }),
   ],
 })
 </script>

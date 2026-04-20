@@ -1,0 +1,410 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Thumbs">
+
+  <DemoViewer
+    title="Thumbnail navigation"
+    description="Click any thumbnail to jump to that slide. The active thumbnail gets highlighted automatically."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>
+
+<div id="my-thumbs">
+  <div class="thumb s-purple">1</div>
+  <div class="thumb s-blue">2</div>
+  <div class="thumb s-green">3</div>
+  <div class="thumb s-amber">4</div>
+  <div class="thumb s-red">5</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; border-radius:8px; }
+#my-thumbs { display:flex; gap:8px; margin-top:12px; }
+.thumb { flex:1; height:56px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; opacity:0.4; transition:opacity .2s; }
+.sliderkit__thumb--active { opacity:1; outline:3px solid #6C2BD9; outline-offset:2px; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { thumbs } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [thumbs({ container: '#my-thumbs' })],
+})`}
+  >
+    <div id="demo-thumbs">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+    <div id="demo-thumbs-strip" style="display:flex;gap:8px;margin-top:12px;">
+      <div class="demo-thumb s-purple">1</div>
+      <div class="demo-thumb s-blue">2</div>
+      <div class="demo-thumb s-green">3</div>
+      <div class="demo-thumb s-amber">4</div>
+      <div class="demo-thumb s-red">5</div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Many thumbnails with arrow navigation"
+    description="When you have more thumbnails than fit in view, add prev/next arrows to scroll the strip. The strip auto-scrolls to keep the active thumbnail visible."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+  <div class="demo-slide s-pink">6</div>
+  <div class="demo-slide s-teal">7</div>
+  <div class="demo-slide s-indigo">8</div>
+  <div class="demo-slide s-purple">9</div>
+  <div class="demo-slide s-blue">10</div>
+</div>
+
+<div class="thumb-nav">
+  <button class="thumb-arrow thumb-arrow--prev">&#8592;</button>
+  <div class="thumb-viewport">
+    <div id="my-thumbs">
+      <div class="thumb s-purple">1</div>
+      <div class="thumb s-blue">2</div>
+      <div class="thumb s-green">3</div>
+      <div class="thumb s-amber">4</div>
+      <div class="thumb s-red">5</div>
+      <div class="thumb s-pink">6</div>
+      <div class="thumb s-teal">7</div>
+      <div class="thumb s-indigo">8</div>
+      <div class="thumb s-purple">9</div>
+      <div class="thumb s-blue">10</div>
+    </div>
+  </div>
+  <button class="thumb-arrow thumb-arrow--next">&#8594;</button>
+</div>`}
+    css={`.demo-slide { height:260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; border-radius:8px; }
+
+.thumb-nav { display:flex; align-items:center; gap:8px; margin-top:12px; }
+.thumb-viewport { flex:1; overflow:hidden; }
+#my-thumbs { display:flex; gap:8px; }
+
+.thumb { flex:0 0 72px; height:56px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; opacity:0.4; transition:opacity .2s; }
+.sliderkit__thumb--active { opacity:1; outline:3px solid #6C2BD9; outline-offset:2px; }
+
+.thumb-arrow { width:32px; height:32px; border-radius:50%; border:1px solid #e2e8f0; background:#fff; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.thumb-arrow:hover { background:#f3f4f6; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { thumbs } from '@andresclua/sliderkit-plugins'
+
+const slider = new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    thumbs({ container: '#my-thumbs' }),
+  ],
+})
+
+const viewport = document.querySelector('.thumb-viewport')
+const strip    = document.getElementById('my-thumbs')
+
+// arrow buttons scroll the strip
+document.querySelector('.thumb-arrow--prev').addEventListener('click', () => {
+  viewport.scrollBy({ left: -160, behavior: 'smooth' })
+})
+document.querySelector('.thumb-arrow--next').addEventListener('click', () => {
+  viewport.scrollBy({ left: 160, behavior: 'smooth' })
+})
+
+// auto-scroll to keep active thumb in view on slide change
+slider.on('indexChanged', () => {
+  const active = strip.children[slider.activeIndex]
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+})
+
+// drag-to-scroll on the thumbnail strip
+let isDragging = false, dragStartX = 0, dragScrollLeft = 0
+viewport.style.cursor = 'grab'
+viewport.addEventListener('mousedown', (e) => {
+  isDragging     = true
+  dragStartX     = e.pageX - viewport.offsetLeft
+  dragScrollLeft = viewport.scrollLeft
+  viewport.style.cursor = 'grabbing'
+})
+viewport.addEventListener('mouseleave', () => { isDragging = false; viewport.style.cursor = 'grab' })
+viewport.addEventListener('mouseup',    () => { isDragging = false; viewport.style.cursor = 'grab' })
+viewport.addEventListener('mousemove',  (e) => {
+  if (!isDragging) return
+  e.preventDefault()
+  viewport.scrollLeft = dragScrollLeft - (e.pageX - viewport.offsetLeft - dragStartX)
+})`}
+  >
+    <div id="demo-thumbs-many">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+      <div class="demo-slide s-pink">6</div>
+      <div class="demo-slide s-teal">7</div>
+      <div class="demo-slide s-indigo">8</div>
+      <div class="demo-slide s-purple">9</div>
+      <div class="demo-slide s-blue">10</div>
+    </div>
+    <div class="thumb-nav-demo" style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+      <button class="demo-thumb-prev" style="width:32px;height:32px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:1rem;flex-shrink:0;">←</button>
+      <div class="demo-thumb-viewport" style="flex:1;overflow:hidden;">
+        <div id="demo-thumbs-many-strip" style="display:flex;gap:8px;">
+          <div class="demo-thumb demo-thumb--fixed s-purple">1</div>
+          <div class="demo-thumb demo-thumb--fixed s-blue">2</div>
+          <div class="demo-thumb demo-thumb--fixed s-green">3</div>
+          <div class="demo-thumb demo-thumb--fixed s-amber">4</div>
+          <div class="demo-thumb demo-thumb--fixed s-red">5</div>
+          <div class="demo-thumb demo-thumb--fixed s-pink">6</div>
+          <div class="demo-thumb demo-thumb--fixed s-teal">7</div>
+          <div class="demo-thumb demo-thumb--fixed s-indigo">8</div>
+          <div class="demo-thumb demo-thumb--fixed s-purple">9</div>
+          <div class="demo-thumb demo-thumb--fixed s-blue">10</div>
+        </div>
+      </div>
+      <button class="demo-thumb-next" style="width:32px;height:32px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:1rem;flex-shrink:0;">→</button>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Arrows navigate the slider"
+    description="Same thumbnail strip, but now the prev/next arrows move the slider itself — the active thumbnail follows automatically."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+  <div class="demo-slide s-pink">6</div>
+  <div class="demo-slide s-teal">7</div>
+  <div class="demo-slide s-indigo">8</div>
+  <div class="demo-slide s-purple">9</div>
+  <div class="demo-slide s-blue">10</div>
+</div>
+
+<div class="thumb-nav">
+  <button class="thumb-arrow thumb-arrow--prev">&#8592;</button>
+  <div class="thumb-viewport">
+    <div id="my-thumbs">
+      <div class="thumb s-purple">1</div>
+      <div class="thumb s-blue">2</div>
+      <div class="thumb s-green">3</div>
+      <div class="thumb s-amber">4</div>
+      <div class="thumb s-red">5</div>
+      <div class="thumb s-pink">6</div>
+      <div class="thumb s-teal">7</div>
+      <div class="thumb s-indigo">8</div>
+      <div class="thumb s-purple">9</div>
+      <div class="thumb s-blue">10</div>
+    </div>
+  </div>
+  <button class="thumb-arrow thumb-arrow--next">&#8594;</button>
+</div>`}
+    css={`.demo-slide { height:260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; border-radius:8px; }
+
+.thumb-nav { display:flex; align-items:center; gap:8px; margin-top:12px; }
+.thumb-viewport { flex:1; overflow:hidden; }
+#my-thumbs { display:flex; gap:8px; }
+
+.thumb { flex:0 0 72px; height:56px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; opacity:0.4; transition:opacity .2s; cursor:pointer; }
+.sliderkit__thumb--active { opacity:1; outline:3px solid #6C2BD9; outline-offset:2px; }
+
+.thumb-arrow { width:32px; height:32px; border-radius:50%; border:1px solid #e2e8f0; background:#fff; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.thumb-arrow:hover { background:#f3f4f6; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { thumbs } from '@andresclua/sliderkit-plugins'
+
+const slider = new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [thumbs({ container: '#my-thumbs' })],
+})
+
+const viewport = document.querySelector('.thumb-viewport')
+const strip    = document.getElementById('my-thumbs')
+
+// arrows navigate the slider, not the strip
+document.querySelector('.thumb-arrow--prev').addEventListener('click', () => slider.prev())
+document.querySelector('.thumb-arrow--next').addEventListener('click', () => slider.next())
+
+// auto-scroll strip to keep active thumb in view
+slider.on('indexChanged', () => {
+  const active = strip.children[slider.activeIndex]
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+})
+
+// drag-to-scroll on the thumbnail strip
+let isDragging = false, dragStartX = 0, dragScrollLeft = 0
+viewport.style.cursor = 'grab'
+viewport.addEventListener('mousedown', (e) => {
+  isDragging     = true
+  dragStartX     = e.pageX - viewport.offsetLeft
+  dragScrollLeft = viewport.scrollLeft
+  viewport.style.cursor = 'grabbing'
+})
+viewport.addEventListener('mouseleave', () => { isDragging = false; viewport.style.cursor = 'grab' })
+viewport.addEventListener('mouseup',    () => { isDragging = false; viewport.style.cursor = 'grab' })
+viewport.addEventListener('mousemove',  (e) => {
+  if (!isDragging) return
+  e.preventDefault()
+  viewport.scrollLeft = dragScrollLeft - (e.pageX - viewport.offsetLeft - dragStartX)
+})`}
+  >
+    <div id="demo-thumbs-nav">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+      <div class="demo-slide s-pink">6</div>
+      <div class="demo-slide s-teal">7</div>
+      <div class="demo-slide s-indigo">8</div>
+      <div class="demo-slide s-purple">9</div>
+      <div class="demo-slide s-blue">10</div>
+    </div>
+    <div class="thumb-nav-demo" style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+      <button class="demo-thumb-nav-prev" style="width:32px;height:32px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:1rem;flex-shrink:0;">←</button>
+      <div class="demo-thumb-nav-viewport" style="flex:1;overflow:hidden;">
+        <div id="demo-thumbs-nav-strip" style="display:flex;gap:8px;">
+          <div class="demo-thumb demo-thumb--fixed s-purple">1</div>
+          <div class="demo-thumb demo-thumb--fixed s-blue">2</div>
+          <div class="demo-thumb demo-thumb--fixed s-green">3</div>
+          <div class="demo-thumb demo-thumb--fixed s-amber">4</div>
+          <div class="demo-thumb demo-thumb--fixed s-red">5</div>
+          <div class="demo-thumb demo-thumb--fixed s-pink">6</div>
+          <div class="demo-thumb demo-thumb--fixed s-teal">7</div>
+          <div class="demo-thumb demo-thumb--fixed s-indigo">8</div>
+          <div class="demo-thumb demo-thumb--fixed s-purple">9</div>
+          <div class="demo-thumb demo-thumb--fixed s-blue">10</div>
+        </div>
+      </div>
+      <button class="demo-thumb-nav-next" style="width:32px;height:32px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:1rem;flex-shrink:0;">→</button>
+    </div>
+  </DemoViewer>
+
+</DemoLayout>
+
+<style>
+.demo-thumb {
+  flex: 1;
+  height: 56px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+:global(.sliderkit__thumb--active).demo-thumb {
+  opacity: 1;
+  outline: 3px solid #6C2BD9;
+  outline-offset: 2px;
+}
+.demo-thumb--fixed {
+  flex: 0 0 72px;
+}
+</style>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { thumbs } from '@andresclua/sliderkit-plugins'
+
+// — demo 1: basic thumbs —
+new Slider('#demo-thumbs', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [thumbs({ container: '#demo-thumbs-strip' })],
+})
+
+// — demo 2: many thumbs with scrollable strip —
+const slider2 = new Slider('#demo-thumbs-many', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    thumbs({ container: '#demo-thumbs-many-strip' }),
+  ],
+})
+
+const viewport = document.querySelector<HTMLElement>('.demo-thumb-viewport')!
+const strip    = document.getElementById('demo-thumbs-many-strip')!
+
+document.querySelector('.demo-thumb-prev')!.addEventListener('click', () => {
+  viewport.scrollBy({ left: -160, behavior: 'smooth' })
+})
+document.querySelector('.demo-thumb-next')!.addEventListener('click', () => {
+  viewport.scrollBy({ left: 160, behavior: 'smooth' })
+})
+
+slider2.on('indexChanged', () => {
+  const active = strip.children[slider2.activeIndex] as HTMLElement
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+})
+
+// drag-to-scroll on the thumbnail strip
+let isDragging = false, dragStartX = 0, dragScrollLeft = 0
+viewport.style.cursor = 'grab'
+viewport.addEventListener('mousedown', (e) => {
+  isDragging    = true
+  dragStartX    = e.pageX - viewport.offsetLeft
+  dragScrollLeft = viewport.scrollLeft
+  viewport.style.cursor = 'grabbing'
+})
+viewport.addEventListener('mouseleave', () => { isDragging = false; viewport.style.cursor = 'grab' })
+viewport.addEventListener('mouseup',    () => { isDragging = false; viewport.style.cursor = 'grab' })
+viewport.addEventListener('mousemove',  (e) => {
+  if (!isDragging) return
+  e.preventDefault()
+  const x    = e.pageX - viewport.offsetLeft
+  const walk = x - dragStartX
+  viewport.scrollLeft = dragScrollLeft - walk
+})
+
+// — demo 3: arrows navigate the slider —
+const slider3 = new Slider('#demo-thumbs-nav', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [thumbs({ container: '#demo-thumbs-nav-strip' })],
+})
+
+const navViewport = document.querySelector<HTMLElement>('.demo-thumb-nav-viewport')!
+const navStrip    = document.getElementById('demo-thumbs-nav-strip')!
+
+document.querySelector('.demo-thumb-nav-prev')!.addEventListener('click', () => slider3.prev())
+document.querySelector('.demo-thumb-nav-next')!.addEventListener('click', () => slider3.next())
+
+slider3.on('indexChanged', () => {
+  const active = navStrip.children[slider3.activeIndex] as HTMLElement
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+})
+
+let isDragging3 = false, dragStartX3 = 0, dragScrollLeft3 = 0
+navViewport.style.cursor = 'grab'
+navViewport.addEventListener('mousedown', (e) => {
+  isDragging3    = true
+  dragStartX3    = e.pageX - navViewport.offsetLeft
+  dragScrollLeft3 = navViewport.scrollLeft
+  navViewport.style.cursor = 'grabbing'
+})
+navViewport.addEventListener('mouseleave', () => { isDragging3 = false; navViewport.style.cursor = 'grab' })
+navViewport.addEventListener('mouseup',    () => { isDragging3 = false; navViewport.style.cursor = 'grab' })
+navViewport.addEventListener('mousemove',  (e) => {
+  if (!isDragging3) return
+  e.preventDefault()
+  navViewport.scrollLeft = dragScrollLeft3 - (e.pageX - navViewport.offsetLeft - dragStartX3)
+})
+</script>

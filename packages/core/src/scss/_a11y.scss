@@ -1,5 +1,5 @@
 // Visually hidden utility used by ARIA live region
-.c--slider-a__sr-only {
+.sliderkit__sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -10,7 +10,7 @@
 }
 
 // Focus styles for keyboard navigation
-.c--slider-a:focus-visible {
+.sliderkit:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 4px;
 }

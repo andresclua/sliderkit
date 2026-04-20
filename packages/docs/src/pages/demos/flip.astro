@@ -1,0 +1,159 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Flip Effect">
+  <DemoViewer
+    title="Flip effect"
+    description="Slides flip on the Y axis like turning a card. Direction-aware — flips forward or backward depending on navigation."
+    html={`<div id="my-slider">
+  <div class="flip-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+    <span class="flip-tag">01 / Setup</span>
+    <h2 class="flip-title">One import,<br>one line of code.</h2>
+    <p class="flip-sub">No config files. No wrappers. Drop it in and go.</p>
+  </div>
+  <div class="flip-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+    <span class="flip-tag">02 / Plugins</span>
+    <h2 class="flip-title">Only load<br>what you need.</h2>
+    <p class="flip-sub">Tree-shakeable plugin system. Zero dead code in your bundle.</p>
+  </div>
+  <div class="flip-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+    <span class="flip-tag">03 / TypeScript</span>
+    <h2 class="flip-title">Full type safety<br>out of the box.</h2>
+    <p class="flip-sub">Written in TypeScript. Autocomplete for every option and event.</p>
+  </div>
+  <div class="flip-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+    <span class="flip-tag">04 / Performance</span>
+    <h2 class="flip-title">Under 10 kb<br>gzipped.</h2>
+    <p class="flip-sub">Tiny core, no runtime dependencies, hardware-accelerated CSS.</p>
+  </div>
+  <div class="flip-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">
+    <span class="flip-tag">05 / A11y</span>
+    <h2 class="flip-title">Accessible<br>by default.</h2>
+    <p class="flip-sub">WAI-ARIA carousel pattern built in. Keyboard navigation included.</p>
+  </div>
+</div>`}
+    css={`.flip-slide {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 56px;
+  border-radius: 12px;
+  color: #fff;
+}
+.flip-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+.flip-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+.flip-sub {
+  font-size: 1rem;
+  opacity: 0.8;
+  max-width: 380px;
+  margin: 0;
+  line-height: 1.6;
+}`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { flipEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    flipEffect({ duration: 500, easing: 'ease-in-out' }),
+  ],
+})`}
+  >
+    <div id="demo-flip">
+      <div class="flip-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+        <span class="flip-tag">01 / Setup</span>
+        <h2 class="flip-title">One import,<br>one line of code.</h2>
+        <p class="flip-sub">No config files. No wrappers. Drop it in and go.</p>
+      </div>
+      <div class="flip-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+        <span class="flip-tag">02 / Plugins</span>
+        <h2 class="flip-title">Only load<br>what you need.</h2>
+        <p class="flip-sub">Tree-shakeable plugin system. Zero dead code in your bundle.</p>
+      </div>
+      <div class="flip-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+        <span class="flip-tag">03 / TypeScript</span>
+        <h2 class="flip-title">Full type safety<br>out of the box.</h2>
+        <p class="flip-sub">Written in TypeScript. Autocomplete for every option and event.</p>
+      </div>
+      <div class="flip-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+        <span class="flip-tag">04 / Performance</span>
+        <h2 class="flip-title">Under 10 kb<br>gzipped.</h2>
+        <p class="flip-sub">Tiny core, no runtime dependencies, hardware-accelerated CSS.</p>
+      </div>
+      <div class="flip-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">
+        <span class="flip-tag">05 / A11y</span>
+        <h2 class="flip-title">Accessible<br>by default.</h2>
+        <p class="flip-sub">WAI-ARIA carousel pattern built in. Keyboard navigation included.</p>
+      </div>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.flip-slide {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 56px;
+  border-radius: 12px;
+  color: #fff;
+}
+.flip-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+.flip-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+.flip-sub {
+  font-size: 1rem;
+  opacity: 0.8;
+  max-width: 380px;
+  margin: 0;
+  line-height: 1.6;
+}
+</style>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { flipEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#demo-flip', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    flipEffect({ duration: 500, easing: 'ease-in-out' }),
+  ],
+})
+</script>

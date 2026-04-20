@@ -5,110 +5,206 @@ import DemoViewer from '../../components/DemoViewer.astro'
 <DemoLayout title="Responsive">
   <DemoViewer
     title="Responsive / Breakpoints"
-    description="1 slide on mobile, 2 at 640px, 3 at 1024px. Resize the window to see it adapt."
-    html={`<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item">1</div>
-    <div class="c--slider-a__item">2</div>
-    <div class="c--slider-a__item">3</div>
-    <div class="c--slider-a__item">4</div>
-    <div class="c--slider-a__item">5</div>
-    <div class="c--slider-a__item">6</div>
-  </div>
-</div>
-<div id="my-pagination" class="c--slider-a__pagination"></div>`}
-    css={`.c--slider-a {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-.c--slider-a__wrapper {
-  display: flex;
-  will-change: transform;
-}
-.c--slider-a__item {
-  flex-shrink: 0;
-  /* width is computed by the slider (100% / slidesPerPage) */
-  height: 260px;
-}
-
-/* Fraction pagination */
-.c--slider-a__pagination {
-  display: flex;
-  justify-content: center;
-  padding: 12px 0;
-}
-.c--slider-a__pagination-fraction {
-  font-size: 0.85rem;
-  color: #6b7280;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Auto-created arrows */
-.c--slider-a__arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-}
-.c--slider-a__arrow--prev { left: 12px; }
-.c--slider-a__arrow--next { right: 12px; }
-.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+    description="1 item below 640px · 2 items at 640px · 3 items at 960px · 4 items at 1280px. Resize the window to see it adapt."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+  <div class="demo-slide s-pink">6</div>
+  <div class="demo-slide s-teal">7</div>
+  <div class="demo-slide s-indigo">8</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
-  slidesPerPage: 1,
-  gutter: 8,
+  items: 1,
+  gutter: 16,
   loop: false,
   rewind: true,
-  breakpoints: {
-    640:  { slidesPerPage: 2, gutter: 12 },
-    1024: { slidesPerPage: 3, gutter: 20 },
+  responsive: {
+    640:  { items: 2, gutter: 16 },
+    960:  { items: 3, gutter: 20 },
+    1280: { items: 4, gutter: 24 },
   },
   plugins: [
     arrows(),
-    pagination({ el: '#my-pagination', type: 'fraction' }),
+    pagination({ type: 'dots', clickable: true }),
   ],
 })`}
   >
-    <div class="c--slider-a" id="demo-responsive">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
-        <div class="c--slider-a__item demo-slide s-pink"   data-slide>6</div>
-      </div>
+    <div id="demo-responsive">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+      <div class="demo-slide s-pink">6</div>
+      <div class="demo-slide s-teal">7</div>
+      <div class="demo-slide s-indigo">8</div>
     </div>
-    <div id="demo-responsive-pag" class="c--slider-a__pagination"></div>
   </DemoViewer>
+  <DemoViewer
+    title="Swap plugins on resize"
+    description="Dots below 640px, progress bar at 960px+. On resize, the slider is destroyed and rebuilt with the correct plugins for the new breakpoint."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>
+<div id="my-progress" style="height:4px;background:#e5e7eb;border-radius:2px;margin-top:12px;"></div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, progress } from '@andresclua/sliderkit-plugins'
+
+function getZone() {
+  const w = window.innerWidth
+  if (w < 640)  return 'sm'
+  if (w < 960)  return 'md'
+  return 'lg'
+}
+
+function buildPlugins(zone) {
+  const p = [arrows()]
+  if (zone === 'sm') p.push(pagination({ type: 'dots', clickable: true }))
+  if (zone === 'lg') p.push(progress({ container: '#my-progress' }))
+  return p
+}
+
+let zone = getZone()
+let slider = new Slider('#my-slider', { items: 1, loop: false, speed: 300, plugins: buildPlugins(zone) })
+
+let t
+window.addEventListener('resize', () => {
+  clearTimeout(t)
+  t = setTimeout(() => {
+    const newZone = getZone()
+    if (newZone === zone) return
+    zone = newZone
+    slider.destroy()
+    slider = new Slider('#my-slider', { items: 1, loop: false, speed: 300, plugins: buildPlugins(zone) })
+  }, 150)
+})`}
+  >
+    <div id="demo-responsive-resize">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+    <div id="demo-rp-resize-progress" style="height:4px;background:#e5e7eb;border-radius:2px;margin-top:12px;"></div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Conditional plugins per breakpoint"
+    description="Pagination dots appear only below 640px. Progress bar appears only at 960px and above. Resize the window to see them switch."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>
+<div id="my-progress" style="height:4px;background:#e5e7eb;border-radius:2px;margin-top:12px;">
+  <div id="my-progress-bar" style="height:100%;background:#6C2BD9;border-radius:2px;width:0%"></div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, progress } from '@andresclua/sliderkit-plugins'
+
+const plugins = [arrows()]
+
+if (window.innerWidth < 640) {
+  plugins.push(pagination({ type: 'dots', clickable: true }))
+} else if (window.innerWidth >= 960) {
+  plugins.push(progress({ container: '#my-progress' }))
+}
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins,
+})`}
+  >
+    <div id="demo-responsive-plugins">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+    <div id="demo-rp-progress" style="height:4px;background:#e5e7eb;border-radius:2px;margin-top:12px;">
+      <div style="height:100%;background:#6C2BD9;border-radius:2px;width:0%"></div>
+    </div>
+  </DemoViewer>
+
 </DemoLayout>
 
 <script>
 import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { arrows, pagination, progress } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-responsive', {
-  slidesPerPage: 1,
-  gutter: 8,
+  items: 1,
+  gutter: 16,
   loop: false,
   rewind: true,
-  breakpoints: {
-    640:  { slidesPerPage: 2, gutter: 12 },
-    1024: { slidesPerPage: 3, gutter: 20 },
+  responsive: {
+    640:  { items: 2, gutter: 16 },
+    960:  { items: 3, gutter: 20 },
+    1280: { items: 4, gutter: 24 },
   },
   plugins: [
     arrows(),
-    pagination({ el: '#demo-responsive-pag', type: 'fraction' }),
+    pagination({ type: 'dots', clickable: true }),
   ],
+})
+
+const pluginsBP = [arrows()]
+if (window.innerWidth < 640) {
+  pluginsBP.push(pagination({ type: 'dots', clickable: true }))
+} else if (window.innerWidth >= 960) {
+  pluginsBP.push(progress({ container: '#demo-rp-progress' }))
+}
+new Slider('#demo-responsive-plugins', {
+  items: 1, loop: false, speed: 300, plugins: pluginsBP,
+})
+
+// Swap plugins on resize
+function getZone() {
+  const w = window.innerWidth
+  if (w < 640) return 'sm'
+  if (w < 960) return 'md'
+  return 'lg'
+}
+function buildPlugins(zone: string) {
+  const p = [arrows()]
+  if (zone === 'sm') p.push(pagination({ type: 'dots', clickable: true }))
+  if (zone === 'lg') p.push(progress({ container: '#demo-rp-resize-progress' }))
+  return p
+}
+let zone = getZone()
+let sliderResize = new Slider('#demo-responsive-resize', {
+  items: 1, loop: false, speed: 300, plugins: buildPlugins(zone),
+})
+let resizeTimer: ReturnType<typeof setTimeout>
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(() => {
+    const newZone = getZone()
+    if (newZone === zone) return
+    zone = newZone
+    sliderResize.destroy()
+    sliderResize = new Slider('#demo-responsive-resize', {
+      items: 1, loop: false, speed: 300, plugins: buildPlugins(zone),
+    })
+  }, 150)
 })
 </script>

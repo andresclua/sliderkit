@@ -1,69 +1,132 @@
-import type { SliderPlugin } from '@andresclua/sliderkit'
-import type { SliderInstance } from '@andresclua/sliderkit'
-import type { AfterSlideChangePayload } from '@andresclua/sliderkit'
+import type { SliderPlugin, SliderInstance, SliderInfo } from '@andresclua/sliderkit'
 
 export interface FlipEffectOptions {
-  slideShadows?: boolean
-  limitRotation?: boolean
+  duration?:    number  // ms — defaults to slider speed
+  easing?:      string  // CSS easing (default: 'ease-in-out')
+  perspective?: number  // perspective distance in px (default: 800)
 }
 
-export function flipEffect(_options: FlipEffectOptions = {}): SliderPlugin {
-  let slider: SliderInstance | null = null
+export function flipEffect(opts: FlipEffectOptions = {}): SliderPlugin {
+  let slider:           SliderInstance
+  let styleEl:          HTMLStyleElement
+  let prevRawIdx:       number
+  let clippingAncestors: { el: HTMLElement; overflow: string }[] = []
 
-  function apply(activeIndex?: number): void {
-    if (!slider) return
-    const idx = activeIndex ?? slider.activeIndex
-    slider.slides.forEach((slide, i) => {
-      const offset = i - idx
-      slide.style.transform = `rotateY(${offset * 180}deg)`
-      slide.style.zIndex = i === idx ? '1' : '0'
-      slide.style.backfaceVisibility = 'hidden'
-    })
-  }
+  const p = (deg: string, persp: number) => `perspective(${persp}px) rotateY(${deg})`
 
-  function onSlideChange({ index }: AfterSlideChangePayload): void {
-    apply(index)
-    if (slider) {
-      slider.wrapper.style.transform = 'translate3d(0,0,0)'
-      slider.wrapper.style.transition = 'none'
+  const onIndexChanged = (info: SliderInfo) => {
+    const nextRawIdx = info.index
+    const forward    = nextRawIdx >= prevRawIdx
+    const duration   = opts.duration   ?? slider.options.speed ?? 300
+    const half       = duration / 2
+    const easing     = opts.easing     ?? 'ease-in-out'
+    const persp      = opts.perspective ?? 800
+
+    const outgoing = slider.slides[prevRawIdx]
+    const incoming = slider.slides[nextRawIdx]
+
+    // Phase 1: outgoing rotates away (first half)
+    if (outgoing && outgoing !== incoming) {
+      outgoing.style.transition = `transform ${half}ms ${easing}`
+      outgoing.style.transform  = p(forward ? '-90deg' : '90deg', persp)
+      outgoing.style.zIndex     = '1'
     }
+
+    // Phase 2: incoming rotates in (second half, after outgoing is gone)
+    if (incoming) {
+      incoming.style.transition = 'none'
+      incoming.style.transform  = p(forward ? '90deg' : '-90deg', persp)
+      incoming.style.zIndex     = '0'
+      void incoming.offsetWidth
+
+      setTimeout(() => {
+        incoming.style.zIndex     = '1'
+        incoming.style.transition = `transform ${half}ms ${easing}`
+        incoming.style.transform  = p('0deg', persp)
+        if (outgoing) outgoing.style.zIndex = '0'
+      }, half)
+    }
+
+    prevRawIdx = nextRawIdx
   }
 
   return {
     name: 'flipEffect',
 
-    install(sliderInstance: SliderInstance) {
-      slider = sliderInstance
-      sliderInstance.container.classList.add('c--slider-effect-flip')
-      sliderInstance.wrapper.style.transformStyle = 'preserve-3d'
-      sliderInstance.wrapper.style.perspective = '1200px'
-      sliderInstance.wrapper.style.transform = 'translate3d(0,0,0)'
-      sliderInstance.wrapper.style.transition = 'none'
+    install(s: SliderInstance): void {
+      slider     = s
+      prevRawIdx = s.getInfo().index
 
-      sliderInstance.slides.forEach((slide) => {
-        slide.style.position = 'absolute'
-        slide.style.top = '0'
-        slide.style.left = '0'
-        slide.style.width = '100%'
+      const uid      = 'skit-flip-' + Math.random().toString(36).slice(2, 7)
+      const selector = s.container.id ? '#' + s.container.id : `[data-skit-flip="${uid}"]`
+      if (!s.container.id) s.container.setAttribute('data-skit-flip', uid)
+
+      const persp = opts.perspective ?? 800
+
+      styleEl = document.createElement('style')
+      styleEl.textContent = [
+        `${selector}{transform:none!important;transition:none!important;}`,
+        `${selector}>.sliderkit__item{`,
+          `position:absolute;top:0;left:0;width:100%;`,
+          `backface-visibility:hidden;`,
+          `transform:perspective(${persp}px) rotateY(90deg);`,
+        `}`,
+      ].join('')
+      document.head.appendChild(styleEl)
+
+      // will-change:transform on the container creates a compositing layer that
+      // flattens 3D child transforms — must remove it for the flip to render in 3D
+      s.container.style.willChange = 'auto'
+
+      // Walk the DOM up and neutralise every ancestor with overflow clipping —
+      // any overflow:hidden/auto/scroll ancestor flattens CSS 3D transforms.
+      clippingAncestors = []
+      let ancestor = s.outerWrapper.parentElement as HTMLElement | null
+      while (ancestor && ancestor !== document.body) {
+        const ov = getComputedStyle(ancestor).overflow
+        if (ov === 'hidden' || ov === 'auto' || ov === 'scroll') {
+          clippingAncestors.push({ el: ancestor, overflow: ancestor.style.overflow })
+          ancestor.style.overflow = 'visible'
+        }
+        ancestor = ancestor.parentElement
+      }
+
+      const syncHeight = () => {
+        const activeSlide = s.slides[s.activeIndex]
+        const h = activeSlide?.offsetHeight || 0
+        if (!h) return
+        s.container.style.height    = h + 'px'
+        s.innerWrapper.style.height = h + 'px'
+        const overflowEl = s.innerWrapper.parentElement as HTMLElement
+        if (overflowEl) overflowEl.style.height = h + 'px'
+      }
+      requestAnimationFrame(syncHeight)
+
+      s.slides.forEach((slide, i) => {
+        slide.style.transform = p(i === prevRawIdx ? '0deg' : '90deg', persp)
+        slide.style.zIndex    = i === prevRawIdx ? '1' : '0'
       })
 
-      apply()
-      slider.on('afterSlideChange', onSlideChange as (p: AfterSlideChangePayload) => void)
+      s.on('indexChanged', onIndexChanged)
+      s.on('indexChanged', syncHeight)
     },
 
-    destroy() {
-      slider?.container.classList.remove('c--slider-effect-flip')
-      slider?.slides.forEach((slide) => {
-        slide.style.transform = ''
-        slide.style.zIndex = ''
-        slide.style.backfaceVisibility = ''
-        slide.style.position = ''
-        slide.style.top = ''
-        slide.style.left = ''
-        slide.style.width = ''
+    destroy(): void {
+      slider.off('indexChanged', onIndexChanged)
+      styleEl?.remove()
+      slider.container.removeAttribute('data-skit-flip')
+      slider.container.style.height    = ''
+      slider.innerWrapper.style.height = ''
+      slider.container.style.willChange = ''
+      clippingAncestors.forEach(function(saved) {
+        saved.el.style.overflow = saved.overflow
       })
-      slider?.off('afterSlideChange', onSlideChange as (p: AfterSlideChangePayload) => void)
-      slider = null
+      clippingAncestors = []
+      slider.slides.forEach(slide => {
+        slide.style.transform  = ''
+        slide.style.transition = ''
+        slide.style.zIndex     = ''
+      })
     },
   }
 }

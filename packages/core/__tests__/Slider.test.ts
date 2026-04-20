@@ -1,165 +1,138 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { Slider } from '../src/Slider'
 
-function createContainer(slideCount = 3): HTMLElement {
-  const container = document.createElement('div')
-  container.className = 'c--slider-a'
-  const wrapper = document.createElement('div')
-  wrapper.className = 'c--slider-a__wrapper'
-  for (let i = 0; i < slideCount; i++) {
-    const slide = document.createElement('div')
-    slide.className = 'c--slider-a__item'
-    slide.setAttribute('data-slide', '')
-    slide.textContent = String(i + 1)
-    wrapper.appendChild(slide)
+function createContainer(n = 5): HTMLElement {
+  const el = document.createElement('div')
+  el.id = 'test-slider'
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement('div')
+    s.textContent = String(i + 1)
+    el.appendChild(s)
   }
-  container.appendChild(wrapper)
-  document.body.appendChild(container)
-  return container
+  document.body.appendChild(el)
+  return el
 }
 
 describe('Slider', () => {
-  let container: HTMLElement
+  beforeEach(() => { document.body.innerHTML = '' })
 
-  beforeEach(() => {
-    document.body.innerHTML = ''
-    container = createContainer(5)
+  describe('init', () => {
+    it('wraps container in outer / overflow / inner divs', () => {
+      const el = createContainer()
+      const s = new Slider(el, { loop: false })
+      expect(el.parentElement?.classList.contains('sliderkit__inner')).toBe(true)
+      s.destroy()
+    })
+
+    it('adds BEM class to container', () => {
+      const el = createContainer()
+      const s = new Slider(el, { loop: false })
+      expect(el.classList.contains('sliderkit')).toBe(true)
+      s.destroy()
+    })
+
+    it('marks original slides with item class', () => {
+      const el = createContainer(3)
+      const s = new Slider(el, { loop: false })
+      expect(s.slides.every(sl => sl.classList.contains('sliderkit__item'))).toBe(true)
+      s.destroy()
+    })
+
+    it('exposes correct slideCount', () => {
+      const el = createContainer(4)
+      const s = new Slider(el, { loop: false })
+      expect(s.getInfo().slideCount).toBe(4)
+      s.destroy()
+    })
   })
 
-  // ── getInfo ──
   describe('getInfo()', () => {
-    it('returns correct snapshot after init', () => {
-      const slider = new Slider(container, { slidesPerPage: 2, gutter: 16 })
-      const info = slider.getInfo() as Record<string, unknown>
+    it('returns slideCount and initial index', () => {
+      const el = createContainer(5)
+      const s = new Slider(el, { loop: false, items: 1 })
+      const info = s.getInfo()
       expect(info.slideCount).toBe(5)
-      expect(info.slidesPerPage).toBe(2)
-      expect(info.activeIndex).toBe(0)
-      expect(info.isBeginning).toBe(true)
-      expect(info.isEnd).toBe(false)
-      expect(info.isDestroyed).toBe(false)
-      expect(info.version).toBe('0.1.0')
-      slider.destroy()
-    })
-
-    it('updates after goTo()', () => {
-      const slider = new Slider(container)
-      slider.goTo(2)
-      const info = slider.getInfo() as Record<string, unknown>
-      expect(info.activeIndex).toBe(2)
-      expect(info.previousIndex).toBe(0)
-      slider.destroy()
+      expect(info.displayIndex).toBe(1)
+      s.destroy()
     })
   })
 
-  // ── destroy ──
-  describe('destroy()', () => {
-    it('sets isDestroyed to true', () => {
-      const slider = new Slider(container)
-      slider.destroy()
-      expect(slider.isDestroyed).toBe(true)
+  describe('goTo()', () => {
+    it('navigates to numeric index', () => {
+      const el = createContainer(5)
+      const s = new Slider(el, { loop: false, speed: 0 })
+      s.goTo(3)
+      expect(s.activeIndex).toBe(3)
+      s.destroy()
     })
 
-    it('guards all methods after destroy', () => {
-      const slider = new Slider(container)
-      slider.destroy()
-      // Should not throw, but log errors
-      expect(() => slider.goTo('next')).not.toThrow()
-      expect(() => slider.next()).not.toThrow()
-      expect(() => slider.prev()).not.toThrow()
-      expect(() => slider.update()).not.toThrow()
-    })
-
-    it('calling destroy twice logs a warning', () => {
-      const warnSpy = vi.spyOn(console, 'warn')
-      const slider = new Slider(container)
-      slider.destroy()
-      slider.destroy()
-      expect(warnSpy).toHaveBeenCalled()
-    })
-
-    it('removes init CSS class on destroy', () => {
-      const slider = new Slider(container)
-      expect(container.classList.contains('c--slider-a--initialized')).toBe(true)
-      slider.destroy()
-      expect(container.classList.contains('c--slider-a--initialized')).toBe(false)
+    it('navigates to first / last', () => {
+      const el = createContainer(5)
+      const s = new Slider(el, { loop: false, speed: 0 })
+      s.goTo('last')
+      expect(s.activeIndex).toBe(4)
+      s.goTo('first')
+      expect(s.activeIndex).toBe(0)
+      s.destroy()
     })
   })
 
-  // ── rebuild ──
-  describe('rebuild()', () => {
-    it('returns a new Slider instance', () => {
-      const slider = new Slider(container)
-      const rebuilt = slider.rebuild()
-      expect(rebuilt).not.toBe(slider)
-      expect(rebuilt.isDestroyed).toBe(false)
-      rebuilt.destroy()
-    })
-
-    it('merges options override', () => {
-      const slider = new Slider(container, { slidesPerPage: 1 })
-      const rebuilt = slider.rebuild({ slidesPerPage: 2 })
-      expect((rebuilt.getInfo() as Record<string, unknown>).slidesPerPage).toBe(2)
-      rebuilt.destroy()
-    })
-
-    it('original slider is destroyed after rebuild', () => {
-      const slider = new Slider(container)
-      slider.rebuild()
-      expect(slider.isDestroyed).toBe(true)
-    })
-  })
-
-  // ── play / pause ──
-  describe('play() / pause()', () => {
-    it('warn when no autoplay plugin registered', () => {
-      const warnSpy = vi.spyOn(console, 'warn')
-      const slider = new Slider(container)
-      slider.play()
-      slider.pause()
-      expect(warnSpy).toHaveBeenCalledTimes(2)
-      slider.destroy()
-    })
-  })
-
-  // ── on / off post-init ──
   describe('on() / off()', () => {
-    it('fires handler registered post-init', () => {
-      const slider = new Slider(container)
+    it('fires indexChanged on goTo', () => {
+      const el = createContainer(5)
+      const s = new Slider(el, { loop: false, speed: 0 })
       const handler = vi.fn()
-      slider.on('afterSlideChange', handler)
-      slider.goTo(1)
-      expect(handler).toHaveBeenCalledOnce()
-      slider.destroy()
+      s.on('indexChanged', handler)
+      s.goTo(2)
+      expect(handler).toHaveBeenCalled()
+      s.destroy()
     })
 
-    it('does not fire handler after off()', () => {
-      const slider = new Slider(container)
+    it('does not fire after off()', () => {
+      const el = createContainer(5)
+      const s = new Slider(el, { loop: false, speed: 0 })
       const handler = vi.fn()
-      slider.on('afterSlideChange', handler)
-      slider.off('afterSlideChange', handler)
-      slider.goTo(1)
+      s.on('indexChanged', handler)
+      s.off('indexChanged', handler)
+      s.goTo(2)
       expect(handler).not.toHaveBeenCalled()
-      slider.destroy()
+      s.destroy()
     })
   })
 
-  // ── enable / disable ──
-  describe('enable() / disable()', () => {
-    it('disable prevents navigation', () => {
-      const slider = new Slider(container)
-      slider.disable()
-      slider.goTo(2)
-      expect(slider.activeIndex).toBe(0) // Should not change
-      slider.destroy()
+  describe('destroy()', () => {
+    it('removes injected DOM wrappers', () => {
+      const el = createContainer()
+      const s = new Slider(el, { loop: false })
+      s.destroy()
+      expect(document.querySelector('.sliderkit__outer')).toBeNull()
     })
 
-    it('enable restores navigation', () => {
-      const slider = new Slider(container)
-      slider.disable()
-      slider.enable()
-      slider.goTo(2)
-      expect(slider.activeIndex).toBe(2)
-      slider.destroy()
+    it('removes BEM class from container', () => {
+      const el = createContainer()
+      const s = new Slider(el, { loop: false })
+      s.destroy()
+      expect(el.classList.contains('sliderkit')).toBe(false)
+    })
+  })
+
+  describe('plugins', () => {
+    it('calls install on each plugin', () => {
+      const el = createContainer()
+      const install = vi.fn()
+      const p = { name: 'test', install, destroy: vi.fn() }
+      const s = new Slider(el, { loop: false, plugins: [p] })
+      expect(install).toHaveBeenCalledOnce()
+      s.destroy()
+    })
+
+    it('calls destroy on plugin when slider is destroyed', () => {
+      const el = createContainer()
+      const pdestroy = vi.fn()
+      const p = { name: 'test', install: vi.fn(), destroy: pdestroy }
+      const s = new Slider(el, { loop: false, plugins: [p] })
+      s.destroy()
+      expect(pdestroy).toHaveBeenCalledOnce()
     })
   })
 })

@@ -1,0 +1,73 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Progress">
+  <DemoViewer
+    title="Progress bar"
+    description="The progress plugin mounts a bar below the slider that fills up as you advance through the slides."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; border-radius:8px; }
+
+/* progress track */
+.sliderkit__progress {
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+/* progress fill */
+.sliderkit__progress-bar {
+  height: 100%;
+  background: #6C2BD9;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, progress } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    progress({ container: '#my-progress' }),
+  ],
+})`}
+  >
+    <div id="demo-progress">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+    <div id="demo-progress-bar" style="margin-top:12px;"></div>
+  </DemoViewer>
+</DemoLayout>
+
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, progress } from '@andresclua/sliderkit-plugins'
+
+new Slider('#demo-progress', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    progress({ container: '#demo-progress-bar' }),
+  ],
+})
+</script>

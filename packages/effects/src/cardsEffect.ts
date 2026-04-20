@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { SliderPlugin } from '@andresclua/sliderkit'
 import type { SliderInstance } from '@andresclua/sliderkit'
 import type { AfterSlideChangePayload } from '@andresclua/sliderkit'

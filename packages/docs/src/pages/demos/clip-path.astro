@@ -1,0 +1,262 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Clip-path Effect">
+
+  <DemoViewer
+    title="Wipe reveal"
+    description="The incoming slide is revealed with a wipe. Direction-aware — wipes right going forward, left going backward."
+    html={`<div id="my-slider">
+  <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+</div>`}
+    css={`.cp-slide { height:300px; display:flex; align-items:center; justify-content:center; border-radius:8px; }
+.cp-slide span { font-size:4rem; font-weight:800; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { clipPathEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    clipPathEffect({ shape: 'wipe-right', duration: 600, easing: 'ease-in-out' }),
+  ],
+})`}
+  >
+    <div id="demo-clip-wipe">
+      <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Circle reveal"
+    description="The incoming slide expands from the center as a growing circle."
+    html={`<div id="my-slider">
+  <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+</div>`}
+    css={`.cp-slide { height:300px; display:flex; align-items:center; justify-content:center; border-radius:8px; }
+.cp-slide span { font-size:4rem; font-weight:800; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { clipPathEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    clipPathEffect({ shape: 'circle', duration: 700, easing: 'ease-out' }),
+  ],
+})`}
+  >
+    <div id="demo-clip-circle">
+      <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Diamond reveal"
+    description="The incoming slide is revealed as a diamond expanding from the center."
+    html={`<div id="my-slider">
+  <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+</div>`}
+    css={`.cp-slide { height:300px; display:flex; align-items:center; justify-content:center; border-radius:8px; }
+.cp-slide span { font-size:4rem; font-weight:800; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { clipPathEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    clipPathEffect({ shape: 'diamond', duration: 700, easing: 'ease-in-out' }),
+  ],
+})`}
+  >
+    <div id="demo-clip-diamond">
+      <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Custom shape — corner spotlight"
+    description="A circle expanding from the bottom-left corner. Fully custom: pass hidden and visible clip-path values directly."
+    html={`<div id="my-slider">
+  <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+</div>`}
+    css={`.cp-slide { height:300px; display:flex; align-items:center; justify-content:center; border-radius:8px; }
+.cp-slide span { font-size:4rem; font-weight:800; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { clipPathEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    clipPathEffect({
+      shape: {
+        hidden:  'circle(0% at 15% 85%)',
+        visible: 'circle(170% at 15% 85%)',
+      },
+      duration: 800,
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    }),
+  ],
+})`}
+  >
+    <div id="demo-clip-custom">
+      <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Direction-aware shapes"
+    description="Next → wipe from top. Prev → custom circle from bottom-right corner. Mix presets and custom shapes per direction."
+    html={`<div id="my-slider">
+  <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+  <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+</div>`}
+    css={`.cp-slide { height:300px; display:flex; align-items:center; justify-content:center; border-radius:8px; }
+.cp-slide span { font-size:4rem; font-weight:800; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { clipPathEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [
+    arrows(),
+    clipPathEffect({
+      shape: {
+        forward: 'wipe-down',
+        backward: {
+          hidden:  'circle(0% at 85% 85%)',
+          visible: 'circle(170% at 85% 85%)',
+        },
+      },
+      duration: 800,
+      easing: 'ease-in-out',
+    }),
+  ],
+})`}
+  >
+    <div id="demo-clip-directional">
+      <div class="cp-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"><span>1</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><span>2</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)"><span>3</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><span>4</span></div>
+      <div class="cp-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><span>5</span></div>
+    </div>
+  </DemoViewer>
+
+</DemoLayout>
+
+<style>
+.cp-slide {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+.cp-slide span {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #fff;
+}
+</style>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { clipPathEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#demo-clip-wipe', {
+  items: 1, loop: false, speed: 300,
+  plugins: [arrows(), clipPathEffect({ shape: 'wipe-right', duration: 600, easing: 'ease-in-out' })],
+})
+
+new Slider('#demo-clip-circle', {
+  items: 1, loop: false, speed: 300,
+  plugins: [arrows(), clipPathEffect({ shape: 'circle', duration: 700, easing: 'ease-out' })],
+})
+
+new Slider('#demo-clip-diamond', {
+  items: 1, loop: false, speed: 300,
+  plugins: [arrows(), clipPathEffect({ shape: 'diamond', duration: 700, easing: 'ease-in-out' })],
+})
+
+new Slider('#demo-clip-custom', {
+  items: 1, loop: false, speed: 300,
+  plugins: [arrows(), clipPathEffect({
+    shape: {
+      hidden:  'circle(0% at 15% 85%)',
+      visible: 'circle(170% at 15% 85%)',
+    },
+    duration: 800,
+    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  })],
+})
+
+new Slider('#demo-clip-directional', {
+  items: 1, loop: false, speed: 300,
+  plugins: [arrows(), clipPathEffect({
+    shape: {
+      forward: 'wipe-down',
+      backward: {
+        hidden:  'circle(0% at 85% 85%)',
+        visible: 'circle(170% at 85% 85%)',
+      },
+    },
+    duration: 800,
+    easing: 'ease-in-out',
+  })],
+})
+</script>

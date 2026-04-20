@@ -1,0 +1,78 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="thumbs plugin">
+  <h1>thumbs plugin</h1>
+  <p class="lead">Syncs a thumbnail strip to the slider. Click any thumbnail to jump to that slide; the active thumbnail updates automatically as you navigate.</p>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>You create a container with one child element per slide — these are your thumbnails.</li>
+    <li>The plugin adds a click handler to each child that calls <code>slider.goTo(i)</code>.</li>
+    <li>On every slide change, the active class moves to the matching thumbnail.</li>
+  </ol>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} thumbs {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} thumbs {"}"} from '@andresclua/sliderkit-plugins'
+
+new Slider('#el', {"{"}
+  items: 1,
+  loop: false,
+  plugins: [
+    thumbs({"{"} container: '#my-thumbs' {"}"}),
+  ],
+{"}"})</code></pre>
+
+  <pre><code>&lt;!-- one child per slide, in the same order --&gt;
+&lt;div id="my-thumbs"&gt;
+  &lt;img src="thumb-1.jpg" alt="Slide 1"&gt;
+  &lt;img src="thumb-2.jpg" alt="Slide 2"&gt;
+  &lt;img src="thumb-3.jpg" alt="Slide 3"&gt;
+&lt;/div&gt;</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>container</code></td>
+        <td><code>string | HTMLElement</code></td>
+        <td>—</td>
+        <td><strong>Required.</strong> The wrapper whose direct children are the thumb items. Must have exactly one child per real slide.</td>
+      </tr>
+      <tr>
+        <td><code>activeClass</code></td>
+        <td><code>string</code></td>
+        <td><code>'sliderkit__thumb--active'</code></td>
+        <td>CSS class applied to the active thumbnail.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Styling the active thumb</h2>
+  <pre><code>.sliderkit__thumb--active {"{"}
+  outline: 3px solid #6C2BD9;
+  outline-offset: 2px;
+  opacity: 1;
+{"}"}
+
+/* dim inactive thumbs */
+#my-thumbs > * {"{"}
+  opacity: 0.4;
+  transition: opacity 0.2s;
+{"}"}</code></pre>
+
+  <h2>Notes</h2>
+  <ul>
+    <li>The number of children in <code>container</code> must match <code>slideCount</code>. Extra or missing thumbs will be out of sync.</li>
+    <li>Works with any element type — <code>&lt;img&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;button&gt;</code>, etc.</li>
+    <li>The plugin does not generate thumbnails — you provide the HTML.</li>
+  </ul>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/thumbs">See the thumbs demo →</a></p>
+</DocsLayout>

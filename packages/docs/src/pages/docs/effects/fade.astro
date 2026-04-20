@@ -1,46 +1,66 @@
 ---
 import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
-<DocsLayout title="Fade Effect">
-  <h1>Fade Effect</h1>
-  <p class="lead">Cross-fades between slides using CSS <code>opacity</code>. Slides are stacked on top of each other; the active one fades in while inactive ones fade out. The transition duration is read from the slider's <code>speed</code> option.</p>
+<DocsLayout title="Fade effect">
+  <h1>Fade effect</h1>
+  <p class="lead">Slides cross-fade instead of sliding. Comes from <code>@andresclua/sliderkit-effects</code>, a separate package so it doesn't add weight to projects that don't need it.</p>
 
-  <h2>Import</h2>
-  <pre><code>import {"{"} fadeEffect {"}"} from '@andresclua/sliderkit-effects'</code></pre>
+  <h2>Installation</h2>
+  <pre><code>npm install @andresclua/sliderkit-effects
+# or
+pnpm add @andresclua/sliderkit-effects</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} fadeEffect {"}"} from '@andresclua/sliderkit-effects'
+
+new Slider('#el', {"{"}
+  items: 1,
+  loop: true,
+  speed: 500,         // controls the fade duration
+  plugins: [fadeEffect()],
+{"}"})</code></pre>
 
   <h2>Options</h2>
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>crossFade</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When <code>false</code>, all slides stay at <code>opacity: 1</code> and only <code>z-index</code> changes — the incoming slide appears instantly on top without a fade.</td></tr>
+      <tr>
+        <td><code>duration</code></td>
+        <td><code>number</code></td>
+        <td>slider <code>speed</code></td>
+        <td>Fade duration in milliseconds. Defaults to the slider's <code>speed</code> option, so you can decouple them — e.g. fast slider, slow fade.</td>
+      </tr>
+      <tr>
+        <td><code>easing</code></td>
+        <td><code>string</code></td>
+        <td><code>'ease'</code></td>
+        <td>Any CSS easing function: <code>'linear'</code>, <code>'ease-in-out'</code>, <code>'cubic-bezier(...)'</code>, etc.</td>
+      </tr>
+      <tr>
+        <td><code>crossFade</code></td>
+        <td><code>boolean</code></td>
+        <td><code>true</code></td>
+        <td>When <code>true</code>, inactive slides fade to opacity 0. When <code>false</code>, they stay visible beneath the active slide.</td>
+      </tr>
     </tbody>
   </table>
 
   <h2>How it works</h2>
-  <p>On install the plugin:</p>
+  <ol>
+    <li>All slides are stacked with <code>position: absolute</code>.</li>
+    <li>The slider's internal translate is neutralised — no sliding movement.</li>
+    <li>The existing <code>.sliderkit__item--active</code> class toggles <code>opacity: 1</code> on the active slide. CSS transition handles the fade.</li>
+    <li>The container height is synced to the active slide's height on every slide change.</li>
+  </ol>
+
+  <h2>Notes</h2>
   <ul>
-    <li>Positions all slides <code>absolute</code>, stacked at <code>top: 0 / left: 0 / width: 100%</code></li>
-    <li>Reads the slider <code>speed</code> option and applies <code>transition: opacity Nms ease</code> to each slide</li>
-    <li>Sets the active slide to <code>opacity: 1</code> and all others to <code>opacity: 0</code></li>
-    <li>Resets the wrapper <code>transform</code> to <code>translate3d(0,0,0)</code> so the core's translate animation does not interfere</li>
+    <li>Only works with <code>items: 1</code>.</li>
+    <li>Works with <code>loop: true</code>, <code>loop: false</code>, and <code>rewind: true</code>.</li>
+    <li><code>crossFade: false</code> is useful for a dissolve effect over a fixed background image.</li>
   </ul>
 
-  <h2>CSS class</h2>
-  <p>The container receives <code>.c--slider-effect-fade</code> while the plugin is active.</p>
-
-  <h2>Example</h2>
-  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
-import { fadeEffect } from '@andresclua/sliderkit-effects'
-import { arrows } from '@andresclua/sliderkit-plugins'
-
-createSlider('#my-slider', {
-  loop: true,
-  speed: 400,
-  plugins: [
-    fadeEffect({ crossFade: true }),
-    arrows(),
-  ],
-})`}</code></pre>
-
-  <p><a href="/demos/effect-fade">View fade effect demo</a></p>
+  <h2>Demo</h2>
+  <p><a href="/demos/fade">See the fade demo →</a></p>
 </DocsLayout>

@@ -3,70 +3,149 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Events">
   <h1>Events</h1>
-  <p class="lead">SliderKit fires typed events at every stage of its lifecycle. Listen via the <code>on</code> option or <code>slider.on()</code> post-init.</p>
+  <p class="lead">SliderKit emits events at every stage of its lifecycle. Subscribe via <code>slider.on(event, fn)</code> after init, or via <code>onInit</code> to get the instance first.</p>
 
   <h2>Usage</h2>
-  <pre><code>{`// On init
-new Slider('#el', {
-  on: {
-    afterSlideChange: ({ index }) => console.log(index),
-  },
-})
+  <pre><code>const slider = new Slider('#my-slider', {"{"} loop: true {"}"})
 
-// Post init
-slider.on('afterSlideChange', ({ index }) => console.log(index))
-slider.off('afterSlideChange', myHandler)`}</code></pre>
+slider.on('indexChanged', (info) => {"{"} console.log(info.displayIndex) {"}"})
 
-  <h2>Lifecycle events</h2>
+// unsubscribe
+slider.off('indexChanged', myHandler)</code></pre>
+
+  <h2>SliderInfo object</h2>
+  <p>Every event handler receives a <code>SliderInfo</code> snapshot of the slider's state at the moment the event fired. You rarely need all fields — here's which ones to reach for:</p>
+
+  <h3>The fields you'll use most</h3>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>beforeInit</code></td><td><code>{"{"} slider {"}"}</code></td><td>Before the slider initializes.</td></tr>
-      <tr><td><code>afterInit</code></td><td><code>{"{"} slider {"}"}</code></td><td>After initialization is complete.</td></tr>
-      <tr><td><code>beforeDestroy</code></td><td><code>{"{"} slider {"}"}</code></td><td>Before destroy() runs.</td></tr>
-      <tr><td><code>afterDestroy</code></td><td><code>{"{"} slider {"}"}</code></td><td>After destroy() completes.</td></tr>
+      <tr><td><code>displayIndex</code></td><td>number</td><td><strong>1-based</strong> current slide number. Use this to show "3 / 5" to users — it's always a clean 1–N number regardless of loop clones.</td></tr>
+      <tr><td><code>slideCount</code></td><td>number</td><td>Total real slides. Paired with <code>displayIndex</code> you get "current / total".</td></tr>
+      <tr><td><code>items</code></td><td>number</td><td>How many slides are visible right now. Changes when a responsive breakpoint fires.</td></tr>
     </tbody>
   </table>
 
-  <h2>Slide change events</h2>
+  <pre><code>slider.on('indexChanged', ({"{"} displayIndex, slideCount {"}"}) => {"{"}
+  label.textContent = displayIndex + ' / ' + slideCount  // "3 / 5"
+{"}"})</code></pre>
+
+  <h3>Index internals (rarely needed)</h3>
+  <p>The slider adds clone slides on both ends when <code>loop:true</code> so transitions look seamless. <code>index</code> tracks position inside this extended list — you almost never need it directly.</p>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>beforeSlideChange</code></td><td><code>{"{"} from, to, direction, slider {"}"}</code></td><td>Before the active index changes.</td></tr>
-      <tr><td><code>afterSlideChange</code></td><td><code>{"{"} index, previousIndex, slide, slider {"}"}</code></td><td>After the active index changes.</td></tr>
-      <tr><td><code>beforeTransitionStart</code></td><td><code>{"{"} from, to, direction, slider {"}"}</code></td><td>Alias for beforeSlideChange (transition timing).</td></tr>
-      <tr><td><code>afterTransitionEnd</code></td><td><code>{"{"} index, previousIndex, slide, slider {"}"}</code></td><td>Alias for afterSlideChange (transition timing).</td></tr>
-      <tr><td><code>progress</code></td><td><code>{"{"} progress, activeIndex, slider {"}"}</code></td><td>Fires after each slide change. <code>progress</code> is 0–1.</td></tr>
+      <tr><td><code>index</code></td><td>number</td><td>Internal position including clone offset. With 5 slides and <code>loop:true</code>, real slides sit at positions 5–9 inside a 15-item list.</td></tr>
+      <tr><td><code>indexCached</code></td><td>number</td><td>The <code>index</code> value from the previous event — useful to detect direction (<code>index > indexCached</code> = forward).</td></tr>
+      <tr><td><code>cloneCount</code></td><td>number</td><td>How many clones were added on each side. Clones are identical DOM nodes, not real slides.</td></tr>
+      <tr><td><code>slideCountNew</code></td><td>number</td><td><code>slideCount + cloneCount * 2</code>. The full length of the internal slide list.</td></tr>
     </tbody>
   </table>
+
+  <pre><code>// Detect swipe direction
+slider.on('indexChanged', ({"{"} index, indexCached {"}"}) => {"{"}
+  const direction = index > indexCached ? 'forward' : 'backward'
+  console.log(direction)
+{"}"})</code></pre>
+
+  <h3>Other fields</h3>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>container</code></td><td>HTMLElement</td><td>The slider's container element — same as what you passed to <code>new Slider()</code>.</td></tr>
+      <tr><td><code>slideItems</code></td><td>HTMLCollectionOf&lt;Element&gt;</td><td>Live collection of all slide elements including clones. Index 0 is the first clone when <code>loop:true</code>.</td></tr>
+      <tr><td><code>slideBy</code></td><td>number | 'page'</td><td>How many slides advance per arrow click at this moment.</td></tr>
+      <tr><td><code>isOn</code></td><td>boolean</td><td><code>true</code> while the slider is active (not destroyed).</td></tr>
+      <tr><td><code>event</code></td><td>Event | undefined</td><td>The raw DOM event that triggered this (touch, mouse, keyboard). <code>undefined</code> for programmatic navigation.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Slide events</h2>
+  <table>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td><code>indexChanged</code></td><td>The active index changes. Fires before the CSS transition starts.</td></tr>
+      <tr><td><code>transitionStart</code></td><td>The CSS transition begins.</td></tr>
+      <tr><td><code>transitionEnd</code></td><td>The CSS transition completes (or immediately if <code>speed:0</code>).</td></tr>
+    </tbody>
+  </table>
+  <pre><code>// Update a custom counter: "3 / 5"
+const label = document.querySelector('#slide-label')
+slider.on('indexChanged', (info) => {"{"}
+  label.textContent = info.displayIndex + ' / ' + info.slideCount
+{"}"})
+
+// Add a CSS class to the container while animating
+slider.on('transitionStart', () => document.body.classList.add('is-sliding'))
+slider.on('transitionEnd',   () => document.body.classList.remove('is-sliding'))</code></pre>
 
   <h2>Touch events</h2>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>touchStart</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
-      <tr><td><code>touchMove</code></td><td><code>{"{"} event, delta, direction, slider {"}"}</code></td></tr>
-      <tr><td><code>touchEnd</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
+      <tr><td><code>touchStart</code></td><td>Touch begins on the slider.</td></tr>
+      <tr><td><code>touchMove</code></td><td>Touch moves while panning.</td></tr>
+      <tr><td><code>touchEnd</code></td><td>Touch ends or is cancelled.</td></tr>
     </tbody>
   </table>
+  <pre><code>// Pause a video when the user starts swiping
+const video = document.querySelector('video')
+
+slider.on('touchStart', () => video.pause())
+slider.on('touchEnd',   () => video.play())</code></pre>
 
   <h2>Drag events</h2>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>dragStart</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
-      <tr><td><code>dragMove</code></td><td><code>{"{"} event, delta, direction, slider {"}"}</code></td></tr>
-      <tr><td><code>dragEnd</code></td><td><code>{"{"} event, slider {"}"}</code></td></tr>
+      <tr><td><code>dragStart</code></td><td>Mouse button pressed on the slider (requires <code>mouseDrag:true</code>).</td></tr>
+      <tr><td><code>dragMove</code></td><td>Mouse dragged while button is held.</td></tr>
+      <tr><td><code>dragEnd</code></td><td>Mouse button released.</td></tr>
     </tbody>
   </table>
+  <pre><code>// Log drag distance on release
+slider.on('dragStart', (info) => {"{"}
+  console.log('drag started, current slide:', info.displayIndex)
+{"}"})
+
+slider.on('dragEnd', (info) => {"{"}
+  console.log('drag ended, landed on slide:', info.displayIndex)
+{"}"})</code></pre>
 
   <h2>Responsive events</h2>
   <table>
-    <thead><tr><th>Event</th><th>Payload</th></tr></thead>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>newBreakpointStart</code></td><td><code>{"{"} previousBreakpoint, currentBreakpoint, options, slider {"}"}</code></td></tr>
-      <tr><td><code>newBreakpointEnd</code></td><td><code>{"{"} previousBreakpoint, currentBreakpoint, options, slider {"}"}</code></td></tr>
-      <tr><td><code>resize</code></td><td><code>{"{"} width, height, slidesPerPage, slider {"}"}</code></td></tr>
+      <tr><td><code>newBreakpointStart</code></td><td>Window crosses a responsive breakpoint — before recalculation.</td></tr>
+      <tr><td><code>newBreakpointEnd</code></td><td>After the slider recalculates for the new breakpoint.</td></tr>
+      <tr><td><code>resize</code></td><td>After every resize cycle completes, whether or not a breakpoint changed.</td></tr>
     </tbody>
   </table>
+  <pre><code>// Re-render an external UI element after the slider adapts to a new breakpoint
+slider.on('newBreakpointEnd', (info) => {"{"}
+  console.log('now showing', info.items, 'items per page')
+{"}"})</code></pre>
+
+  <h2>Lifecycle events</h2>
+  <table>
+    <thead><tr><th>Event</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td><code>beforeInit</code></td><td>Before the slider builds the DOM. No wrappers or clones exist yet.</td></tr>
+      <tr><td><code>afterInit</code></td><td>After init is fully complete and all plugins are installed.</td></tr>
+      <tr><td><code>beforeDestroy</code></td><td>Before the slider tears down — DOM and plugins are still alive.</td></tr>
+      <tr><td><code>afterDestroy</code></td><td>After the DOM has been restored and plugins destroyed.</td></tr>
+    </tbody>
+  </table>
+  <pre><code>// Measure init time
+const t0 = performance.now()
+slider.on('beforeInit', () => {"{"}  console.log('slider starting…') {"}"})
+slider.on('afterInit',  () => {"{"}  console.log('ready in', performance.now() - t0, 'ms') {"}"})
+
+// Clean up something external before the slider tears down
+slider.on('beforeDestroy', () => {"{"}
+  myExternalWidget.detach()
+{"}"})</code></pre>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/events">See the events demo →</a></p>
 </DocsLayout>

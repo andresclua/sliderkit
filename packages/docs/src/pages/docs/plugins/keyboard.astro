@@ -1,0 +1,71 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="keyboard plugin">
+  <h1>keyboard plugin</h1>
+  <p class="lead">Let users navigate the slider with arrow keys. Works only when the slider is focused — it never hijacks the keyboard globally.</p>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>The plugin makes the slider wrapper <strong>focusable</strong> by adding <code>tabindex="0"</code> to it.</li>
+    <li>When the user <strong>clicks the slider</strong> (or tabs to it), it gets focus.</li>
+    <li>While focused, pressing <strong>← →</strong> goes to the previous / next slide.</li>
+    <li>For a vertical slider (<code>axis:'vertical'</code>), it uses <strong>↑ ↓</strong> instead.</li>
+    <li>As soon as the user clicks somewhere else, focus leaves — and the keys stop working on the slider.</li>
+  </ol>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} keyboard {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} keyboard {"}"} from '@andresclua/sliderkit-plugins'
+
+new Slider('#el', {"{"}
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [keyboard()],
+{"}"})</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>focusable</code></td>
+        <td><code>boolean</code></td>
+        <td><code>true</code></td>
+        <td>Automatically adds <code>tabindex="0"</code> to the outer wrapper so users can tab to it. Set to <code>false</code> if you manage focus yourself.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Show the focus ring</h2>
+  <p>By default browsers draw a focus outline, but many CSS resets remove it. Add one back so users can see when the slider is active:</p>
+  <pre><code>.sliderkit__outer:focus {"{"}
+  outline: 3px solid #6C2BD9;
+  outline-offset: 4px;
+{"}"}</code></pre>
+
+  <h2>Key map</h2>
+  <table>
+    <thead><tr><th>Key</th><th>Axis</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><code>←</code></td><td>horizontal</td><td>Previous slide</td></tr>
+      <tr><td><code>→</code></td><td>horizontal</td><td>Next slide</td></tr>
+      <tr><td><code>↑</code></td><td>vertical</td><td>Previous slide</td></tr>
+      <tr><td><code>↓</code></td><td>vertical</td><td>Next slide</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Pairing with a11y</h2>
+  <p>Use <code>keyboard()</code> together with <code>a11y()</code> for a fully accessible slider — the a11y plugin adds the ARIA roles and labels, and the keyboard plugin handles focus-based navigation.</p>
+  <pre><code>plugins: [
+  a11y(),
+  keyboard(),
+]</code></pre>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/keyboard">See the keyboard demo →</a></p>
+</DocsLayout>

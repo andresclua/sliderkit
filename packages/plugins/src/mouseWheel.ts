@@ -1,69 +1,58 @@
-import type { SliderPlugin } from '@andresclua/sliderkit'
-import type { SliderInstance } from '@andresclua/sliderkit'
+import type { SliderPlugin, SliderInstance } from '@andresclua/sliderkit'
 
 export interface MouseWheelOptions {
-  forceToAxis?: boolean
-  releaseOnEdges?: boolean
-  sensitivity?: number
-  deltaThreshold?: number
+  threshold?: number  // accumulated deltaY to trigger a slide (default 120)
+  invert?:    boolean
 }
 
-export function mouseWheel(options: MouseWheelOptions = {}): SliderPlugin {
-  const { forceToAxis = true, releaseOnEdges = false, sensitivity = 1, deltaThreshold = 50 } = options
+export function mouseWheel(opts: MouseWheelOptions = {}): SliderPlugin {
+  const threshold = opts.threshold ?? 120
+  const invert    = opts.invert    ?? false
 
-  let slider: SliderInstance | null = null
-  let lastEventTime = 0
-  const minDelay = 300
+  let slider:       SliderInstance
+  let accumulated:  number = 0
+  let cooldown:     boolean = false
+  let resetTimer:   ReturnType<typeof setTimeout>
+  let unlockTimer:  ReturnType<typeof setTimeout>
 
-  function onWheel(e: WheelEvent): void {
-    if (!slider) return
-
-    const info = slider.getInfo() as Record<string, unknown>
-    const isHorizontal = info.direction !== 'vertical'
-    const delta = isHorizontal ? e.deltaX || e.deltaY : e.deltaY
-
-    if (Math.abs(delta) < deltaThreshold) return
-
-    const now = Date.now()
-    if (now - lastEventTime < minDelay) return
-    lastEventTime = now
-
-    if (forceToAxis) {
-      const dominantAxis = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? 'x' : 'y'
-      if (isHorizontal && dominantAxis !== 'x') return
-      if (!isHorizontal && dominantAxis !== 'y') return
-    }
-
-    if (releaseOnEdges) {
-      const index = info.index as number
-      const total = info.slideCount as number
-      const loop = info.loop as boolean
-      if (!loop) {
-        if (delta > 0 && index >= total - 1) return
-        if (delta < 0 && index <= 0) return
-      }
-    }
-
-    if (delta * sensitivity > 0) {
-      slider.next()
-    } else {
-      slider.prev()
-    }
-
+  const onWheel = (e: Event): void => {
+    const we = e as WheelEvent
     e.preventDefault()
+
+    if (cooldown) return
+
+    accumulated += we.deltaY
+
+    clearTimeout(resetTimer)
+    resetTimer = setTimeout(() => { accumulated = 0 }, 80)
+
+    if (Math.abs(accumulated) < threshold) return
+
+    const forward = invert ? accumulated < 0 : accumulated > 0
+    accumulated = 0
+    cooldown = true
+
+    forward ? slider.next() : slider.prev()
+
+    clearTimeout(unlockTimer)
+    unlockTimer = setTimeout(
+      () => { cooldown = false },
+      (slider.options.speed ?? 300) + 200,
+    )
   }
 
   return {
     name: 'mouseWheel',
 
-    install(sliderInstance: SliderInstance) {
-      slider = sliderInstance
-      slider.container.addEventListener('wheel', onWheel, { passive: false })
+    install(s: SliderInstance): void {
+      slider = s
+      s.container.addEventListener('wheel', onWheel, { passive: false })
     },
 
-    destroy() {
-      slider?.container.removeEventListener('wheel', onWheel)
-      slider = null
+    destroy(): void {
+      clearTimeout(resetTimer)
+      clearTimeout(unlockTimer)
+      slider.container.removeEventListener('wheel', onWheel)
     },
   }
 }

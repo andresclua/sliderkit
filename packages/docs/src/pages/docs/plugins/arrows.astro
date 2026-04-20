@@ -3,7 +3,7 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Arrows Plugin">
   <h1>Arrows</h1>
-  <p class="lead">Previous and next navigation buttons. Auto-creates buttons inside the container, or attaches to existing elements. Buttons are disabled at the first and last slide when loop and rewind are both off.</p>
+  <p class="lead">Injects previous and next navigation buttons into the slider's outer wrapper. Buttons are automatically disabled at the first and last slide when <code>loop</code> and <code>rewind</code> are both off.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} arrows {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
@@ -12,10 +12,8 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>prevEl</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>CSS selector or element for the previous button. Auto-created if omitted.</td></tr>
-      <tr><td><code>nextEl</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>CSS selector or element for the next button. Auto-created if omitted.</td></tr>
-      <tr><td><code>prevLabel</code></td><td><code>string</code></td><td><code>'Previous slide'</code></td><td><code>aria-label</code> for the previous button.</td></tr>
-      <tr><td><code>nextLabel</code></td><td><code>string</code></td><td><code>'Next slide'</code></td><td><code>aria-label</code> for the next button.</td></tr>
+      <tr><td><code>prevLabel</code></td><td>string</td><td><code>'Previous slide'</code></td><td><code>aria-label</code> on the prev button.</td></tr>
+      <tr><td><code>nextLabel</code></td><td>string</td><td><code>'Next slide'</code></td><td><code>aria-label</code> on the next button.</td></tr>
     </tbody>
   </table>
 
@@ -23,33 +21,28 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Class</th><th>Applied when</th></tr></thead>
     <tbody>
-      <tr><td><code>.c--slider-a__arrow</code></td><td>Always (auto-created buttons only)</td></tr>
-      <tr><td><code>.c--slider-a__arrow--prev</code></td><td>Previous button</td></tr>
-      <tr><td><code>.c--slider-a__arrow--next</code></td><td>Next button</td></tr>
-      <tr><td><code>.c--slider-a__arrow--disabled</code></td><td>At the first or last slide when not looping</td></tr>
+      <tr><td><code>.sliderkit__arrow</code></td><td>Both buttons, always.</td></tr>
+      <tr><td><code>.sliderkit__arrow--prev</code></td><td>Previous button.</td></tr>
+      <tr><td><code>.sliderkit__arrow--next</code></td><td>Next button.</td></tr>
+      <tr><td><code>.sliderkit__arrow--disabled</code></td><td>At the first or last slide when <code>loop:false</code> and <code>rewind:false</code>.</td></tr>
     </tbody>
   </table>
 
   <h2>Example</h2>
-  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
-import { arrows } from '@andresclua/sliderkit-plugins'
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} arrows {"}"} from '@andresclua/sliderkit-plugins'
 
-// Auto-create buttons
-createSlider('#my-slider', {
+new Slider('#my-slider', {"{"}
+  items: 1,
+  loop:  true,
   plugins: [arrows()],
-})
+{"}"})</code></pre>
 
-// Use existing elements
-createSlider('#my-slider', {
-  plugins: [
-    arrows({
-      prevEl: '#my-prev',
-      nextEl: '#my-next',
-      prevLabel: 'Previous',
-      nextLabel: 'Next',
-    }),
-  ],
-})`}</code></pre>
+  <h2>Custom button labels</h2>
+  <pre><code>arrows({"{"}
+  prevLabel: 'Anterior',
+  nextLabel: 'Siguiente',
+{"}"})</code></pre>
 
-  <p><a href="/demos/arrows">View arrows demo</a></p>
+  <p><a href="/demos/base">See it live in the Base demo →</a></p>
 </DocsLayout>

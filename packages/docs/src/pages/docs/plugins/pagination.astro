@@ -3,7 +3,7 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Pagination Plugin">
   <h1>Pagination</h1>
-  <p class="lead">Five pagination modes: clickable dot bullets, dynamic (scaling) bullets, a fraction counter, a progress bar fill, and fully custom HTML output.</p>
+  <p class="lead">Three pagination modes: clickable dot bullets, a fraction counter (<code>2 / 5</code>), and a horizontal progress bar. Dots rebuild automatically when responsive breakpoints change the items count.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} pagination {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
@@ -12,54 +12,42 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>type</code></td><td><code>'dots' | 'fraction' | 'progress' | 'dynamic' | 'custom'</code></td><td><code>'dots'</code></td><td>Pagination display style.</td></tr>
-      <tr><td><code>el</code></td><td><code>string | HTMLElement</code></td><td>—</td><td>Target container. Auto-created with class <code>c--slider-a__pagination</code> if omitted.</td></tr>
-      <tr><td><code>clickable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Allow clicking dot bullets to navigate (applies to <code>dots</code> and <code>dynamic</code> types).</td></tr>
-      <tr><td><code>dynamicBullets</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Scale neighbouring bullets smaller than the active one.</td></tr>
-      <tr><td><code>renderCustom</code></td><td><code>{"({"} current: number; total: number {"}"}) =&gt; string</code></td><td>—</td><td>HTML string renderer. Required when <code>type</code> is <code>'custom'</code>.</td></tr>
+      <tr><td><code>type</code></td><td><code>'dots' | 'fraction' | 'progress'</code></td><td><code>'dots'</code></td><td>Pagination display style.</td></tr>
+      <tr><td><code>clickable</code></td><td>boolean</td><td><code>true</code></td><td>Clicking a dot navigates to that page. Only applies to <code>dots</code> type.</td></tr>
+      <tr><td><code>container</code></td><td>HTMLElement | string | null</td><td>outer wrapper</td><td>Where to append the pagination element. Defaults to the slider's outer wrapper.</td></tr>
     </tbody>
   </table>
 
-  <h2>Example</h2>
-  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
-import { pagination } from '@andresclua/sliderkit-plugins'
+  <h2>CSS classes</h2>
+  <table>
+    <thead><tr><th>Class</th><th>Applied when</th></tr></thead>
+    <tbody>
+      <tr><td><code>.sliderkit__pagination</code></td><td>The pagination wrapper, always.</td></tr>
+      <tr><td><code>.sliderkit__pagination-bullet</code></td><td>Each dot button (<code>dots</code> type).</td></tr>
+      <tr><td><code>.sliderkit__pagination-bullet--active</code></td><td>The active dot.</td></tr>
+      <tr><td><code>.sliderkit__pagination-fraction</code></td><td>Added to wrapper for <code>fraction</code> type.</td></tr>
+      <tr><td><code>.sliderkit__pagination-progress</code></td><td>Progress track (<code>progress</code> type).</td></tr>
+      <tr><td><code>.sliderkit__pagination-progress-fill</code></td><td>Progress fill bar.</td></tr>
+    </tbody>
+  </table>
 
-// Dots
-createSlider('#my-slider', {
-  plugins: [pagination({ type: 'dots', clickable: true })],
-})
+  <h2>Dots</h2>
+  <pre><code>pagination({"{"} type: 'dots', clickable: true {"}"})</code></pre>
+  <p>One dot per <em>page</em> (not per slide). With <code>items:3</code> and 9 slides you get 3 dots. Dots rebuild when the breakpoint changes.</p>
 
-// Fraction "2 / 5"
-createSlider('#my-slider', {
-  plugins: [pagination({ type: 'fraction' })],
-})
+  <h2>Fraction</h2>
+  <pre><code>pagination({"{"} type: 'fraction' {"}"})</code></pre>
+  <p>Renders plain text: <code>2 / 5</code>. Useful as an overlay on top of the slider.</p>
 
-// Horizontal fill bar
-createSlider('#my-slider', {
-  plugins: [pagination({ type: 'progress' })],
-})
+  <h2>Progress</h2>
+  <pre><code>pagination({"{"} type: 'progress' {"}"})</code></pre>
+  <p>A horizontal bar that fills as you advance through the slides.</p>
 
-// Shrinking dots around active
-createSlider('#my-slider', {
-  plugins: [pagination({ type: 'dynamic', dynamicBullets: true })],
-})
+  <h2>Custom container</h2>
+  <pre><code>pagination({"{"}
+  type: 'dots',
+  container: '#my-pagination',  // mount outside the slider
+{"}"})</code></pre>
 
-// Custom HTML
-createSlider('#my-slider', {
-  plugins: [
-    pagination({
-      type: 'custom',
-      renderCustom: ({ current, total }) =>
-        \`<strong>\${current}</strong> of \${total}\`,
-    }),
-  ],
-})`}</code></pre>
-
-  <p>
-    <a href="/demos/pagination-dots">Dots</a> &bull;
-    <a href="/demos/pagination-fraction">Fraction</a> &bull;
-    <a href="/demos/pagination-progress">Progress</a> &bull;
-    <a href="/demos/pagination-dynamic">Dynamic</a> &bull;
-    <a href="/demos/pagination-custom">Custom</a>
-  </p>
+  <p><a href="/demos/base">See it live in the Base demo →</a></p>
 </DocsLayout>

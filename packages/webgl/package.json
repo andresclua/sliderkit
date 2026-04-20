@@ -1,7 +1,7 @@
 {
   "name": "@andresclua/sliderkit-webgl",
-  "version": "0.1.1",
-  "description": "SliderKit WebGL renderer — OGL-powered effects with displacement, rgb-shift, pixel-dissolve, parallax",
+  "version": "2.0.0",
+  "description": "SliderKit WebGL plugin — GPU-powered transitions (displacement, rgb-shift, radial, custom GLSL)",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
@@ -18,16 +18,13 @@
   },
   "files": ["dist", "src/scss", "textures", "README.md"],
   "sideEffects": ["**/*.css", "**/*.scss"],
-  "homepage": "https://sliderkit.andresclua.com/docs/webgl",
+  "homepage": "https://sliderkit.andresclua.com/docs/plugins/webgl",
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "ogl": "^1.0.3"
-  },
   "peerDependencies": {
-    "@andresclua/sliderkit": "workspace:*",
+    "@andresclua/sliderkit": "^2.0.0",
     "gsap": ">=3.0.0"
   },
   "peerDependenciesMeta": {
@@ -39,7 +36,7 @@
     "typescript": "^5.4.5",
     "@andresclua/sliderkit": "workspace:*"
   },
-  "keywords": ["slider", "carousel", "sliderkit", "webgl", "ogl", "displacement", "shader"],
+  "keywords": ["slider", "carousel", "sliderkit", "webgl", "displacement", "shader", "glsl"],
   "author": "Andres Clua",
   "license": "MIT",
   "repository": {

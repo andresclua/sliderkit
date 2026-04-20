@@ -4,9 +4,11 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@andresclua/sliderkit-webgl?style=flat-square&label=gzip)](https://bundlephobia.com/package/@andresclua/sliderkit-webgl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-WebGL transition effects for **SliderKit**, powered by [OGL](https://github.com/oframe/ogl). Displacement, RGB shift, pixel dissolve, and parallax depth — all GPU-accelerated with automatic canvas management and fallback detection.
+GPU-powered slide transitions for **SliderKit** via raw WebGL. Three built-in effects (displacement, RGB-shift, radial) and a `custom` mode where you supply your own GLSL fragment shader.
 
-**[Full documentation & demos →](https://sliderkit.andresclua.com/docs/webgl)**
+> **Experimental** — API may change in minor versions.
+
+**[Full documentation & demos →](https://sliderkit.andresclua.com/docs/plugins/webgl)**
 
 ---
 
@@ -22,86 +24,85 @@ pnpm add @andresclua/sliderkit @andresclua/sliderkit-webgl
 
 ```typescript
 import { Slider } from '@andresclua/sliderkit'
-import { webglRenderer, displacementEffect, preloadImages } from '@andresclua/sliderkit-webgl'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { webgl, preloadWebGL } from '@andresclua/sliderkit-webgl'
 
-// Preload images so the first frame renders correctly
-await preloadImages('#my-slider')
+const assets = await preloadWebGL({
+  slides:       [1,2,3,4,5].map(i => `/images/slide-${i}.jpg`),
+  displacement: '/images/displacement.png',
+})
 
 new Slider('#my-slider', {
-  plugins: [
-    webglRenderer({
-      effect: displacementEffect({
-        texture: '/textures/displacement.png',
-        intensity: 1.2,
-      }),
-    }),
-  ],
+  items:   1,
+  loop:    true,
+  speed:   0,
+  plugins: [arrows(), webgl({ effect: 'displacement', assets })],
 })
 ```
 
-## Available effects
+> Always set `items: 1` and `speed: 0` — the plugin owns the animation.
 
-### `displacementEffect()`
-Distorts pixels using a displacement map texture during transitions.
+## `preloadWebGL()` options
+
+| Option | Type | Description |
+|---|---|---|
+| `slides` | `string[]` | Image URLs, one per slide in DOM order. |
+| `displacement` | `string` | Optional. Greyscale displacement map. Required only for `effect: 'displacement'`. |
+
+## `webgl()` options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `effect` | `'displacement' \| 'rgb-shift' \| 'radial' \| 'custom'` | — | Required. Transition shader to use. |
+| `assets` | `WebGLAssets` | — | Required. Returned by `preloadWebGL()`. |
+| `duration` | `number` | `900` | Transition length in milliseconds. |
+| `intensity` | `number` | `0.08` | Effect strength. |
+| `easing` | `(t: number) => number` | cubic ease-in-out | Maps progress `[0,1]` to eased value. |
+| `frag` | `string` | — | Required when `effect: 'custom'`. Raw GLSL fragment shader source. |
+| `uniforms` | `Record<string, number \| number[] \| (() => unknown)>` | `{}` | Extra uniforms injected into the shader each frame. |
+
+## Built-in effects
+
+| Effect | Description | Needs displacement map |
+|---|---|---|
+| `displacement` | A greyscale map warps both frames, producing a fluid ink-wipe. | Yes |
+| `rgb-shift` | Splits R and B channels horizontally (chromatic aberration). | No |
+| `radial` | Incoming image grows from the centre outward with a soft edge. | No |
+
+## Custom shaders
+
+Set `effect: 'custom'` and provide a GLSL fragment shader via `frag`. Always-available uniforms:
+
+| Name | Type | Description |
+|---|---|---|
+| `vUv` | `varying vec2` | UV coordinates `[0,1]`. |
+| `u_from` | `sampler2D` | Outgoing slide texture. |
+| `u_to` | `sampler2D` | Incoming slide texture. |
+| `u_progress` | `float` | Eased progress `[0,1]`. |
+| `u_ar` | `float` | Canvas aspect ratio (`width / height`). |
+| `u_disp` | `sampler2D` | Displacement map (bound when `assets.displacement` exists). |
 
 ```typescript
-import { displacementEffect } from '@andresclua/sliderkit-webgl'
-
-displacementEffect({
-  texture: '/textures/displacement.png', // displacement map
-  intensity: 1.2,                        // warp strength
+webgl({
+  effect: 'custom',
+  assets,
+  frag: `precision mediump float;
+varying vec2 vUv;
+uniform sampler2D u_from, u_to;
+uniform float u_progress;
+void main() {
+  float t = smoothstep(0.45, 0.55, vUv.x - u_progress + 0.5);
+  gl_FragColor = mix(texture2D(u_from, vUv), texture2D(u_to, vUv), t);
+}`,
 })
 ```
 
-### `rgbShiftEffect()`
-Splits the RGB channels apart for a chromatic aberration look.
+## TypeScript types
 
 ```typescript
-import { rgbShiftEffect } from '@andresclua/sliderkit-webgl'
-
-rgbShiftEffect({
-  amount: 0.02, // channel separation amount
-})
+import type { WebGLOptions, WebGLAssets, PreloadConfig, BuiltinEffect } from '@andresclua/sliderkit-webgl'
 ```
-
-### `pixelDissolveEffect()`
-Dissolves the outgoing slide into pixels before revealing the next.
-
-```typescript
-import { pixelDissolveEffect } from '@andresclua/sliderkit-webgl'
-
-pixelDissolveEffect({
-  pixelSize: 20, // pixel block size
-})
-```
-
-### `parallaxDepthEffect()`
-Moves slide layers at different depths creating a parallax illusion on swipe.
-
-```typescript
-import { parallaxDepthEffect } from '@andresclua/sliderkit-webgl'
-
-parallaxDepthEffect({
-  depth: 0.15, // parallax intensity (0–1)
-})
-```
-
-## `preloadImages(selector)`
-
-WebGL requires images to be fully decoded before the first render. Call this helper and `await` it before initialising the slider:
-
-```typescript
-import { preloadImages } from '@andresclua/sliderkit-webgl'
-
-await preloadImages('#my-slider') // decodes all img elements inside the container
-```
-
-## Notes
-
-- WebGL rendering requires slide content to be `<img>` elements (or elements with a `background-image`).
-- A canvas element is injected over the slider automatically — no extra markup needed.
-- If WebGL is unavailable (old browser / privacy mode), the renderer falls back gracefully to a plain CSS transition.
 
 ---
 
-[Documentation](https://sliderkit.andresclua.com/docs/webgl) · [GitHub](https://github.com/andresclua/sliderkit) · [MIT License](https://opensource.org/licenses/MIT)
+[Documentation](https://sliderkit.andresclua.com/docs/plugins/webgl) · [GitHub](https://github.com/andresclua/sliderkit) · [MIT License](https://opensource.org/licenses/MIT)

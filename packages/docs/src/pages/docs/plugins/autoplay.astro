@@ -3,7 +3,7 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Autoplay Plugin">
   <h1>Autoplay</h1>
-  <p class="lead">Auto-advances slides on a timed interval. Supports pause on hover, pause or disable on user interaction, reverse direction, and page-visibility awareness.</p>
+  <p class="lead">Automatically advances the slider on a fixed interval. Pauses on hover and focus by default, and always pauses while the user is touching or dragging.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} autoplay {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
@@ -12,32 +12,57 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>delay</code></td><td><code>number</code></td><td><code>3000</code></td><td>Interval in milliseconds between automatic slide advances.</td></tr>
-      <tr><td><code>pauseOnHover</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Pause autoplay while the pointer is over the slider container.</td></tr>
-      <tr><td><code>pauseOnInteraction</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Pause temporarily after a drag or touch, then resume once the transition ends.</td></tr>
-      <tr><td><code>disableOnInteraction</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Permanently stop autoplay after the first user drag or touch interaction.</td></tr>
-      <tr><td><code>reverseDirection</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Advance to the previous slide instead of the next on each tick.</td></tr>
-      <tr><td><code>resetOnVisibility</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Stop the interval when the page becomes hidden and restart when it becomes visible again.</td></tr>
+      <tr><td><code>delay</code></td><td>number</td><td><code>3000</code></td><td>Milliseconds between slide advances.</td></tr>
+      <tr><td><code>pauseOnHover</code></td><td>boolean</td><td><code>true</code></td><td>Pause while the cursor is over the slider.</td></tr>
+      <tr><td><code>pauseOnFocus</code></td><td>boolean</td><td><code>true</code></td><td>Pause while any element inside the slider has focus (keyboard accessibility).</td></tr>
+      <tr><td><code>direction</code></td><td><code>'forward' | 'backward'</code></td><td><code>'forward'</code></td><td>Which direction to advance automatically.</td></tr>
     </tbody>
   </table>
 
-  <h2>Programmatic control</h2>
-  <p>The plugin instance exposes <code>start()</code> and <code>stop()</code> methods.</p>
+  <h2>CSS classes</h2>
+  <table>
+    <thead><tr><th>Class</th><th>Applied to</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td><code>.sliderkit--autoplay-playing</code></td><td>outer wrapper</td><td>Autoplay is running.</td></tr>
+      <tr><td><code>.sliderkit--autoplay-paused</code></td><td>outer wrapper</td><td>Autoplay is paused (hover, focus, touch, drag).</td></tr>
+    </tbody>
+  </table>
 
-  <h2>Example</h2>
-  <pre><code>{`import { createSlider } from '@andresclua/sliderkit'
-import { autoplay } from '@andresclua/sliderkit-plugins'
+  <h2>Basic example</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} arrows, pagination, autoplay {"}"} from '@andresclua/sliderkit-plugins'
 
-const ap = autoplay({ delay: 4000, pauseOnHover: true })
+new Slider('#my-slider', {"{"}
+  items: 1,
+  loop:  true,
+  speed: 500,
+  plugins: [
+    arrows(),
+    pagination({"{"} type: 'dots', clickable: true {"}"}),
+    autoplay({"{"} delay: 3000, pauseOnHover: true {"}"}),
+  ],
+{"}"})</code></pre>
 
-createSlider('#my-slider', {
-  loop: true,
-  plugins: [ap],
-})
+  <h2>With progress bar</h2>
+  <p>Use <code>pagination({"{"} type: 'progress' {"}"})</code> alongside autoplay for a visual countdown. Match the CSS transition duration to your <code>delay</code>:</p>
+  <pre><code>plugins: [
+  pagination({"{"} type: 'progress' {"}"}),
+  autoplay({"{"} delay: 4000 {"}"}),
+]</code></pre>
+  <pre><code>/* match transition duration to delay */
+.sliderkit__pagination-progress-fill {"{"}
+  transition: width 3800ms linear; /* ~200ms less than delay for smoothness */
+{"}"}</code></pre>
 
-// Programmatic control
-ap.stop()
-ap.start()`}</code></pre>
+  <h2>Reverse direction</h2>
+  <pre><code>autoplay({"{"} delay: 2500, direction: 'backward' {"}"})</code></pre>
 
-  <p><a href="/demos/autoplay">View autoplay demo</a></p>
+  <h2>Behaviour notes</h2>
+  <ul>
+    <li>Autoplay always pauses during a touch swipe or mouse drag, and resumes on release.</li>
+    <li><code>pauseOnFocus</code> is on by default — this is the correct accessible behaviour. Users navigating by keyboard won't lose their place mid-slider.</li>
+    <li>Calling <code>slider.destroy()</code> clears the timer automatically.</li>
+  </ul>
+
+  <p><a href="/demos/autoplay">See it live in the Autoplay demo →</a></p>
 </DocsLayout>

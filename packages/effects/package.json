@@ -1,7 +1,7 @@
 {
   "name": "@andresclua/sliderkit-effects",
-  "version": "0.1.1",
-  "description": "SliderKit CSS transition effects — fade, cube, coverflow, flip, cards, creative",
+  "version": "2.0.0",
+  "description": "SliderKit CSS transition effects — fade, flip, clip-path",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
@@ -23,7 +23,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@andresclua/sliderkit": "workspace:*"
+    "@andresclua/sliderkit": "^2.0.0"
   },
   "devDependencies": {
     "vite": "^5.2.12",
@@ -31,7 +31,7 @@
     "typescript": "^5.4.5",
     "@andresclua/sliderkit": "workspace:*"
   },
-  "keywords": ["slider", "carousel", "sliderkit", "effects", "fade", "webgl", "css"],
+  "keywords": ["slider", "carousel", "sliderkit", "effects", "fade", "flip", "css"],
   "author": "Andres Clua",
   "license": "MIT",
   "repository": {

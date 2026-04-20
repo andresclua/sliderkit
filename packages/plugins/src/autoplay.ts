@@ -1,127 +1,93 @@
-import type { SliderPlugin } from '@andresclua/sliderkit'
-import type { SliderInstance } from '@andresclua/sliderkit'
+import type { SliderPlugin, SliderInstance, SliderInfo } from '@andresclua/sliderkit'
 
 export interface AutoplayOptions {
-  delay?: number
+  delay?:        number
   pauseOnHover?: boolean
-  pauseOnInteraction?: boolean
-  disableOnInteraction?: boolean
-  reverseDirection?: boolean
-  resetOnVisibility?: boolean
+  pauseOnFocus?: boolean
+  direction?:    'forward' | 'backward'
 }
 
-export function autoplay(options: AutoplayOptions = {}): SliderPlugin & {
-  start(): void
-  stop(): void
-} {
-  const {
-    delay = 3000,
-    pauseOnHover = true,
-    pauseOnInteraction = true,
-    disableOnInteraction = false,
-    reverseDirection = false,
-    resetOnVisibility = true,
-  } = options
+const CLS_PLAYING = 'sliderkit--autoplay-playing'
+const CLS_PAUSED  = 'sliderkit--autoplay-paused'
 
-  let intervalId: ReturnType<typeof setInterval> | null = null
-  let slider: SliderInstance | null = null
-  let paused = false
-  let disabled = false
+export function autoplay(opts: AutoplayOptions = {}): SliderPlugin {
+  const delay        = opts.delay        ?? 3000
+  const pauseOnHover = opts.pauseOnHover ?? true
+  const pauseOnFocus = opts.pauseOnFocus ?? true
+  const direction    = opts.direction    ?? 'forward'
 
-  let hoverEnterHandler: (() => void) | null = null
-  let hoverLeaveHandler: (() => void) | null = null
-  let visibilityHandler: (() => void) | null = null
-  let interactionHandler: (() => void) | null = null
+  let slider:    SliderInstance
+  let timerId:   ReturnType<typeof setTimeout> | null = null
+  let paused:    boolean = false
+  let destroyed: boolean = false
 
-  function start(): void {
-    if (disabled || paused) return
-    stop()
-    intervalId = setInterval(() => {
-      if (!slider) return
-      slider.goTo(reverseDirection ? 'prev' : 'next')
+  function schedule(): void {
+    if (timerId) clearTimeout(timerId)
+    timerId = setTimeout(() => {
+      if (!paused && !destroyed) {
+        direction === 'forward' ? slider.next() : slider.prev()
+        schedule()
+      }
     }, delay)
   }
 
-  function stop(): void {
-    if (intervalId !== null) {
-      clearInterval(intervalId)
-      intervalId = null
-    }
+  function pause(): void {
+    if (paused) return
+    paused = true
+    if (timerId) { clearTimeout(timerId); timerId = null }
+    slider.outerWrapper.classList.remove(CLS_PLAYING)
+    slider.outerWrapper.classList.add(CLS_PAUSED)
   }
+
+  function play(): void {
+    if (!paused) return
+    paused = false
+    slider.outerWrapper.classList.remove(CLS_PAUSED)
+    slider.outerWrapper.classList.add(CLS_PLAYING)
+    schedule()
+  }
+
+  const onMouseEnter = () => { if (pauseOnHover) pause() }
+  const onMouseLeave = () => { if (pauseOnHover) play() }
+  const onFocusIn    = () => { if (pauseOnFocus) pause() }
+  const onFocusOut   = () => { if (pauseOnFocus) play() }
 
   return {
     name: 'autoplay',
 
-    install(sliderInstance: SliderInstance) {
-      slider = sliderInstance
+    install(s: SliderInstance): void {
+      slider  = s
+      paused  = false
+      destroyed = false
 
-      start()
+      slider.outerWrapper.classList.add(CLS_PLAYING)
 
-      if (pauseOnHover && slider.container) {
-        hoverEnterHandler = () => {
-          paused = true
-          stop()
-        }
-        hoverLeaveHandler = () => {
-          paused = false
-          if (!disabled) start()
-        }
-        slider.container.addEventListener('mouseenter', hoverEnterHandler)
-        slider.container.addEventListener('mouseleave', hoverLeaveHandler)
+      if (pauseOnHover) {
+        slider.outerWrapper.addEventListener('mouseenter', onMouseEnter)
+        slider.outerWrapper.addEventListener('mouseleave', onMouseLeave)
+      }
+      if (pauseOnFocus) {
+        slider.outerWrapper.addEventListener('focusin',  onFocusIn)
+        slider.outerWrapper.addEventListener('focusout', onFocusOut)
       }
 
-      if (pauseOnInteraction || disableOnInteraction) {
-        interactionHandler = () => {
-          if (disableOnInteraction) {
-            disabled = true
-            stop()
-          } else if (pauseOnInteraction) {
-            paused = true
-            stop()
-            // Resume after the slide transition
-            setTimeout(() => {
-              if (!disabled) {
-                paused = false
-                start()
-              }
-            }, (slider?.getInfo() as Record<string, unknown>).speed as number || 300)
-          }
-        }
+      // pause while user is touching/dragging
+      s.on('touchStart', pause as (d: SliderInfo) => void)
+      s.on('dragStart',  pause as (d: SliderInfo) => void)
+      s.on('touchEnd',   play  as (d: SliderInfo) => void)
+      s.on('dragEnd',    play  as (d: SliderInfo) => void)
 
-        slider.on('touchStart', interactionHandler as () => void)
-        slider.on('dragStart', interactionHandler as () => void)
-      }
-
-      if (resetOnVisibility) {
-        visibilityHandler = () => {
-          if (document.hidden) {
-            stop()
-          } else if (!paused && !disabled) {
-            start()
-          }
-        }
-        document.addEventListener('visibilitychange', visibilityHandler)
-      }
+      schedule()
     },
 
-    start,
-    stop,
-
-    destroy() {
-      stop()
-      if (hoverEnterHandler && slider?.container) {
-        slider.container.removeEventListener('mouseenter', hoverEnterHandler)
-        slider.container.removeEventListener('mouseleave', hoverLeaveHandler!)
-      }
-      if (visibilityHandler) {
-        document.removeEventListener('visibilitychange', visibilityHandler)
-      }
-      slider = null
-      hoverEnterHandler = null
-      hoverLeaveHandler = null
-      visibilityHandler = null
-      interactionHandler = null
-      intervalId = null
+    destroy(): void {
+      destroyed = true
+      if (timerId) { clearTimeout(timerId); timerId = null }
+      slider.outerWrapper.classList.remove(CLS_PLAYING, CLS_PAUSED)
+      slider.outerWrapper.removeEventListener('mouseenter', onMouseEnter)
+      slider.outerWrapper.removeEventListener('mouseleave', onMouseLeave)
+      slider.outerWrapper.removeEventListener('focusin',  onFocusIn)
+      slider.outerWrapper.removeEventListener('focusout', onFocusOut)
     },
   }
 }

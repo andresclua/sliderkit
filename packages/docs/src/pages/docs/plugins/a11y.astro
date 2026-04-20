@@ -1,0 +1,64 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="A11y Plugin">
+  <h1>A11y</h1>
+  <p class="lead">Implements the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/carousel/" target="_blank" rel="noopener">WAI-ARIA Carousel pattern</a>. Adds semantic roles and labels so screen readers announce the carousel correctly.</p>
+
+  <h2>What it adds</h2>
+  <p>The core slider already hides non-visible slides with <code>aria-hidden</code> and maintains a live region that announces the current slide. This plugin adds the full structural layer on top:</p>
+  <table>
+    <thead><tr><th>Element</th><th>Attributes added</th></tr></thead>
+    <tbody>
+      <tr><td>Outer wrapper</td><td><code>role="region"</code>, <code>aria-roledescription="carousel"</code>, <code>aria-label="..."</code></td></tr>
+      <tr><td>Each real slide</td><td><code>role="group"</code>, <code>aria-roledescription="slide"</code>, <code>aria-label="1 of 5"</code></td></tr>
+    </tbody>
+  </table>
+  <p>With this in place a screen reader will announce <em>"Image carousel, region"</em> on focus, and <em>"slide, 1 of 5"</em> when entering each slide.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} a11y {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>containerLabel</code></td><td>string</td><td><code>'Image carousel'</code></td><td><code>aria-label</code> on the carousel region. Describe what the carousel contains.</td></tr>
+      <tr><td><code>slideLabel</code></td><td>string</td><td><code>'{"{{index}}"} of {"{{total}}"}'</code></td><td>Template for each slide's <code>aria-label</code>. Use <code>{"{{index}}"}</code> (1-based) and <code>{"{{total}}"}</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Basic example</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} arrows, pagination, a11y {"}"} from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {"{"}
+  items: 1,
+  loop:  true,
+  plugins: [
+    arrows(),
+    pagination({"{"} type: 'dots', clickable: true {"}"}),
+    a11y(),
+  ],
+{"}"})</code></pre>
+
+  <h2>Custom labels</h2>
+  <pre><code>// Product gallery
+a11y({"{"}
+  containerLabel: 'Product images',
+  slideLabel: 'Product photo {"{{index}}"} of {"{{total}}"}',
+{"}"})
+
+// Spanish
+a11y({"{"}
+  containerLabel: 'Galería de imágenes',
+  slideLabel: 'Imagen {"{{index}}"} de {"{{total}}"}',
+{"}"})</code></pre>
+
+  <h2>Behaviour notes</h2>
+  <ul>
+    <li>All attributes are removed cleanly on <code>slider.destroy()</code>.</li>
+    <li>Clone slides (added by <code>loop:true</code>) are not labelled — only real slides.</li>
+    <li>The core already sets <code>aria-hidden="true"</code> on off-screen slides and maintains an <code>aria-live="polite"</code> region that announces the current position. This plugin adds the structural carousel semantics on top of that.</li>
+  </ul>
+</DocsLayout>

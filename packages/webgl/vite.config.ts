@@ -11,11 +11,10 @@ export default defineConfig({
       fileName: (format) => (format === 'es' ? 'index.mjs' : 'index.umd.js'),
     },
     rollupOptions: {
-      external: ['@andresclua/sliderkit', 'gsap'],
+      external: ['@andresclua/sliderkit'],
       output: {
         globals: {
           '@andresclua/sliderkit': 'SliderKitCore',
-          'gsap': 'gsap',
         },
       },
     },

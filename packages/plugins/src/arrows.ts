@@ -1,78 +1,78 @@
-import type { SliderPlugin } from '@andresclua/sliderkit'
-import type { SliderInstance } from '@andresclua/sliderkit'
+import type { SliderPlugin, SliderInstance, SliderInfo } from '@andresclua/sliderkit'
 
 export interface ArrowsOptions {
-  prevEl?: string | HTMLElement
-  nextEl?: string | HTMLElement
-  prevLabel?: string
-  nextLabel?: string
+  prevText?: string
+  nextText?: string
+  container?: HTMLElement | string | null
 }
 
-const SVG_PREV = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>`
-const SVG_NEXT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`
+const SVG_PREV = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`
+const SVG_NEXT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`
 
-export function arrows(options: ArrowsOptions = {}): SliderPlugin {
-  const { prevLabel = 'Previous slide', nextLabel = 'Next slide' } = options
+const CLS_ARROW    = 'sliderkit__arrow'
+const CLS_PREV     = 'sliderkit__arrow--prev'
+const CLS_NEXT     = 'sliderkit__arrow--next'
+const CLS_DISABLED = 'sliderkit__arrow--disabled'
 
-  let slider: SliderInstance | null = null
-  let prevEl: HTMLElement | null = null
-  let nextEl: HTMLElement | null = null
-  let autoCreated = false
+export function arrows(opts: ArrowsOptions = {}): SliderPlugin {
+  let slider: SliderInstance
+  let prevBtn: HTMLButtonElement
+  let nextBtn: HTMLButtonElement
 
-  function update(): void {
-    if (!slider || !prevEl || !nextEl) return
-    const info = slider.getInfo() as Record<string, unknown>
-    const wraps = Boolean(info.loop) || Boolean(info.rewind)
-    prevEl.classList.toggle('c--slider-a__arrow--disabled', slider.isBeginning && !wraps)
-    nextEl.classList.toggle('c--slider-a__arrow--disabled', slider.isEnd && !wraps)
-    ;(prevEl as HTMLButtonElement).disabled = slider.isBeginning && !wraps
-    ;(nextEl as HTMLButtonElement).disabled = slider.isEnd && !wraps
-  }
-
-  function getOrCreate(
-    opt: string | HTMLElement | undefined,
-    dir: 'prev' | 'next',
-    container: HTMLElement
-  ): HTMLElement {
-    if (opt) {
-      const el = typeof opt === 'string' ? document.querySelector<HTMLElement>(opt) : opt
-      if (el) return el
+  function updateDisabled(): void {
+    if (slider.options.loop) {
+      prevBtn.classList.remove(CLS_DISABLED)
+      nextBtn.classList.remove(CLS_DISABLED)
+      return
     }
-    autoCreated = true
-    const btn = document.createElement('button') as HTMLButtonElement
-    btn.className = `c--slider-a__arrow c--slider-a__arrow--${dir}`
-    btn.setAttribute('aria-label', dir === 'prev' ? prevLabel : nextLabel)
-    btn.innerHTML = dir === 'prev' ? SVG_PREV : SVG_NEXT
-    container.appendChild(btn)
-    return btn
+    if (slider.isBeginning) prevBtn.classList.add(CLS_DISABLED)
+    else prevBtn.classList.remove(CLS_DISABLED)
+    if (slider.isEnd) nextBtn.classList.add(CLS_DISABLED)
+    else nextBtn.classList.remove(CLS_DISABLED)
   }
+
+  const onPrev = () => slider.prev()
+  const onNext = () => slider.next()
 
   return {
     name: 'arrows',
 
-    install(sliderInstance: SliderInstance) {
-      slider = sliderInstance
-      prevEl = getOrCreate(options.prevEl, 'prev', sliderInstance.container)
-      nextEl = getOrCreate(options.nextEl, 'next', sliderInstance.container)
+    install(s: SliderInstance): void {
+      slider = s
 
-      prevEl.addEventListener('click', () => slider?.prev())
-      nextEl.addEventListener('click', () => slider?.next())
+      prevBtn = document.createElement('button')
+      prevBtn.type = 'button'
+      prevBtn.className = `${CLS_ARROW} ${CLS_PREV}`
+      prevBtn.setAttribute('aria-label', 'Previous slide')
+      prevBtn.innerHTML = opts.prevText ?? SVG_PREV
 
-      update()
-      slider.on('afterSlideChange', update as () => void)
-      slider.on('resize', update as () => void)
+      nextBtn = document.createElement('button')
+      nextBtn.type = 'button'
+      nextBtn.className = `${CLS_ARROW} ${CLS_NEXT}`
+      nextBtn.setAttribute('aria-label', 'Next slide')
+      nextBtn.innerHTML = opts.nextText ?? SVG_NEXT
+
+      const target = opts.container
+        ? (typeof opts.container === 'string' ? document.querySelector<HTMLElement>(opts.container) : opts.container)
+        : s.outerWrapper
+      if (!target) return
+
+      target.appendChild(prevBtn)
+      target.appendChild(nextBtn)
+
+      prevBtn.addEventListener('click', onPrev)
+      nextBtn.addEventListener('click', onNext)
+
+      updateDisabled()
+      s.on('indexChanged', updateDisabled as (d: SliderInfo) => void)
+      s.on('transitionEnd', updateDisabled as (d: SliderInfo) => void)
     },
 
-    destroy() {
-      slider?.off('afterSlideChange', update as () => void)
-      slider?.off('resize', update as () => void)
-      if (autoCreated) {
-        prevEl?.remove()
-        nextEl?.remove()
-      }
-      slider = null
-      prevEl = null
-      nextEl = null
+    destroy(): void {
+      prevBtn?.removeEventListener('click', onPrev)
+      nextBtn?.removeEventListener('click', onNext)
+      prevBtn?.remove()
+      nextBtn?.remove()
     },
   }
 }

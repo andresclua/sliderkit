@@ -3,189 +3,118 @@ import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
 ---
 <DemoLayout title="Infinite Loop">
-
   <DemoViewer
     title="Infinite loop — 1 slide per page"
     description="Set loop: true to wrap seamlessly from the last slide back to the first. Clones of the boundary slides are inserted in the DOM so the animation always looks continuous."
-    html={`<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item">Slide 1</div>
-    <div class="c--slider-a__item">Slide 2</div>
-    <div class="c--slider-a__item">Slide 3</div>
-    <div class="c--slider-a__item">Slide 4</div>
-    <div class="c--slider-a__item">Slide 5</div>
-  </div>
-</div>
-<div id="my-pag"></div>`}
-    css={`.c--slider-a {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`.sliderkit__item { height: 260px; }
+
+.sliderkit__arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 10; width: 40px; height: 40px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,0.9); cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
 }
-.c--slider-a__wrapper {
-  display: flex;
-  will-change: transform;
+.sliderkit__arrow--prev { left: 12px; }
+.sliderkit__arrow--next { right: 12px; }
+
+.sliderkit__pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 12px 0;
 }
-.c--slider-a__item {
-  flex-shrink: 0;
-  width: 100%;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  background: #6C2BD9;
-  border-radius: 12px;
+.sliderkit__pagination-bullet {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #d1d5db; border: none; cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
 }
-.c--slider-a__arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.9);
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-}
-.c--slider-a__arrow--prev { left: 12px; }
-.c--slider-a__arrow--next { right: 12px; }`}
+.sliderkit__pagination-bullet--active { background: #6C2BD9; transform: scale(1.3); }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
+  items: 1,
   loop: true,
   speed: 350,
   plugins: [
     arrows(),
-    pagination({ el: '#my-pag', type: 'dots', clickable: true }),
+    pagination({ type: 'dots', clickable: true }),
   ],
 })`}
   >
-    <div class="c--slider-a" id="demo-loop-1">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item loop-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__item loop-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__item loop-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__item loop-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__item loop-slide s-red"    data-slide>5</div>
-      </div>
+    <div id="demo-loop-1">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
     </div>
-    <div id="demo-loop-1-pag" class="c--slider-a__pagination" style="justify-content:center;display:flex;gap:6px;padding:10px 0;"></div>
   </DemoViewer>
 
   <DemoViewer
     title="Infinite loop — 2 slides per page"
-    description="Loop works with any slidesPerPage. The slider clones the last 2 slides before the start and the first 2 after the end, so boundaries always animate smoothly."
-    html={`<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item">1</div>
-    <div class="c--slider-a__item">2</div>
-    <div class="c--slider-a__item">3</div>
-    <div class="c--slider-a__item">4</div>
-    <div class="c--slider-a__item">5</div>
-    <div class="c--slider-a__item">6</div>
-  </div>
+    description="Loop works with any items count. The slider clones boundary slides so transitions always animate smoothly."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+  <div class="demo-slide s-pink">6</div>
 </div>`}
-    css={`.c--slider-a {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+    css={`.sliderkit__item { height: 220px; }
+
+.sliderkit__arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 10; width: 40px; height: 40px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,0.9); cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
 }
-.c--slider-a__wrapper {
-  display: flex;
-  will-change: transform;
-}
-.c--slider-a__item {
-  flex-shrink: 0;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  border-radius: 10px;
-}
-.c--slider-a__arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.9);
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-}
-.c--slider-a__arrow--prev { left: 8px; }
-.c--slider-a__arrow--next { right: 8px; }`}
+.sliderkit__arrow--prev { left: 8px; }
+.sliderkit__arrow--next { right: 8px; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
-  slidesPerPage: 2,
+  items: 2,
   gutter: 16,
   loop: true,
   speed: 350,
   plugins: [arrows()],
 })`}
   >
-    <div class="c--slider-a" id="demo-loop-2">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item loop-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__item loop-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__item loop-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__item loop-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__item loop-slide s-red"    data-slide>5</div>
-        <div class="c--slider-a__item loop-slide s-teal"   data-slide>6</div>
-      </div>
+    <div id="demo-loop-2">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+      <div class="demo-slide s-pink">6</div>
     </div>
   </DemoViewer>
-
 </DemoLayout>
-
-<style>
-.loop-slide {
-  flex-shrink: 0;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #fff;
-  border-radius: 12px;
-}
-.s-purple { background: #6C2BD9; }
-.s-blue   { background: #2563eb; }
-.s-green  { background: #059669; }
-.s-amber  { background: #d97706; }
-.s-red    { background: #dc2626; }
-.s-teal   { background: #0891b2; }
-</style>
 
 <script>
 import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-loop-1', {
+  items: 1,
   loop: true,
   speed: 350,
   plugins: [
     arrows(),
-    pagination({ el: '#demo-loop-1-pag', type: 'dots', clickable: true }),
+    pagination({ type: 'dots', clickable: true }),
   ],
 })
 
 new Slider('#demo-loop-2', {
-  slidesPerPage: 2,
+  items: 2,
   gutter: 16,
   loop: true,
   speed: 350,

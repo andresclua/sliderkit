@@ -5,105 +5,68 @@ import DemoViewer from '../../components/DemoViewer.astro'
 <DemoLayout title="Vertical">
   <DemoViewer
     title="Vertical slider"
-    description='Set direction: "vertical" for a top-to-bottom slider. Use arrows, swipe up/down, or arrow keys.'
-    html={`<div class="c--slider-a c--slider-a--vertical" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item">1</div>
-    <div class="c--slider-a__item">2</div>
-    <div class="c--slider-a__item">3</div>
-    <div class="c--slider-a__item">4</div>
-    <div class="c--slider-a__item">5</div>
-  </div>
-</div>
-<div id="my-pagination" class="c--slider-a__pagination"></div>`}
-    css={`.c--slider-a {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-.c--slider-a__wrapper {
-  display: flex;
-  will-change: transform;
-}
-.c--slider-a__item {
-  flex-shrink: 0;
-  width: 100%;
-  height: 260px;
-}
+    description='Set axis:"vertical" for a top-to-bottom slider. Give the container a fixed height. Swipe up/down or use the arrows.'
+    html={`<div id="my-slider" style="height:300px">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>`}
+    css={`#my-slider { height: 300px; }
+.demo-slide { height: 300px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }
 
-/* Vertical mode */
-.c--slider-a--vertical {
-  height: 300px;
-}
-.c--slider-a--vertical .c--slider-a__wrapper {
-  flex-direction: column;
-  height: 100%;
-}
-
-/* Fraction pagination */
-.c--slider-a__pagination {
-  display: flex;
-  justify-content: center;
-  padding: 12px 0;
-}
-.c--slider-a__pagination-fraction {
-  font-size: 0.85rem;
-  color: #6b7280;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Auto-created arrows */
-.c--slider-a__arrow {
+/* vertical arrows: top / bottom instead of left / right */
+.sliderkit__arrow {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  left: 50%; transform: translateX(-50%);
+  z-index: 10; width: 40px; height: 40px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,0.9); cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
 }
-.c--slider-a__arrow--prev { left: 12px; }
-.c--slider-a__arrow--next { right: 12px; }
-.c--slider-a__arrow--disabled { opacity: 0.3; pointer-events: none; }`}
+.sliderkit__arrow--prev { top: 8px; }
+.sliderkit__arrow--next { bottom: 8px; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { arrows } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
-  direction: 'vertical',
+  items: 1,
+  axis: 'vertical',
   loop: true,
-  plugins: [
-    arrows(),
-    pagination({ el: '#my-pagination', type: 'fraction' }),
-  ],
+  speed: 300,
+  plugins: [arrows()],
 })`}
   >
-    <div class="c--slider-a" id="demo-vertical">
-      <div class="c--slider-a__wrapper">
-        <div class="c--slider-a__item demo-slide s-purple" data-slide>1</div>
-        <div class="c--slider-a__item demo-slide s-blue"   data-slide>2</div>
-        <div class="c--slider-a__item demo-slide s-green"  data-slide>3</div>
-        <div class="c--slider-a__item demo-slide s-amber"  data-slide>4</div>
-        <div class="c--slider-a__item demo-slide s-red"    data-slide>5</div>
-      </div>
+    <div id="demo-vertical" style="height:300px">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
     </div>
-    <div id="demo-vertical-pag" class="c--slider-a__pagination"></div>
   </DemoViewer>
 </DemoLayout>
 
+<style>
+#demo-vertical ~ :global(.sliderkit__outer) .sliderkit__arrow,
+:global(#demo-vertical-ow) :global(.sliderkit__arrow) {
+  left: 50%;
+  transform: translateX(-50%);
+  top: auto;
+}
+:global(#demo-vertical-ow) :global(.sliderkit__arrow--prev) { top: 8px; }
+:global(#demo-vertical-ow) :global(.sliderkit__arrow--next) { bottom: 8px; top: auto; }
+</style>
+
 <script>
 import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { arrows } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-vertical', {
-  direction: 'vertical',
+  items: 1,
+  axis: 'vertical',
   loop: true,
-  plugins: [
-    arrows(),
-    pagination({ el: '#demo-vertical-pag', type: 'fraction' }),
-  ],
+  speed: 300,
+  plugins: [arrows()],
 })
 </script>
