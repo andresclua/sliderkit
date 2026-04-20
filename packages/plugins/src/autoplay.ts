@@ -7,8 +7,8 @@ export interface AutoplayOptions {
   direction?:    'forward' | 'backward'
 }
 
-const CLS_PLAYING = 'c--slider-a--autoplay-playing'
-const CLS_PAUSED  = 'c--slider-a--autoplay-paused'
+const CLS_PLAYING = 'sliderkit--autoplay-playing'
+const CLS_PAUSED  = 'sliderkit--autoplay-paused'
 
 export function autoplay(opts: AutoplayOptions = {}): SliderPlugin {
   const delay        = opts.delay        ?? 3000

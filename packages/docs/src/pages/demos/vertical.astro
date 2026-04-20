@@ -17,15 +17,15 @@ import DemoViewer from '../../components/DemoViewer.astro'
 .demo-slide { height: 300px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }
 
 /* vertical arrows: top / bottom instead of left / right */
-.c--slider-a__arrow {
+.sliderkit__arrow {
   position: absolute;
   left: 50%; transform: translateX(-50%);
   z-index: 10; width: 40px; height: 40px; border-radius: 50%;
   border: none; background: rgba(255,255,255,0.9); cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,.18);
 }
-.c--slider-a__arrow--prev { top: 8px; }
-.c--slider-a__arrow--next { bottom: 8px; }`}
+.sliderkit__arrow--prev { top: 8px; }
+.sliderkit__arrow--next { bottom: 8px; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows } from '@andresclua/sliderkit-plugins'
 
@@ -48,14 +48,14 @@ new Slider('#my-slider', {
 </DemoLayout>
 
 <style>
-#demo-vertical ~ :global(.c--slider-a__outer) .c--slider-a__arrow,
-:global(#demo-vertical-ow) :global(.c--slider-a__arrow) {
+#demo-vertical ~ :global(.sliderkit__outer) .sliderkit__arrow,
+:global(#demo-vertical-ow) :global(.sliderkit__arrow) {
   left: 50%;
   transform: translateX(-50%);
   top: auto;
 }
-:global(#demo-vertical-ow) :global(.c--slider-a__arrow--prev) { top: 8px; }
-:global(#demo-vertical-ow) :global(.c--slider-a__arrow--next) { bottom: 8px; top: auto; }
+:global(#demo-vertical-ow) :global(.sliderkit__arrow--prev) { top: 8px; }
+:global(#demo-vertical-ow) :global(.sliderkit__arrow--next) { bottom: 8px; top: auto; }
 </style>
 
 <script>

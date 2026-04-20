@@ -1,0 +1,110 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Clip-path effect">
+  <h1>Clip-path effect</h1>
+  <p class="lead">Slides are revealed using CSS <code>clip-path</code> animations. Six built-in shapes plus full support for custom clip-path values.</p>
+
+  <h2>Installation</h2>
+  <pre><code>npm install @andresclua/sliderkit-effects</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} clipPathEffect {"}"} from '@andresclua/sliderkit-effects'
+
+new Slider('#el', {"{"}
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [clipPathEffect({"{"} shape: 'wipe-right', duration: 600 {"}"})],
+{"}"})</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>shape</code></td>
+        <td><code>ClipPathPreset | ClipPathCustom | ClipPathDirectional</code></td>
+        <td><code>'wipe-right'</code></td>
+        <td>Preset name, custom clip object, or <code>{"{"} forward, backward {"}"}</code> for per-direction shapes.</td>
+      </tr>
+      <tr>
+        <td><code>duration</code></td>
+        <td><code>number</code></td>
+        <td>slider <code>speed</code></td>
+        <td>Transition duration in milliseconds.</td>
+      </tr>
+      <tr>
+        <td><code>easing</code></td>
+        <td><code>string</code></td>
+        <td><code>'ease-in-out'</code></td>
+        <td>Any CSS easing function.</td>
+      </tr>
+      <tr>
+        <td><code>directionAware</code></td>
+        <td><code>boolean</code></td>
+        <td><code>true</code></td>
+        <td>Reverses the wipe direction when navigating backward (only applies to wipe presets).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Built-in presets</h2>
+  <table>
+    <thead><tr><th>Preset</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>'wipe-right'</code></td><td>Reveals left to right</td></tr>
+      <tr><td><code>'wipe-left'</code></td><td>Reveals right to left</td></tr>
+      <tr><td><code>'wipe-down'</code></td><td>Reveals top to bottom</td></tr>
+      <tr><td><code>'wipe-up'</code></td><td>Reveals bottom to top</td></tr>
+      <tr><td><code>'circle'</code></td><td>Expands from center as a circle</td></tr>
+      <tr><td><code>'diamond'</code></td><td>Expands from center as a diamond</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Direction-aware shapes</h2>
+  <p>Pass <code>{"{"} forward, backward {"}"}</code> to <code>shape</code> to use a completely different effect depending on which arrow was clicked. Each value accepts a preset name or a custom shape object — you can mix both freely.</p>
+  <pre><code>// preset forward, custom backward
+clipPathEffect({"{"}
+  shape: {"{"}
+    forward:  'wipe-down',
+    backward: {"{"}
+      hidden:  'circle(0% at 85% 85%)',
+      visible: 'circle(170% at 85% 85%)',
+    {"}"},
+  {"}"},
+  duration: 800,
+  easing: 'ease-in-out',
+{"}"})</code></pre>
+
+  <h2>Custom shape</h2>
+  <p>Pass an object instead of a preset name. Define any valid <code>clip-path</code> values for the hidden and visible states. Both values must use the same function type (both <code>polygon()</code>, both <code>inset()</code>, etc.) for the browser to interpolate between them.</p>
+  <pre><code>clipPathEffect({"{"}
+  shape: {"{"}
+    hidden:  'polygon(0 0, 0 0, 0 100%, 0 100%)',   // fully clipped (left edge)
+    visible: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', // fully revealed
+    hiddenReverse: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)', // reversed start
+  {"}"},
+  duration: 700,
+  easing: 'cubic-bezier(0.77, 0, 0.18, 1)',
+{"}"})</code></pre>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>All slides stack with <code>position: absolute</code>. The slider's translate is neutralised.</li>
+    <li>The outgoing slide stays at <code>z-index: 1</code> beneath the incoming.</li>
+    <li>The incoming slide is placed at <code>z-index: 2</code> with <code>clip-path</code> set to the hidden state, then animated to the visible state.</li>
+    <li>After the transition ends, <code>clip-path</code> and <code>z-index</code> are cleaned up.</li>
+  </ol>
+
+  <h2>Notes</h2>
+  <ul>
+    <li>Only works with <code>items: 1</code>.</li>
+    <li>Both <code>hidden</code> and <code>visible</code> clip-path values must use the same CSS function type so the browser can interpolate between them.</li>
+    <li>No <code>overflow: hidden</code> issues — <code>clip-path</code> doesn't require a 3D rendering context.</li>
+  </ul>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/clip-path">See the clip-path demos →</a></p>
+</DocsLayout>

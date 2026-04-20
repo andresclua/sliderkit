@@ -1,13 +1,13 @@
 @use '../../../core/src/scss/variables' as *;
 
-.c--slider-a__thumbs {
+.sliderkit__thumbs {
   display: flex;
   gap: $slider-thumb-gap;
   margin-top: 12px;
   flex-wrap: wrap;
 }
 
-.c--slider-a__thumb {
+.sliderkit__thumb {
   width: $slider-thumb-size;
   height: $slider-thumb-size;
   cursor: pointer;

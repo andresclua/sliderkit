@@ -1,0 +1,64 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Flip effect">
+  <h1>Flip effect</h1>
+  <p class="lead">Slides flip on the Y axis like turning a card. Direction-aware — flips forward or backward depending on how you navigate.</p>
+
+  <h2>Installation</h2>
+  <pre><code>npm install @andresclua/sliderkit-effects</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} flipEffect {"}"} from '@andresclua/sliderkit-effects'
+
+new Slider('#el', {"{"}
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins: [flipEffect({"{"} duration: 500, easing: 'ease-in-out', perspective: 800 {"}"})],
+{"}"})</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>duration</code></td>
+        <td><code>number</code></td>
+        <td>slider <code>speed</code></td>
+        <td>Total flip duration in ms. Each phase (out + in) takes half this value.</td>
+      </tr>
+      <tr>
+        <td><code>easing</code></td>
+        <td><code>string</code></td>
+        <td><code>'ease-in-out'</code></td>
+        <td>Any CSS easing function.</td>
+      </tr>
+      <tr>
+        <td><code>perspective</code></td>
+        <td><code>number</code></td>
+        <td><code>800</code></td>
+        <td>Perspective distance in px. Lower values = more dramatic 3D depth.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>Slides stack with <code>position: absolute</code>; the slider's translate is neutralised.</li>
+    <li>Each slide uses <code>perspective(Npx) rotateY()</code> inline in its own transform — no parent perspective needed.</li>
+    <li>The animation is sequential: the outgoing slide rotates to ±90° first (first half of <code>duration</code>), then the incoming slides in from ∓90° to 0° (second half). The two phases never overlap.</li>
+    <li><code>backface-visibility: hidden</code> prevents the reverse face showing mid-flip.</li>
+  </ol>
+
+  <h2>Notes</h2>
+  <ul>
+    <li>Only works with <code>items: 1</code>.</li>
+    <li>Recommended with <code>loop: false</code> or <code>rewind: true</code>.</li>
+    <li>The plugin temporarily removes <code>overflow: hidden</code> from any clipping ancestor and <code>will-change: transform</code> from the track — both are restored on <code>destroy()</code>.</li>
+  </ul>
+
+  <h2>Demo</h2>
+  <p><a href="/demos/flip">See the flip demo →</a></p>
+</DocsLayout>

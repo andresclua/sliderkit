@@ -3,7 +3,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 ---
 <DocsLayout title="Plugins">
   <h1>Plugins</h1>
-  <p class="lead">Plugins extend the slider with UI features. Import only what you need from <code>@andresclua/sliderkit-plugins</code>.</p>
+  <p class="lead">Plugins extend the slider with UI features — navigation arrows, pagination, autoplay, accessibility, keyboard control, and more. They are installed via the <code>plugins</code> option and follow a simple <code>install</code> / <code>destroy</code> lifecycle. Each plugin is a separate named export so you import only what you use — unused plugins are tree-shaken out and add zero bytes to your final bundle.</p>
 
   <h2>Installation</h2>
   <pre><code>npm install @andresclua/sliderkit-plugins
@@ -11,7 +11,8 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 pnpm add @andresclua/sliderkit-plugins</code></pre>
 
   <h2>Usage</h2>
-  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+  <pre><code>// Only import what you use — unused plugins are tree-shaken out of your bundle
+import {"{"} Slider {"}"} from '@andresclua/sliderkit'
 import {"{"} arrows, pagination {"}"} from '@andresclua/sliderkit-plugins'
 
 new Slider('#el', {"{"}
@@ -31,8 +32,49 @@ new Slider('#el', {"{"}
       <tr><td><a href="/docs/plugins/a11y">a11y</a></td><td><code>a11y(opts?)</code></td><td>WAI-ARIA carousel pattern — roles, roledescriptions, and slide labels.</td></tr>
       <tr><td><a href="/docs/plugins/mouseWheel">mouseWheel</a></td><td><code>mouseWheel(opts?)</code></td><td>Navigate with the mouse wheel or trackpad. Cooldown prevents mid-transition skips.</td></tr>
       <tr><td><a href="/docs/plugins/keyboard">keyboard</a></td><td><code>keyboard(opts?)</code></td><td>← → arrow keys navigate when the slider is focused. ↑ ↓ for vertical sliders.</td></tr>
+      <tr><td><a href="/docs/plugins/progress">progress</a></td><td><code>progress(opts?)</code></td><td>Progress bar that fills as you advance through the slides.</td></tr>
+      <tr><td><a href="/docs/plugins/thumbs">thumbs</a></td><td><code>thumbs(opts)</code></td><td>Thumbnail strip synced to the slider. Click a thumb to jump to that slide.</td></tr>
+      <tr><td><a href="/docs/plugins/hooks">hooks</a></td><td><code>hooks(callbacks)</code></td><td>Lifecycle callbacks (onInit, beforeChange, afterChange, onDragStart, onDragEnd, onResize, beforeDestroy) for custom animations with GSAP or similar.</td></tr>
     </tbody>
   </table>
+
+  <h2>Plugins and responsive breakpoints</h2>
+  <p><code>plugins</code> cannot be set inside the <code>responsive</code> map — it only supports layout options like <code>items</code> and <code>gutter</code>. If you need a plugin active only above a certain breakpoint, build the array conditionally before creating the slider:</p>
+  <pre><code>const plugins = [arrows()]
+
+if (window.innerWidth >= 960) {"{"}
+  plugins.push(progress({"{"} container: '#my-progress' {"}"}))
+{"}"}
+
+new Slider('#el', {"{"} plugins {"}"})</code></pre>
+  <p>If you also need plugins to swap <strong>on resize</strong>, destroy and recreate the slider when the breakpoint zone changes:</p>
+  <pre><code>function getZone() {"{"}
+  if (window.innerWidth &lt; 640)  return 'sm'
+  if (window.innerWidth &lt; 960)  return 'md'
+  return 'lg'
+{"}"}
+
+function buildPlugins(zone) {"{"}
+  const p = [arrows()]
+  if (zone === 'sm') p.push(pagination({"{"} type: 'dots' {"}"}))
+  if (zone === 'lg') p.push(progress({"{"} container: '#progress' {"}"}))
+  return p
+{"}"}
+
+let zone = getZone()
+let slider = new Slider('#el', {"{"} plugins: buildPlugins(zone) {"}"})
+
+let t
+window.addEventListener('resize', () => {"{"}
+  clearTimeout(t)
+  t = setTimeout(() => {"{"}
+    const next = getZone()
+    if (next === zone) return
+    zone = next
+    slider.destroy()
+    slider = new Slider('#el', {"{"} plugins: buildPlugins(zone) {"}"})
+  {"}"}, 150)
+{"}"})</code></pre>
 
   <h2>Writing your own plugin</h2>
   <p>A plugin is a plain object with <code>name</code>, <code>install</code>, and <code>destroy</code>. Wrap it in a factory function so options are closed over.</p>

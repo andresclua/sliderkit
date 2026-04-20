@@ -1,75 +1,71 @@
-import type { SliderPlugin } from '@andresclua/sliderkit'
-import type { SliderInstance } from '@andresclua/sliderkit'
-import type { AfterSlideChangePayload } from '@andresclua/sliderkit'
+import type { SliderPlugin, SliderInstance } from '@andresclua/sliderkit'
 
 export interface FadeEffectOptions {
-  crossFade?: boolean
+  crossFade?: boolean  // true = others fade out, false = others stay visible beneath (default: true)
+  duration?:  number   // fade duration in ms — defaults to the slider's speed option
+  easing?:    string   // CSS easing function (default: 'ease')
 }
 
-export function fadeEffect(options: FadeEffectOptions = {}): SliderPlugin {
-  const { crossFade = true } = options
+export function fadeEffect(opts: FadeEffectOptions = {}): SliderPlugin {
+  const crossFade = opts.crossFade ?? true
+  const easing    = opts.easing    ?? 'ease'
 
-  let slider: SliderInstance | null = null
-
-  function applyFade(activeIndex?: number): void {
-    if (!slider) return
-    const idx = activeIndex ?? slider.activeIndex
-    slider.slides.forEach((slide, i) => {
-      const isActive = i === idx
-      slide.style.opacity = isActive || !crossFade ? '1' : '0'
-      slide.style.zIndex = isActive ? '1' : '0'
-      slide.style.pointerEvents = isActive ? 'auto' : 'none'
-    })
-  }
-
-  function onSlideChange({ index }: AfterSlideChangePayload): void {
-    applyFade(index)
-    // Reset wrapper translate — slides are absolute, wrapper must stay at 0
-    if (slider) {
-      slider.wrapper.style.transform = 'translate3d(0,0,0)'
-      slider.wrapper.style.transition = 'none'
-    }
-  }
+  let slider:  SliderInstance
+  let styleEl: HTMLStyleElement
 
   return {
     name: 'fadeEffect',
 
-    install(sliderInstance: SliderInstance) {
-      slider = sliderInstance
-      sliderInstance.container.classList.add('c--slider-effect-fade')
+    install(s: SliderInstance): void {
+      slider = s
 
-      const speed = (sliderInstance.getInfo() as Record<string, unknown>).speed as number ?? 300
+      // Build a unique CSS selector for this container
+      const uid      = 'skit-f-' + Math.random().toString(36).slice(2, 7)
+      const selector = s.container.id ? '#' + s.container.id : `[data-skit-fade="${uid}"]`
+      if (!s.container.id) s.container.setAttribute('data-skit-fade', uid)
 
-      sliderInstance.wrapper.style.position = 'relative'
-      sliderInstance.wrapper.style.transform = 'translate3d(0,0,0)'
-      sliderInstance.wrapper.style.transition = 'none'
+      const speed    = opts.duration ?? s.options.speed ?? 300
+      const opacity0 = crossFade ? '0' : '1'
 
-      sliderInstance.slides.forEach((slide) => {
-        slide.style.position = 'absolute'
-        slide.style.top = '0'
-        slide.style.left = '0'
-        slide.style.width = '100%'
-        slide.style.transition = `opacity ${speed}ms ease`
-      })
+      // Inject CSS:
+      //  - neutralise the slider's translate (it moves the container, fade doesn't need that)
+      //  - stack slides with absolute positioning
+      //  - use the existing --active class for the opacity toggle
+      styleEl = document.createElement('style')
+      styleEl.textContent = [
+        `${selector}{transform:none!important;transition:none!important;}`,
+        `${selector}>.sliderkit__item{`,
+          `position:absolute;top:0;left:0;width:100%;`,
+          `opacity:${opacity0};`,
+          `transition:opacity ${speed}ms ${easing};`,
+          `pointer-events:none;z-index:0;`,
+        `}`,
+        `${selector}>.sliderkit__item--active{`,
+          `opacity:1;pointer-events:auto;z-index:1;`,
+        `}`,
+      ].join('')
+      document.head.appendChild(styleEl)
 
-      applyFade()
-      slider.on('afterSlideChange', onSlideChange as (p: AfterSlideChangePayload) => void)
+      const syncHeight = () => {
+        const activeSlide = s.slides[s.activeIndex]
+        const h = activeSlide?.offsetHeight || 0
+        if (!h) return
+        s.container.style.height    = h + 'px'
+        s.innerWrapper.style.height = h + 'px'
+        const overflowEl = s.innerWrapper.parentElement as HTMLElement
+        if (overflowEl) overflowEl.style.height = h + 'px'
+      }
+      requestAnimationFrame(syncHeight)
+      s.on('indexChanged', syncHeight)
     },
 
-    destroy() {
-      slider?.container.classList.remove('c--slider-effect-fade')
-      slider?.slides.forEach((slide) => {
-        slide.style.position = ''
-        slide.style.top = ''
-        slide.style.left = ''
-        slide.style.opacity = ''
-        slide.style.zIndex = ''
-        slide.style.pointerEvents = ''
-        slide.style.transition = ''
-      })
-      slider?.wrapper.style && (slider.wrapper.style.position = '')
-      slider?.off('afterSlideChange', onSlideChange as (p: AfterSlideChangePayload) => void)
-      slider = null
+    destroy(): void {
+      styleEl?.remove()
+      slider.container.removeAttribute('data-skit-fade')
+      slider.container.style.height    = ''
+      slider.innerWrapper.style.height = ''
+      const overflowEl = slider.innerWrapper.parentElement as HTMLElement
+      if (overflowEl) overflowEl.style.height = ''
     },
   }
 }

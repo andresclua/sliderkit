@@ -20,21 +20,21 @@ describe('Slider', () => {
     it('wraps container in outer / overflow / inner divs', () => {
       const el = createContainer()
       const s = new Slider(el, { loop: false })
-      expect(el.parentElement?.classList.contains('c--slider-a__inner')).toBe(true)
+      expect(el.parentElement?.classList.contains('sliderkit__inner')).toBe(true)
       s.destroy()
     })
 
     it('adds BEM class to container', () => {
       const el = createContainer()
       const s = new Slider(el, { loop: false })
-      expect(el.classList.contains('c--slider-a')).toBe(true)
+      expect(el.classList.contains('sliderkit')).toBe(true)
       s.destroy()
     })
 
     it('marks original slides with item class', () => {
       const el = createContainer(3)
       const s = new Slider(el, { loop: false })
-      expect(s.slides.every(sl => sl.classList.contains('c--slider-a__item'))).toBe(true)
+      expect(s.slides.every(sl => sl.classList.contains('sliderkit__item'))).toBe(true)
       s.destroy()
     })
 
@@ -105,14 +105,14 @@ describe('Slider', () => {
       const el = createContainer()
       const s = new Slider(el, { loop: false })
       s.destroy()
-      expect(document.querySelector('.c--slider-a__outer')).toBeNull()
+      expect(document.querySelector('.sliderkit__outer')).toBeNull()
     })
 
     it('removes BEM class from container', () => {
       const el = createContainer()
       const s = new Slider(el, { loop: false })
       s.destroy()
-      expect(el.classList.contains('c--slider-a')).toBe(false)
+      expect(el.classList.contains('sliderkit')).toBe(false)
     })
   })
 

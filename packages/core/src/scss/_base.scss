@@ -1,7 +1,7 @@
 @use 'variables' as *;
 
 // ── Injected outer wrapper ────────────────────────────────────────────────
-.c--slider-a__outer {
+.sliderkit__outer {
   position: relative;
   box-sizing: border-box;
 
@@ -11,7 +11,7 @@
 }
 
 // ── Overflow/viewport div (overflow hidden) ───────────────────────────────
-.c--slider-a__overflow {
+.sliderkit__overflow {
   overflow: hidden;
   position: relative;
 
@@ -20,12 +20,12 @@
 }
 
 // ── Inner margin div (edge padding) ──────────────────────────────────────
-.c--slider-a__inner {
+.sliderkit__inner {
   // margin set by JS dynamic stylesheet for edgePadding
 }
 
 // ── Track (the user's element — gets translated by JS) ───────────────────
-.c--slider-a {
+.sliderkit {
   user-select: none;
   will-change: transform;
 
@@ -34,13 +34,13 @@
 
   &--frozen {
     // Hide arrows/pagination when frozen
-    ~ .c--slider-a__pagination,
-    .c--slider-a__arrow { display: none; }
+    ~ .sliderkit__pagination,
+    .sliderkit__arrow { display: none; }
   }
 }
 
 // ── Slide items ───────────────────────────────────────────────────────────
-.c--slider-a__item {
+.sliderkit__item {
   display: inline-block;
   vertical-align: top;
   min-height: 1px;
@@ -59,7 +59,7 @@
 }
 
 // ── A11y live region (visually hidden) ───────────────────────────────────
-.c--slider-a__live {
+.sliderkit__live {
   position: absolute;
   width: 1px;
   height: 1px;

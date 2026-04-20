@@ -1,0 +1,112 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Hooks Plugin">
+  <h1>Hooks</h1>
+  <p class="lead">Lifecycle callbacks that fire at key moments in the slider — slide changes, drag events, resize, and destroy. Use them to drive GSAP animations or any custom side effects without touching slider internals.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} hooks {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
+
+  <h2>Callbacks</h2>
+  <table>
+    <thead><tr><th>Callback</th><th>Context</th><th>When it fires</th></tr></thead>
+    <tbody>
+      <tr><td><code>onInit</code></td><td><code>{"{"} slides, slider {"}"}</code></td><td>Once, after the slider finishes initialising.</td></tr>
+      <tr><td><code>beforeChange</code></td><td><code>{"{"} outgoing, incoming, direction {"}"}</code></td><td>Before the transition starts. <code>outgoing</code> is the currently-visible slide (or <code>null</code> on first change); <code>incoming</code> is the one about to appear; <code>direction</code> is <code>'forward'</code> or <code>'backward'</code>.</td></tr>
+      <tr><td><code>afterChange</code></td><td><code>{"{"} slide, direction {"}"}</code></td><td>After the transition ends. <code>slide</code> is the now-visible slide.</td></tr>
+      <tr><td><code>onDragStart</code></td><td><code>{"{"} event? {"}"}</code></td><td>User starts a touch swipe or mouse drag.</td></tr>
+      <tr><td><code>onDragEnd</code></td><td><code>{"{"} event? {"}"}</code></td><td>User releases after a touch swipe or mouse drag.</td></tr>
+      <tr><td><code>onResize</code></td><td><code>{"{"} breakpoint, items {"}"}</code></td><td>After a responsive breakpoint change. <code>items</code> is the new slide count in view.</td></tr>
+      <tr><td><code>beforeDestroy</code></td><td>—</td><td>Just before <code>slider.destroy()</code> cleans up.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Basic example</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} arrows, hooks {"}"} from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {"{"}
+  items: 1,
+  loop:  true,
+  speed: 400,
+  plugins: [
+    arrows(),
+    hooks({"{"}
+      onInit({"{"} slides {"}"}) {"{"}
+        console.log('Ready with', slides.length, 'slides')
+      {"}"},
+      beforeChange({"{"} incoming, direction {"}"}) {"{"}
+        console.log('Going', direction, '→', incoming)
+      {"}"},
+      afterChange({"{"} slide {"}"}) {"{"}
+        console.log('Now showing', slide)
+      {"}"},
+    {"}"}),
+  ],
+{"}"})</code></pre>
+
+  <h2>GSAP fade transition</h2>
+  <p>Use <code>beforeChange</code> and <code>afterChange</code> to cross-fade slides with GSAP while the slider still handles layout and touch:</p>
+  <pre><code>import gsap from 'gsap'
+import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} hooks {"}"} from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {"{"}
+  items:   1,
+  loop:    true,
+  speed:   0,        // let GSAP own the animation
+  plugins: [
+    hooks({"{"}
+      beforeChange({"{"} outgoing, incoming {"}"}) {"{"}
+        gsap.set(incoming,  {"{"} autoAlpha: 0 {"}"})
+        gsap.to(outgoing,   {"{"} autoAlpha: 0, duration: 0.35, ease: 'power2.in' {"}"})
+        gsap.to(incoming,   {"{"} autoAlpha: 1, duration: 0.35, ease: 'power2.out', delay: 0.2 {"}"})
+      {"}"},
+    {"}"}),
+  ],
+{"}"})</code></pre>
+
+  <h2>GSAP staggered entrance</h2>
+  <p>Stagger child elements of each incoming slide using <code>afterChange</code>:</p>
+  <pre><code>hooks({"{"}
+  afterChange({"{"} slide {"}"}) {"{"}
+    gsap.from(slide.querySelectorAll('.card'), {"{"}
+      y:        40,
+      autoAlpha: 0,
+      stagger:  0.08,
+      duration: 0.5,
+      ease:     'back.out(1.4)',
+      clearProps: 'all',
+    {"}"})
+  {"}"},
+{"}"})</code></pre>
+
+  <h2>Direction-aware slide-in</h2>
+  <pre><code>hooks({"{"}
+  beforeChange({"{"} outgoing, incoming, direction {"}"}) {"{"}
+    const sign = direction === 'forward' ? 1 : -1
+    gsap.set(incoming,  {"{"} x: sign * 80, autoAlpha: 0 {"}"})
+    gsap.to(outgoing,   {"{"} x: -sign * 40, autoAlpha: 0, duration: 0.3 {"}"})
+    gsap.to(incoming,   {"{"} x: 0, autoAlpha: 1, duration: 0.45, ease: 'power3.out', delay: 0.1 {"}"})
+  {"}"},
+{"}"})</code></pre>
+
+  <h2>onInit — set initial states</h2>
+  <pre><code>hooks({"{"}
+  onInit({"{"} slides {"}"}) {"{"}
+    // hide all but the first
+    gsap.set(slides.slice(1), {"{"} autoAlpha: 0 {"}"})
+  {"}"},
+{"}"})</code></pre>
+
+  <h2>Behaviour notes</h2>
+  <ul>
+    <li>All callbacks are optional — pass only the ones you need.</li>
+    <li>The hooks plugin adds no DOM nodes and no CSS.</li>
+    <li>When <code>speed: 0</code> is set, <code>afterChange</code> fires immediately after <code>beforeChange</code> — let GSAP control timing with its own <code>duration</code>.</li>
+    <li><code>onDragStart</code> fires for both touch and mouse drag events.</li>
+  </ul>
+
+  <p><a href="/demos/hooks">See it live in the Hooks demo →</a></p>
+</DocsLayout>

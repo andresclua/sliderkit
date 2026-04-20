@@ -15,7 +15,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <div class="demo-slide s-pink">6</div>
 </div>`}
     css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; border-radius:8px; opacity:.45; transition:opacity .3s; }
-.c--slider-a__item--active .demo-slide { opacity:1; }`}
+.sliderkit__item--active .demo-slide { opacity:1; }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 
@@ -49,7 +49,7 @@ new Slider('#my-slider', {
   opacity: .45;
   transition: opacity .3s;
 }
-:global(.c--slider-a__item--active) .demo-slide {
+:global(.sliderkit__item--active) .demo-slide {
   opacity: 1;
 }
 </style>

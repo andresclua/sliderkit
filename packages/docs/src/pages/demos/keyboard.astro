@@ -16,7 +16,7 @@ import DemoViewer from '../../components/DemoViewer.astro'
     css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; border-radius:8px; }
 
 /* show a clear focus ring so the user knows the slider is active */
-.c--slider-a__outer:focus {
+.sliderkit__outer:focus {
   outline: 3px solid #6C2BD9;
   outline-offset: 4px;
 }`}
@@ -45,7 +45,7 @@ new Slider('#my-slider', {
 </DemoLayout>
 
 <style>
-:global(#demo-keyboard-ow).c--slider-a__outer:focus {
+:global(#demo-keyboard-ow).sliderkit__outer:focus {
   outline: 3px solid #6C2BD9;
   outline-offset: 4px;
 }

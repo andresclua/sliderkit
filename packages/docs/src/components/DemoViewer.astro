@@ -118,7 +118,7 @@ function cssToScss(raw: string): string {
       output.push(`  }`)
     })
 
-    // Direct root modifiers (e.g. .c--slider-a--disabled)
+    // Direct root modifiers (e.g. .sliderkit--disabled)
     directMods.forEach(mod => {
       const modSuffix = mod.selector.slice(root.length)
       output.push(`\n  &${modSuffix} {`)

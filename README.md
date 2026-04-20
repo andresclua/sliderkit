@@ -15,9 +15,9 @@ A modern, accessible, TypeScript-first slider library with WebGL effects, CSS tr
 | Package | Description | Size |
 |---|---|---|
 | [`@andresclua/sliderkit`](packages/core) | Core slider engine | ~7 KB gzip |
-| [`@andresclua/sliderkit-plugins`](packages/plugins) | Arrows, pagination, autoplay, thumbnails… | ~4 KB gzip |
-| [`@andresclua/sliderkit-effects`](packages/effects) | CSS transition effects (fade, cube, coverflow…) | ~2 KB gzip |
-| [`@andresclua/sliderkit-webgl`](packages/webgl) | WebGL renderer via OGL + shader effects | ~4 KB gzip |
+| [`@andresclua/sliderkit-plugins`](packages/plugins) | Arrows, pagination, autoplay, thumbs… | ~4 KB gzip |
+| [`@andresclua/sliderkit-effects`](packages/effects) | CSS transition effects (fade, flip, clip-path…) | ~2 KB gzip |
+| [`@andresclua/sliderkit-webgl`](packages/webgl) | GPU WebGL transitions (displacement, rgb-shift, radial) | ~4 KB gzip |
 
 ---
 
@@ -39,11 +39,13 @@ yarn add @andresclua/sliderkit
 ## Quick Start
 
 ```html
-<div class="c--slider-a" id="my-slider">
-  <div class="c--slider-a__wrapper">
-    <div class="c--slider-a__item" data-slide>Slide 1</div>
-    <div class="c--slider-a__item" data-slide>Slide 2</div>
-    <div class="c--slider-a__item" data-slide>Slide 3</div>
+<div class="sliderkit__outer">
+  <div class="sliderkit__overflow">
+    <div class="sliderkit" id="my-slider">
+      <div class="sliderkit__item">Slide 1</div>
+      <div class="sliderkit__item">Slide 2</div>
+      <div class="sliderkit__item">Slide 3</div>
+    </div>
   </div>
 </div>
 ```
@@ -52,9 +54,13 @@ yarn add @andresclua/sliderkit
 import { Slider } from '@andresclua/sliderkit'
 
 const slider = new Slider('#my-slider', {
-  slidesPerPage: 1,
-  loop: true,
+  items: 1,
+  loop:  true,
   speed: 400,
+})
+
+slider.on('indexChanged', ({ displayIndex }) => {
+  console.log('Slide:', displayIndex)
 })
 ```
 
@@ -66,12 +72,11 @@ const slider = new Slider('#my-slider', {
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `slidesPerPage` | `number` | `1` | Number of slides visible at once |
+| `items` | `number` | `1` | Number of slides visible at once |
 | `gutter` | `number` | `0` | Space between slides in px |
 | `edgePadding` | `number` | `0` | Space on the outer edges in px — makes adjacent slides peek |
-| `fixedWidth` | `number \| false` | `false` | Fixed pixel width per slide, ignores `slidesPerPage` |
+| `fixedWidth` | `number \| false` | `false` | Fixed pixel width per slide, ignores `items` |
 | `autoWidth` | `boolean` | `false` | Each slide uses its natural CSS width |
-| `centered` | `boolean` | `false` | Centers the active slide in the viewport |
 | `direction` | `'horizontal' \| 'vertical'` | `'horizontal'` | Slide axis |
 
 ### Behaviour
@@ -81,10 +86,9 @@ const slider = new Slider('#my-slider', {
 | `loop` | `boolean` | `false` | Seamless infinite loop using DOM clones |
 | `rewind` | `boolean` | `false` | Jump to first/last slide at the edges |
 | `speed` | `number` | `300` | Transition duration in ms |
-| `slideBy` | `number \| 'page'` | `1` | Slides advanced per next/prev click. `'page'` equals `slidesPerPage` |
+| `slideBy` | `number \| 'page'` | `1` | Slides advanced per next/prev click |
 | `startIndex` | `number` | `0` | Initial active slide index |
 | `freezable` | `boolean` | `true` | Freezes interaction when all slides fit in the viewport |
-| `disabled` | `boolean` | `false` | Disables all interaction on init |
 
 ### Touch & Drag
 
@@ -93,35 +97,20 @@ const slider = new Slider('#my-slider', {
 | `touch` | `boolean` | `true` | Enable touch swipe |
 | `mouseDrag` | `boolean` | `false` | Enable mouse drag |
 | `swipeThreshold` | `number` | `50` | Minimum swipe distance in px to trigger navigation |
-| `swipeAngle` | `number` | `15` | Maximum angle (degrees) off-axis before swipe is ignored |
 | `resistance` | `boolean` | `true` | Elastic resistance at the edges |
-| `resistanceRatio` | `number` | `0.85` | Resistance strength (0–1) |
-| `preventScrollOnTouch` | `'auto' \| 'force' \| false` | `'auto'` | Prevent page scroll while swiping |
-| `grabCursor` | `boolean` | `true` | Show grab cursor on hover |
-
-### Accessibility
-
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `a11y.enabled` | `boolean` | `true` | ARIA roles, live regions, roledescription |
-| `a11y.prevSlideMessage` | `string` | `'Previous slide'` | ARIA label for prev button |
-| `a11y.nextSlideMessage` | `string` | `'Next slide'` | ARIA label for next button |
-| `a11y.slideLabel` | `string` | `'Slide'` | Prefix for slide ARIA labels |
 
 ### Responsive
 
 ```typescript
 new Slider('#my-slider', {
-  slidesPerPage: 1,
+  items: 1,
   gutter: 8,
   breakpoints: {
-    640:  { slidesPerPage: 2, gutter: 12 },
-    1024: { slidesPerPage: 3, gutter: 20 },
+    640:  { items: 2, gutter: 12 },
+    1024: { items: 3, gutter: 20 },
   },
 })
 ```
-
-Any option available at the root level can be overridden per breakpoint.
 
 ---
 
@@ -133,136 +122,78 @@ pnpm add @andresclua/sliderkit-plugins
 
 ```typescript
 import { Slider } from '@andresclua/sliderkit'
-import {
-  arrows,
-  pagination,
-  autoplay,
-  thumbnails,
-  progressBar,
-  slideCounter,
-  mouseWheel,
-  lazyLoad,
-  autoHeight,
-  virtualSlides,
-  centerMode,
-  variableWidth,
-} from '@andresclua/sliderkit-plugins'
+import { arrows, pagination, autoplay, thumbs, progress, mouseWheel, keyboard, a11y, hooks } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
   loop: true,
   plugins: [
     arrows(),
-    pagination({ type: 'dots', clickable: true }),
+    pagination({ type: 'dots' }),
     autoplay({ delay: 3000, pauseOnHover: true }),
   ],
 })
 ```
 
 ### `arrows()`
-```typescript
-arrows({
-  prevEl: '.my-prev', // custom prev button selector or element
-  nextEl: '.my-next', // custom next button selector or element
-})
-```
+Previous / next navigation buttons injected into `.sliderkit__outer`.
 
 ### `pagination()`
 ```typescript
 pagination({
-  el: '#my-pag',          // custom container (optional)
-  type: 'dots',           // 'dots' | 'fraction' | 'progress' | 'dynamic' | 'custom'
+  type: 'dots',       // 'dots' | 'fraction' | 'progress'
   clickable: true,
-  renderBullet: (i, cls) => `<span class="${cls}">${i + 1}</span>`, // custom render
 })
 ```
 
 ### `autoplay()`
 ```typescript
 autoplay({
-  delay: 3000,
+  delay:        3000,
   pauseOnHover: true,
-  pauseOnInteraction: true,
-  disableOnInteraction: false,
 })
 ```
 
-### `thumbnails()`
+### `thumbs()`
 ```typescript
-thumbnails({
-  el: '#thumbs',        // thumbnail container
-  slideEl: '.thumb',    // individual thumb selector
+thumbs({ el: '#thumbs-container' })
+```
+
+### `progress()`
+```typescript
+progress({ el: '#progress-bar' })
+```
+
+### `mouseWheel()` · `keyboard()` · `a11y()`
+Drop-in behaviour enhancements — no required options.
+
+### `hooks()`
+```typescript
+hooks({
+  beforeChange: ({ from, to }) => { /* … */ },
+  afterChange:  ({ index })    => { /* … */ },
 })
-```
-
-### `progressBar()`
-```typescript
-progressBar({ el: '#progress' })
-```
-
-### `slideCounter()`
-```typescript
-slideCounter({ el: '#counter', separator: ' / ' })
-```
-
-### `mouseWheel()`
-```typescript
-mouseWheel({ sensitivity: 1, releaseOnEdges: true })
-```
-
-### `lazyLoad()`
-```typescript
-lazyLoad({ selector: '.lazy', preloadPrev: 1, preloadNext: 2 })
-```
-
-### `autoHeight()`
-```typescript
-autoHeight({ transition: 300 })
 ```
 
 ---
 
 ## Events
 
-Listen with `on` in options or call `.on()` / `.off()` at any time:
-
 ```typescript
-const slider = new Slider('#my-slider', {
-  on: {
-    afterSlideChange: ({ index, previousIndex, slide }) => {
-      console.log(`Moved from ${previousIndex} → ${index}`)
-    },
-  },
-})
-
-// Or imperatively
-slider.on('beforeSlideChange', ({ from, to, direction }) => { })
-slider.on('afterSlideChange',  ({ index, previousIndex, slide }) => { })
-slider.on('beforeTransitionStart', ({ from, to }) => { })
-slider.on('afterTransitionEnd',    ({ index }) => { })
-slider.on('beforeLoopBoundary',    ({ direction, targetIndex }) => { })
-slider.on('progress',              ({ progress }) => { })
-slider.on('beforeInit',  ({ slider }) => { })
-slider.on('afterInit',   ({ slider }) => { })
-slider.on('beforeDestroy', ({ slider }) => { })
-slider.on('afterDestroy',  ({ slider }) => { })
-slider.on('touchStart', ({ event }) => { })
-slider.on('touchMove',  ({ event, delta, direction }) => { })
-slider.on('touchEnd',   ({ event }) => { })
-slider.on('dragStart',  ({ event }) => { })
-slider.on('dragMove',   ({ event, delta, direction }) => { })
-slider.on('dragEnd',    ({ event }) => { })
-slider.on('resize',     ({ width, slidesPerPage }) => { })
-slider.on('newBreakpointStart', ({ currentBreakpoint, options }) => { })
-slider.on('newBreakpointEnd',   ({ currentBreakpoint }) => { })
-```
-
-### `beforeLoopBoundary`
-Fires after the wrapper is moved to the clone position but before the CSS transition plays. Use it to snap visual effects so clones look correct as they animate in:
-
-```typescript
-slider.on('beforeLoopBoundary', ({ direction, targetIndex }) => {
-  applyRotation(targetIndex, true) // instant, no transition
-})
+slider.on('indexChanged',    ({ displayIndex }) => { })
+slider.on('transitionStart', ({ displayIndex }) => { })
+slider.on('transitionEnd',   ({ displayIndex }) => { })
+slider.on('touchStart',      info => { })
+slider.on('touchMove',       info => { })
+slider.on('touchEnd',        info => { })
+slider.on('dragStart',       info => { })
+slider.on('dragMove',        info => { })
+slider.on('dragEnd',         info => { })
+slider.on('resize',          info => { })
+slider.on('newBreakpointStart', info => { })
+slider.on('newBreakpointEnd',   info => { })
+slider.on('afterInit',       info => { })
+slider.on('beforeDestroy',   info => { })
+slider.on('afterDestroy',    info => { })
 ```
 
 ---
@@ -270,30 +201,19 @@ slider.on('beforeLoopBoundary', ({ direction, targetIndex }) => {
 ## Methods
 
 ```typescript
-slider.goTo(2)         // go to index
+slider.goTo(2)
 slider.goTo('next')
 slider.goTo('prev')
-slider.goTo('first')
-slider.goTo('last')
 slider.next()
 slider.prev()
 
-slider.play()          // start autoplay
-slider.pause()         // pause autoplay
-
-slider.enable()        // re-enable after disable()
-slider.disable()
-
 slider.update()        // recalculate layout (call after DOM changes)
-slider.updateSliderHeight()
-
-slider.getInfo()       // returns { index, slidesPerPage, slideCount, ... }
+slider.getInfo()       // returns SliderInfo
 
 slider.on('event', handler)
 slider.off('event', handler)
 
 slider.destroy()
-slider.rebuild({ slidesPerPage: 2 })  // destroy + reinit with new options
 ```
 
 ---
@@ -306,14 +226,15 @@ pnpm add @andresclua/sliderkit-effects
 
 ```typescript
 import { Slider } from '@andresclua/sliderkit'
-import { fadeEffect } from '@andresclua/sliderkit-effects'
+import { fade } from '@andresclua/sliderkit-effects'
 
 new Slider('#my-slider', {
-  plugins: [fadeEffect()],
+  items: 1,
+  plugins: [fade()],
 })
 ```
 
-Available effects: `fadeEffect`, `cubeEffect`, `coverflowEffect`, `flipEffect`, `cardsEffect`, `creativeEffect`.
+Available effects: `fade`, `flip`, `clipPath`.
 
 ---
 
@@ -325,33 +246,25 @@ pnpm add @andresclua/sliderkit-webgl
 
 ```typescript
 import { Slider } from '@andresclua/sliderkit'
-import { webglRenderer, displacementEffect } from '@andresclua/sliderkit-webgl'
+import { arrows } from '@andresclua/sliderkit-plugins'
+import { webgl, preloadWebGL } from '@andresclua/sliderkit-webgl'
+
+const assets = await preloadWebGL({
+  slides:       [1,2,3,4,5].map(i => `/images/slide-${i}.jpg`),
+  displacement: '/images/displacement.png',
+})
 
 new Slider('#my-slider', {
-  plugins: [
-    webglRenderer({
-      effect: displacementEffect({
-        texture: '/textures/displacement.png',
-        intensity: 1.2,
-      }),
-    }),
-  ],
+  items:   1,
+  loop:    true,
+  speed:   0,
+  plugins: [arrows(), webgl({ effect: 'displacement', assets })],
 })
 ```
 
-Available effects: `displacementEffect`, `rgbShiftEffect`, `pixelDissolveEffect`, `parallaxDepthEffect`.
+Available effects: `displacement`, `rgb-shift`, `radial`, `custom` (bring your own GLSL).
 
-> **Note — image preloading:** WebGL textures require images to be fully decoded before the first render. Use the optional `preloadImages` helper to avoid a blank first frame:
->
-> ```typescript
-> import { webglRenderer, preloadImages } from '@andresclua/sliderkit-webgl'
->
-> await preloadImages('#my-slider')
->
-> new Slider('#my-slider', {
->   plugins: [webglRenderer({ effect: displacementEffect(...) })],
-> })
-> ```
+> **Note:** Always set `items: 1` and `speed: 0` when using the WebGL plugin. The plugin silently no-ops when WebGL is unavailable.
 
 ---
 
@@ -364,99 +277,11 @@ import { Slider } from '@andresclua/sliderkit'
 import { gsap } from 'gsap'
 
 const slider = new Slider('#my-slider', { loop: true })
-const cards = [...slider.slides].map(s => s.querySelector('.card'))
 
-// Entrance animation on init
-slider.on('afterInit', () => {
-  gsap.fromTo(cards[0], { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 })
+slider.on('indexChanged', ({ displayIndex }) => {
+  const slide = slider.getInfo().slideItems[displayIndex - 1]
+  gsap.fromTo(slide, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4 })
 })
-
-// Animate entering slide on navigation
-slider.on('afterSlideChange', ({ index }) => {
-  gsap.fromTo(cards[index], { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4 })
-})
-
-// Snap effects before a loop boundary animates
-slider.on('beforeLoopBoundary', ({ targetIndex }) => {
-  applyEffect(targetIndex, true) // instant snap on clone
-})
-```
-
----
-
-## Lazy Load with Boostify
-
-Defer the entire slider + plugins until the user scrolls:
-
-```typescript
-import Boostify from 'boostify'
-
-const bstf = new Boostify()
-bstf.scroll({
-  distance: 300,
-  callback: async () => {
-    const [{ Slider }, { arrows, pagination }, { gsap }] = await Promise.all([
-      import('@andresclua/sliderkit'),
-      import('@andresclua/sliderkit-plugins'),
-      import('gsap'),
-    ])
-
-    const slider = new Slider('#my-slider', {
-      slidesPerPage: 3,
-      loop: true,
-      plugins: [arrows(), pagination({ type: 'dots' })],
-    })
-
-    slider.on('afterSlideChange', ({ index }) => {
-      gsap.fromTo(slider.slides[index], { x: 30, opacity: 0 }, { x: 0, opacity: 1 })
-    })
-  },
-})
-```
-
----
-
-## Common Patterns
-
-### Fixed-width slides
-```typescript
-new Slider('#my-slider', {
-  fixedWidth: 280,
-  gutter: 16,
-  loop: true,
-})
-```
-
-### Natural-width slides (mixed widths)
-```typescript
-new Slider('#my-slider', {
-  autoWidth: true,
-  gutter: 12,
-})
-```
-
-### Advance multiple slides per click
-```typescript
-new Slider('#my-slider', {
-  slidesPerPage: 3,
-  slideBy: 'page', // advances 3 at a time
-  // or slideBy: 2  — advances 2 at a time
-})
-```
-
-### Edge padding (peek effect)
-```typescript
-new Slider('#my-slider', {
-  slidesPerPage: 1,
-  edgePadding: 48, // adjacent slides peek 48px from each edge
-  loop: true,
-})
-```
-
-### Destroy & rebuild
-```typescript
-slider.destroy()
-const fresh = slider.rebuild({ slidesPerPage: 2, gutter: 20 })
 ```
 
 ---
@@ -470,16 +295,11 @@ pnpm install
 # Build all packages
 pnpm build
 
-# Build a single package
-pnpm --filter @andresclua/sliderkit build
-
 # Start playground dev server
 pnpm dev
 
 # Start docs dev server
 pnpm docs
-# or directly:
-pnpm --filter sliderkit-docs dev
 # then open http://localhost:4321
 ```
 

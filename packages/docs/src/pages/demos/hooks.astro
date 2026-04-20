@@ -1,0 +1,892 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Hooks">
+  <DemoViewer
+    title="Hooks — beforeChange / afterChange"
+    description="hooks() exposes lifecycle callbacks. Here beforeChange fades the outgoing slide out and afterChange logs the active slide."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>
+<p id="hook-log" style="margin-top:1rem;font-size:.85rem;color:#6b7280"></p>`}
+    css={`.demo-slide { height:260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; transition: opacity .3s; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, hooks } from '@andresclua/sliderkit-plugins'
+
+const log = document.getElementById('hook-log')
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    hooks({
+      onInit({ slides }) {
+        log.textContent = 'onInit — ' + slides.length + ' slides ready'
+      },
+      beforeChange({ outgoing, incoming, direction }) {
+        if (outgoing) outgoing.style.opacity = '0.3'
+        log.textContent = 'beforeChange → ' + direction
+      },
+      afterChange({ slide }) {
+        slide.style.opacity = '1'
+        log.textContent = 'afterChange — now showing slide ' + slide.textContent.trim()
+      },
+      onDragStart() { log.textContent = 'onDragStart' },
+      onDragEnd()   { log.textContent = 'onDragEnd'   },
+    }),
+  ],
+})`}
+  >
+    <div id="demo-hooks-basic">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+    <p id="demo-hooks-log" style="margin-top:1rem;font-size:.85rem;color:#6b7280"></p>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Hooks — GSAP content stagger"
+    description="fadeEffect handles the cross-fade; hooks + GSAP stagger the inner elements of each incoming slide."
+    html={`<div id="my-slider">
+  <div class="fade-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+    <span class="fade-tag">01 / Setup</span>
+    <h2 class="fade-title">One import,<br>one line of code.</h2>
+    <p class="fade-sub">No config files. No wrappers. Drop it in and go.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+    <span class="fade-tag">02 / Plugins</span>
+    <h2 class="fade-title">Only load<br>what you need.</h2>
+    <p class="fade-sub">Tree-shakeable plugin system. Zero dead code in your bundle.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+    <span class="fade-tag">03 / TypeScript</span>
+    <h2 class="fade-title">Full type safety<br>out of the box.</h2>
+    <p class="fade-sub">Written in TypeScript. Autocomplete for every option and event.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+    <span class="fade-tag">04 / Performance</span>
+    <h2 class="fade-title">Under 10 kb<br>gzipped.</h2>
+    <p class="fade-sub">Tiny core, no runtime dependencies, hardware-accelerated CSS.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">
+    <span class="fade-tag">05 / A11y</span>
+    <h2 class="fade-title">Accessible<br>by default.</h2>
+    <p class="fade-sub">WAI-ARIA carousel pattern built in. Keyboard navigation included.</p>
+  </div>
+</div>`}
+    css={`.fade-slide {
+  height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 56px;
+  border-radius: 12px;
+  color: #fff;
+}
+.fade-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+.fade-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+.fade-sub {
+  font-size: 1rem;
+  opacity: 0.8;
+  max-width: 380px;
+  margin: 0;
+  line-height: 1.6;
+}`}
+    js={`import gsap from 'gsap'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, hooks } from '@andresclua/sliderkit-plugins'
+import { fadeEffect } from '@andresclua/sliderkit-effects'
+
+function animateIn(slide) {
+  gsap.from(slide.querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+    y: 28,
+    autoAlpha: 0,
+    stagger: 0.1,
+    duration: 0.55,
+    ease: 'power3.out',
+    clearProps: 'all',
+  })
+}
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 600,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    fadeEffect({ duration: 600, easing: 'ease-in-out' }),
+    hooks({
+      onInit({ slides }) {
+        animateIn(slides[0])
+      },
+      beforeChange({ incoming }) {
+        gsap.from(incoming.querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          y: 28,
+          autoAlpha: 0,
+          stagger: 0.1,
+          duration: 0.55,
+          ease: 'power3.out',
+          delay: 0.25,
+          clearProps: 'all',
+        })
+      },
+    }),
+  ],
+})`}
+  >
+    <div id="demo-hooks-gsap">
+      <div class="fade-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+        <span class="fade-tag">01 / Setup</span>
+        <h2 class="fade-title">One import,<br>one line of code.</h2>
+        <p class="fade-sub">No config files. No wrappers. Drop it in and go.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+        <span class="fade-tag">02 / Plugins</span>
+        <h2 class="fade-title">Only load<br>what you need.</h2>
+        <p class="fade-sub">Tree-shakeable plugin system. Zero dead code in your bundle.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+        <span class="fade-tag">03 / TypeScript</span>
+        <h2 class="fade-title">Full type safety<br>out of the box.</h2>
+        <p class="fade-sub">Written in TypeScript. Autocomplete for every option and event.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+        <span class="fade-tag">04 / Performance</span>
+        <h2 class="fade-title">Under 10 kb<br>gzipped.</h2>
+        <p class="fade-sub">Tiny core, no runtime dependencies, hardware-accelerated CSS.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">
+        <span class="fade-tag">05 / A11y</span>
+        <h2 class="fade-title">Accessible<br>by default.</h2>
+        <p class="fade-sub">WAI-ARIA carousel pattern built in. Keyboard navigation included.</p>
+      </div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Hooks — direction-aware content slide-in"
+    description="The direction value tells you which arrow was clicked. Content enters from the right on forward, from the left on backward."
+    html={`<div id="my-slider">
+  <div class="fade-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+    <span class="fade-tag">01 / Setup</span>
+    <h2 class="fade-title">One import,<br>one line of code.</h2>
+    <p class="fade-sub">No config files. No wrappers. Drop it in and go.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+    <span class="fade-tag">02 / Plugins</span>
+    <h2 class="fade-title">Only load<br>what you need.</h2>
+    <p class="fade-sub">Tree-shakeable plugin system. Zero dead code in your bundle.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+    <span class="fade-tag">03 / TypeScript</span>
+    <h2 class="fade-title">Full type safety<br>out of the box.</h2>
+    <p class="fade-sub">Written in TypeScript. Autocomplete for every option and event.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+    <span class="fade-tag">04 / Performance</span>
+    <h2 class="fade-title">Under 10 kb<br>gzipped.</h2>
+    <p class="fade-sub">Tiny core, no runtime dependencies, hardware-accelerated CSS.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">
+    <span class="fade-tag">05 / A11y</span>
+    <h2 class="fade-title">Accessible<br>by default.</h2>
+    <p class="fade-sub">WAI-ARIA carousel pattern built in. Keyboard navigation included.</p>
+  </div>
+</div>`}
+    css={`.fade-slide {
+  height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 56px;
+  border-radius: 12px;
+  color: #fff;
+}
+.fade-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+.fade-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+.fade-sub {
+  font-size: 1rem;
+  opacity: 0.8;
+  max-width: 380px;
+  margin: 0;
+  line-height: 1.6;
+}`}
+    js={`import gsap from 'gsap'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, hooks } from '@andresclua/sliderkit-plugins'
+import { fadeEffect } from '@andresclua/sliderkit-effects'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 600,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    fadeEffect({ duration: 600, easing: 'ease-in-out' }),
+    hooks({
+      onInit({ slides }) {
+        gsap.from(slides[0].querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          x: 40, autoAlpha: 0, stagger: 0.09, duration: 0.5, ease: 'power3.out', clearProps: 'all',
+        })
+      },
+      beforeChange({ incoming, direction }) {
+        const sign = direction === 'forward' ? 1 : -1
+        gsap.from(incoming.querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          x: sign * 50,
+          autoAlpha: 0,
+          stagger: 0.09,
+          duration: 0.5,
+          ease: 'power3.out',
+          delay: 0.2,
+          clearProps: 'all',
+        })
+      },
+    }),
+  ],
+})`}
+  >
+    <div id="demo-hooks-direction">
+      <div class="fade-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+        <span class="fade-tag">01 / Setup</span>
+        <h2 class="fade-title">One import,<br>one line of code.</h2>
+        <p class="fade-sub">No config files. No wrappers. Drop it in and go.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+        <span class="fade-tag">02 / Plugins</span>
+        <h2 class="fade-title">Only load<br>what you need.</h2>
+        <p class="fade-sub">Tree-shakeable plugin system. Zero dead code in your bundle.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+        <span class="fade-tag">03 / TypeScript</span>
+        <h2 class="fade-title">Full type safety<br>out of the box.</h2>
+        <p class="fade-sub">Written in TypeScript. Autocomplete for every option and event.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+        <span class="fade-tag">04 / Performance</span>
+        <h2 class="fade-title">Under 10 kb<br>gzipped.</h2>
+        <p class="fade-sub">Tiny core, no runtime dependencies, hardware-accelerated CSS.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">
+        <span class="fade-tag">05 / A11y</span>
+        <h2 class="fade-title">Accessible<br>by default.</h2>
+        <p class="fade-sub">WAI-ARIA carousel pattern built in. Keyboard navigation included.</p>
+      </div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Hooks — multi-item with gutter + GSAP"
+    description="slideBy:'page' swaps all 3 cards at once. hooks + GSAP animate each card in from the navigation direction, with a vertical stagger on the inner elements."
+    html={`<div id="my-slider">
+  <div class="hc">
+    <div class="hc__accent" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"></div>
+    <div class="hc__body">
+      <span class="hc-num">01</span>
+      <h3 class="hc-title">Instant setup</h3>
+      <p class="hc-text">One import, one constructor call. No config files, no build plugins required.</p>
+      <a class="hc-cta" href="#">Learn more →</a>
+    </div>
+  </div>
+  <div class="hc">
+    <div class="hc__accent" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"></div>
+    <div class="hc__body">
+      <span class="hc-num">02</span>
+      <h3 class="hc-title">Plugin system</h3>
+      <p class="hc-text">Tree-shakeable plugins. Import only what you use — zero dead code in your bundle.</p>
+      <a class="hc-cta" href="#">Explore plugins →</a>
+    </div>
+  </div>
+  <div class="hc">
+    <div class="hc__accent" style="background:linear-gradient(135deg,#10b981,#84cc16)"></div>
+    <div class="hc__body">
+      <span class="hc-num">03</span>
+      <h3 class="hc-title">TypeScript</h3>
+      <p class="hc-text">Written in TypeScript. Full autocomplete for every option, method, and event.</p>
+      <a class="hc-cta" href="#">View types →</a>
+    </div>
+  </div>
+  <div class="hc">
+    <div class="hc__accent" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"></div>
+    <div class="hc__body">
+      <span class="hc-num">04</span>
+      <h3 class="hc-title">Performance</h3>
+      <p class="hc-text">Under 10 kb gzipped. No runtime dependencies, hardware-accelerated CSS.</p>
+      <a class="hc-cta" href="#">Benchmark →</a>
+    </div>
+  </div>
+  <div class="hc">
+    <div class="hc__accent" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"></div>
+    <div class="hc__body">
+      <span class="hc-num">05</span>
+      <h3 class="hc-title">Accessible</h3>
+      <p class="hc-text">WAI-ARIA carousel pattern built in. Keyboard navigation and screen reader support.</p>
+      <a class="hc-cta" href="#">A11y docs →</a>
+    </div>
+  </div>
+  <div class="hc">
+    <div class="hc__accent" style="background:linear-gradient(135deg,#14b8a6,#6366f1)"></div>
+    <div class="hc__body">
+      <span class="hc-num">06</span>
+      <h3 class="hc-title">Effects</h3>
+      <p class="hc-text">Fade, flip, and clip-path transitions from a separate effects package.</p>
+      <a class="hc-cta" href="#">See effects →</a>
+    </div>
+  </div>
+</div>`}
+    css={`.hc {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.hc__accent { height: 6px; }
+.hc__body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hc-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+.hc-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+}
+.hc-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.6;
+}
+.hc-cta {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6C2BD9;
+  text-decoration: none;
+  margin-top: 4px;
+}`}
+    js={`import gsap from 'gsap'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, hooks } from '@andresclua/sliderkit-plugins'
+
+const INNER = '.hc-num, .hc-title, .hc-text, .hc-cta'
+
+function animateIn(cards, sign = 1) {
+  cards.forEach((card, i) => {
+    const delay = i * 0.1
+    gsap.fromTo(card,
+      { x: sign * 48, autoAlpha: 0 },
+      { x: 0, autoAlpha: 1, duration: 0.45, ease: 'power3.out', delay, clearProps: 'all' }
+    )
+    gsap.from(card.querySelectorAll(INNER), {
+      y: sign * 18, autoAlpha: 0, stagger: 0.07,
+      duration: 0.38, ease: 'power2.out', delay: delay + 0.1, clearProps: 'all',
+    })
+  })
+}
+
+new Slider('#my-slider', {
+  items: 3,
+  gutter: 24,
+  slideBy: 'page',
+  loop: true,
+  speed: 400,
+  plugins: [
+    arrows(),
+    hooks({
+      onInit({ slides }) {
+        const active = slides.filter(s =>
+          s.classList.contains('sliderkit__item--active') &&
+          !s.classList.contains('sliderkit__item--clone')
+        )
+        animateIn(active)
+      },
+      afterChange({ slide, direction }) {
+        const sign = direction === 'forward' ? 1 : -1
+        const active = [...slide.parentElement.querySelectorAll(
+          '.sliderkit__item--active:not(.sliderkit__item--clone)'
+        )]
+        animateIn(active, sign)
+      },
+    }),
+  ],
+})`}
+  >
+    <div id="demo-hooks-cards">
+      <div class="hc">
+        <div class="hc__accent" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)"></div>
+        <div class="hc__body">
+          <span class="hc-num">01</span>
+          <h3 class="hc-title">Instant setup</h3>
+          <p class="hc-text">One import, one constructor call. No config files, no build plugins required.</p>
+          <a class="hc-cta" href="#">Learn more →</a>
+        </div>
+      </div>
+      <div class="hc">
+        <div class="hc__accent" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"></div>
+        <div class="hc__body">
+          <span class="hc-num">02</span>
+          <h3 class="hc-title">Plugin system</h3>
+          <p class="hc-text">Tree-shakeable plugins. Import only what you use — zero dead code in your bundle.</p>
+          <a class="hc-cta" href="#">Explore plugins →</a>
+        </div>
+      </div>
+      <div class="hc">
+        <div class="hc__accent" style="background:linear-gradient(135deg,#10b981,#84cc16)"></div>
+        <div class="hc__body">
+          <span class="hc-num">03</span>
+          <h3 class="hc-title">TypeScript</h3>
+          <p class="hc-text">Written in TypeScript. Full autocomplete for every option, method, and event.</p>
+          <a class="hc-cta" href="#">View types →</a>
+        </div>
+      </div>
+      <div class="hc">
+        <div class="hc__accent" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"></div>
+        <div class="hc__body">
+          <span class="hc-num">04</span>
+          <h3 class="hc-title">Performance</h3>
+          <p class="hc-text">Under 10 kb gzipped. No runtime dependencies, hardware-accelerated CSS.</p>
+          <a class="hc-cta" href="#">Benchmark →</a>
+        </div>
+      </div>
+      <div class="hc">
+        <div class="hc__accent" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"></div>
+        <div class="hc__body">
+          <span class="hc-num">05</span>
+          <h3 class="hc-title">Accessible</h3>
+          <p class="hc-text">WAI-ARIA carousel pattern built in. Keyboard navigation and screen reader support.</p>
+          <a class="hc-cta" href="#">A11y docs →</a>
+        </div>
+      </div>
+      <div class="hc">
+        <div class="hc__accent" style="background:linear-gradient(135deg,#14b8a6,#6366f1)"></div>
+        <div class="hc__body">
+          <span class="hc-num">06</span>
+          <h3 class="hc-title">Effects</h3>
+          <p class="hc-text">Fade, flip, and clip-path transitions from a separate effects package.</p>
+          <a class="hc-cta" href="#">See effects →</a>
+        </div>
+      </div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Hooks — focus center"
+    description="3 slides visible. The center one is always at full opacity and scale; the sides are dimmed. slideBy:1 moves one at a time so the focus always lands on the center."
+    html={`<div id="my-slider">
+  <div class="focus-slide s-purple">1</div>
+  <div class="focus-slide s-blue">2</div>
+  <div class="focus-slide s-green">3</div>
+  <div class="focus-slide s-amber">4</div>
+  <div class="focus-slide s-red">5</div>
+  <div class="focus-slide s-pink">6</div>
+</div>`}
+    css={`.focus-slide {
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #fff;
+  border-radius: 12px;
+  opacity: 0.5;
+  transform: scale(0.92);
+}`}
+    js={`import gsap from 'gsap'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, hooks } from '@andresclua/sliderkit-plugins'
+
+const ORIG = '.sliderkit__item:not(.sliderkit__item--clone)'
+
+function applyFocus(track) {
+  track.querySelectorAll(ORIG).forEach(s =>
+    gsap.to(s, { opacity: 0.5, scale: 0.92, duration: 0.35, ease: 'power2.out', overwrite: true })
+  )
+  track.querySelectorAll('.sliderkit__item--clone').forEach(s =>
+    gsap.set(s, { opacity: 0.5, scale: 0.92 })
+  )
+  const active = [...track.querySelectorAll('.sliderkit__item--active')]
+  if (active[1])
+    gsap.to(active[1], { opacity: 1, scale: 1, duration: 0.35, ease: 'power2.out', overwrite: true })
+}
+
+new Slider('#my-slider', {
+  items: 3,
+  gutter: 16,
+  slideBy: 1,
+  loop: true,
+  speed: 350,
+  plugins: [
+    arrows(),
+    hooks({
+      onInit({ slider }) { applyFocus(slider.container) },
+      afterChange({ slide }) {
+        requestAnimationFrame(() => applyFocus(slide.parentElement))
+      },
+    }),
+  ],
+})`}
+  >
+    <div id="demo-hooks-focus">
+      <div class="focus-slide s-purple">1</div>
+      <div class="focus-slide s-blue">2</div>
+      <div class="focus-slide s-green">3</div>
+      <div class="focus-slide s-amber">4</div>
+      <div class="focus-slide s-red">5</div>
+      <div class="focus-slide s-pink">6</div>
+    </div>
+  </DemoViewer>
+</DemoLayout>
+
+<style>
+.fade-slide {
+  height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 56px;
+  border-radius: 12px;
+  color: #fff;
+}
+.fade-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+.fade-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+.fade-sub {
+  font-size: 1rem;
+  opacity: 0.8;
+  max-width: 380px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── Hook cards (multi-item demo) ── */
+.hc {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.hc__accent { height: 6px; }
+.hc__body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hc-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+.hc-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+}
+.hc-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.6;
+}
+.hc-cta {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6C2BD9;
+  text-decoration: none;
+  margin-top: 4px;
+}
+
+/* ── Focus-center demo ── */
+.focus-slide {
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #fff;
+  border-radius: 12px;
+  opacity: 0.5;
+}
+.sliderkit__item.focus-slide { display: inline-flex; }
+</style>
+
+<script>
+import gsap from 'gsap'
+import { Slider } from '@andresclua/sliderkit'
+import type { SliderInstance } from '@andresclua/sliderkit'
+import { arrows, pagination, hooks } from '@andresclua/sliderkit-plugins'
+import { fadeEffect } from '@andresclua/sliderkit-effects'
+
+const log = document.getElementById('demo-hooks-log') as HTMLElement | null
+
+new Slider('#demo-hooks-basic', {
+  items: 1,
+  loop: true,
+  speed: 300,
+  plugins: [
+    arrows(),
+    hooks({
+      onInit({ slides }) {
+        if (log) log.textContent = 'onInit — ' + slides.length + ' slides ready'
+      },
+      beforeChange({ outgoing, incoming, direction }) {
+        if (outgoing) (outgoing as HTMLElement).style.opacity = '0.3'
+        if (log) log.textContent = 'beforeChange → ' + direction
+      },
+      afterChange({ slide }) {
+        ;(slide as HTMLElement).style.opacity = '1'
+        if (log) log.textContent = 'afterChange — now showing slide ' + (slide.textContent?.trim() ?? '')
+      },
+      onDragStart() { if (log) log.textContent = 'onDragStart' },
+      onDragEnd()   { if (log) log.textContent = 'onDragEnd'   },
+    }),
+  ],
+})
+
+new Slider('#demo-hooks-gsap', {
+  items: 1,
+  loop: true,
+  speed: 600,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    fadeEffect({ duration: 600, easing: 'ease-in-out' }),
+    hooks({
+      onInit({ slides }) {
+        gsap.from(slides[0].querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          y: 28,
+          autoAlpha: 0,
+          stagger: 0.1,
+          duration: 0.55,
+          ease: 'power3.out',
+          clearProps: 'all',
+        })
+      },
+      beforeChange({ incoming }) {
+        gsap.from((incoming as HTMLElement).querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          y: 28,
+          autoAlpha: 0,
+          stagger: 0.1,
+          duration: 0.55,
+          ease: 'power3.out',
+          delay: 0.25,
+          clearProps: 'all',
+        })
+      },
+    }),
+  ],
+})
+
+new Slider('#demo-hooks-direction', {
+  items: 1,
+  loop: true,
+  speed: 600,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    fadeEffect({ duration: 600, easing: 'ease-in-out' }),
+    hooks({
+      onInit({ slides }) {
+        gsap.from(slides[0].querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          x: 40, autoAlpha: 0, stagger: 0.09, duration: 0.5, ease: 'power3.out', clearProps: 'all',
+        })
+      },
+      beforeChange({ incoming, direction }) {
+        const sign = direction === 'forward' ? 1 : -1
+        gsap.from((incoming as HTMLElement).querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          x: sign * 50,
+          autoAlpha: 0,
+          stagger: 0.09,
+          duration: 0.5,
+          ease: 'power3.out',
+          delay: 0.2,
+          clearProps: 'all',
+        })
+      },
+    }),
+  ],
+})
+
+let sliderCardsInst: SliderInstance | null = null
+
+new Slider('#demo-hooks-cards', {
+  items: 3,
+  gutter: 24,
+  slideBy: 'page',
+  loop: true,
+  speed: 400,
+  plugins: [
+    arrows(),
+    hooks({
+      onInit({ slider, slides }) {
+        sliderCardsInst = slider
+        const active = (slides as HTMLElement[]).filter(s =>
+          s.classList.contains('sliderkit__item--active') &&
+          !s.classList.contains('sliderkit__item--clone')
+        )
+        active.forEach((card, i) => {
+          const d = i * 0.1
+          gsap.from(card, { x: 48, autoAlpha: 0, duration: 0.45, ease: 'power3.out', delay: d, clearProps: 'all' })
+          gsap.from(card.querySelectorAll('.hc-num, .hc-title, .hc-text, .hc-cta'), {
+            y: 18, autoAlpha: 0, stagger: 0.07, duration: 0.38, ease: 'power2.out', delay: d + 0.1, clearProps: 'all',
+          })
+        })
+      },
+      beforeChange() {
+        if (!sliderCardsInst) return
+        // By the time this fires, additionalUpdates() already ran and marked the
+        // INCOMING slides as --active. Hide them before the CSS transition starts.
+        ;(sliderCardsInst.slides as HTMLElement[]).forEach(s => {
+          if (s.classList.contains('sliderkit__item--active'))
+            gsap.set(s, { opacity: 0 })
+        })
+      },
+      afterChange({ slide, direction }) {
+        if (!sliderCardsInst) return
+        const sign = direction === 'forward' ? 1 : -1
+        const track = (slide as HTMLElement).parentElement!
+
+        // Reset outgoing slides for next transition
+        ;(sliderCardsInst.slides as HTMLElement[]).forEach(s => {
+          if (!s.classList.contains('sliderkit__item--active'))
+            gsap.set(s, { clearProps: 'opacity' })
+        })
+
+        const animateCards = (cards: HTMLElement[]) => {
+          cards.forEach((card, i) => {
+            const d = i * 0.1
+            gsap.fromTo(card,
+              { opacity: 0, x: sign * 48 },
+              { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out', delay: d, clearProps: 'all' }
+            )
+            gsap.from(card.querySelectorAll('.hc-num, .hc-title, .hc-text, .hc-cta'), {
+              y: sign * 18, autoAlpha: 0, stagger: 0.07, duration: 0.38,
+              ease: 'power2.out', delay: d + 0.1, clearProps: 'all',
+            })
+          })
+        }
+
+        const active = [...track.querySelectorAll<HTMLElement>(
+          '.sliderkit__item--active:not(.sliderkit__item--clone)'
+        )]
+
+        if (active.length > 0) {
+          // Normal transition: real active slides found — reveal them
+          animateCards(active)
+        } else {
+          // Loop wrap-around: slider still showing clones; real slides get --active
+          // only after the silent jump, which happens synchronously after this callback.
+          // rAF fires before the next paint, so we catch the real slides before they're visible.
+          requestAnimationFrame(() => {
+            const realActive = [...track.querySelectorAll<HTMLElement>(
+              '.sliderkit__item--active:not(.sliderkit__item--clone)'
+            )]
+            animateCards(realActive)
+          })
+        }
+      },
+    }),
+  ],
+})
+
+// ── Focus-center demo ─────────────────────────────────────────────────────
+
+const ORIG_SEL = '.sliderkit__item:not(.sliderkit__item--clone)'
+
+function applyFocus(track: HTMLElement) {
+  // Dim all originals
+  track.querySelectorAll<HTMLElement>(ORIG_SEL).forEach(s =>
+    gsap.to(s, { opacity: 0.5, scale: 0.92, duration: 0.35, ease: 'power2.out', overwrite: true })
+  )
+  // Dim clones instantly (only briefly visible during loop transitions)
+  track.querySelectorAll<HTMLElement>('.sliderkit__item--clone').forEach(s =>
+    gsap.set(s, { opacity: 0.5, scale: 0.92 })
+  )
+  // Center = active[1] counting ALL active items (incl. clones) — correct visual position
+  const active = [...track.querySelectorAll<HTMLElement>('.sliderkit__item--active')]
+  if (active[1])
+    gsap.to(active[1], { opacity: 1, scale: 1, duration: 0.35, ease: 'power2.out', overwrite: true })
+}
+
+new Slider('#demo-hooks-focus', {
+  items: 3,
+  gutter: 16,
+  slideBy: 1,
+  loop: true,
+  speed: 350,
+  plugins: [
+    arrows(),
+    hooks({
+      onInit({ slider }) {
+        applyFocus(slider.container)
+      },
+      afterChange({ slide }) {
+        // rAF ensures we run after any loop silent-jump, so real slides are already in place
+        requestAnimationFrame(() => applyFocus((slide as HTMLElement).parentElement!))
+      },
+    }),
+  ],
+})
+</script>

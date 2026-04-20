@@ -1,0 +1,103 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="WebGL Plugin">
+  <h1>WebGL Plugin <span class="badge badge-purple">Experimental</span></h1>
+  <p class="lead">GPU-powered slide transitions via raw WebGL. Ships three built-in effects (displacement, RGB-shift, radial) and a <code>custom</code> mode where you supply your own GLSL fragment shader.</p>
+
+  <h2>Installation</h2>
+  <pre><code>npm install @andresclua/sliderkit-webgl</code></pre>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} webgl, preloadWebGL {"}"} from '@andresclua/sliderkit-webgl'</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} arrows {"}"} from '@andresclua/sliderkit-plugins'
+import {"{"} webgl, preloadWebGL {"}"} from '@andresclua/sliderkit-webgl'
+
+const assets = await preloadWebGL({"{"}
+  slides:       [1,2,3,4,5].map(i => `/images/slide-${"{"}i{"}"}.jpg`),
+  displacement: '/images/displacement.png',
+{"}"})
+
+new Slider('#my-slider', {"{"}
+  items:   1,
+  loop:    true,
+  speed:   0,
+  plugins: [arrows(), webgl({"{"} effect: 'displacement', assets {"}"})],
+{"}"})</code></pre>
+
+  <h2>preloadWebGL() options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>slides</code></td><td><code>string[]</code></td><td>Image URLs, one per slide in DOM order.</td></tr>
+      <tr><td><code>displacement</code></td><td><code>string</code></td><td>Optional. Greyscale displacement map URL. Required only for <code>effect: 'displacement'</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>webgl() options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>effect</code></td><td><code>'displacement' | 'rgb-shift' | 'radial' | 'custom'</code></td><td>—</td><td>Required. Transition shader to use.</td></tr>
+      <tr><td><code>assets</code></td><td><code>WebGLAssets</code></td><td>—</td><td>Required. Returned by <code>preloadWebGL()</code>.</td></tr>
+      <tr><td><code>duration</code></td><td><code>number</code></td><td><code>900</code></td><td>Transition length in milliseconds.</td></tr>
+      <tr><td><code>intensity</code></td><td><code>number</code></td><td><code>0.08</code></td><td>Effect strength. Warp radius for displacement; channel offset for RGB-shift.</td></tr>
+      <tr><td><code>easing</code></td><td><code>(t: number) =&gt; number</code></td><td>cubic ease-in-out</td><td>Maps raw progress <code>[0,1]</code> to eased value before it reaches <code>u_progress</code>.</td></tr>
+      <tr><td><code>frag</code></td><td><code>string</code></td><td>—</td><td>Required when <code>effect: 'custom'</code>. Raw GLSL fragment shader source.</td></tr>
+      <tr><td><code>uniforms</code></td><td><code>Record&lt;string, number | number[] | (() =&gt; unknown)&gt;</code></td><td><code>{"{}"}</code></td><td>Extra uniforms injected into the shader each frame.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Built-in effects</h2>
+  <table>
+    <thead><tr><th>Effect</th><th>Description</th><th>Needs displacement map</th></tr></thead>
+    <tbody>
+      <tr><td><code>displacement</code></td><td>A greyscale map warps both frames simultaneously, producing a fluid ink-wipe.</td><td>Yes</td></tr>
+      <tr><td><code>rgb-shift</code></td><td>Splits R and B channels horizontally at mid-transition (chromatic aberration).</td><td>No</td></tr>
+      <tr><td><code>radial</code></td><td>Incoming image grows from the centre outward with a soft edge.</td><td>No</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Custom shaders</h2>
+  <p>Set <code>effect: 'custom'</code> and provide a GLSL fragment shader via <code>frag</code>. The following uniforms and varying are always available:</p>
+  <table>
+    <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>vUv</code></td><td><code>varying vec2</code></td><td>UV coordinates <code>[0,1]</code>.</td></tr>
+      <tr><td><code>u_from</code></td><td><code>sampler2D</code></td><td>Outgoing slide texture.</td></tr>
+      <tr><td><code>u_to</code></td><td><code>sampler2D</code></td><td>Incoming slide texture.</td></tr>
+      <tr><td><code>u_progress</code></td><td><code>float</code></td><td>Eased progress <code>[0,1]</code>.</td></tr>
+      <tr><td><code>u_ar</code></td><td><code>float</code></td><td>Canvas aspect ratio (<code>width / height</code>).</td></tr>
+      <tr><td><code>u_disp</code></td><td><code>sampler2D</code></td><td>Displacement map. Only bound when <code>assets.displacement</code> exists.</td></tr>
+    </tbody>
+  </table>
+  <pre><code>webgl({"{"}
+  effect: 'custom',
+  assets,
+  frag: `precision mediump float;
+varying vec2 vUv;
+uniform sampler2D u_from, u_to;
+uniform float u_progress, u_ar;
+void main() {"{"}
+  float t = smoothstep(0.45, 0.55, vUv.x - u_progress + 0.5);
+  gl_FragColor = mix(texture2D(u_from, vUv), texture2D(u_to, vUv), t);
+{"}"}`,
+{"}"})</code></pre>
+
+  <h2>Notes</h2>
+  <ul>
+    <li>Only works with <code>items: 1</code>. The WebGL canvas covers a single slide at a time.</li>
+    <li>Always set <code>speed: 0</code> — the plugin owns the animation, the slider's CSS transition is not used.</li>
+    <li>The plugin silently no-ops when WebGL is unavailable; the slider still works without the visual effect.</li>
+    <li>Sharing an <code>assets</code> object across multiple sliders is safe — each slider uploads its own GPU textures.</li>
+    <li>Textures and the WebGL context are released automatically when <code>slider.destroy()</code> is called.</li>
+  </ul>
+
+  <h2>TypeScript types</h2>
+  <pre><code>import type {"{"} WebGLOptions, WebGLAssets, PreloadConfig, BuiltinEffect {"}"} from '@andresclua/sliderkit-webgl'</code></pre>
+
+  <p><a href="/demos/webgl">See all effects live in the WebGL demo →</a></p>
+</DocsLayout>

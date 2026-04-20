@@ -47,11 +47,109 @@ new Slider('#my-slider', {
       <div class="demo-slide s-indigo">8</div>
     </div>
   </DemoViewer>
+  <DemoViewer
+    title="Swap plugins on resize"
+    description="Dots below 640px, progress bar at 960px+. On resize, the slider is destroyed and rebuilt with the correct plugins for the new breakpoint."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>
+<div id="my-progress" style="height:4px;background:#e5e7eb;border-radius:2px;margin-top:12px;"></div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, progress } from '@andresclua/sliderkit-plugins'
+
+function getZone() {
+  const w = window.innerWidth
+  if (w < 640)  return 'sm'
+  if (w < 960)  return 'md'
+  return 'lg'
+}
+
+function buildPlugins(zone) {
+  const p = [arrows()]
+  if (zone === 'sm') p.push(pagination({ type: 'dots', clickable: true }))
+  if (zone === 'lg') p.push(progress({ container: '#my-progress' }))
+  return p
+}
+
+let zone = getZone()
+let slider = new Slider('#my-slider', { items: 1, loop: false, speed: 300, plugins: buildPlugins(zone) })
+
+let t
+window.addEventListener('resize', () => {
+  clearTimeout(t)
+  t = setTimeout(() => {
+    const newZone = getZone()
+    if (newZone === zone) return
+    zone = newZone
+    slider.destroy()
+    slider = new Slider('#my-slider', { items: 1, loop: false, speed: 300, plugins: buildPlugins(zone) })
+  }, 150)
+})`}
+  >
+    <div id="demo-responsive-resize">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+    <div id="demo-rp-resize-progress" style="height:4px;background:#e5e7eb;border-radius:2px;margin-top:12px;"></div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Conditional plugins per breakpoint"
+    description="Pagination dots appear only below 640px. Progress bar appears only at 960px and above. Resize the window to see them switch."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+</div>
+<div id="my-progress" style="height:4px;background:#e5e7eb;border-radius:2px;margin-top:12px;">
+  <div id="my-progress-bar" style="height:100%;background:#6C2BD9;border-radius:2px;width:0%"></div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, progress } from '@andresclua/sliderkit-plugins'
+
+const plugins = [arrows()]
+
+if (window.innerWidth < 640) {
+  plugins.push(pagination({ type: 'dots', clickable: true }))
+} else if (window.innerWidth >= 960) {
+  plugins.push(progress({ container: '#my-progress' }))
+}
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: false,
+  speed: 300,
+  plugins,
+})`}
+  >
+    <div id="demo-responsive-plugins">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+    </div>
+    <div id="demo-rp-progress" style="height:4px;background:#e5e7eb;border-radius:2px;margin-top:12px;">
+      <div style="height:100%;background:#6C2BD9;border-radius:2px;width:0%"></div>
+    </div>
+  </DemoViewer>
+
 </DemoLayout>
 
 <script>
 import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination } from '@andresclua/sliderkit-plugins'
+import { arrows, pagination, progress } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-responsive', {
   items: 1,
@@ -67,5 +165,46 @@ new Slider('#demo-responsive', {
     arrows(),
     pagination({ type: 'dots', clickable: true }),
   ],
+})
+
+const pluginsBP = [arrows()]
+if (window.innerWidth < 640) {
+  pluginsBP.push(pagination({ type: 'dots', clickable: true }))
+} else if (window.innerWidth >= 960) {
+  pluginsBP.push(progress({ container: '#demo-rp-progress' }))
+}
+new Slider('#demo-responsive-plugins', {
+  items: 1, loop: false, speed: 300, plugins: pluginsBP,
+})
+
+// Swap plugins on resize
+function getZone() {
+  const w = window.innerWidth
+  if (w < 640) return 'sm'
+  if (w < 960) return 'md'
+  return 'lg'
+}
+function buildPlugins(zone: string) {
+  const p = [arrows()]
+  if (zone === 'sm') p.push(pagination({ type: 'dots', clickable: true }))
+  if (zone === 'lg') p.push(progress({ container: '#demo-rp-resize-progress' }))
+  return p
+}
+let zone = getZone()
+let sliderResize = new Slider('#demo-responsive-resize', {
+  items: 1, loop: false, speed: 300, plugins: buildPlugins(zone),
+})
+let resizeTimer: ReturnType<typeof setTimeout>
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(() => {
+    const newZone = getZone()
+    if (newZone === zone) return
+    zone = newZone
+    sliderResize.destroy()
+    sliderResize = new Slider('#demo-responsive-resize', {
+      items: 1, loop: false, speed: 300, plugins: buildPlugins(zone),
+    })
+  }, 150)
 })
 </script>

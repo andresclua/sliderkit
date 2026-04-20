@@ -37,11 +37,11 @@ import SiteHeader from '../components/SiteHeader.astro'
       <div class="hero-stats">
         <div class="stat"><strong>~4 KB</strong><span>core (gzip)</span></div>
         <div class="stat-sep"></div>
-        <div class="stat"><strong>13+</strong><span>plugins</span></div>
+        <div class="stat"><strong>9</strong><span>plugins</span></div>
         <div class="stat-sep"></div>
-        <div class="stat"><strong>6</strong><span>CSS effects</span></div>
+        <div class="stat"><strong>7</strong><span>CSS effects</span></div>
         <div class="stat-sep"></div>
-        <div class="stat"><strong>4</strong><span>WebGL shaders</span></div>
+        <div class="stat"><strong>3</strong><span>WebGL shaders</span></div>
       </div>
     </section>
 
@@ -57,8 +57,8 @@ import SiteHeader from '../components/SiteHeader.astro'
             { icon: '⚡', title: 'Lightweight core', desc: 'The engine is tiny. Import only what you use — plugins, effects and WebGL are fully optional extras.' },
             { icon: '♿', title: 'Fully accessible', desc: 'ARIA roles, live regions, roledescription, keyboard navigation, and prefers-reduced-motion out of the box.' },
             { icon: '🎨', title: '6 CSS effects', desc: 'Fade, cube, coverflow, flip, cards, creative — all pure CSS, no JavaScript animations required.' },
-            { icon: '✨', title: 'WebGL renderer', desc: 'Powered by OGL. Displacement maps, RGB shift, pixel dissolve, parallax depth, and custom GLSL shaders.' },
-            { icon: '🔌', title: '12 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, mousewheel, lazy load, virtual slides, and more.' },
+            { icon: '✨', title: 'WebGL renderer', desc: 'Raw WebGL, no dependencies. Displacement map warp, RGB-shift chromatic aberration, radial reveal, and custom GLSL shaders.' },
+            { icon: '🔌', title: '9 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, mouse wheel, keyboard, progress, accessibility, and hooks.' },
             { icon: '📱', title: 'Touch & drag', desc: 'Native-feeling swipe gestures with configurable threshold, angle, and resistance on touch and mouse.' },
             { icon: '📐', title: 'Responsive', desc: 'Change any option at any viewport width. ResizeObserver powered — no window resize hacks.' },
             { icon: '🔒', title: 'TypeScript strict', desc: 'Fully typed API, typed event payloads, typed plugin interface. No any escape hatches anywhere.' },
@@ -97,19 +97,18 @@ import { arrows, pagination, autoplay }
   from '@andresclua/sliderkit-plugins'
 
 const slider = new Slider('#hero-slider', {
-  slidesPerPage: 1,
-  loop: true,
+  items: 1,
+  loop:  true,
   speed: 420,
   plugins: [
     arrows(),
     pagination({ type: 'dots', clickable: true }),
     autoplay({ delay: 3000, pauseOnHover: true }),
   ],
-  on: {
-    afterSlideChange: ({ index }) => {
-      console.log('Slide:', index)
-    },
-  },
+})
+
+slider.on('indexChanged', ({ displayIndex }) => {
+  console.log('Slide:', displayIndex)
 })`}</code></pre>
           </div>
         </div>
@@ -126,9 +125,9 @@ const slider = new Slider('#hero-slider', {
         <div class="package-grid">
           {[
             { name: '@andresclua/sliderkit', badge: 'Core', color: '#6C2BD9', bg: '#ede9fe', desc: 'The slider engine. Touch, drag, keyboard, infinite loop, breakpoints, a11y, events, and plugin system.' },
-            { name: '@andresclua/sliderkit-plugins', badge: 'Plugins', color: '#2563EB', bg: '#dbeafe', desc: '12 UI plugins. Arrows, pagination, autoplay, thumbnails, mousewheel, lazy load, and more.' },
+            { name: '@andresclua/sliderkit-plugins', badge: 'Plugins', color: '#2563EB', bg: '#dbeafe', desc: '9 UI plugins. Arrows, pagination, autoplay, thumbnails, mouse wheel, keyboard, progress, accessibility, and hooks.' },
             { name: '@andresclua/sliderkit-effects', badge: 'Effects', color: '#059669', bg: '#d1fae5', desc: '6 CSS transition effects. Fade, cube, coverflow, flip, cards, and creative — zero JS animations.' },
-            { name: '@andresclua/sliderkit-webgl', badge: 'WebGL', color: '#D97706', bg: '#fef3c7', desc: 'OGL-powered WebGL renderer. 4 built-in shader effects plus a custom GLSL API with automatic fallback.' },
+            { name: '@andresclua/sliderkit-webgl', badge: 'WebGL', color: '#D97706', bg: '#fef3c7', desc: 'Raw WebGL renderer. 3 built-in shader effects (displacement, RGB-shift, radial) plus a custom GLSL API with automatic fallback.' },
           ].map(p => (
             <div class="package-card">
               <div class="package-top" style={`background: ${p.bg}`}></div>

@@ -32,20 +32,20 @@ const CALC                = 'calc'
 
 // ── CSS class constants ──────────────────────────────────────────────────────
 const CLS = {
-  OUTER:      'c--slider-a__outer',
-  OVERFLOW:   'c--slider-a__overflow',
-  INNER:      'c--slider-a__inner',
-  SLIDER:     'c--slider-a',
-  HORIZONTAL: 'c--slider-a--horizontal',
-  VERTICAL:   'c--slider-a--vertical',
-  ITEM:       'c--slider-a__item',
-  ACTIVE:     'c--slider-a__item--active',
-  CLONE:      'c--slider-a__item--clone',
-  LIVE:       'c--slider-a__live',
-  VHIDE:      'c--slider-a__visually-hidden',
-  FROZEN:     'c--slider-a--frozen',
-  AUTOHEIGHT: 'c--slider-a--ah',
-  VPFIX:      'c--slider-a--vpfix',
+  OUTER:      'sliderkit__outer',
+  OVERFLOW:   'sliderkit__overflow',
+  INNER:      'sliderkit__inner',
+  SLIDER:     'sliderkit',
+  HORIZONTAL: 'sliderkit--horizontal',
+  VERTICAL:   'sliderkit--vertical',
+  ITEM:       'sliderkit__item',
+  ACTIVE:     'sliderkit__item--active',
+  CLONE:      'sliderkit__item--clone',
+  LIVE:       'sliderkit__live',
+  VHIDE:      'sliderkit__visually-hidden',
+  FROZEN:     'sliderkit--frozen',
+  AUTOHEIGHT: 'sliderkit--ah',
+  VPFIX:      'sliderkit--vpfix',
 } as const
 
 // ── Defaults — mirror Tiny Slider defaults ───────────────────────────────────
@@ -461,15 +461,13 @@ export class Slider implements SliderInstance {
     return str
   }
 
-  private getContainerWidth(fixedWidthTem: number | false, gutterTem: number, _itemsTem: number): string {
+  private getContainerWidth(fixedWidthTem: number | false, gutterTem: number, itemsTem: number): string {
     if (fixedWidthTem) {
       return (fixedWidthTem + gutterTem) * this.slideCountNew + 'px'
     } else {
-      // For carousel mode: container width = slideCountNew * 100% / items
-      // We use slideCountNew (not items) because percentage is relative to parent
       return CALC
-        ? CALC + '(' + this.slideCountNew * 100 + '% / ' + this.items + ')'
-        : this.slideCountNew * 100 / this.items + '%'
+        ? CALC + '(' + this.slideCountNew * 100 + '% / ' + itemsTem + ')'
+        : this.slideCountNew * 100 / itemsTem + '%'
     }
   }
 
@@ -478,19 +476,20 @@ export class Slider implements SliderInstance {
     if (fixedWidthTem) {
       width = (fixedWidthTem + gutterTem) + 'px'
     } else {
-      const dividend = this.slideCountNew  // carousel mode
-      width = CALC
-        ? CALC + '(100% / ' + dividend + ')'
-        : 100 / dividend + '%'
+      const dividend = this.slideCountNew
+      width = CALC && gutterTem
+        ? CALC + '(100% / ' + dividend + ' - ' + gutterTem + 'px)'
+        : CALC
+          ? CALC + '(100% / ' + dividend + ')'
+          : 100 / dividend + '%'
     }
     return 'width:' + width + ';'
   }
 
   private getSlideGutterStyle(gutterTem: number): string {
-    if (gutterTem === 0) return ''   // gutter can be 0
-    const prop = this.horizontal ? 'padding-' : 'margin-'
-    const dir  = this.horizontal ? 'right' : 'bottom'
-    return prop + dir + ': ' + gutterTem + 'px;'
+    if (gutterTem === 0) return ''
+    const dir = this.horizontal ? 'right' : 'bottom'
+    return 'margin-' + dir + ': ' + gutterTem + 'px;'
   }
 
   private getTransitionDurationStyle(speed: number): string {

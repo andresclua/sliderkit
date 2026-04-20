@@ -66,6 +66,14 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   {"}"},
 {"}"})</code></pre>
   <p>All layout and navigation options can be overridden per breakpoint. The slider rebuilds pagination and recalculates layout automatically on each resize that crosses a breakpoint.</p>
+  <p><strong>Note:</strong> <code>plugins</code> cannot be set inside <code>responsive</code>. If you need a plugin only above a certain breakpoint, initialise it conditionally in JS before creating the slider:</p>
+  <pre><code>const plugins = [arrows()]
+if (window.innerWidth >= 960) {"{"}
+  plugins.push(progress({"{"} container: '#my-progress' {"}"}))
+{"}"}
+
+new Slider('#my-slider', {"{"} plugins {"}"})
+</code></pre>
 
   <h2>Callbacks & plugins</h2>
   <table>

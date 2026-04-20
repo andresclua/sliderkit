@@ -23,8 +23,8 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Class</th><th>Applied to</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>.c--slider-a--autoplay-playing</code></td><td>outer wrapper</td><td>Autoplay is running.</td></tr>
-      <tr><td><code>.c--slider-a--autoplay-paused</code></td><td>outer wrapper</td><td>Autoplay is paused (hover, focus, touch, drag).</td></tr>
+      <tr><td><code>.sliderkit--autoplay-playing</code></td><td>outer wrapper</td><td>Autoplay is running.</td></tr>
+      <tr><td><code>.sliderkit--autoplay-paused</code></td><td>outer wrapper</td><td>Autoplay is paused (hover, focus, touch, drag).</td></tr>
     </tbody>
   </table>
 
@@ -50,7 +50,7 @@ new Slider('#my-slider', {"{"}
   autoplay({"{"} delay: 4000 {"}"}),
 ]</code></pre>
   <pre><code>/* match transition duration to delay */
-.c--slider-a__pagination-progress-fill {"{"}
+.sliderkit__pagination-progress-fill {"{"}
   transition: width 3800ms linear; /* ~200ms less than delay for smoothness */
 {"}"}</code></pre>
 

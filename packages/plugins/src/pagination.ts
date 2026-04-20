@@ -8,12 +8,12 @@ export interface PaginationOptions {
   container?: HTMLElement | string | null
 }
 
-const CLS_WRAP     = 'c--slider-a__pagination'
-const CLS_BULLET   = 'c--slider-a__pagination-bullet'
-const CLS_ACTIVE   = 'c--slider-a__pagination-bullet--active'
-const CLS_FRACTION = 'c--slider-a__pagination-fraction'
-const CLS_PROGRESS = 'c--slider-a__pagination-progress'
-const CLS_FILL     = 'c--slider-a__pagination-progress-fill'
+const CLS_WRAP     = 'sliderkit__pagination'
+const CLS_BULLET   = 'sliderkit__pagination-bullet'
+const CLS_ACTIVE   = 'sliderkit__pagination-bullet--active'
+const CLS_FRACTION = 'sliderkit__pagination-fraction'
+const CLS_PROGRESS = 'sliderkit__pagination-progress'
+const CLS_FILL     = 'sliderkit__pagination-progress-fill'
 
 export function pagination(opts: PaginationOptions = {}): SliderPlugin {
   const type      = opts.type ?? 'dots'

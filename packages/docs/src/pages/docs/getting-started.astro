@@ -21,11 +21,11 @@ pnpm add @andresclua/sliderkit @andresclua/sliderkit-plugins</code></pre>
   <h2>Required CSS</h2>
   <p>The slider injects layout styles at runtime. You need to provide the structural rules:</p>
   <pre><code>/* clip the sliding track */
-.c--slider-a__overflow {"{"} overflow: hidden; {"}"}
+.sliderkit__overflow {"{"} overflow: hidden; {"}"}
 
 /* horizontal carousel — added automatically by the JS */
-.c--slider-a--horizontal {"{"} white-space: nowrap; {"}"}
-.c--slider-a--horizontal > .c--slider-a__item {"{"} display: inline-block; vertical-align: top; {"}"}</code></pre>
+.sliderkit--horizontal {"{"} white-space: nowrap; {"}"}
+.sliderkit--horizontal > .sliderkit__item {"{"} display: inline-block; vertical-align: top; {"}"}</code></pre>
   <p>All demo pages include a complete stylesheet reference in their CSS tab.</p>
 
   <h2>Basic usage</h2>
@@ -34,6 +34,7 @@ pnpm add @andresclua/sliderkit @andresclua/sliderkit-plugins</code></pre>
 new Slider('#my-slider', {"{"} items: 1, loop: true, speed: 300 {"}"})</code></pre>
 
   <h2>With plugins</h2>
+  <p>Plugins live in a separate package so you only ship what you actually use. Import each plugin by name — anything you don't import is tree-shaken out of your bundle. Pass them as an array to the <code>plugins</code> option; the slider calls <code>install</code> on each one after init and <code>destroy</code> when the slider is torn down.</p>
   <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
 import {"{"} arrows, pagination {"}"} from '@andresclua/sliderkit-plugins'
 

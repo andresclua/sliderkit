@@ -15,3 +15,12 @@ export type { MouseWheelOptions } from './mouseWheel'
 
 export { keyboard } from './keyboard'
 export type { KeyboardOptions } from './keyboard'
+
+export { progress } from './progress'
+export type { ProgressOptions } from './progress'
+
+export { thumbs } from './thumbs'
+export type { ThumbsOptions } from './thumbs'
+
+export { hooks } from './hooks'
+export type { HooksContext } from './hooks'

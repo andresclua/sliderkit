@@ -1,6 +1,6 @@
 @use '../../../core/src/scss/variables' as *;
 
-.c--slider-a__scrollbar {
+.sliderkit__scrollbar {
   height: $slider-scrollbar-height;
   background: $slider-scrollbar-bg;
   border-radius: 2px;

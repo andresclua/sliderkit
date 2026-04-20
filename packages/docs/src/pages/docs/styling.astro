@@ -5,36 +5,115 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   <h1>Styling</h1>
   <p class="lead">SliderKit adds BEM class names to every element it creates. Override them with plain CSS — no preprocessor needed.</p>
 
+  <h2>Minimum required CSS</h2>
+  <p>The slider injects layout styles at runtime via a dynamic stylesheet, but it needs these structural rules to exist in your CSS. Copy one of the blocks below — plain CSS or SCSS, your choice.</p>
+
+  <p><strong>CSS</strong></p>
+  <pre><code>/* ── SliderKit base styles ──────────────────────────── */
+.sliderkit__outer {"{"}
+  position: relative;
+  box-sizing: border-box;
+{"}"}
+.sliderkit__outer *,
+.sliderkit__outer *::before,
+.sliderkit__outer *::after {"{"} box-sizing: inherit; {"}"}
+
+.sliderkit__overflow {"{"}
+  overflow: hidden;
+  position: relative;
+{"}"}
+
+.sliderkit {"{"}
+  user-select: none;
+  will-change: transform;
+{"}"}
+.sliderkit--horizontal {"{"} touch-action: pan-y; {"}"}
+.sliderkit--vertical   {"{"} touch-action: pan-x; {"}"}
+
+.sliderkit__item {"{"}
+  display: inline-block;
+  vertical-align: top;
+  min-height: 1px;
+{"}"}
+.sliderkit__item img {"{"}
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+{"}"}
+
+.sliderkit__live {"{"}
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+{"}"}</code></pre>
+
+  <p><strong>SCSS</strong></p>
+  <pre><code>// ── SliderKit base styles ────────────────────────────
+.sliderkit__outer {"{"}
+  position: relative;
+  box-sizing: border-box;
+  *, *::before, *::after {"{"} box-sizing: inherit; {"}"}
+{"}"}
+
+.sliderkit__overflow {"{"}
+  overflow: hidden;
+  position: relative;
+{"}"}
+
+.sliderkit {"{"}
+  user-select: none;
+  will-change: transform;
+  &--horizontal {"{"} touch-action: pan-y; {"}"}
+  &--vertical   {"{"} touch-action: pan-x; {"}"}
+{"}"}
+
+.sliderkit__item {"{"}
+  display: inline-block;
+  vertical-align: top;
+  min-height: 1px;
+  img {"{"} display: block; max-width: 100%; width: 100%; height: auto; {"}"}
+{"}"}
+
+.sliderkit__live {"{"}
+  position: absolute;
+  width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0,0,0,0); border: 0;
+{"}"}</code></pre>
+
   <h2>DOM structure</h2>
   <p>After init, the slider wraps your container in this structure:</p>
-  <pre><code>div.c--slider-a__outer          ← position:relative, arrows mount here
-  div.c--slider-a__overflow     ← overflow:hidden, clips the track
-    div.c--slider-a__inner      ← applies edgePadding margin
+  <pre><code>div.sliderkit__outer          ← position:relative, arrows mount here
+  div.sliderkit__overflow     ← overflow:hidden, clips the track
+    div.sliderkit__inner      ← applies edgePadding margin
       div#your-id               ← your original container (the track)
-        div.c--slider-a__item   ← each slide
+        div.sliderkit__item   ← each slide
       /div
     /div
   /div
-  div.c--slider-a__pagination   ← pagination mounts here
+  div.sliderkit__pagination   ← pagination mounts here
 /div</code></pre>
 
   <h2>State classes</h2>
   <table>
     <thead><tr><th>Class</th><th>Applied to</th><th>When</th></tr></thead>
     <tbody>
-      <tr><td><code>.c--slider-a--horizontal</code></td><td>container</td><td>Always (horizontal axis).</td></tr>
-      <tr><td><code>.c--slider-a--vertical</code></td><td>container</td><td>When <code>axis:'vertical'</code>.</td></tr>
-      <tr><td><code>.c--slider-a__item--active</code></td><td>slide</td><td>Slide is in the visible range.</td></tr>
-      <tr><td><code>.c--slider-a__item--clone</code></td><td>slide</td><td>Clone slide (loop only).</td></tr>
-      <tr><td><code>.c--slider-a--frozen</code></td><td>outer wrapper</td><td>Slider is frozen (all slides fit, <code>freezable:true</code>).</td></tr>
-      <tr><td><code>.c--slider-a--autoplay-playing</code></td><td>outer wrapper</td><td>Autoplay is running.</td></tr>
-      <tr><td><code>.c--slider-a--autoplay-paused</code></td><td>outer wrapper</td><td>Autoplay is paused.</td></tr>
+      <tr><td><code>.sliderkit--horizontal</code></td><td>container</td><td>Always (horizontal axis).</td></tr>
+      <tr><td><code>.sliderkit--vertical</code></td><td>container</td><td>When <code>axis:'vertical'</code>.</td></tr>
+      <tr><td><code>.sliderkit__item--active</code></td><td>slide</td><td>Slide is in the visible range.</td></tr>
+      <tr><td><code>.sliderkit__item--clone</code></td><td>slide</td><td>Clone slide (loop only).</td></tr>
+      <tr><td><code>.sliderkit--frozen</code></td><td>outer wrapper</td><td>Slider is frozen (all slides fit, <code>freezable:true</code>).</td></tr>
+      <tr><td><code>.sliderkit--autoplay-playing</code></td><td>outer wrapper</td><td>Autoplay is running.</td></tr>
+      <tr><td><code>.sliderkit--autoplay-paused</code></td><td>outer wrapper</td><td>Autoplay is paused.</td></tr>
     </tbody>
   </table>
 
   <h2>Customising arrows</h2>
   <pre><code>/* size and position */
-.c--slider-a__arrow {"{"}
+.sliderkit__arrow {"{"}
   width: 48px;
   height: 48px;
   border-radius: 4px;          /* square instead of circle */
@@ -42,18 +121,18 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 {"}"}
 
 /* placement */
-.c--slider-a__arrow--prev {"{"} left: 0; {"}"}
-.c--slider-a__arrow--next {"{"} right: 0; {"}"}
+.sliderkit__arrow--prev {"{"} left: 0; {"}"}
+.sliderkit__arrow--next {"{"} right: 0; {"}"}
 
 /* disabled state */
-.c--slider-a__arrow--disabled {"{"}
+.sliderkit__arrow--disabled {"{"}
   opacity: 0;
   pointer-events: none;
 {"}"}</code></pre>
 
   <h2>Customising dots</h2>
   <pre><code>/* dot shape */
-.c--slider-a__pagination-bullet {"{"}
+.sliderkit__pagination-bullet {"{"}
   width: 8px;
   height: 8px;
   border-radius: 2px;          /* square dots */
@@ -61,52 +140,52 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 {"}"}
 
 /* active dot */
-.c--slider-a__pagination-bullet--active {"{"}
+.sliderkit__pagination-bullet--active {"{"}
   background: #6C2BD9;
   transform: scale(1.4);
 {"}"}</code></pre>
 
   <h2>Highlighting the active slide</h2>
   <pre><code>/* dim all slides, brighten the active one */
-.c--slider-a__item {"{"}
+.sliderkit__item {"{"}
   opacity: 0.4;
   transition: opacity 0.3s;
 {"}"}
-.c--slider-a__item--active {"{"}
+.sliderkit__item--active {"{"}
   opacity: 1;
 {"}"}</code></pre>
 
   <h2>Vertical arrows</h2>
   <p>For <code>axis:'vertical'</code> the default arrow positions (left/right) don't make sense. Override them to top/bottom:</p>
-  <pre><code>.c--slider-a__arrow {"{"}
+  <pre><code>.sliderkit__arrow {"{"}
   left: 50%;
   transform: translateX(-50%);
 {"}"}
-.c--slider-a__arrow--prev {"{"} top: 8px; {"}"}
-.c--slider-a__arrow--next {"{"} bottom: 8px; top: auto; {"}"}</code></pre>
+.sliderkit__arrow--prev {"{"} top: 8px; {"}"}
+.sliderkit__arrow--next {"{"} bottom: 8px; top: auto; {"}"}</code></pre>
 
   <h2>Hide controls when frozen</h2>
-  <p>When <code>freezable:true</code> and all slides fit, the outer wrapper gets <code>.c--slider-a--frozen</code>. You can use this to hide controls:</p>
-  <pre><code>.c--slider-a--frozen .c--slider-a__arrow,
-.c--slider-a--frozen .c--slider-a__pagination {"{"}
+  <p>When <code>freezable:true</code> and all slides fit, the outer wrapper gets <code>.sliderkit--frozen</code>. You can use this to hide controls:</p>
+  <pre><code>.sliderkit--frozen .sliderkit__arrow,
+.sliderkit--frozen .sliderkit__pagination {"{"}
   display: none;
 {"}"}</code></pre>
 
   <h2>Autoplay state styling</h2>
   <pre><code>/* show a pause icon when playing, play icon when paused */
-.c--slider-a--autoplay-playing .my-play-btn  {"{"} display: none; {"}"}
-.c--slider-a--autoplay-paused  .my-pause-btn {"{"} display: none; {"}"}</code></pre>
+.sliderkit--autoplay-playing .my-play-btn  {"{"} display: none; {"}"}
+.sliderkit--autoplay-paused  .my-pause-btn {"{"} display: none; {"}"}</code></pre>
 
   <h2>Dark mode</h2>
   <pre><code>@media (prefers-color-scheme: dark) {"{"}
-  .c--slider-a__arrow {"{"}
+  .sliderkit__arrow {"{"}
     background: rgba(255, 255, 255, 0.15);
     color: #fff;
   {"}"}
-  .c--slider-a__pagination-bullet {"{"}
+  .sliderkit__pagination-bullet {"{"}
     background: rgba(255, 255, 255, 0.3);
   {"}"}
-  .c--slider-a__pagination-bullet--active {"{"}
+  .sliderkit__pagination-bullet--active {"{"}
     background: #a78bfa;
   {"}"}
 {"}"}</code></pre>

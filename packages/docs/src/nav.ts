@@ -21,25 +21,52 @@ export const demosNav: NavGroup[] = DEMO_GROUP_ORDER.map(group => ({
 
 export const docsNav: NavGroup[] = [
   {
-    title: 'Guide',
+    title: 'Getting Started',
     items: [
       { label: 'Getting Started', href: '/docs/getting-started' },
-      { label: 'Options',         href: '/docs/options' },
-      { label: 'Methods',         href: '/docs/methods' },
-      { label: 'Events',          href: '/docs/events' },
       { label: 'Styling',         href: '/docs/styling' },
     ],
   },
   {
-    title: 'Plugins',
+    title: 'Core API',
     items: [
-      { label: 'Overview',     href: '/docs/plugins' },
-      { label: 'Arrows',       href: '/docs/plugins/arrows' },
-      { label: 'Pagination',   href: '/docs/plugins/pagination' },
-      { label: 'Autoplay',     href: '/docs/plugins/autoplay' },
-      { label: 'A11y',         href: '/docs/plugins/a11y' },
-      { label: 'Mouse Wheel',  href: '/docs/plugins/mouseWheel' },
-      { label: 'Keyboard',     href: '/docs/plugins/keyboard' },
+      { label: 'Options', href: '/docs/options' },
+      { label: 'Methods', href: '/docs/methods' },
+      { label: 'Events',  href: '/docs/events' },
+    ],
+  },
+  {
+    title: 'Effects',
+    items: [
+      { label: 'Fade',      href: '/docs/effects/fade' },
+      { label: 'Flip',      href: '/docs/effects/flip' },
+      { label: 'Clip Path', href: '/docs/effects/clip-path' },
+    ],
+  },
+  {
+    title: 'Plugins — UI',
+    items: [
+      { label: 'Overview',      href: '/docs/plugins' },
+      { label: 'Arrows',        href: '/docs/plugins/arrows' },
+      { label: 'Pagination',    href: '/docs/plugins/pagination' },
+      { label: 'Progress',      href: '/docs/plugins/progress' },
+      { label: 'Thumbs',        href: '/docs/plugins/thumbs' },
+    ],
+  },
+  {
+    title: 'Plugins — Behaviour',
+    items: [
+      { label: 'Autoplay',      href: '/docs/plugins/autoplay' },
+      { label: 'Mouse Wheel',   href: '/docs/plugins/mouseWheel' },
+      { label: 'Keyboard',      href: '/docs/plugins/keyboard' },
+      { label: 'Accessibility', href: '/docs/plugins/a11y' },
+    ],
+  },
+  {
+    title: 'Plugins — Advanced',
+    items: [
+      { label: 'Hooks',         href: '/docs/plugins/hooks' },
+      { label: 'WebGL',         href: '/docs/plugins/webgl' },
     ],
   },
 ]

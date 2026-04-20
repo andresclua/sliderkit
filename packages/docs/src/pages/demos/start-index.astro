@@ -13,27 +13,27 @@ import DemoViewer from '../../components/DemoViewer.astro'
   <div class="demo-slide s-amber">4</div>
   <div class="demo-slide s-red">5</div>
 </div>`}
-    css={`.c--slider-a__item { height: 260px; }
+    css={`.sliderkit__item { height: 260px; }
 
-.c--slider-a__arrow {
+.sliderkit__arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   z-index: 10; width: 40px; height: 40px; border-radius: 50%;
   border: none; background: rgba(255,255,255,0.9); cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,.18);
 }
-.c--slider-a__arrow--prev { left: 12px; }
-.c--slider-a__arrow--next { right: 12px; }
+.sliderkit__arrow--prev { left: 12px; }
+.sliderkit__arrow--next { right: 12px; }
 
-.c--slider-a__pagination {
+.sliderkit__pagination {
   display: flex; align-items: center; justify-content: center;
   gap: 6px; padding: 12px 0;
 }
-.c--slider-a__pagination-bullet {
+.sliderkit__pagination-bullet {
   width: 10px; height: 10px; border-radius: 50%;
   background: #d1d5db; border: none; cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
-.c--slider-a__pagination-bullet--active { background: #6C2BD9; transform: scale(1.3); }`}
+.sliderkit__pagination-bullet--active { background: #6C2BD9; transform: scale(1.3); }`}
     js={`import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination } from '@andresclua/sliderkit-plugins'
 

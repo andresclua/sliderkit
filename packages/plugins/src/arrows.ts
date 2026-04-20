@@ -9,10 +9,10 @@ export interface ArrowsOptions {
 const SVG_PREV = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`
 const SVG_NEXT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`
 
-const CLS_ARROW    = 'c--slider-a__arrow'
-const CLS_PREV     = 'c--slider-a__arrow--prev'
-const CLS_NEXT     = 'c--slider-a__arrow--next'
-const CLS_DISABLED = 'c--slider-a__arrow--disabled'
+const CLS_ARROW    = 'sliderkit__arrow'
+const CLS_PREV     = 'sliderkit__arrow--prev'
+const CLS_NEXT     = 'sliderkit__arrow--next'
+const CLS_DISABLED = 'sliderkit__arrow--disabled'
 
 export function arrows(opts: ArrowsOptions = {}): SliderPlugin {
   let slider: SliderInstance

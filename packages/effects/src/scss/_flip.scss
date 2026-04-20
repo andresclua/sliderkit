@@ -1,10 +1,10 @@
 .c--slider-effect-flip {
-  .c--slider-a__wrapper {
+  .sliderkit__wrapper {
     transform-style: preserve-3d;
     perspective: 1200px;
   }
 
-  .c--slider-a__item {
+  .sliderkit__item {
     backface-visibility: hidden;
     transition: transform 300ms ease;
     position: absolute;

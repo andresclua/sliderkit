@@ -1,10 +1,10 @@
-.c--slider-a--vertical {
-  .c--slider-a__wrapper {
+.sliderkit--vertical {
+  .sliderkit__wrapper {
     flex-direction: column;
     touch-action: pan-x;
   }
 
-  .c--slider-a__item {
+  .sliderkit__item {
     width: 100%;
   }
 }

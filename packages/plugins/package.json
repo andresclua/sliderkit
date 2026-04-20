@@ -1,7 +1,7 @@
 {
   "name": "@andresclua/sliderkit-plugins",
-  "version": "0.1.1",
-  "description": "SliderKit UI plugins — pagination, autoplay, arrows, thumbnails, and more",
+  "version": "2.0.0",
+  "description": "SliderKit plugins — arrows, pagination, autoplay, thumbs, progress, mouseWheel, keyboard, a11y, hooks",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
@@ -30,7 +30,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@andresclua/sliderkit": "workspace:*"
+    "@andresclua/sliderkit": "^2.0.0"
   },
   "devDependencies": {
     "vite": "^5.2.12",

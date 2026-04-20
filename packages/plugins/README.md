@@ -4,7 +4,7 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@andresclua/sliderkit-plugins?style=flat-square&label=gzip)](https://bundlephobia.com/package/@andresclua/sliderkit-plugins)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-UI plugins for **SliderKit** — arrows, pagination, autoplay, thumbnails, progress bar, lazy load, and more.
+Plugins for **SliderKit** — arrows, pagination, autoplay, thumbs, progress, mouse wheel, keyboard, accessibility, and hooks.
 
 **[Full documentation & demos →](https://sliderkit.andresclua.com/docs/plugins)**
 
@@ -22,24 +22,15 @@ pnpm add @andresclua/sliderkit @andresclua/sliderkit-plugins
 
 ```typescript
 import { Slider } from '@andresclua/sliderkit'
-import {
-  arrows,
-  pagination,
-  autoplay,
-  thumbnails,
-  progressBar,
-  slideCounter,
-  mouseWheel,
-  lazyLoad,
-  autoHeight,
-} from '@andresclua/sliderkit-plugins'
+import { arrows, pagination, autoplay } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
-  loop: true,
+  items: 1,
+  loop:  true,
   plugins: [
     arrows(),
-    pagination({ type: 'dots', clickable: true }),
-    autoplay({ delay: 3000, pauseOnHover: true }),
+    pagination({ type: 'dots' }),
+    autoplay({ delay: 3000 }),
   ],
 })
 ```
@@ -47,67 +38,79 @@ new Slider('#my-slider', {
 ## Available plugins
 
 ### `arrows()`
-Previous / next navigation buttons.
+Previous / next navigation buttons injected into `.sliderkit__outer`.
+
 ```typescript
-arrows({
-  prevEl: '.my-prev', // custom selector or element
-  nextEl: '.my-next',
-})
+arrows()
 ```
 
 ### `pagination()`
-Dots, fractions, progress bar, dynamic, or fully custom.
+Dots, fraction, or progress-bar style pagination.
+
 ```typescript
 pagination({
-  type: 'dots',          // 'dots' | 'fraction' | 'progress' | 'dynamic' | 'custom'
+  type: 'dots',       // 'dots' | 'fraction' | 'progress'
   clickable: true,
-  renderBullet: (i, cls) => `<span class="${cls}">${i + 1}</span>`,
 })
 ```
 
 ### `autoplay()`
 Auto-advance slides on a timer.
+
 ```typescript
 autoplay({
-  delay: 3000,
-  pauseOnHover: true,
-  pauseOnInteraction: true,
-  disableOnInteraction: false,
+  delay:          3000,
+  pauseOnHover:   true,
+  stopOnLastSlide: false,
 })
 ```
 
-### `thumbnails()`
-Sync a secondary slider or thumbnail strip.
+### `thumbs()`
+Thumbnail strip that syncs with the main slider.
+
 ```typescript
-thumbnails({ el: '#thumbs', slideEl: '.thumb' })
+thumbs({ el: '#thumbs-container' })
 ```
 
-### `progressBar()`
-```typescript
-progressBar({ el: '#progress' })
-```
+### `progress()`
+Animated progress bar that fills across the autoplay interval.
 
-### `slideCounter()`
 ```typescript
-slideCounter({ el: '#counter', separator: ' / ' })
+progress({ el: '#progress-bar' })
 ```
 
 ### `mouseWheel()`
 Navigate with the scroll wheel.
+
 ```typescript
-mouseWheel({ sensitivity: 1, releaseOnEdges: true })
+mouseWheel()
 ```
 
-### `lazyLoad()`
-Load images only when they enter the viewport.
+### `keyboard()`
+Navigate with arrow keys when the slider is focused.
+
 ```typescript
-lazyLoad({ selector: '.lazy', preloadPrev: 1, preloadNext: 2 })
+keyboard()
 ```
 
-### `autoHeight()`
-Animate the container height to match the active slide.
+### `a11y()`
+ARIA roles, live regions, and keyboard-accessible markup.
+
 ```typescript
-autoHeight({ transition: 300 })
+a11y({
+  prevSlideMessage: 'Previous slide',
+  nextSlideMessage: 'Next slide',
+})
+```
+
+### `hooks()`
+Lifecycle callbacks: `beforeChange`, `afterChange`.
+
+```typescript
+hooks({
+  beforeChange: ({ from, to }) => { /* … */ },
+  afterChange:  ({ index })    => { /* … */ },
+})
 ```
 
 ---

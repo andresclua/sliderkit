@@ -1,13 +1,13 @@
 .c--slider-effect-creative {
   overflow: visible;
 
-  .c--slider-a__wrapper {
+  .sliderkit__wrapper {
     transform-style: preserve-3d;
     perspective: 1200px;
     position: relative;
   }
 
-  .c--slider-a__item {
+  .sliderkit__item {
     position: absolute;
     top: 0;
     left: 0;

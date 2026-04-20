@@ -71,49 +71,49 @@ pre code { background: none; padding: 0; font-size: inherit; }
 /* ── Slider core styles (inline — no SCSS preprocessor needed) ── */
 
 /* outerWrapper: position:relative so arrows position correctly */
-.c--slider-a__outer {
+.sliderkit__outer {
   position: relative;
   border-radius: var(--radius);
   background: #e5e7eb;
 }
 
 /* overflow div: clips the track */
-.c--slider-a__overflow {
+.sliderkit__overflow {
   overflow: hidden;
 }
 
 /* inner margin div: applies edgePadding offset */
-.c--slider-a__inner { }
+.sliderkit__inner { }
 
 /* track (the user's element, translates on slide) */
-.c--slider-a {
+.sliderkit {
   will-change: transform;
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
 }
-.c--slider-a:active { cursor: grabbing; }
+.sliderkit:active { cursor: grabbing; }
 
 /* Horizontal carousel: slides must be inline-block to sit side-by-side */
-.c--slider-a--horizontal {
+.sliderkit--horizontal {
   white-space: nowrap;
 }
-.c--slider-a--horizontal > .c--slider-a__item {
+.sliderkit--horizontal > .sliderkit__item {
   display: inline-block;
   white-space: normal;
   vertical-align: top;
 }
 
 /* Vertical mode */
-.c--slider-a--vertical {
+.sliderkit--vertical {
   touch-action: pan-x;
 }
-.c--slider-a__outer--vertical {
+.sliderkit__outer--vertical {
   height: 300px;
 }
 
 /* a11y live region — visually hidden, readable by screen readers */
-.c--slider-a__live {
+.sliderkit__live {
   position: absolute;
   width: 1px; height: 1px;
   padding: 0; margin: -1px;
@@ -124,7 +124,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
 }
 
 /* slides */
-.c--slider-a__item {
+.sliderkit__item {
   position: relative;
   min-height: 1px;
   box-sizing: border-box;
@@ -142,7 +142,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
 
 .demo-slide {
   height: 260px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
@@ -150,9 +150,34 @@ pre code { background: none; padding: 0; font-size: inherit; }
   color: #fff;
   letter-spacing: -0.02em;
 }
+/* sliderkit adds .sliderkit__item to slide elements; this overrides its display:inline-block */
+.sliderkit__item.demo-slide { display: inline-flex; }
+
+/* ── Hooks cards demo: arrows outside cards ── */
+.sliderkit__outer:has(#demo-hooks-cards) {
+  padding: 0 64px;
+}
+.sliderkit__outer:has(#demo-hooks-cards) .sliderkit__arrow--prev { left: 8px; }
+.sliderkit__outer:has(#demo-hooks-cards) .sliderkit__arrow--next { right: 8px; }
+
+/* ── Progress ── */
+.sliderkit__progress {
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.sliderkit__progress-bar {
+  height: 100%;
+  background: #6C2BD9;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
 
 /* ── Arrows ── */
-.c--slider-a__arrow {
+.sliderkit__arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -170,25 +195,25 @@ pre code { background: none; padding: 0; font-size: inherit; }
   transition: background 0.15s, opacity 0.15s;
   padding: 0;
 }
-.c--slider-a__arrow:hover { background: #fff; }
-.c--slider-a__arrow--disabled { opacity: 0.3; cursor: default; pointer-events: none; }
-.c--slider-a__arrow--prev { left: 12px; }
-.c--slider-a__arrow--next { right: 12px; }
-.c--slider-a__arrow svg { width: 20px; height: 20px; color: #374151; }
+.sliderkit__arrow:hover { background: #fff; }
+.sliderkit__arrow--disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+.sliderkit__arrow--prev { left: 12px; }
+.sliderkit__arrow--next { right: 12px; }
+.sliderkit__arrow svg { width: 20px; height: 20px; color: #374151; }
 
 /* ── Frozen: hide arrows and pagination ── */
-.c--slider-a--frozen .c--slider-a__arrow,
-.c--slider-a--frozen .c--slider-a__pagination { display: none; }
+.sliderkit--frozen .sliderkit__arrow,
+.sliderkit--frozen .sliderkit__pagination { display: none; }
 
 /* ── Pagination ── */
-.c--slider-a__pagination {
+.sliderkit__pagination {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   padding: 12px 0 8px;
 }
-.c--slider-a__pagination-bullet {
+.sliderkit__pagination-bullet {
   width: 10px; height: 10px;
   border-radius: 50%;
   border: none;
@@ -197,23 +222,23 @@ pre code { background: none; padding: 0; font-size: inherit; }
   padding: 0;
   transition: background 0.2s, transform 0.2s;
 }
-.c--slider-a__pagination-bullet--active {
+.sliderkit__pagination-bullet--active {
   background: var(--brand);
   transform: scale(1.3);
 }
-.c--slider-a__pagination-fraction {
+.sliderkit__pagination-fraction {
   font-size: 0.85rem;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
 }
-.c--slider-a__pagination-progress {
+.sliderkit__pagination-progress {
   width: 100%;
   height: 4px;
   background: #e5e7eb;
   border-radius: 2px;
   overflow: hidden;
 }
-.c--slider-a__pagination-progress-fill {
+.sliderkit__pagination-progress-fill {
   height: 100%;
   background: var(--brand);
   border-radius: 2px;
@@ -221,7 +246,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
 }
 
 /* ── Progress bar plugin ── */
-.c--slider-a__progress-bar {
+.sliderkit__progress-bar {
   position: absolute;
   top: 0; left: 0;
   height: 3px;
@@ -231,12 +256,12 @@ pre code { background: none; padding: 0; font-size: inherit; }
 }
 
 /* ── Thumbnails plugin ── */
-.c--slider-a__thumbs {
+.sliderkit__thumbs {
   display: flex;
   gap: 8px;
   margin-top: 8px;
 }
-.c--slider-a__thumb {
+.sliderkit__thumb {
   flex: 1;
   height: 60px;
   border-radius: 4px;
@@ -247,20 +272,20 @@ pre code { background: none; padding: 0; font-size: inherit; }
   transition: opacity 0.2s, border-color 0.2s;
   background: #e5e7eb;
 }
-.c--slider-a__thumb--active {
+.sliderkit__thumb--active {
   opacity: 1;
   border-color: var(--brand);
 }
 
 /* ── Progress bar plugin ── */
-.c--slider-a__progress {
+.sliderkit__progress {
   height: 4px;
   background: #e5e7eb;
   border-radius: 2px;
   overflow: hidden;
   margin-top: 8px;
 }
-.c--slider-a__progress-fill {
+.sliderkit__progress-fill {
   height: 100%;
   background: var(--brand);
   border-radius: 2px;
@@ -269,15 +294,65 @@ pre code { background: none; padding: 0; font-size: inherit; }
 }
 
 /* ── Effects: absolute-stacked slides ── */
-.c--slider-a--effect {
+.sliderkit--effect {
   height: 260px;
 }
-.c--slider-a--effect .c--slider-a__wrapper {
+.sliderkit--effect .sliderkit__wrapper {
   height: 100%;
 }
 
+/* ── WebGL demo slides ── */
+.wgl-slide {
+  height: 420px;
+  background: #111;
+  position: relative;
+  overflow: hidden;
+}
+.sliderkit__item.wgl-slide { display: inline-block; }
+
+/* HTML-driven accessible slides */
+.wgl-slide__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wgl-slide__label,
+.wgl-slide__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.wgl-hero { position: relative; }
+.wgl-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 10;
+  pointer-events: none;
+  padding: 1.75rem 2rem;
+  background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 100%);
+  color: #fff;
+}
+.wgl-caption__label {
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  opacity: .65;
+  margin: 0 0 .3rem;
+}
+.wgl-caption__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+}
+
 /* ── Slide counter plugin ── */
-.c--slider-a__counter {
+.sliderkit__counter {
   position: absolute;
   top: 12px;
   right: 12px;

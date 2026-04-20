@@ -161,10 +161,10 @@ new Slider('#demo-a11y-es', {
 function updateInspector(info: { displayIndex: number; slideCount: number }) {
   const outer = slider.outerWrapper
   const activeSlide = Array.from(slider.container.children).find(
-    el => !el.classList.contains('c--slider-a__item--clone') &&
+    el => !el.classList.contains('sliderkit__item--clone') &&
           !el.hasAttribute('aria-hidden')
   ) as HTMLElement | undefined
-  const liveEl = outer.querySelector('.c--slider-a__live') as HTMLElement | null
+  const liveEl = outer.querySelector('.sliderkit__live') as HTMLElement | null
 
   const regionLabel   = document.getElementById('region-label')!
   const carouselLabel = document.getElementById('carousel-label')!
