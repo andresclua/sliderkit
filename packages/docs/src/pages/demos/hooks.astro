@@ -187,6 +187,109 @@ new Slider('#my-slider', {
   </DemoViewer>
 
   <DemoViewer
+    title="Hooks — GSAP content stagger (adaptive height)"
+    description="El contenedor anima su alto al cambiar de slide, adaptándose al contenido de cada uno."
+    html={`<div id="my-slider">
+  <div class="fade-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+    <span class="fade-tag">01 / Setup</span>
+    <h2 class="fade-title">One import,<br>one line of code.</h2>
+    <p class="fade-sub">No config files. No wrappers. Drop it in and go.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+    <span class="fade-tag">02 / Plugins</span>
+    <h2 class="fade-title">Only load<br>what you need.</h2>
+    <p class="fade-sub">Tree-shakeable plugin system. Zero dead code in your bundle.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+    <span class="fade-tag">03 / TypeScript</span>
+    <h2 class="fade-title">Full type safety<br>out of the box.</h2>
+    <p class="fade-sub">Written in TypeScript. Autocomplete for every option and event. lorem ipsum dolor amit la bla el barco la writen in autocomplete</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+    <span class="fade-tag">04 / Performance</span>
+    <h2 class="fade-title">Under 10 kb<br>gzipped.</h2>
+    <p class="fade-sub">Tiny core, no runtime dependencies, hardware-accelerated CSS.</p>
+  </div>
+  <div class="fade-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">
+    <span class="fade-tag">05 / A11y</span>
+    <h2 class="fade-title">Accessible<br>by default.</h2>
+    <p class="fade-sub">WAI-ARIA carousel pattern built in. Keyboard navigation included.</p>
+  </div>
+</div>`}
+    css={`.fade-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 48px 56px;
+  border-radius: 12px;
+  color: #fff;
+}
+.fade-tag { font-size:.75rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; opacity:.7; margin-bottom:16px; }
+.fade-title { font-size:2.25rem; font-weight:800; line-height:1.15; margin:0 0 16px; }
+.fade-sub { font-size:1rem; opacity:.8; max-width:380px; margin:0; line-height:1.6; }`}
+    js={`import gsap from 'gsap'
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, pagination, hooks } from '@andresclua/sliderkit-plugins'
+import { fadeEffect } from '@andresclua/sliderkit-effects'
+
+let track
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 600,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    fadeEffect({ duration: 600, easing: 'ease-in-out' }),
+    hooks({
+      onInit({ slider, slides }) {
+        track = slider.container
+        gsap.set(track, { height: slides[0].offsetHeight })
+        gsap.from(slides[0].querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          y: 28, autoAlpha: 0, stagger: 0.1, duration: 0.55, ease: 'power3.out', clearProps: 'all',
+        })
+      },
+      beforeChange({ incoming }) {
+        gsap.to(track, { height: incoming.offsetHeight, duration: 0.4, ease: 'power2.inOut' })
+        gsap.from(incoming.querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          y: 28, autoAlpha: 0, stagger: 0.1, duration: 0.55, ease: 'power3.out', delay: 0.25, clearProps: 'all',
+        })
+      },
+    }),
+  ],
+})`}
+  >
+    <div id="demo-hooks-gsap-long">
+      <div class="fade-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+        <span class="fade-tag">01 / Setup</span>
+        <h2 class="fade-title">One import,<br>one line of code.</h2>
+        <p class="fade-sub">No config files. No wrappers. Drop it in and go.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+        <span class="fade-tag">02 / Plugins</span>
+        <h2 class="fade-title">Only load<br>what you need.</h2>
+        <p class="fade-sub">Tree-shakeable plugin system. Zero dead code in your bundle.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+        <span class="fade-tag">03 / TypeScript</span>
+        <h2 class="fade-title">Full type safety<br>out of the box.</h2>
+        <p class="fade-sub">Written in TypeScript. Autocomplete for every option and event. lorem ipsum dolor amit la bla el barco la writen in autocomplete. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa quae ab illo inventore veritatis. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet consectetur adipiscing elit.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+        <span class="fade-tag">04 / Performance</span>
+        <h2 class="fade-title">Under 10 kb<br>gzipped.</h2>
+        <p class="fade-sub">Tiny core, no runtime dependencies, hardware-accelerated CSS.</p>
+      </div>
+      <div class="fade-slide" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">
+        <span class="fade-tag">05 / A11y</span>
+        <h2 class="fade-title">Accessible<br>by default.</h2>
+        <p class="fade-sub">WAI-ARIA carousel pattern built in. Keyboard navigation included.</p>
+      </div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
     title="Hooks — direction-aware content slide-in"
     description="The direction value tells you which arrow was clicked. Content enters from the right on forward, from the left on backward."
     html={`<div id="my-slider">
@@ -584,6 +687,13 @@ new Slider('#my-slider', {
 </DemoLayout>
 
 <style>
+/* Adaptive-height demo */
+#demo-hooks-gsap-long .fade-slide {
+  height: auto;
+  padding: 48px 56px;
+  justify-content: flex-start;
+}
+
 .fade-slide {
   height: 340px;
   display: flex;
@@ -733,6 +843,49 @@ new Slider('#demo-hooks-gsap', {
           ease: 'power3.out',
           delay: 0.25,
           clearProps: 'all',
+        })
+      },
+    }),
+  ],
+})
+
+let longTrack: HTMLElement
+let longInner: HTMLElement
+let longOverflow: HTMLElement
+
+function setAdaptiveHeight(els: { track: HTMLElement; inner: HTMLElement; overflow: HTMLElement }, h: number, animate: boolean) {
+  const targets = [els.track, els.inner, els.overflow]
+  if (animate) {
+    gsap.to(targets, { height: h, duration: 0.4, ease: 'power2.inOut', overwrite: true })
+  } else {
+    targets.forEach(el => el && (el.style.height = h + 'px'))
+  }
+}
+
+new Slider('#demo-hooks-gsap-long', {
+  items: 1,
+  loop: true,
+  speed: 600,
+  plugins: [
+    arrows(),
+    pagination({ type: 'dots', clickable: true }),
+    fadeEffect({ duration: 600, easing: 'ease-in-out', adaptiveHeight: true }),
+    hooks({
+      onInit({ slider, slides }) {
+        longTrack    = slider.container as HTMLElement
+        longInner    = slider.innerWrapper as HTMLElement
+        longOverflow = longInner.parentElement as HTMLElement
+        const h = (slides[0] as HTMLElement).offsetHeight
+        setAdaptiveHeight({ track: longTrack, inner: longInner, overflow: longOverflow }, h, false)
+        gsap.from(slides[0].querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          y: 28, autoAlpha: 0, stagger: 0.1, duration: 0.55, ease: 'power3.out', clearProps: 'all',
+        })
+      },
+      beforeChange({ incoming }) {
+        const h = (incoming as HTMLElement).offsetHeight
+        setAdaptiveHeight({ track: longTrack, inner: longInner, overflow: longOverflow }, h, true)
+        gsap.from((incoming as HTMLElement).querySelectorAll('.fade-tag, .fade-title, .fade-sub'), {
+          y: 28, autoAlpha: 0, stagger: 0.1, duration: 0.55, ease: 'power3.out', delay: 0.25, clearProps: 'all',
         })
       },
     }),

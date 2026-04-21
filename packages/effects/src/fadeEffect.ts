@@ -1,9 +1,10 @@
 import type { SliderPlugin, SliderInstance } from '@andresclua/sliderkit'
 
 export interface FadeEffectOptions {
-  crossFade?: boolean  // true = others fade out, false = others stay visible beneath (default: true)
-  duration?:  number   // fade duration in ms — defaults to the slider's speed option
-  easing?:    string   // CSS easing function (default: 'ease')
+  crossFade?:      boolean  // true = others fade out, false = others stay visible beneath (default: true)
+  duration?:       number   // fade duration in ms — defaults to the slider's speed option
+  easing?:         string   // CSS easing function (default: 'ease')
+  adaptiveHeight?: boolean  // skip auto syncHeight so external GSAP can animate the container height
 }
 
 export function fadeEffect(opts: FadeEffectOptions = {}): SliderPlugin {
@@ -55,8 +56,14 @@ export function fadeEffect(opts: FadeEffectOptions = {}): SliderPlugin {
         const overflowEl = s.innerWrapper.parentElement as HTMLElement
         if (overflowEl) overflowEl.style.height = h + 'px'
       }
-      requestAnimationFrame(syncHeight)
-      s.on('indexChanged', syncHeight)
+
+      // adaptiveHeight: only set initial height; external GSAP animates on each change
+      if (opts.adaptiveHeight) {
+        requestAnimationFrame(syncHeight)
+      } else {
+        requestAnimationFrame(syncHeight)
+        s.on('indexChanged', syncHeight)
+      }
     },
 
     destroy(): void {
