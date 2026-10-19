@@ -24,3 +24,6 @@ export type { ThumbsOptions } from './thumbs'
 
 export { hooks } from './hooks'
 export type { HooksContext } from './hooks'
+
+export { smooth, smoothPresets } from './smooth'
+export type { SmoothOptions, SmoothPlugin, SmoothPreset, SmoothSkewOptions } from './smooth'

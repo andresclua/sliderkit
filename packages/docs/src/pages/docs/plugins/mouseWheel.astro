@@ -4,6 +4,7 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
 <DocsLayout title="mouseWheel plugin">
   <h1>mouseWheel plugin</h1>
   <p class="lead">Navigate slides by scrolling the mouse wheel or trackpad over the slider. A cooldown prevents skipping slides mid-transition.</p>
+  <p>This plugin moves <strong>one slide per gesture</strong>. If you want continuous, eased trackpad scroll that follows your fingers and snaps when you stop, use the <a href="/docs/plugins/smooth">smooth plugin</a> (its <code>wheel</code> option) instead.</p>
 
   <h2>Import</h2>
   <pre><code>import {"{"} mouseWheel {"}"} from '@andresclua/sliderkit-plugins'</code></pre>

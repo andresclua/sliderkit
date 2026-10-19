@@ -151,6 +151,7 @@ new Slider('#my-slider', {
 | `thumbs()` | `container` (required), `activeClass` | Children of `container` become thumbnails. |
 | `progress()` | `container` | Progress bar; mounted after the slider if no `container`. |
 | `mouseWheel()` | `threshold` (120), `invert` | Calls `preventDefault` on wheel events over the slider. |
+| `smooth()` | `preset` (`'smooth' \| 'snappy' \| 'floaty' \| 'free'`), `lerp`, `inertia`, `snap`, `maxFling`, `dragSpeed`, `wheel`, `wheelSpeed`, `snapDelay`, `dragThreshold`, `skew`, `onUpdate`, `raf` | Smooth drag + horizontal trackpad scroll with lerp, inertia and optional velocity skew. Use with `touch: false, mouseDrag: false`. |
 | `keyboard()` | `focusable` (default `true`) | ←/→ (↑/↓ if vertical) when the slider has focus. |
 | `a11y()` | `containerLabel`, `slideLabel` | Carousel roles/labels, and `tabindex="-1"` on focusable elements inside inactive slides. |
 | `hooks()` | see below | Convenience callbacks, handy for GSAP. |
@@ -166,6 +167,36 @@ hooks({
   beforeDestroy: ()                                        => {},
 })
 ```
+
+### Smooth drag
+
+`smooth()` replaces the core drag with a lerped position, inertia and horizontal trackpad scroll: the slider follows the pointer with a slight lag, keeps its momentum on release and settles on a slide.
+
+```typescript
+import { smooth, smoothPresets } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  loop: true,
+  touch: false, mouseDrag: false,            // smooth() replaces the core drag
+  plugins: [smooth({ preset: 'snappy' })],   // 'smooth' | 'snappy' | 'floaty' | 'free'
+})
+```
+
+Any option overrides its preset (`smooth({ preset: 'floaty', inertia: 1200 })`), and `smoothPresets` is a plain object you can spread. Skew the slides into the movement with `skew: true`, or build your own effect with `onUpdate`, which runs every frame the slider moves with the live state:
+
+```typescript
+smooth({
+  onUpdate(sm) {
+    sm.velocity      // slides per second, signed (0 at rest)
+    sm.position      // position in slides
+    sm.progress      // 0–1
+    sm.positions[i]  // per real slide: 0 = start of the viewport, 1 = one slide further right
+    sm.dragging
+  },
+})
+```
+
+Drawing on a canvas too? `smooth({ raf: false })` and call `sm.tick(now)` from your own `requestAnimationFrame`, so slider and canvas update in the same frame. Full reference: [docs](https://sliderkit.andresclua.com/docs/plugins/smooth) · [demos](https://sliderkit.andresclua.com/demos/smooth).
 
 ---
 

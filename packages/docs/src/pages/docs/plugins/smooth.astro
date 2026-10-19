@@ -1,0 +1,120 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="smooth plugin">
+  <h1>smooth plugin</h1>
+  <p class="lead">Drag that eases in and out. The slider follows your pointer with a lerp, keeps its momentum when you let go, and settles on the nearest slide. Horizontal trackpad scroll gets the same treatment.</p>
+
+  <h2>Usage</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} smooth, arrows {"}"} from '@andresclua/sliderkit-plugins'
+
+new Slider('#el', {"{"}
+  items: 3,
+  loop: true,
+  touch: false,       // smooth() replaces the core drag
+  mouseDrag: false,
+  plugins: [smooth(), arrows()],
+{"}"})</code></pre>
+
+  <h2>Presets</h2>
+  <p>Start from a named behaviour and override whatever you like. Every other option wins over the preset.</p>
+  <pre><code>smooth({"{"} preset: 'snappy' {"}"})
+smooth({"{"} preset: 'floaty', inertia: 1200, skew: true {"}"})</code></pre>
+  <table>
+    <thead><tr><th>Preset</th><th>Feel</th><th>Values</th></tr></thead>
+    <tbody>
+      <tr><td><code>'smooth'</code> (default)</td><td>Soft lag, generous glide, always settles on a slide.</td><td><code>lerp 0.1 · inertia 350 · snap</code></td></tr>
+      <tr><td><code>'snappy'</code></td><td>Quick and controlled. A fling never travels more than one slide.</td><td><code>lerp 0.22 · inertia 120 · snap · maxFling 1</code></td></tr>
+      <tr><td><code>'floaty'</code></td><td>Heavy and dreamy. A lot of lag and a long glide.</td><td><code>lerp 0.05 · inertia 700 · snap</code></td></tr>
+      <tr><td><code>'free'</code></td><td>No snapping. It stops wherever the momentum runs out.</td><td><code>lerp 0.08 · inertia 900 · no snap · maxFling 8</code></td></tr>
+    </tbody>
+  </table>
+  <p>The presets are exported as a plain object, so you can read them, spread them or build your own: <code>smooth({"{"} ...smoothPresets.floaty, lerp: 0.04 {"}"})</code>.</p>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>preset</code></td><td>'smooth' | 'snappy' | 'floaty' | 'free'</td><td><code>'smooth'</code></td><td>Starting point. See above.</td></tr>
+      <tr><td><code>lerp</code></td><td>number</td><td>preset</td><td>Fraction of the remaining distance covered per 60&nbsp;fps frame. Lower is floatier, <code>1</code> is no smoothing. Frame-rate independent.</td></tr>
+      <tr><td><code>inertia</code></td><td>number</td><td>preset</td><td>Milliseconds of release velocity projected forward. <code>0</code> disables the fling.</td></tr>
+      <tr><td><code>snap</code></td><td>boolean</td><td>preset</td><td>Settle on a slide after a drag or wheel gesture.</td></tr>
+      <tr><td><code>maxFling</code></td><td>number</td><td>2 × visible items</td><td>Most slides a single fling can travel.</td></tr>
+      <tr><td><code>dragSpeed</code></td><td>number</td><td><code>1</code></td><td>Multiplier for pointer and wheel movement.</td></tr>
+      <tr><td><code>wheel</code></td><td>boolean</td><td><code>true</code></td><td>Horizontal wheel / trackpad scroll. Vertical scroll is left alone so the page still scrolls.</td></tr>
+      <tr><td><code>wheelSpeed</code></td><td>number</td><td><code>1</code></td><td>Extra multiplier for the wheel only, on top of <code>dragSpeed</code>.</td></tr>
+      <tr><td><code>snapDelay</code></td><td>number</td><td><code>140</code></td><td>Milliseconds of wheel silence before it settles on a slide.</td></tr>
+      <tr><td><code>dragThreshold</code></td><td>number</td><td><code>5</code></td><td>Pixels of movement after which a drag stops counting as a click, so it doesn't open the link under the pointer.</td></tr>
+      <tr><td><code>skew</code></td><td>boolean | object</td><td><code>false</code></td><td>Lean the slides into the movement. <code>true</code> uses the defaults below.</td></tr>
+      <tr><td><code>onUpdate</code></td><td>(plugin) =&gt; void</td><td>—</td><td>Called every frame the slider moves, and once more when it comes to rest. Receives the plugin, so you can read <code>velocity</code>, <code>position</code>, <code>progress</code> and <code>positions</code>. See below.</td></tr>
+      <tr><td><code>raf</code></td><td>boolean</td><td><code>true</code></td><td>Run its own animation loop. Set <code>false</code> to call <code>plugin.tick(now)</code> from your own <code>requestAnimationFrame</code>, so it moves in the same frame as other things you draw (a canvas, for example).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Skew</h2>
+  <p>Slides lean in the direction they move, in proportion to the speed, and ease back to straight when they stop.</p>
+  <pre><code>smooth({"{"}
+  skew: {"{"}
+    target: '.card',   // selector inside each slide (default: the slide itself)
+    perSecond: 2.5,    // degrees per slide/second of velocity
+    max: 14,           // max degrees either way
+    ease: 0.2,         // how fast it returns to 0 (0–1 per frame)
+  {"}"},
+{"}"})</code></pre>
+  <p>It sets <code>transform: skewX()</code> on the target, so use an element that has no transform of its own. For any other effect, read <code>velocity</code> yourself (next section).</p>
+
+  <h2>onUpdate and live state</h2>
+  <p><code>onUpdate</code> is the extension point: the plugin gives you the numbers, you decide what to do with them. The skew option is just a ready-made use of it.</p>
+  <pre><code>const slider = new Slider('#el', {"{"}
+  touch: false, mouseDrag: false,
+  plugins: [
+    smooth({"{"}
+      onUpdate(sm) {"{"}
+        // runs every frame the slider moves, and once more when it stops (velocity 0)
+        const scale = 1 - Math.min(Math.abs(sm.velocity) * 0.02, 0.1)
+        cards.forEach(card =&gt; card.style.transform = `scale($&#123;scale&#125;)`)
+      {"}"},
+    {"}"}),
+  ],
+{"}"})</code></pre>
+  <table>
+    <thead><tr><th>Member</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>velocity</code></td><td>number</td><td>Signed speed in slides per second, eased so it ramps up and decays smoothly (it never jumps when you let go). Positive towards the next slide, negative towards the previous one, <code>0</code> at rest.</td></tr>
+      <tr><td><code>position</code></td><td>number</td><td>Where the slider is, in slides from the first one. Wraps around when looping.</td></tr>
+      <tr><td><code>progress</code></td><td>number</td><td><code>0</code>–<code>1</code> along the slider.</td></tr>
+      <tr><td><code>positions</code></td><td>readonly number[]</td><td>One value per <em>real</em> slide. <code>0</code> = at the start of the viewport, <code>1</code> = one slide further right, negative = before it. With <code>loop: true</code> it wraps inside <code>[-1, n-1)</code>, so every slide that can be on screen has a continuous value. Loop clones show the same slide, so they share its value.</td></tr>
+      <tr><td><code>dragging</code></td><td>boolean</td><td><code>true</code> while a pointer is holding the slider.</td></tr>
+      <tr><td><code>tick(now)</code></td><td>(number) =&gt; void</td><td>Advances the animation by one frame. Only needed with <code>raf: false</code>.</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Tip:</strong> build effects from <em>continuous</em> functions of the values (distance to a point, multiplied by a factor). Avoid <code>Math.round</code>, <code>%</code> or anything that steps: when the slider settles it crosses those thresholds and the effect jumps.</p>
+  <p>The same properties are readable at any time from the plugin you created (<code>const sm = smooth()</code>), for example from your own <code>requestAnimationFrame</code>. <code>positions</code> is reused between frames: copy it if you keep it.</p>
+
+  <h2>Drawing on a canvas</h2>
+  <p>If something else renders every frame (a WebGL canvas, for instance), create the plugin with <code>smooth({"{"} raf: false {"}"})</code> and call <code>sm.tick(now)</code> at the start of your own <code>requestAnimationFrame</code> callback, before you read the slides' positions. That way the slider and the canvas always update in the same frame and never drift apart. The home page does exactly this.</p>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>The plugin keeps a continuous position (in slides) and a target. Every frame the position moves a fraction of the way to the target, and the result is written as the track's transform.</li>
+    <li>Dragging moves the target. On release, the pointer velocity of the last 100&nbsp;ms is projected forward (<code>inertia</code>) and the target snaps to a slide.</li>
+    <li>The core stays in charge of the index: it is told where you landed, so arrows, pagination, <code>a11y</code> and events keep working. Clicking an arrow animates there by the shortest way round.</li>
+    <li>With <code>loop: true</code> the position wraps over the clones the core already creates, so there is no jump at the seam.</li>
+  </ol>
+
+  <h2>Notes</h2>
+  <ul>
+    <li>Horizontal axis only.</li>
+    <li>Pass <code>touch: false</code> and <code>mouseDrag: false</code>, otherwise both drag systems fight.</li>
+    <li>The plugin disables the core's CSS transition on the track (it would lag behind the per-frame movement). <code>speed</code> no longer affects the slide movement.</li>
+    <li>With <code>loop: false</code> the movement stops hard at the ends (no rubber-band).</li>
+    <li>A drag never ends in a click on a link or button under the pointer.</li>
+  </ul>
+
+  <h2>Demos</h2>
+  <ul>
+    <li><a href="/demos/smooth">Smooth drag demos</a> — the plugin on its own, a skew boilerplate you can copy, your own effect with <code>onUpdate</code>, and the four presets side by side.</li>
+    <li><a href="/">Home page</a> — the same slider with a WebGL canvas that follows the slides.</li>
+  </ul>
+</DocsLayout>

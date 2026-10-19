@@ -4,7 +4,7 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@andresclua/sliderkit-plugins?style=flat-square&label=gzip)](https://bundlephobia.com/package/@andresclua/sliderkit-plugins)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-Plugins for **SliderKit** — arrows, pagination, autoplay, thumbs, progress, mouse wheel, keyboard, accessibility, and hooks.
+Plugins for **SliderKit** — arrows, pagination, autoplay, thumbs, progress, smooth drag, mouse wheel, keyboard, accessibility, and hooks.
 
 **[Full documentation & demos →](https://sliderkit.andresclua.com/docs/plugins)**
 
@@ -59,9 +59,10 @@ Auto-advance slides on a timer.
 
 ```typescript
 autoplay({
-  delay:          3000,
-  pauseOnHover:   true,
-  stopOnLastSlide: false,
+  delay:        3000,
+  pauseOnHover: true,
+  pauseOnFocus: true,
+  direction:    'forward',   // 'forward' | 'backward'
 })
 ```
 
@@ -69,18 +70,38 @@ autoplay({
 Thumbnail strip that syncs with the main slider.
 
 ```typescript
-thumbs({ el: '#thumbs-container' })
+thumbs({ container: '#thumbs-container' })
 ```
 
 ### `progress()`
-Animated progress bar that fills across the autoplay interval.
+Progress bar that fills as you advance through the slides.
 
 ```typescript
-progress({ el: '#progress-bar' })
+progress({ container: '#progress-bar' })
 ```
 
+### `smooth()`
+Smooth drag with lerp and inertia, horizontal trackpad scroll, presets, optional skew and an `onUpdate` hook for your own effects. Replaces the core drag, so set `touch: false, mouseDrag: false`.
+
+```typescript
+smooth({ preset: 'snappy' })                       // 'smooth' | 'snappy' | 'floaty' | 'free'
+smooth({ preset: 'floaty', inertia: 1200, skew: true })
+
+smooth({
+  onUpdate(sm) {                                   // every frame it moves, and once more at rest
+    sm.velocity     // slides/second, signed
+    sm.position     // in slides
+    sm.progress     // 0–1
+    sm.positions[i] // per real slide: 0 = start of the viewport
+    sm.dragging
+  },
+})
+```
+
+Options: `preset`, `lerp`, `inertia`, `snap`, `maxFling`, `dragSpeed`, `wheel`, `wheelSpeed`, `snapDelay`, `dragThreshold`, `skew`, `onUpdate`, `raf`. [Full reference →](https://sliderkit.andresclua.com/docs/plugins/smooth)
+
 ### `mouseWheel()`
-Navigate with the scroll wheel.
+Navigate with the scroll wheel, one slide per gesture. For smooth, continuous trackpad scroll see `smooth()`.
 
 ```typescript
 mouseWheel()
@@ -98,18 +119,18 @@ ARIA roles, live regions, and keyboard-accessible markup.
 
 ```typescript
 a11y({
-  prevSlideMessage: 'Previous slide',
-  nextSlideMessage: 'Next slide',
+  containerLabel: 'Image carousel',
+  slideLabel:     '{{index}} of {{total}}',
 })
 ```
 
 ### `hooks()`
-Lifecycle callbacks: `beforeChange`, `afterChange`.
+Lifecycle callbacks for custom animations (GSAP and friends).
 
 ```typescript
 hooks({
-  beforeChange: ({ from, to }) => { /* … */ },
-  afterChange:  ({ index })    => { /* … */ },
+  beforeChange: ({ outgoing, incoming, direction }) => { /* … */ },
+  afterChange:  ({ slide, direction })              => { /* … */ },
 })
 ```
 

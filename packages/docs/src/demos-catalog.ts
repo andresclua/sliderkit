@@ -105,6 +105,14 @@ export const DEMOS: DemoEntry[] = [
     group: 'core',
   },
   {
+    slug: 'smooth',
+    label: 'Smooth Drag',
+    title: 'Smooth drag',
+    description: 'Lerped drag with inertia, horizontal trackpad scroll and a velocity-driven skew. Boilerplate for the home page slider, without WebGL.',
+    tags: ['plugin', 'smooth', 'drag', 'inertia', 'lerp', 'skew', 'velocity', 'trackpad'],
+    group: 'core',
+  },
+  {
     slug: 'a11y',
     label: 'Accessibility',
     title: 'Accessibility',

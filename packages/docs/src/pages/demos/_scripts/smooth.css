@@ -1,0 +1,21 @@
+.smooth-slide {
+  padding: 0 10px;
+}
+.smooth-card {
+  height: 300px;
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #fff;
+}
+.smooth-card span {
+  font: 500 0.75rem/1 'Fira Code', ui-monospace, monospace;
+  letter-spacing: 0.04em;
+}
+.smooth-card h3 {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+}

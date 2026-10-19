@@ -1,0 +1,79 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+import basicCode from './_scripts/smooth-basic.js?raw'
+import skewCode  from './_scripts/smooth-skew.js?raw'
+import updateCode  from './_scripts/smooth-update.js?raw'
+import presetsCode from './_scripts/smooth-presets.js?raw'
+import cssCode   from './_scripts/smooth.css?raw'
+
+const CARDS = [
+  { n: '01', t: 'Drag me',      c: '#6C2BD9' },
+  { n: '02', t: 'Let it glide', c: '#2563EB' },
+  { n: '03', t: 'Or scroll',    c: '#059669' },
+  { n: '04', t: 'Sideways',     c: '#D97706' },
+  { n: '05', t: 'Loop forever', c: '#DB2777' },
+]
+const PRESETS = [
+  { name: 'smooth', desc: 'The default: a soft lag while dragging, a generous glide on release, and it always settles on a slide.', opts: 'lerp 0.1 · inertia 350 · snap' },
+  { name: 'snappy', desc: 'Quick and controlled: little lag, a short fling that never travels more than one slide.',               opts: 'lerp 0.22 · inertia 120 · snap · maxFling 1' },
+  { name: 'floaty', desc: 'Heavy and dreamy: a lot of lag and a long glide before it settles.',                                    opts: 'lerp 0.05 · inertia 700 · snap' },
+  { name: 'free',   desc: 'No snapping: it glides and stops wherever the momentum runs out, like a free-scrolling strip.',         opts: 'lerp 0.08 · inertia 900 · no snap · maxFling 8' },
+]
+const markup = (id: string) =>
+  `<div id="${id}">\n` +
+  CARDS.map(c => `  <div class="smooth-slide">\n    <div class="smooth-card" style="background:${c.c}">\n      <span>${c.n}</span>\n      <h3>${c.t}</h3>\n    </div>\n  </div>`).join('\n') +
+  `\n</div>`
+---
+<DemoLayout title="Smooth drag">
+  <DemoViewer
+    title="Smooth drag"
+    description="The smooth() plugin replaces the core drag with a lerped position and inertia: the slider follows your pointer with a slight lag, keeps its momentum when you let go and settles on a slide. Horizontal trackpad scroll works too."
+    html={markup('demo-smooth-basic')}
+    css={cssCode}
+    js={basicCode}
+  >
+    <Fragment set:html={markup('demo-smooth-basic')} />
+  </DemoViewer>
+
+  <DemoViewer
+    title="Smooth drag + skew (boilerplate)"
+    description="Same slider, plus a velocity-driven skew on the cards. smooth() exposes velocity (slides per second, signed) so any effect can follow the movement. This is the home page slider without the WebGL canvas — a starting point for your own."
+    html={markup('demo-smooth-skew')}
+    css={cssCode}
+    js={skewCode}
+  >
+    <Fragment set:html={markup('demo-smooth-skew')} />
+  </DemoViewer>
+
+  <DemoViewer
+    title="Your own effect with onUpdate"
+    description="onUpdate runs every frame the slider moves, and once more when it stops, with the live state: velocity, position, progress and a position for every slide. Here the cards shrink while moving fast and the titles slide against the movement. Any effect you can think of fits in that callback."
+    html={markup('demo-smooth-update')}
+    css={cssCode}
+    js={updateCode}
+  >
+    <Fragment set:html={markup('demo-smooth-update')} />
+  </DemoViewer>
+
+  {PRESETS.map(p => (
+    <DemoViewer
+      title={`Preset: ${p.name}`}
+      description={`${p.desc} (${p.opts})`}
+      html={markup(`demo-smooth-${p.name}`)}
+      css={cssCode}
+      js={presetsCode}
+    >
+      <Fragment set:html={markup(`demo-smooth-${p.name}`)} />
+    </DemoViewer>
+  ))}
+</DemoLayout>
+
+<style is:global set:html={cssCode}></style>
+
+<script>
+import './_scripts/smooth-basic.js'
+import './_scripts/smooth-skew.js'
+import './_scripts/smooth-update.js'
+import './_scripts/smooth-presets.js'
+</script>
