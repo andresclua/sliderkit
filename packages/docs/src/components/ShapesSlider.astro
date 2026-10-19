@@ -1,0 +1,200 @@
+---
+// Draggable slider with WebGL shapes in a single canvas, layered like:
+//   back  → slider cards (DOM, receive the drag)
+//   mid   → <canvas> shapes, positioned from each card's rect every frame
+//   front → text layer, positioned from each slide's rect every frame
+const ITEMS = [
+  { name: 'Red square',   bg: '#f5b83d' },
+  { name: 'Green square', bg: '#8b3fd9' },
+  { name: 'Diamond',      bg: '#ff5fa2' },
+  { name: 'Sphere',       bg: '#2f6bff' },
+]
+---
+<section class="shapes">
+  <div class="shapes-stage" id="shapes-stage">
+    <div id="shapes-slider">
+      {ITEMS.map((it, i) => (
+        <div class="shapes-slide" data-shape={i} data-name={it.name}>
+          <div class="shapes-card" style={`background:${it.bg}`}></div>
+          <span class="shapes-sr">{it.name}</span>
+        </div>
+      ))}
+    </div>
+    <canvas class="shapes-canvas" aria-hidden="true"></canvas>
+    <div class="shapes-fg" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style is:global>
+.shapes { background: transparent; color: var(--text); }
+.shapes-stage .sliderkit__outer { background: none; border-radius: 0; }
+.shapes-stage { position: relative; isolation: isolate; overflow: hidden; cursor: grab; }
+.shapes-stage:active { cursor: grabbing; }
+
+.shapes-slide { height: min(78vh, 640px); }
+.shapes-card  { margin: 54px 8% 112px; height: calc(100% - 166px); }
+.shapes-sr    { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+.shapes-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+.shapes-fg     { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.shapes-fg-item {
+  position: absolute; top: 0; left: 0;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 18px 8% 76px;
+  font: 500 0.72rem/1 'Fira Code', ui-monospace, monospace;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.shapes-fg-item > div { display: flex; justify-content: space-between; }
+
+.shapes-stage .sliderkit__arrows { position: absolute; right: 24px; bottom: 14px; display: flex; gap: 10px; z-index: 10; }
+.shapes-stage .sliderkit__arrow { position: static; transform: none; background: transparent; box-shadow: none; }
+.shapes-stage .sliderkit__arrow svg { color: var(--text); }
+</style>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows, smooth } from '@andresclua/sliderkit-plugins'
+
+const stage  = document.getElementById('shapes-stage')!
+const canvas = stage.querySelector<HTMLCanvasElement>('.shapes-canvas')!
+const fgRoot = stage.querySelector<HTMLElement>('.shapes-fg')!
+
+// smooth() replaces the core's drag (touch / mouseDrag off) and is ticked from the same
+// rAF as the canvas, so cards and shapes always move in the same frame.
+const sm = smooth({ raf: false, skew: { target: '.shapes-card' } })
+const slider = new Slider('#shapes-slider', {
+  items: 1, loop: true, touch: false, mouseDrag: false,
+  responsive: { 700: { items: 2 }, 1100: { items: 3 } },
+  plugins: [sm, arrows()],
+})
+
+// ── Front layer: one text block per slide (clones included) ─────────────────
+const pad = (n: number) => String(n + 1).padStart(4, '0')
+const items = slider.slides.map(slide => {
+  const shape = Number(slide.dataset.shape)
+  const fg = document.createElement('div')
+  fg.className = 'shapes-fg-item'
+  fg.innerHTML = `<div><span>${pad(shape)}</span><span>—</span></div>` +
+                 `<div><span>"${slide.dataset.name}"</span><span>SK / ${shape + 1}</span></div>`
+  fgRoot.appendChild(fg)
+  return { slide, card: slide.querySelector<HTMLElement>('.shapes-card')!, fg, shape, w: 0, h: 0 }
+})
+
+// ── Mid layer: one canvas, one quad per card ────────────────────────────────
+const VERT = `attribute vec2 a_pos; varying vec2 vUv;
+void main(){ vUv = a_pos * .5 + .5; gl_Position = vec4(a_pos, 0., 1.); }`
+
+// q is in card-width units; the viewport is a square of side K card widths.
+const FRAG = `precision mediump float;
+varying vec2 vUv;
+uniform float u_shape, u_time, u_rot, u_px, u_k;
+mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
+void main(){
+  vec2 q = (vUv - .5) * u_k;
+  float aa = 1.5 / u_px;
+  float t = u_time, r = u_rot;
+  vec3 col = vec3(0.); float a = 0.;
+  if (u_shape < .5) {                       // red square
+    vec2 p = rot(t * .4 + r) * q;
+    float d = max(abs(p.x), abs(p.y)) - .36;
+    a = 1. - smoothstep(-aa, aa, d);
+    col = mix(vec3(1., .22, .2), vec3(.75, .05, .1), p.y + .36);
+  } else if (u_shape < 1.5) {               // green square
+    vec2 p = rot(-t * .3 + r) * q;
+    float d = max(abs(p.x), abs(p.y)) - .36;
+    a = 1. - smoothstep(-aa, aa, d);
+    col = mix(vec3(.3, .95, .45), vec3(.05, .6, .25), p.y + .36);
+  } else if (u_shape < 2.5) {               // diamond, spinning around Y
+    vec2 p = q;
+    p.x /= mix(.3, 1., abs(cos(t * .7 + r)));
+    float d = (abs(p.x) + abs(p.y) - .5) * .7071;
+    a = 1. - smoothstep(-aa, aa, d);
+    col = mix(vec3(.35, .9, 1.), vec3(.1, .45, .95), step(0., p.x) * .5 + p.y * .4 + .3);
+  } else {                                  // sphere, shaded in the fragment shader
+    float rad = .36, d = length(q) - rad;
+    a = 1. - smoothstep(-aa, aa, d);
+    float z = sqrt(max(rad * rad - dot(q, q), 0.)) / rad;
+    vec3 n = normalize(vec3(q / rad, z));
+    vec3 L = normalize(vec3(-.5 + .4 * sin(r), .6, .7));
+    float diff = max(dot(n, L), 0.);
+    float spec = pow(max(dot(reflect(-L, n), vec3(0., 0., 1.)), 0.), 28.);
+    float rim  = pow(1. - n.z, 2.);
+    col = vec3(.96, .95, 1.) * (.25 + .85 * diff) + spec * .6 + rim * vec3(.5, .6, 1.) * .4;
+  }
+  gl_FragColor = vec4(col * a, a);
+}`
+
+const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: true })
+let draw: ((t: number) => void) | null = null
+
+if (gl) {
+  const shader = (type: number, src: string) => {
+    const s = gl.createShader(type)!
+    gl.shaderSource(s, src); gl.compileShader(s)
+    return s
+  }
+  const prog = gl.createProgram()!
+  gl.attachShader(prog, shader(gl.VERTEX_SHADER, VERT))
+  gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FRAG))
+  gl.linkProgram(prog)
+  gl.useProgram(prog)
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW)
+  const loc = gl.getAttribLocation(prog, 'a_pos')
+  gl.enableVertexAttribArray(loc)
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
+
+  gl.enable(gl.BLEND)
+  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
+
+  const u = (n: string) => gl.getUniformLocation(prog, n)
+  const U = { shape: u('u_shape'), time: u('u_time'), rot: u('u_rot'), px: u('u_px'), k: u('u_k') }
+  const K = 1.7
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  draw = (now: number) => {
+    const dpr = Math.min(devicePixelRatio || 1, 2)
+    const s = stage.getBoundingClientRect()
+    const cw = Math.round(s.width * dpr), ch = Math.round(s.height * dpr)
+    if (canvas.width !== cw || canvas.height !== ch) { canvas.width = cw; canvas.height = ch }
+    gl.viewport(0, 0, cw, ch)
+    gl.clear(gl.COLOR_BUFFER_BIT)
+
+    const time = reduced ? 0 : now / 1000
+    for (const it of items) {
+      const r = it.slide.getBoundingClientRect()
+      const off = r.right < s.left - 80 || r.left > s.right + 80
+      it.fg.style.visibility = off ? 'hidden' : 'visible'
+      if (off) continue
+
+      if (it.w !== r.width || it.h !== r.height) {
+        it.w = r.width; it.h = r.height
+        it.fg.style.width = r.width + 'px'; it.fg.style.height = r.height + 'px'
+      }
+      it.fg.style.transform = `translate3d(${r.left - s.left}px, ${r.top - s.top}px, 0)`
+
+      const c    = it.card.getBoundingClientRect()
+      const cw   = it.card.offsetWidth             // layout width: unaffected by the skew
+      const side = cw * K
+      const cx   = c.left + c.width / 2 - s.left
+      const cy   = c.top + c.height / 2 - s.top
+      gl.viewport((cx - side / 2) * dpr, ch - (cy + side / 2) * dpr, side * dpr, side * dpr)
+      gl.uniform1f(U.shape, it.shape)
+      gl.uniform1f(U.time, time)
+      gl.uniform1f(U.rot, ((cx - s.width / 2) / s.width) * 2.5)   // parallax: spins while it moves across the stage
+      gl.uniform1f(U.px, cw * dpr)
+      gl.uniform1f(U.k, K)
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+    }
+  }
+}
+
+// Only run while the stage is on screen. Without WebGL the cards and text still render.
+let raf = 0
+const loop = (now: number) => { sm.tick(now); draw?.(now); raf = requestAnimationFrame(loop) }
+new IntersectionObserver(([e]) => {
+  cancelAnimationFrame(raf)
+  if (e!.isIntersecting) raf = requestAnimationFrame(loop)
+}).observe(stage)
+</script>

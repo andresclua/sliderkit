@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import SiteHeader from '../components/SiteHeader.astro'
+import ShapesSlider from '../components/ShapesSlider.astro'
 ---
 <BaseLayout title="SliderKit — A modern, accessible slider library for the web">
   <SiteHeader />
@@ -37,13 +38,16 @@ import SiteHeader from '../components/SiteHeader.astro'
       <div class="hero-stats">
         <div class="stat"><strong>~4 KB</strong><span>core (gzip)</span></div>
         <div class="stat-sep"></div>
-        <div class="stat"><strong>9</strong><span>plugins</span></div>
+        <div class="stat"><strong>10</strong><span>plugins</span></div>
         <div class="stat-sep"></div>
         <div class="stat"><strong>3</strong><span>CSS effects</span></div>
         <div class="stat-sep"></div>
         <div class="stat"><strong>3</strong><span>WebGL shaders</span></div>
       </div>
     </section>
+
+    <!-- Shapes slider: DOM cards + WebGL canvas + DOM text -->
+    <ShapesSlider />
 
     <!-- Feature grid -->
     <section class="features">
@@ -58,8 +62,8 @@ import SiteHeader from '../components/SiteHeader.astro'
             { icon: '♿', title: 'Fully accessible', desc: 'ARIA roles, live regions, roledescription, keyboard navigation, and prefers-reduced-motion out of the box.' },
             { icon: '🎨', title: '3 CSS effects', desc: 'Fade, flip, and clip-path — all pure CSS, no JavaScript animations required.' },
             { icon: '✨', title: 'WebGL renderer', desc: 'Raw WebGL, no dependencies. Displacement map warp, RGB-shift chromatic aberration, radial reveal, and custom GLSL shaders.' },
-            { icon: '🔌', title: '9 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, mouse wheel, keyboard, progress, accessibility, and hooks.' },
-            { icon: '📱', title: 'Touch & drag', desc: 'Native-feeling swipe gestures with configurable threshold, angle, and resistance on touch and mouse.' },
+            { icon: '🔌', title: '10 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, smooth drag, mouse wheel, keyboard, progress, accessibility, and hooks.' },
+            { icon: '📱', title: 'Touch & smooth drag', desc: 'Swipe on touch and mouse, or add the smooth plugin for lerped drag with inertia, trackpad scroll, presets and an onUpdate hook for your own effects.' },
             { icon: '📐', title: 'Responsive', desc: 'Change any option at any viewport width. ResizeObserver powered — no window resize hacks.' },
             { icon: '🔒', title: 'TypeScript strict', desc: 'Fully typed API, typed event payloads, typed plugin interface. No any escape hatches anywhere.' },
           ].map(f => (
@@ -125,7 +129,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
         <div class="package-grid">
           {[
             { name: '@andresclua/sliderkit', badge: 'Core', color: '#6C2BD9', bg: '#ede9fe', desc: 'The slider engine. Touch, drag, keyboard, infinite loop, breakpoints, a11y, events, and plugin system.' },
-            { name: '@andresclua/sliderkit-plugins', badge: 'Plugins', color: '#2563EB', bg: '#dbeafe', desc: '9 UI plugins. Arrows, pagination, autoplay, thumbnails, mouse wheel, keyboard, progress, accessibility, and hooks.' },
+            { name: '@andresclua/sliderkit-plugins', badge: 'Plugins', color: '#2563EB', bg: '#dbeafe', desc: '10 plugins. Arrows, pagination, autoplay, thumbnails, smooth drag, mouse wheel, keyboard, progress, accessibility, and hooks.' },
             { name: '@andresclua/sliderkit-effects', badge: 'Effects', color: '#059669', bg: '#d1fae5', desc: '6 CSS transition effects. Fade, cube, coverflow, flip, cards, and creative — zero JS animations.' },
             { name: '@andresclua/sliderkit-webgl', badge: 'WebGL', color: '#D97706', bg: '#fef3c7', desc: 'Raw WebGL renderer. 3 built-in shader effects (displacement, RGB-shift, radial) plus a custom GLSL API with automatic fallback.' },
           ].map(p => (
