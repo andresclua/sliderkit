@@ -12,8 +12,10 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
   <table>
     <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td><code>prevLabel</code></td><td>string</td><td><code>'Previous slide'</code></td><td><code>aria-label</code> on the prev button.</td></tr>
-      <tr><td><code>nextLabel</code></td><td>string</td><td><code>'Next slide'</code></td><td><code>aria-label</code> on the next button.</td></tr>
+      <tr><td><code>prevText</code></td><td>string</td><td>chevron SVG</td><td>innerHTML of the prev button. The <code>aria-label</code> is always "Previous slide".</td></tr>
+      <tr><td><code>nextText</code></td><td>string</td><td>chevron SVG</td><td>innerHTML of the next button. The <code>aria-label</code> is always "Next slide".</td></tr>
+      <tr><td><code>container</code></td><td>HTMLElement | string | null</td><td>outer wrapper</td><td>Where to append the buttons.</td></tr>
+      <tr><td><code>wrapper</code></td><td>boolean</td><td><code>true</code></td><td>Wrap both buttons in a <code>.sliderkit__arrows</code> div. Set to <code>false</code> to append them directly.</td></tr>
     </tbody>
   </table>
 
@@ -22,6 +24,7 @@ import DocsLayout from '../../../layouts/DocsLayout.astro'
     <thead><tr><th>Class</th><th>Applied when</th></tr></thead>
     <tbody>
       <tr><td><code>.sliderkit__arrow</code></td><td>Both buttons, always.</td></tr>
+      <tr><td><code>.sliderkit__arrows</code></td><td>Wrapper around both buttons (unless <code>wrapper: false</code>).</td></tr>
       <tr><td><code>.sliderkit__arrow--prev</code></td><td>Previous button.</td></tr>
       <tr><td><code>.sliderkit__arrow--next</code></td><td>Next button.</td></tr>
       <tr><td><code>.sliderkit__arrow--disabled</code></td><td>At the first or last slide when <code>loop:false</code> and <code>rewind:false</code>.</td></tr>
@@ -38,11 +41,13 @@ new Slider('#my-slider', {"{"}
   plugins: [arrows()],
 {"}"})</code></pre>
 
-  <h2>Custom button labels</h2>
+  <h2>Custom button content</h2>
   <pre><code>arrows({"{"}
-  prevLabel: 'Anterior',
-  nextLabel: 'Siguiente',
+  prevText: '←',
+  nextText: '→',
 {"}"})</code></pre>
+
+  <p>The arrows are hidden automatically when all slides fit in the viewport (<code>slideCount &lt;= items</code>), and re-evaluated on every breakpoint change.</p>
 
   <p><a href="/demos/base">See it live in the Base demo →</a></p>
 </DocsLayout>
