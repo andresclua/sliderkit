@@ -22,8 +22,7 @@ export function arrows(opts: ArrowsOptions = {}): SliderPlugin {
   let wrapperEl: HTMLDivElement | null = null
 
   function updateVisibility(): void {
-    const items = slider.options.items ?? 1
-    const hidden = slider.slideCount <= items
+    const hidden = slider.slideCount <= slider.currentItems
     const root = wrapperEl ?? prevBtn
     if (root) (root as HTMLElement).style.display = hidden ? 'none' : ''
     if (!wrapperEl && nextBtn) nextBtn.style.display = hidden ? 'none' : ''
@@ -83,6 +82,7 @@ export function arrows(opts: ArrowsOptions = {}): SliderPlugin {
 
       updateVisibility()
       updateDisabled()
+      s.on('newBreakpointEnd', updateVisibility as (d: SliderInfo) => void)
       s.on('indexChanged', updateDisabled as (d: SliderInfo) => void)
       s.on('transitionEnd', updateDisabled as (d: SliderInfo) => void)
     },

@@ -39,18 +39,17 @@ yarn add @andresclua/sliderkit
 ## Quick Start
 
 ```html
-<div class="sliderkit__outer">
-  <div class="sliderkit__overflow">
-    <div class="sliderkit" id="my-slider">
-      <div class="sliderkit__item">Slide 1</div>
-      <div class="sliderkit__item">Slide 2</div>
-      <div class="sliderkit__item">Slide 3</div>
-    </div>
-  </div>
+<div class="my-slider" id="my-slider">
+  <div>Slide 1</div>
+  <div>Slide 2</div>
+  <div>Slide 3</div>
 </div>
 ```
 
+SliderKit wraps your element in `.sliderkit__outer > .sliderkit__overflow > .sliderkit__inner` and adds `.sliderkit` / `.sliderkit__item` classes. Import the base styles:
+
 ```typescript
+import '@andresclua/sliderkit/scss/slider.scss'
 import { Slider } from '@andresclua/sliderkit'
 
 const slider = new Slider('#my-slider', {
@@ -60,7 +59,7 @@ const slider = new Slider('#my-slider', {
 })
 
 slider.on('indexChanged', ({ displayIndex }) => {
-  console.log('Slide:', displayIndex)
+  console.log('Slide:', displayIndex)   // 1-based
 })
 ```
 
@@ -72,42 +71,53 @@ slider.on('indexChanged', ({ displayIndex }) => {
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `items` | `number` | `1` | Number of slides visible at once |
+| `items` | `number` | `1` | Slides visible at once |
 | `gutter` | `number` | `0` | Space between slides in px |
-| `edgePadding` | `number` | `0` | Space on the outer edges in px — makes adjacent slides peek |
-| `fixedWidth` | `number \| false` | `false` | Fixed pixel width per slide, ignores `items` |
-| `autoWidth` | `boolean` | `false` | Each slide uses its natural CSS width |
-| `direction` | `'horizontal' \| 'vertical'` | `'horizontal'` | Slide axis |
+| `edgePadding` | `number` | `0` | Padding on the outer edges in px — makes adjacent slides peek |
+| `fixedWidth` | `number \| false` | `false` | Fixed pixel width per slide, overrides `items` |
+| `autoWidth` | `boolean` | `false` | Each slide uses its natural width |
+| `viewportMax` | `number \| false` | `false` | Max viewport width used to compute clones with `fixedWidth` |
+| `center` | `boolean` | `false` | Center the active slide |
+| `axis` | `'horizontal' \| 'vertical'` | `'horizontal'` | Slide axis |
+| `autoHeight` | `boolean` | `false` | Container height follows the visible slides |
 
 ### Behaviour
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `loop` | `boolean` | `false` | Seamless infinite loop using DOM clones |
-| `rewind` | `boolean` | `false` | Jump to first/last slide at the edges |
+| `loop` | `boolean` | `true` | Infinite loop using DOM clones |
+| `rewind` | `boolean` | `false` | Jump to first/last at the edges (forces `loop: false`) |
 | `speed` | `number` | `300` | Transition duration in ms |
-| `slideBy` | `number \| 'page'` | `1` | Slides advanced per next/prev click |
-| `startIndex` | `number` | `0` | Initial active slide index |
-| `freezable` | `boolean` | `true` | Freezes interaction when all slides fit in the viewport |
+| `slideBy` | `number \| 'page'` | `1` | Slides advanced per next/prev |
+| `startIndex` | `number` | `0` | Initial slide index |
+| `freezable` | `boolean` | `true` | Freeze the slider when all slides fit |
+| `preventActionWhenRunning` | `boolean` | `true` | Ignore next/prev/drag while a transition is running |
+| `lazyload` | `boolean` | `false` | Wait for images before measuring |
+| `arrowKeys` | `boolean` | `false` | Built-in ←/→ navigation on `document` (see the `keyboard()` plugin for a scoped version) |
+| `onInit` | `(info) => void` | `false` | Called once the slider is ready |
+| `plugins` | `SliderPlugin[]` | `[]` | Plugins to install |
 
 ### Touch & Drag
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `touch` | `boolean` | `true` | Enable touch swipe |
-| `mouseDrag` | `boolean` | `false` | Enable mouse drag |
-| `swipeThreshold` | `number` | `50` | Minimum swipe distance in px to trigger navigation |
-| `resistance` | `boolean` | `true` | Elastic resistance at the edges |
+| `touch` | `boolean` | `true` | Touch swipe |
+| `mouseDrag` | `boolean` | `false` | Mouse drag |
+| `swipeAngle` | `number \| false` | `15` | Max angle (°) from the axis for a gesture to count as a swipe |
+| `preventScrollOnTouch` | `'auto' \| 'force' \| false` | `false` | Block page scroll while swiping |
 
 ### Responsive
+
+Any option above except `loop`, `rewind`, `startIndex` and `plugins` can change per breakpoint (`min-width`, in px). A bare number is shorthand for `{ items: n }`.
 
 ```typescript
 new Slider('#my-slider', {
   items: 1,
   gutter: 8,
-  breakpoints: {
+  responsive: {
     640:  { items: 2, gutter: 12 },
     1024: { items: 3, gutter: 20 },
+    1440: 4,
   },
 })
 ```
@@ -122,10 +132,9 @@ pnpm add @andresclua/sliderkit-plugins
 
 ```typescript
 import { Slider } from '@andresclua/sliderkit'
-import { arrows, pagination, autoplay, thumbs, progress, mouseWheel, keyboard, a11y, hooks } from '@andresclua/sliderkit-plugins'
+import { arrows, pagination, autoplay } from '@andresclua/sliderkit-plugins'
 
 new Slider('#my-slider', {
-  loop: true,
   plugins: [
     arrows(),
     pagination({ type: 'dots' }),
@@ -134,43 +143,27 @@ new Slider('#my-slider', {
 })
 ```
 
-### `arrows()`
-Previous / next navigation buttons injected into `.sliderkit__outer`.
+| Plugin | Options | Notes |
+|---|---|---|
+| `arrows()` | `prevText`, `nextText`, `container`, `wrapper` (default `true`) | Prev/next buttons. Wrapped in `.sliderkit__arrows`; hidden when all slides fit. |
+| `pagination()` | `type: 'dots' \| 'fraction' \| 'progress'`, `clickable`, `container` | Rebuilt on breakpoint change. |
+| `autoplay()` | `delay` (3000), `pauseOnHover`, `pauseOnFocus`, `direction: 'forward' \| 'backward'` | Also pauses while touching/dragging. |
+| `thumbs()` | `container` (required), `activeClass` | Children of `container` become thumbnails. |
+| `progress()` | `container` | Progress bar; mounted after the slider if no `container`. |
+| `mouseWheel()` | `threshold` (120), `invert` | Calls `preventDefault` on wheel events over the slider. |
+| `keyboard()` | `focusable` (default `true`) | ←/→ (↑/↓ if vertical) when the slider has focus. |
+| `a11y()` | `containerLabel`, `slideLabel` | Carousel roles/labels, and `tabindex="-1"` on focusable elements inside inactive slides. |
+| `hooks()` | see below | Convenience callbacks, handy for GSAP. |
 
-### `pagination()`
-```typescript
-pagination({
-  type: 'dots',       // 'dots' | 'fraction' | 'progress'
-  clickable: true,
-})
-```
-
-### `autoplay()`
-```typescript
-autoplay({
-  delay:        3000,
-  pauseOnHover: true,
-})
-```
-
-### `thumbs()`
-```typescript
-thumbs({ el: '#thumbs-container' })
-```
-
-### `progress()`
-```typescript
-progress({ el: '#progress-bar' })
-```
-
-### `mouseWheel()` · `keyboard()` · `a11y()`
-Drop-in behaviour enhancements — no required options.
-
-### `hooks()`
 ```typescript
 hooks({
-  beforeChange: ({ from, to }) => { /* … */ },
-  afterChange:  ({ index })    => { /* … */ },
+  onInit:       ({ slides, slider })                       => {},
+  beforeChange: ({ outgoing, incoming, direction })        => {},   // direction: 'forward' | 'backward'
+  afterChange:  ({ slide, direction })                     => {},
+  onDragStart:  ({ event })                                => {},
+  onDragEnd:    ({ event })                                => {},
+  onResize:     ({ breakpoint, items })                    => {},   // fires on breakpoint change
+  beforeDestroy: ()                                        => {},
 })
 ```
 
@@ -179,41 +172,32 @@ hooks({
 ## Events
 
 ```typescript
-slider.on('indexChanged',    ({ displayIndex }) => { })
-slider.on('transitionStart', ({ displayIndex }) => { })
-slider.on('transitionEnd',   ({ displayIndex }) => { })
-slider.on('touchStart',      info => { })
-slider.on('touchMove',       info => { })
-slider.on('touchEnd',        info => { })
-slider.on('dragStart',       info => { })
-slider.on('dragMove',        info => { })
-slider.on('dragEnd',         info => { })
-slider.on('resize',          info => { })
-slider.on('newBreakpointStart', info => { })
-slider.on('newBreakpointEnd',   info => { })
-slider.on('afterInit',       info => { })
-slider.on('beforeDestroy',   info => { })
-slider.on('afterDestroy',    info => { })
+slider.on('indexChanged', ({ displayIndex }) => {})
 ```
+
+`beforeInit` · `afterInit` · `indexChanged` · `transitionStart` · `transitionEnd` · `touchStart` · `touchMove` · `touchEnd` · `dragStart` · `dragMove` · `dragEnd` · `resize` · `newBreakpointStart` · `newBreakpointEnd` · `beforeDestroy` · `afterDestroy`
+
+Handlers receive a `SliderInfo` (`index`, `displayIndex`, `slideCount`, `items`, `cloneCount`, `event`, …).
 
 ---
 
-## Methods
+## Methods & properties
 
 ```typescript
-slider.goTo(2)
-slider.goTo('next')
-slider.goTo('prev')
+slider.goTo(2)            // 0-based real index
+slider.goTo('next')       // 'next' | 'prev' | 'first' | 'last'
 slider.next()
 slider.prev()
 
-slider.update()        // recalculate layout (call after DOM changes)
-slider.getInfo()       // returns SliderInfo
+slider.getInfo()          // SliderInfo
+slider.on('event', fn)
+slider.off('event', fn)
+slider.destroy()          // restores the original DOM
 
-slider.on('event', handler)
-slider.off('event', handler)
-
-slider.destroy()
+slider.activeIndex        // 0-based real index (no clones)
+slider.slideCount
+slider.currentItems       // items for the current breakpoint
+slider.isBeginning / slider.isEnd
 ```
 
 ---
@@ -226,15 +210,15 @@ pnpm add @andresclua/sliderkit-effects
 
 ```typescript
 import { Slider } from '@andresclua/sliderkit'
-import { fade } from '@andresclua/sliderkit-effects'
+import { fadeEffect } from '@andresclua/sliderkit-effects'
 
 new Slider('#my-slider', {
-  items: 1,
-  plugins: [fade()],
+  items:   1,
+  plugins: [fadeEffect({ duration: 600 })],
 })
 ```
 
-Available effects: `fade`, `flip`, `clipPath`.
+Available effects: `fadeEffect`, `flipEffect`, `clipPathEffect`.
 
 ---
 
@@ -262,9 +246,9 @@ new Slider('#my-slider', {
 })
 ```
 
-Available effects: `displacement`, `rgb-shift`, `radial`, `custom` (bring your own GLSL).
+Options: `effect` (`'displacement' | 'rgb-shift' | 'radial' | 'custom'`), `assets`, `duration` (900), `intensity` (0.08), `easing`, and for `custom`: `frag` (GLSL) + `uniforms`.
 
-> **Note:** Always set `items: 1` and `speed: 0` when using the WebGL plugin. The plugin silently no-ops when WebGL is unavailable.
+> **Note:** Use `items: 1` and `speed: 0` with the WebGL plugin. It silently no-ops when WebGL is unavailable.
 
 ---
 

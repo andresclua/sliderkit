@@ -25,7 +25,7 @@ export function hooks(callbacks: HooksContext = {}): SliderPlugin {
   const onIndexChanged = (info: SliderInfo) => {
     const nextIdx   = info.displayIndex
     const direction = nextIdx >= prevIdx ? 'forward' : 'backward'
-    const outgoing  = slider.slides[slider.activeIndex] ?? null
+    const outgoing  = slider.slides[info.indexCached] ?? null
     const incoming  = getSlide(info)
     callbacks.beforeChange?.({ outgoing, incoming, direction })
     prevIdx = nextIdx
@@ -49,7 +49,9 @@ export function hooks(callbacks: HooksContext = {}): SliderPlugin {
   }
 
   const onResize = (info: SliderInfo) => {
-    callbacks.onResize?.({ breakpoint: 0, items: info.items })
+    const bps = Object.keys(slider.options.responsive ?? {}).map(Number)
+    const breakpoint = Math.max(0, ...bps.filter(bp => bp <= window.innerWidth))
+    callbacks.onResize?.({ breakpoint, items: info.items })
   }
 
   const onBeforeDestroy = () => {
