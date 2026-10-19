@@ -4,6 +4,7 @@ export interface ArrowsOptions {
   prevText?: string
   nextText?: string
   container?: HTMLElement | string | null
+  wrapper?: boolean  // wrap both buttons in a .sliderkit__arrows div (default: true)
 }
 
 const SVG_PREV = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`
@@ -18,6 +19,15 @@ export function arrows(opts: ArrowsOptions = {}): SliderPlugin {
   let slider: SliderInstance
   let prevBtn: HTMLButtonElement
   let nextBtn: HTMLButtonElement
+  let wrapperEl: HTMLDivElement | null = null
+
+  function updateVisibility(): void {
+    const items = slider.options.items ?? 1
+    const hidden = slider.slideCount <= items
+    const root = wrapperEl ?? prevBtn
+    if (root) (root as HTMLElement).style.display = hidden ? 'none' : ''
+    if (!wrapperEl && nextBtn) nextBtn.style.display = hidden ? 'none' : ''
+  }
 
   function updateDisabled(): void {
     if (slider.options.loop) {
@@ -57,12 +67,21 @@ export function arrows(opts: ArrowsOptions = {}): SliderPlugin {
         : s.outerWrapper
       if (!target) return
 
-      target.appendChild(prevBtn)
-      target.appendChild(nextBtn)
+      if (opts.wrapper !== false) {
+        wrapperEl = document.createElement('div')
+        wrapperEl.className = 'sliderkit__arrows'
+        wrapperEl.appendChild(prevBtn)
+        wrapperEl.appendChild(nextBtn)
+        target.appendChild(wrapperEl)
+      } else {
+        target.appendChild(prevBtn)
+        target.appendChild(nextBtn)
+      }
 
       prevBtn.addEventListener('click', onPrev)
       nextBtn.addEventListener('click', onNext)
 
+      updateVisibility()
       updateDisabled()
       s.on('indexChanged', updateDisabled as (d: SliderInfo) => void)
       s.on('transitionEnd', updateDisabled as (d: SliderInfo) => void)
@@ -71,8 +90,7 @@ export function arrows(opts: ArrowsOptions = {}): SliderPlugin {
     destroy(): void {
       prevBtn?.removeEventListener('click', onPrev)
       nextBtn?.removeEventListener('click', onNext)
-      prevBtn?.remove()
-      nextBtn?.remove()
+      wrapperEl ? wrapperEl.remove() : (prevBtn?.remove(), nextBtn?.remove())
     },
   }
 }

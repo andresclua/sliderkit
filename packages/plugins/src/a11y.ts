@@ -7,6 +7,8 @@ export interface A11yOptions {
   slideLabel?: string
 }
 
+const FOCUSABLE = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+
 export function a11y(opts: A11yOptions = {}): SliderPlugin {
   const containerLabel = opts.containerLabel ?? 'Image carousel'
   const slideTemplate  = opts.slideLabel    ?? '{{index}} of {{total}}'
@@ -27,6 +29,19 @@ export function a11y(opts: A11yOptions = {}): SliderPlugin {
     })
   }
 
+  function updateTabIndex(): void {
+    slider.slides.forEach(slide => {
+      const isActive = slide.classList.contains('sliderkit__item--active')
+      slide.querySelectorAll<HTMLElement>(FOCUSABLE).forEach(el => {
+        if (isActive) {
+          el.removeAttribute('tabindex')
+        } else {
+          el.setAttribute('tabindex', '-1')
+        }
+      })
+    })
+  }
+
   return {
     name: 'a11y',
 
@@ -39,10 +54,9 @@ export function a11y(opts: A11yOptions = {}): SliderPlugin {
       s.outerWrapper.setAttribute('aria-roledescription', 'carousel')
 
       // ── Container: mark as the live rotating element ─────────────────────
-      s.container.setAttribute('aria-live', 'off')   // announce via live region, not here
+      s.container.setAttribute('aria-live', 'off')
 
       // ── Slides: role="group" + roledescription + label ───────────────────
-      // s.slides includes clones — filter to real slides only
       const cloneCount = (s.slides.length - s.slideCount) / 2
       realSlides = s.slides.slice(cloneCount, cloneCount + s.slideCount)
 
@@ -52,8 +66,9 @@ export function a11y(opts: A11yOptions = {}): SliderPlugin {
         slide.setAttribute('aria-label', slideLabel(i + 1, s.slideCount))
       })
 
-      // keep labels in sync when index changes (displayIndex updates)
+      updateTabIndex()
       s.on('indexChanged', updateSlideLabels as (d: SliderInfo) => void)
+      s.on('indexChanged', updateTabIndex   as (d: SliderInfo) => void)
     },
 
     destroy(): void {
@@ -66,6 +81,13 @@ export function a11y(opts: A11yOptions = {}): SliderPlugin {
         slide.removeAttribute('role')
         slide.removeAttribute('aria-roledescription')
         slide.removeAttribute('aria-label')
+      })
+
+      // restore focusable elements
+      slider.slides.forEach(slide => {
+        slide.querySelectorAll<HTMLElement>('[tabindex="-1"]').forEach(el => {
+          el.removeAttribute('tabindex')
+        })
       })
 
       realSlides = []

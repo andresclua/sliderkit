@@ -25,7 +25,7 @@ import type { SliderOptions, SliderInfo, SliderPlugin, SliderInstance } from './
 // ── Hardcoded modern-browser feature flags ───────────────────────────────────
 const TRANSFORM           = 'transform'
 const HAS3DTRANSFORMS     = true
-// PERCENTAGELAYOUT = true — slides are inline-block (used in initSheet logic)
+// PERCENTAGELAYOUT = true — percentage widths via calc() (used in initSheet logic)
 const CSSMQ               = true
 const TRANSITIONDURATION  = 'transitionDuration'
 const CALC                = 'calc'
@@ -43,6 +43,7 @@ const CLS = {
   CLONE:      'sliderkit__item--clone',
   LIVE:       'sliderkit__live',
   VHIDE:      'sliderkit__visually-hidden',
+  HIDDEN:     'sliderkit__item--hidden',
   FROZEN:     'sliderkit--frozen',
   AUTOHEIGHT: 'sliderkit--ah',
   VPFIX:      'sliderkit--vpfix',
@@ -69,7 +70,7 @@ const DEFAULTS: Required<SliderOptions> = {
   touch:                    true,
   mouseDrag:                false,
   swipeAngle:               15,
-  preventActionWhenRunning: false,
+  preventActionWhenRunning: true,
   preventScrollOnTouch:     false,
   freezable:                true,
   speed:                    300,
@@ -528,9 +529,7 @@ export class Slider implements SliderInstance {
     // PERCENTAGELAYOUT = true
     this.newContainerClasses += ' ' + CLS.SLIDER
 
-    // add horizontal/vertical class — use calc class string like tiny slider
-    this.newContainerClasses += ' tns-subpixel'   // PERCENTAGELAYOUT = true
-    this.newContainerClasses += ' tns-calc'        // CALC = true
+    // add horizontal/vertical class
     this.newContainerClasses += ' ' + (this.horizontal ? CLS.HORIZONTAL : CLS.VERTICAL)
     container.className += this.newContainerClasses
 
@@ -554,7 +553,14 @@ export class Slider implements SliderInstance {
     slideArr.forEach((item, i) => {
       addClass(item, CLS.ITEM)
       if (!item.id) { item.id = this.slideId + '-item' + i }
-      setAttrs(item, { 'aria-hidden': 'true', 'tabindex': '-1' })
+      setAttrs(item, {
+        'role': 'group',
+        'aria-roledescription': 'slide',
+        'aria-label': (i + 1) + ' of ' + this.slideCount_,
+        'aria-hidden': 'true',
+        'tabindex': '-1',
+        'inert': '',
+      })
     })
 
     // clone slides: carousel => n + slides + n
@@ -590,15 +596,6 @@ export class Slider implements SliderInstance {
 
   private initSheet(): void {
     const id = this.slideId
-
-    // ── LAYOUT ─────────────────────────────────────────────────────────────
-    // PERCENTAGELAYOUT = true, so slides are inline-block
-    if (this.horizontal) {
-      // font-size reset for inline-block gap removal
-      const computedFontSize = window.getComputedStyle(this.slideItems[0] as Element).fontSize
-      this.addCSSRule('#' + id + ' > .' + CLS.ITEM + ' { font-size:' + computedFontSize + '; }')
-      this.addCSSRule('#' + id + ' { font-size:0; }')
-    }
 
     // ── BASIC STYLES (CSSMQ = true) ──────────────────────────────────────
     // middle wrapper (carousel autoHeight)
@@ -863,8 +860,8 @@ export class Slider implements SliderInstance {
     // make clones transparent
     if (this.cloneCount) {
       for (let i = this.cloneCount; i--;) {
-        addClass(this.slideItems[i], 'tns-transparent')
-        addClass(this.slideItems[this.slideCountNew - i - 1], 'tns-transparent')
+        addClass(this.slideItems[i], CLS.HIDDEN)
+        addClass(this.slideItems[this.slideCountNew - i - 1], CLS.HIDDEN)
       }
     }
     addClass(this.outerWrapper, CLS.FROZEN)
@@ -876,8 +873,8 @@ export class Slider implements SliderInstance {
     if (this.edgePadding && CSSMQ) { this.innerWrapper.style.margin = '' }
     if (this.cloneCount) {
       for (let i = this.cloneCount; i--;) {
-        removeClass(this.slideItems[i], 'tns-transparent')
-        removeClass(this.slideItems[this.slideCountNew - i - 1], 'tns-transparent')
+        removeClass(this.slideItems[i], CLS.HIDDEN)
+        removeClass(this.slideItems[this.slideCountNew - i - 1], CLS.HIDDEN)
       }
     }
     removeClass(this.outerWrapper, CLS.FROZEN)
@@ -1222,11 +1219,12 @@ export class Slider implements SliderInstance {
         if (el.hasAttribute('aria-hidden')) {
           el.removeAttribute('aria-hidden')
           el.removeAttribute('tabindex')
+          el.removeAttribute('inert')
           addClass(el, CLS.ACTIVE)
         }
       } else {
         if (!el.hasAttribute('aria-hidden')) {
-          setAttrs(el, { 'aria-hidden': 'true', 'tabindex': '-1' })
+          setAttrs(el, { 'aria-hidden': 'true', 'tabindex': '-1', 'inert': '' })
           removeClass(el, CLS.ACTIVE)
         }
       }
@@ -1779,6 +1777,7 @@ export class Slider implements SliderInstance {
       const el = item as HTMLElement
       el.removeAttribute('aria-hidden')
       el.removeAttribute('tabindex')
+      el.removeAttribute('inert')
       removeClass(el, CLS.ITEM)
       removeClass(el, CLS.ACTIVE)
     })

@@ -1,6 +1,6 @@
 {
   "name": "@andresclua/sliderkit-plugins",
-  "version": "2.0.0",
+  "version": "2.1.1",
   "description": "SliderKit plugins — arrows, pagination, autoplay, thumbs, progress, mouseWheel, keyboard, a11y, hooks",
   "type": "module",
   "main": "./dist/index.umd.js",
@@ -38,7 +38,14 @@
     "typescript": "^5.4.5",
     "@andresclua/sliderkit": "workspace:*"
   },
-  "keywords": ["slider", "carousel", "sliderkit", "plugins", "pagination", "autoplay"],
+  "keywords": [
+    "slider",
+    "carousel",
+    "sliderkit",
+    "plugins",
+    "pagination",
+    "autoplay"
+  ],
   "author": "Andres Clua",
   "license": "MIT",
   "repository": {

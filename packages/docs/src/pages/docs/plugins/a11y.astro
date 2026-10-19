@@ -55,9 +55,14 @@ a11y({"{"}
   slideLabel: 'Imagen {"{{index}}"} de {"{{total}}"}',
 {"}"})</code></pre>
 
+  <h2>Keyboard focus management</h2>
+  <p>The plugin automatically sets <code>tabindex="-1"</code> on all focusable elements (<code>a</code>, <code>button</code>, <code>input</code>, etc.) inside inactive slides. Only the active slide's focusable elements are reachable via Tab. This updates on every <code>indexChanged</code> event.</p>
+  <pre><code>// No extra config needed — focus management is automatic
+a11y({"{"} containerLabel: 'My carousel' {"}"})</code></pre>
+
   <h2>Behaviour notes</h2>
   <ul>
-    <li>All attributes are removed cleanly on <code>slider.destroy()</code>.</li>
+    <li>All attributes and <code>tabindex</code> overrides are removed cleanly on <code>slider.destroy()</code>.</li>
     <li>Clone slides (added by <code>loop:true</code>) are not labelled — only real slides.</li>
     <li>The core already sets <code>aria-hidden="true"</code> on off-screen slides and maintains an <code>aria-live="polite"</code> region that announces the current position. This plugin adds the structural carousel semantics on top of that.</li>
   </ul>

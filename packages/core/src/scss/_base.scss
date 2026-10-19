@@ -29,8 +29,12 @@
   user-select: none;
   will-change: transform;
 
-  &--horizontal { touch-action: pan-y; }
-  &--vertical   { touch-action: pan-x; }
+  &--horizontal {
+    display: flex;
+    touch-action: pan-y;
+  }
+
+  &--vertical { touch-action: pan-x; }
 
   &--frozen {
     // Hide arrows/pagination when frozen
@@ -41,17 +45,8 @@
 
 // ── Slide items ───────────────────────────────────────────────────────────
 .sliderkit__item {
-  display: inline-block;
-  vertical-align: top;
-  min-height: 1px;
+  flex-shrink: 0;
   position: relative;
-
-  img {
-    display: block;
-    max-width: 100%;
-    width: 100%;
-    height: auto;
-  }
 
   &--active  { /* visible slide */ }
   &--clone   { /* loop clone — aria-hidden via JS */ }

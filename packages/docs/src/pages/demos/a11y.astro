@@ -1,6 +1,7 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro'
 import DemoViewer from '../../components/DemoViewer.astro'
+import tabIndexCode from './_scripts/a11y-tabindex.js?raw'
 ---
 <DemoLayout title="Accessibility">
   <DemoViewer
@@ -37,6 +38,90 @@ new Slider('#my-slider', {
       <div class="demo-slide s-green">3</div>
       <div class="demo-slide s-amber">4</div>
       <div class="demo-slide s-red">5</div>
+    </div>
+  </DemoViewer>
+
+  <DemoViewer
+    title="Keyboard focus — active slides only"
+    description="Tab navigation only reaches focusable elements (links, buttons) inside active slides. Inactive slides get tabindex='-1' automatically via the a11y plugin."
+    html={`<div id="demo-a11y-tab">
+  <div class="tab-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+    <h3 class="tab-slide__title">Slide 1</h3>
+    <p class="tab-slide__text">Try pressing Tab — only these buttons are reachable.</p>
+    <div class="tab-slide__actions">
+      <a class="tab-btn" href="#">Link A</a>
+      <button class="tab-btn" type="button">Button A</button>
+    </div>
+  </div>
+  <div class="tab-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+    <h3 class="tab-slide__title">Slide 2</h3>
+    <p class="tab-slide__text">Navigate to this slide first, then Tab will reach these.</p>
+    <div class="tab-slide__actions">
+      <a class="tab-btn" href="#">Link B</a>
+      <button class="tab-btn" type="button">Button B</button>
+    </div>
+  </div>
+  <div class="tab-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+    <h3 class="tab-slide__title">Slide 3</h3>
+    <p class="tab-slide__text">Same here — inactive slides are skipped by Tab.</p>
+    <div class="tab-slide__actions">
+      <a class="tab-btn" href="#">Link C</a>
+      <button class="tab-btn" type="button">Button C</button>
+    </div>
+  </div>
+</div>`}
+    css={`.tab-slide {
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 48px;
+  border-radius: 12px;
+  color: #fff;
+  gap: 12px;
+}
+.tab-slide__title { font-size: 1.5rem; font-weight: 800; margin: 0; }
+.tab-slide__text  { font-size: 0.9rem; opacity: 0.85; margin: 0; }
+.tab-slide__actions { display: flex; gap: 10px; }
+.tab-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.tab-btn:focus { outline: 2px solid #fff; outline-offset: 2px; }`}
+    js={tabIndexCode}
+  >
+    <div id="demo-a11y-tab">
+      <div class="tab-slide" style="background:linear-gradient(135deg,#6C2BD9,#3b82f6)">
+        <h3 class="tab-slide__title">Slide 1</h3>
+        <p class="tab-slide__text">Try pressing Tab — only these buttons are reachable.</p>
+        <div class="tab-slide__actions">
+          <a class="tab-btn" href="#">Link A</a>
+          <button class="tab-btn" type="button">Button A</button>
+        </div>
+      </div>
+      <div class="tab-slide" style="background:linear-gradient(135deg,#10b981,#84cc16)">
+        <h3 class="tab-slide__title">Slide 2</h3>
+        <p class="tab-slide__text">Navigate to this slide first, then Tab will reach these.</p>
+        <div class="tab-slide__actions">
+          <a class="tab-btn" href="#">Link B</a>
+          <button class="tab-btn" type="button">Button B</button>
+        </div>
+      </div>
+      <div class="tab-slide" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+        <h3 class="tab-slide__title">Slide 3</h3>
+        <p class="tab-slide__text">Same here — inactive slides are skipped by Tab.</p>
+        <div class="tab-slide__actions">
+          <a class="tab-btn" href="#">Link C</a>
+          <button class="tab-btn" type="button">Button C</button>
+        </div>
+      </div>
     </div>
   </DemoViewer>
 
@@ -128,6 +213,7 @@ new Slider('#my-slider', {
 <script>
 import { Slider } from '@andresclua/sliderkit'
 import { arrows, pagination, a11y } from '@andresclua/sliderkit-plugins'
+import './_scripts/a11y-tabindex.js'
 
 const slider = new Slider('#demo-a11y', {
   items: 1,
