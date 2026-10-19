@@ -27,14 +27,14 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   user-select: none;
   will-change: transform;
 {"}"}
-.sliderkit--horizontal {"{"} touch-action: pan-y; {"}"}
-.sliderkit--vertical   {"{"} touch-action: pan-x; {"}"}
+.sliderkit--horizontal {"{"} display: flex; touch-action: pan-y; {"}"}
+.sliderkit--vertical   {"{"} display: flex; flex-direction: column; touch-action: pan-x; {"}"}
 
 .sliderkit__item {"{"}
-  display: inline-block;
-  vertical-align: top;
-  min-height: 1px;
+  flex-shrink: 0;
+  position: relative;
 {"}"}
+.sliderkit__item--hidden {"{"} visibility: hidden; {"}"} /* clones while frozen */
 .sliderkit__item img {"{"}
   display: block;
   max-width: 100%;
@@ -67,14 +67,14 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 .sliderkit {"{"}
   user-select: none;
   will-change: transform;
-  &--horizontal {"{"} touch-action: pan-y; {"}"}
-  &--vertical   {"{"} touch-action: pan-x; {"}"}
+  &--horizontal {"{"} display: flex; touch-action: pan-y; {"}"}
+  &--vertical   {"{"} display: flex; flex-direction: column; touch-action: pan-x; {"}"}
 {"}"}
 
 .sliderkit__item {"{"}
-  display: inline-block;
-  vertical-align: top;
-  min-height: 1px;
+  flex-shrink: 0;
+  position: relative;
+  &--hidden {"{"} visibility: hidden; {"}"} // clones while frozen
   img {"{"} display: block; max-width: 100%; width: 100%; height: auto; {"}"}
 {"}"}
 

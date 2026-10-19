@@ -54,8 +54,8 @@ new Slider('#el', {"{"}
 
   <h2>Notes</h2>
   <ul>
-    <li>Works best with <code>loop:false</code> — in loop mode the bar reaches 100% at the last real slide, then jumps back.</li>
-    <li>The bar width is calculated as <code>(activeIndex / (slideCount - 1)) * 100%</code>. First slide = 0%, last slide = 100%.</li>
+    <li>Works best with <code>loop:false</code> — in loop mode the bar reaches 100% at the last real slide, then drops back to the first.</li>
+    <li>The bar width is calculated as <code>((activeIndex + 1) / slideCount) * 100%</code>. First slide = <code>1 / slideCount</code>, last slide = 100%.</li>
   </ul>
 
   <h2>Demo</h2>

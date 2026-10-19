@@ -14,8 +14,11 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
       <tr><td><code>edgePadding</code></td><td>number</td><td><code>0</code></td><td>Peek px from each side, revealing adjacent slides.</td></tr>
       <tr><td><code>fixedWidth</code></td><td>number | false</td><td><code>false</code></td><td>Fixed px width per slide instead of fluid columns.</td></tr>
       <tr><td><code>autoWidth</code></td><td>boolean</td><td><code>false</code></td><td>Each slide keeps its own intrinsic width.</td></tr>
+      <tr><td><code>viewportMax</code></td><td>number | false</td><td><code>false</code></td><td>Max viewport width, used with <code>fixedWidth</code> to compute how many clones a loop needs.</td></tr>
       <tr><td><code>center</code></td><td>boolean</td><td><code>false</code></td><td>Centre the active slide in the viewport.</td></tr>
       <tr><td><code>axis</code></td><td><code>'horizontal' | 'vertical'</code></td><td><code>'horizontal'</code></td><td>Scroll direction. Vertical requires a fixed container height.</td></tr>
+      <tr><td><code>container</code></td><td>string | HTMLElement</td><td><code>'.slider'</code></td><td>Fallback element when no target is passed to <code>new Slider()</code>. The first argument takes precedence.</td></tr>
+      <tr><td><code>mode</code></td><td><code>'carousel'</code></td><td><code>'carousel'</code></td><td>Only carousel mode exists.</td></tr>
     </tbody>
   </table>
 

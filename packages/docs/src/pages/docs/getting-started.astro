@@ -19,14 +19,14 @@ pnpm add @andresclua/sliderkit @andresclua/sliderkit-plugins</code></pre>
 &lt;/div&gt;</code></pre>
 
   <h2>Required CSS</h2>
-  <p>The slider injects layout styles at runtime. You need to provide the structural rules:</p>
+  <p>The slider injects widths, gutters and transitions at runtime. You need to provide the structural rules:</p>
   <pre><code>/* clip the sliding track */
-.sliderkit__overflow {"{"} overflow: hidden; {"}"}
+.sliderkit__overflow {"{"} overflow: hidden; position: relative; {"}"}
 
-/* horizontal carousel — added automatically by the JS */
-.sliderkit--horizontal {"{"} white-space: nowrap; {"}"}
-.sliderkit--horizontal > .sliderkit__item {"{"} display: inline-block; vertical-align: top; {"}"}</code></pre>
-  <p>All demo pages include a complete stylesheet reference in their CSS tab.</p>
+/* horizontal carousel — class added automatically by the JS */
+.sliderkit--horizontal {"{"} display: flex; {"}"}
+.sliderkit__item {"{"} flex-shrink: 0; {"}"}</code></pre>
+  <p>See <a href="/docs/styling">Styling</a> for the complete base stylesheet, or import <code>@andresclua/sliderkit/scss/slider.scss</code> if you use Sass. All demo pages also include a complete stylesheet reference in their CSS tab.</p>
 
   <h2>Basic usage</h2>
   <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'

@@ -1,10 +1,5 @@
-.sliderkit--vertical {
-  .sliderkit__wrapper {
-    flex-direction: column;
-    touch-action: pan-x;
-  }
-
-  .sliderkit__item {
-    width: 100%;
-  }
+// Vertical axis layout lives in _base.scss (.sliderkit--vertical).
+// Kept as an extension point for vertical-only overrides.
+.sliderkit--vertical .sliderkit__item {
+  width: 100%;
 }

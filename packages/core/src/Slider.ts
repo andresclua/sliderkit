@@ -1264,8 +1264,10 @@ export class Slider implements SliderInstance {
     this.resetDuration(this.container, '')
     // modern browser with transitionDuration support, or speed === 0
     this.doContainerTransform()
-    // fallback: if speed=0 or container hidden, run onTransitionEnd manually
-    if (!this.speed || !isVisible(this.container)) {
+    // fallback: if speed=0, container hidden, or a plugin (effects) disabled the
+    // transition, no transitionend will fire — run onTransitionEnd manually
+    if (!this.speed || !isVisible(this.container) ||
+        !parseFloat(getComputedStyle(this.container).transitionDuration)) {
       this.onTransitionEnd()
     }
 

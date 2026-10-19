@@ -34,7 +34,11 @@
     touch-action: pan-y;
   }
 
-  &--vertical { touch-action: pan-x; }
+  &--vertical {
+    display: flex;
+    flex-direction: column;
+    touch-action: pan-x;
+  }
 
   &--frozen {
     // Hide arrows/pagination when frozen
