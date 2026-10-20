@@ -1,6 +1,6 @@
 ---
 // No props — the catalog is embedded at build time and search runs client-side
-import { DEMOS } from '../demos-catalog'
+import { DEMOS, GROUP_LABELS } from '../demos-catalog'
 const catalogJson = JSON.stringify(
   DEMOS.map(d => ({
     slug: d.slug,
@@ -32,19 +32,12 @@ const catalogJson = JSON.stringify(
   <ul id="demo-search-results" class="search-results" hidden></ul>
 </div>
 
-<script define:vars={{ catalogJson }}>
+<script define:vars={{ catalogJson, GROUP_LABELS }}>
 const catalog = JSON.parse(catalogJson)
 
 const input   = document.getElementById('demo-search-input')
 const results = document.getElementById('demo-search-results')
 
-const GROUP_LABELS = {
-  core:      'Core',
-  plugins:   'Plugins',
-  effects:   'Effects CSS',
-  lifecycle: 'Lifecycle',
-  webgl:     'WebGL',
-}
 
 function search(q) {
   const query = q.toLowerCase().trim()

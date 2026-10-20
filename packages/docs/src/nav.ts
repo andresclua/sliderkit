@@ -1,4 +1,4 @@
-import { DEMOS, GROUP_LABELS, type DemoEntry } from './demos-catalog'
+import { DEMOS, GROUP_LABELS, GROUP_ORDER } from './demos-catalog'
 
 export interface NavItem {
   label: string
@@ -10,9 +10,7 @@ export interface NavGroup {
   items: NavItem[]
 }
 
-const DEMO_GROUP_ORDER: DemoEntry['group'][] = ['core']
-
-export const demosNav: NavGroup[] = DEMO_GROUP_ORDER.map(group => ({
+export const demosNav: NavGroup[] = GROUP_ORDER.map(group => ({
   title: GROUP_LABELS[group],
   items: DEMOS
     .filter(d => d.group === group)
