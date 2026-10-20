@@ -12,6 +12,10 @@ A modern, accessible, TypeScript-first slider library with WebGL effects, CSS tr
 
 **[Documentation & Demos →](https://sliderkit.andresclua.com)**
 
+<p align="center">
+  <a href="https://sliderkit.andresclua.com"><img src="packages/docs/public/og.png" alt="SliderKit — performance-first carousels for TypeScript" width="720"></a>
+</p>
+
 ---
 
 ## Packages
