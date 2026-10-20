@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-20
+
+`@andresclua/sliderkit` 2.1.2 · `@andresclua/sliderkit-plugins` 2.2.0 (`-effects` and `-webgl` are unchanged).
+
 ### Added
 - `smooth()` plugin: lerped drag with inertia, horizontal trackpad scroll, four presets (`smooth`, `snappy`, `floaty`, `free`), optional velocity skew, and an `onUpdate` hook with the live state (`velocity`, `position`, `progress`, `positions`, `dragging`). Exports `smoothPresets`
 - Demos: `/demos/smooth` (basic, skew boilerplate, custom effect with `onUpdate`, presets) and docs at `/docs/plugins/smooth`
@@ -23,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - pnpm monorepo with GitHub Actions CI/CD
 
 ### Fixed
+- Docs: the production build failed in the sitemap step (`@astrojs/sitemap` 3.7 needs Astro 5); pinned to 3.2.1, which works with the Astro 4 the site uses
 - Core: slider froze after the first move when a plugin disabled the track's CSS transition (all CSS effects), because `preventActionWhenRunning` never saw a `transitionend`
 - Core/docs: vertical axis stacked slides in a row; the track is now a flex column
 - `arrows`: visibility is recomputed on breakpoint change and uses the current item count

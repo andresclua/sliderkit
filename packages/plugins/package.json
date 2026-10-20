@@ -1,6 +1,6 @@
 {
   "name": "@andresclua/sliderkit-plugins",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "SliderKit plugins — arrows, pagination, autoplay, thumbs, progress, smooth, mouseWheel, keyboard, a11y, hooks",
   "type": "module",
   "main": "./dist/index.umd.js",
