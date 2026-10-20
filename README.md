@@ -22,10 +22,10 @@ A modern, accessible, TypeScript-first slider library with WebGL effects, CSS tr
 
 | Package | Description | Size |
 |---|---|---|
-| [`@andresclua/sliderkit`](packages/core) | Core slider engine | ~7 KB gzip |
-| [`@andresclua/sliderkit-plugins`](packages/plugins) | Arrows, pagination, autoplay, thumbs… | ~4 KB gzip |
+| [`@andresclua/sliderkit`](packages/core) | Core slider engine | ~10 KB gzip |
+| [`@andresclua/sliderkit-plugins`](packages/plugins) | Arrows, pagination, autoplay, thumbs… | ~5.5 KB gzip |
 | [`@andresclua/sliderkit-effects`](packages/effects) | CSS transition effects (fade, flip, clip-path…) | ~2 KB gzip |
-| [`@andresclua/sliderkit-webgl`](packages/webgl) | GPU WebGL transitions (displacement, rgb-shift, radial) | ~4 KB gzip |
+| [`@andresclua/sliderkit-webgl`](packages/webgl) | GPU WebGL transitions (displacement, rgb-shift, radial) | ~2.5 KB gzip |
 
 ---
 
