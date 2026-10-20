@@ -32,7 +32,7 @@ const ITEMS = [
 </section>
 
 <style is:global>
-.shapes { background: transparent; color: var(--text); --info-h: 84px; }
+.shapes { background: transparent; color: var(--text); --info-h: 84px; padding: 48px 0 24px; }
 .shapes-stage .sliderkit__outer { background: none; border-radius: 0; }
 .shapes-stage { position: relative; isolation: isolate; overflow: hidden; cursor: grab; }
 .shapes-stage:active { cursor: grabbing; }
@@ -57,7 +57,7 @@ const ITEMS = [
 .shapes-card { position: relative; container-type: inline-size; }
 .shapes-num {
   position: absolute; top: 4cqw; right: 5cqw;
-  font-family: inherit; font-weight: 800; font-size: 16cqw; line-height: 0.8; letter-spacing: -0.05em;
+  font-family: var(--font-head); font-weight: 700; font-size: 16cqw; line-height: 0.8; letter-spacing: -0.05em;
   color: rgba(255, 255, 255, 0.92); pointer-events: none; user-select: none;
 }
 

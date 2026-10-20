@@ -2,9 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import SiteHeader from '../components/SiteHeader.astro'
 import ShapesSlider from '../components/ShapesSlider.astro'
+import SmoothScroll from '../components/SmoothScroll.astro'
+import i_zap from 'lucide-static/icons/zap.svg?raw'
+import i_accessibility from 'lucide-static/icons/accessibility.svg?raw'
+import i_palette from 'lucide-static/icons/palette.svg?raw'
+import i_sparkles from 'lucide-static/icons/sparkles.svg?raw'
+import i_plug from 'lucide-static/icons/plug.svg?raw'
+import i_move from 'lucide-static/icons/move-horizontal.svg?raw'
+import i_device from 'lucide-static/icons/monitor-smartphone.svg?raw'
+import i_lock from 'lucide-static/icons/lock-keyhole.svg?raw'
 ---
 <BaseLayout title="SliderKit — A modern, accessible slider library for the web">
   <SiteHeader />
+  <SmoothScroll />
   <main class="landing">
 
     <!-- Hero -->
@@ -58,17 +68,17 @@ import ShapesSlider from '../components/ShapesSlider.astro'
         </header>
         <div class="feature-grid">
           {[
-            { icon: '⚡', title: 'Lightweight core', desc: 'The engine is tiny. Import only what you use — plugins, effects and WebGL are fully optional extras.' },
-            { icon: '♿', title: 'Fully accessible', desc: 'ARIA roles, live regions, roledescription, keyboard navigation, and prefers-reduced-motion out of the box.' },
-            { icon: '🎨', title: '3 CSS effects', desc: 'Fade, flip, and clip-path — all pure CSS, no JavaScript animations required.' },
-            { icon: '✨', title: 'WebGL renderer', desc: 'Raw WebGL, no dependencies. Displacement map warp, RGB-shift chromatic aberration, radial reveal, and custom GLSL shaders.' },
-            { icon: '🔌', title: '10 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, smooth drag, mouse wheel, keyboard, progress, accessibility, and hooks.' },
-            { icon: '📱', title: 'Touch & smooth drag', desc: 'Swipe on touch and mouse, or add the smooth plugin for lerped drag with inertia, trackpad scroll, presets and an onUpdate hook for your own effects.' },
-            { icon: '📐', title: 'Responsive', desc: 'Change any option at any viewport width. ResizeObserver powered — no window resize hacks.' },
-            { icon: '🔒', title: 'TypeScript strict', desc: 'Fully typed API, typed event payloads, typed plugin interface. No any escape hatches anywhere.' },
+            { icon: i_zap, title: 'Lightweight core', desc: 'The engine is tiny. Import only what you use — plugins, effects and WebGL are fully optional extras.' },
+            { icon: i_accessibility, title: 'Fully accessible', desc: 'ARIA roles, live regions, roledescription, keyboard navigation, and prefers-reduced-motion out of the box.' },
+            { icon: i_palette, title: '3 CSS effects', desc: 'Fade, flip, and clip-path — all pure CSS, no JavaScript animations required.' },
+            { icon: i_sparkles, title: 'WebGL renderer', desc: 'Raw WebGL, no dependencies. Displacement map warp, RGB-shift chromatic aberration, radial reveal, and custom GLSL shaders.' },
+            { icon: i_plug, title: '10 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, smooth drag, mouse wheel, keyboard, progress, accessibility, and hooks.' },
+            { icon: i_move, title: 'Touch & smooth drag', desc: 'Swipe on touch and mouse, or add the smooth plugin for lerped drag with inertia, trackpad scroll, presets and an onUpdate hook for your own effects.' },
+            { icon: i_device, title: 'Responsive', desc: 'Change any option at any viewport width. ResizeObserver powered — no window resize hacks.' },
+            { icon: i_lock, title: 'TypeScript strict', desc: 'Fully typed API, typed event payloads, typed plugin interface. No any escape hatches anywhere.' },
           ].map(f => (
             <div class="feature-card">
-              <span class="feature-icon">{f.icon}</span>
+              <span class="feature-icon" set:html={f.icon}></span>
               <h3>{f.title}</h3>
               <p>{f.desc}</p>
             </div>
@@ -128,9 +138,9 @@ slider.on('indexChanged', ({ displayIndex }) => {
         </header>
         <div class="package-grid">
           {[
-            { name: '@andresclua/sliderkit', badge: 'Core', color: '#6C2BD9', bg: '#ede9fe', desc: 'The slider engine. Touch, drag, keyboard, infinite loop, breakpoints, a11y, events, and plugin system.' },
+            { name: '@andresclua/sliderkit', badge: 'Core', color: '#0F766E', bg: '#CCFBF1', desc: 'The slider engine. Touch, drag, keyboard, infinite loop, breakpoints, a11y, events, and plugin system.' },
             { name: '@andresclua/sliderkit-plugins', badge: 'Plugins', color: '#2563EB', bg: '#dbeafe', desc: '10 plugins. Arrows, pagination, autoplay, thumbnails, smooth drag, mouse wheel, keyboard, progress, accessibility, and hooks.' },
-            { name: '@andresclua/sliderkit-effects', badge: 'Effects', color: '#059669', bg: '#d1fae5', desc: '6 CSS transition effects. Fade, cube, coverflow, flip, cards, and creative — zero JS animations.' },
+            { name: '@andresclua/sliderkit-effects', badge: 'Effects', color: '#4F46E5', bg: '#E0E7FF', desc: '6 CSS transition effects. Fade, cube, coverflow, flip, cards, and creative — zero JS animations.' },
             { name: '@andresclua/sliderkit-webgl', badge: 'WebGL', color: '#D97706', bg: '#fef3c7', desc: 'Raw WebGL renderer. 3 built-in shader effects (displacement, RGB-shift, radial) plus a custom GLSL API with automatic fallback.' },
           ].map(p => (
             <div class="package-card">
@@ -166,7 +176,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
 
 /* ── Hero ─────────────────────────────────────────────────────────────────── */
 .hero {
-  background: #0f0f17;
+  background: var(--text);
   color: #fff;
   padding: 5rem 1.5rem 0;
   text-align: center;
@@ -177,7 +187,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(108,43,217,0.45) 0%, transparent 70%);
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(20,184,166,0.30) 0%, transparent 70%);
   pointer-events: none;
 }
 .hero-inner { max-width: 760px; margin: 0 auto; position: relative; }
@@ -190,8 +200,8 @@ slider.on('indexChanged', ({ displayIndex }) => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #a78bfa;
-  border: 1px solid rgba(167,139,250,0.3);
+  color: #5eead4;
+  border: 1px solid rgba(94,234,212,0.3);
   border-radius: 99px;
   padding: 5px 14px;
   margin-bottom: 1.75rem;
@@ -199,7 +209,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
 .hero-badge-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: #a78bfa;
+  background: #5eead4;
   animation: pulse-dot 2s ease-in-out infinite;
   flex-shrink: 0;
 }
@@ -216,7 +226,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
   margin-bottom: 1.25rem;
 }
 .hero-accent {
-  background: linear-gradient(90deg, #c4b5fd 0%, #818cf8 100%);
+  background: linear-gradient(90deg, #5eead4 0%, #14B8A6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -242,7 +252,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
 .hero-install code {
   display: inline-block;
   background: rgba(255,255,255,0.07);
-  color: #c7d2fe;
+  color: #99f6e4;
   border: 1px solid rgba(255,255,255,0.1);
   padding: 9px 18px;
   border-radius: 8px;
@@ -283,7 +293,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
   transition: all 0.15s;
   white-space: nowrap;
 }
-.btn-primary { background: #fff; color: #1e1b4b; }
+.btn-primary { background: #fff; color: var(--text); }
 .btn-primary:hover { background: #e2e8f0; text-decoration: none; }
 .btn-ghost {
   background: rgba(255,255,255,0.08);
@@ -292,12 +302,12 @@ slider.on('indexChanged', ({ displayIndex }) => {
 }
 .btn-ghost:hover { background: rgba(255,255,255,0.14); color: #fff; text-decoration: none; }
 
-.btn-primary-dark { background: var(--brand); color: #fff; }
-.btn-primary-dark:hover { background: var(--brand-dark); text-decoration: none; }
+.btn-primary-dark { background: var(--primary); color: var(--text); }
+.btn-primary-dark:hover { background: #2dd4bf; text-decoration: none; }
 .btn-outline-dark {
   background: transparent;
-  color: var(--text-muted);
-  border: 1px solid var(--border);
+  color: #cbd5e1;
+  border: 1px solid rgba(255,255,255,0.25);
 }
 .btn-outline-dark:hover { background: var(--bg); color: var(--text); text-decoration: none; }
 .btn-sponsor { background: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; }
@@ -324,13 +334,18 @@ slider.on('indexChanged', ({ displayIndex }) => {
   transition: box-shadow 0.15s;
 }
 .feature-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-.feature-icon { font-size: 1.4rem; display: block; margin-bottom: 0.6rem; }
+.feature-icon {
+  display: inline-grid; place-items: center;
+  width: 40px; height: 40px; margin-bottom: 0.9rem;
+  border-radius: 10px; background: var(--tint); color: var(--accent);
+}
+.feature-icon :global(svg) { width: 20px; height: 20px; }
 .feature-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
 .feature-card p  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; margin: 0; }
 
 /* ── Code preview ─────────────────────────────────────────────────────────── */
 .code-preview {
-  background: #0f0f17;
+  background: var(--text);
   padding: 5rem 1.5rem;
 }
 .code-preview-inner {
@@ -366,7 +381,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
   align-items: center;
   gap: 6px;
   padding: 10px 14px;
-  background: #1a1a2e;
+  background: #0c3329;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 .dot { width: 11px; height: 11px; border-radius: 50%; }
@@ -377,13 +392,13 @@ slider.on('indexChanged', ({ displayIndex }) => {
 .code-window-body {
   margin: 0;
   padding: 1.25rem 1.5rem;
-  background: #12121e;
+  background: #082a21;
   border-radius: 0;
   font-size: 0.8rem;
   line-height: 1.7;
   overflow-x: auto;
 }
-.code-window-body code { color: #c4b5fd; }
+.code-window-body code { color: #99f6e4; }
 
 /* ── Packages ─────────────────────────────────────────────────────────────── */
 .packages {
@@ -416,7 +431,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
   margin-bottom: 0.4rem;
 }
 .package-name {
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 700;
   display: block;
   margin-bottom: 0.6rem;

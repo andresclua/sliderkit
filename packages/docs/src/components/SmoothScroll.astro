@@ -1,0 +1,16 @@
+---
+// Smooth page scroll with Lenis. Only the home page includes this component, and Lenis is a
+// dependency of the docs site only: the SliderKit packages themselves have none.
+---
+<script>
+import Lenis from 'lenis'
+import 'lenis/dist/lenis.css'
+
+// Lenis only eases vertical gestures, so the horizontal trackpad scroll of the home slider
+// (the smooth() plugin) keeps working. Reduced motion keeps the browser's own scroll.
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const lenis = new Lenis({ anchors: true })
+  const raf = (t: number) => { lenis.raf(t); requestAnimationFrame(raf) }
+  requestAnimationFrame(raf)
+}
+</script>

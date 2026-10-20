@@ -209,21 +209,21 @@ const multiTab = tabs.length > 1
 }
 .demo-code summary {
   padding: 0.6rem 1rem;
-  background: #f9fafb;
+  background: var(--hover);
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-muted);
   user-select: none;
 }
-.demo-code summary:hover { background: #f3f4f6; }
+.demo-code summary:hover { background: var(--hover); }
 .demo-code pre { margin: 0; border-radius: 0; }
 
 /* Tabs */
 .demo-tab-bar {
   display: flex;
   gap: 0;
-  background: #1e1e2e;
+  background: var(--code-bg);
   border-bottom: 1px solid #333;
 }
 .demo-tab-btn {

@@ -123,7 +123,7 @@ input.addEventListener('keydown', e => {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #f3f4f6;
+  background: var(--hover);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0 10px;
@@ -131,7 +131,7 @@ input.addEventListener('keydown', e => {
 }
 .search-input-wrap:focus-within {
   border-color: var(--brand-light);
-  box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.1);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.22);
   background: #fff;
 }
 
@@ -157,7 +157,7 @@ input.addEventListener('keydown', e => {
 .search-kbd {
   font-size: 0.7rem;
   color: var(--text-muted);
-  background: #e5e7eb;
+  background: var(--border);
   border-radius: 4px;
   padding: 1px 5px;
   flex-shrink: 0;
@@ -194,7 +194,7 @@ input.addEventListener('keydown', e => {
 }
 .search-result-link:hover,
 .search-result-link:focus {
-  background: #f3f4f6;
+  background: var(--hover);
   outline: none;
 }
 

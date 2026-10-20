@@ -3,23 +3,31 @@
 
 /* ── Design tokens ── */
 :root {
-  --brand: #6C2BD9;
-  --brand-light: #8B5CF6;
-  --brand-dark: #4C1D95;
-  --bg: #f8f8f8;
+  /* palette: Space Grotesk + DM Sans, dark green text, teal primary */
+  --primary: #14B8A6;          /* fills and highlights. Too light for text on white: use --accent for that */
+  --accent: #005345;           /* links, active states, strong accents */
+  --brand: var(--accent);
+  --brand-light: var(--primary);
+  --brand-dark: #003a30;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --border: #e5e7eb;
-  --text: #111827;
-  --text-muted: #6b7280;
-  --code-bg: #1e1e2e;
+  --border: #E2E8F0;
+  --text: #00221A;
+  --text-muted: #4F6560;
+  --hover: #F1F5F9;            /* hover background on light surfaces */
+  --tint: #E6F6F3;             /* soft teal: active nav item, badges */
+  --code-bg: #0a2e24;
+  --font-head: 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-body: 'DM Sans Variable', system-ui, -apple-system, sans-serif;
   --sidebar-w: 260px;
   --header-h: 60px;
-  --radius: 8px;
+  --radius: 14px;
   --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
 }
 
 html { scroll-behavior: smooth; }
-body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; }
+h1, h2, h3, h4 { font-family: var(--font-head); letter-spacing: -0.02em; }
 
 /* ── GitHub corner ribbon ── */
 .github-corner {
@@ -52,7 +60,7 @@ a:hover { text-decoration: underline; }
 code {
   font-family: 'Fira Code', 'Cascadia Code', 'Menlo', monospace;
   font-size: 0.875em;
-  background: #f3f4f6;
+  background: var(--hover);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -74,7 +82,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
 .sliderkit__outer {
   position: relative;
   border-radius: var(--radius);
-  background: #e5e7eb;
+  background: var(--border);
 }
 
 /* overflow div: clips the track */
@@ -170,7 +178,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
 }
 .sliderkit__progress-bar {
   height: 100%;
-  background: #6C2BD9;
+  background: var(--primary);
   border-radius: 2px;
   transition: width 0.3s ease;
   width: 0%;
@@ -199,7 +207,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
 .sliderkit__arrow--disabled { opacity: 0.3; cursor: default; pointer-events: none; }
 .sliderkit__arrow--prev { left: 12px; }
 .sliderkit__arrow--next { right: 12px; }
-.sliderkit__arrow svg { width: 20px; height: 20px; color: #374151; }
+.sliderkit__arrow svg { width: 20px; height: 20px; color: var(--text); }
 
 /* ── Frozen: hide arrows and pagination ── */
 .sliderkit--frozen .sliderkit__arrow,
@@ -234,7 +242,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
 .sliderkit__pagination-progress {
   width: 100%;
   height: 4px;
-  background: #e5e7eb;
+  background: var(--border);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -270,7 +278,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
   opacity: 0.5;
   border: 2px solid transparent;
   transition: opacity 0.2s, border-color 0.2s;
-  background: #e5e7eb;
+  background: var(--border);
 }
 .sliderkit__thumb--active {
   opacity: 1;
@@ -280,7 +288,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
 /* ── Progress bar plugin ── */
 .sliderkit__progress {
   height: 4px;
-  background: #e5e7eb;
+  background: var(--border);
   border-radius: 2px;
   overflow: hidden;
   margin-top: 8px;

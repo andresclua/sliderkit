@@ -36,13 +36,14 @@ const isDocs = currentPath.startsWith('/docs')
   margin: 0 auto;
 }
 .logo {
+  font-family: var(--font-head);
   font-size: 1.15rem;
   font-weight: 800;
   text-decoration: none;
   letter-spacing: -0.03em;
 }
 .logo-slider { color: var(--text); }
-.logo-kit    { color: var(--brand); }
+.logo-kit    { color: var(--primary); }
 
 .header-nav { display: flex; align-items: center; gap: 0.25rem; }
 .nav-link {
@@ -54,8 +55,8 @@ const isDocs = currentPath.startsWith('/docs')
   text-decoration: none;
   transition: color 0.15s, background 0.15s;
 }
-.nav-link:hover { color: var(--text); background: #f3f4f6; text-decoration: none; }
-.nav-link--active { color: var(--brand); background: #ede9fe; }
+.nav-link:hover { color: var(--text); background: var(--hover); text-decoration: none; }
+.nav-link--active { color: var(--brand); background: var(--tint); }
 .nav-link--sponsor { color: #db2777; background: #fce7f3; }
 .nav-link--sponsor:hover { background: #fbcfe8; color: #be185d; }
 </style>

@@ -61,7 +61,7 @@ const currentPath = Astro.url.pathname
 }
 .docs-content :global(p) {
   margin-bottom: 1rem;
-  color: #374151;
+  color: var(--text);
 }
 .docs-content :global(ul), .docs-content :global(ol) {
   margin: 0 0 1rem 1.5rem;
@@ -77,7 +77,7 @@ const currentPath = Astro.url.pathname
 .docs-content :global(th) {
   text-align: left;
   padding: 8px 12px;
-  background: #f3f4f6;
+  background: var(--hover);
   border: 1px solid var(--border);
   font-weight: 600;
 }
@@ -109,7 +109,7 @@ const currentPath = Astro.url.pathname
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-.docs-content :global(.badge-purple) { background: #ede9fe; color: var(--brand); }
+.docs-content :global(.badge-purple) { background: var(--tint); color: var(--brand); }
 .docs-content :global(.badge-green)  { background: #d1fae5; color: #065f46; }
 .docs-content :global(.badge-blue)   { background: #dbeafe; color: #1e40af; }
 
