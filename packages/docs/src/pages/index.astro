@@ -163,7 +163,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
         <p>SliderKit is MIT-licensed. If it saves you time, consider sponsoring on GitHub Sponsors and help keep it maintained.</p>
         <div class="cta-actions">
           <a href="/docs/getting-started" class="btn btn-primary-dark">Get started</a>
-          <a href="https://github.com/sponsors/andresclua" target="_blank" rel="noopener" class="btn btn-sponsor">♥ Sponsor</a>
+          <a href="https://github.com/sponsors/andresclua" target="_blank" rel="noopener" class="btn btn-sponsor"><span class="heart">♥</span> Sponsor</a>
         </div>
       </div>
     </section>
@@ -310,8 +310,9 @@ slider.on('indexChanged', ({ displayIndex }) => {
   border: 1px solid rgba(255,255,255,0.25);
 }
 .btn-outline-dark:hover { background: var(--bg); color: var(--text); text-decoration: none; }
-.btn-sponsor { background: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; }
-.btn-sponsor:hover { background: #fbcfe8; text-decoration: none; }
+.btn-sponsor { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.btn-sponsor:hover { background: var(--tint); text-decoration: none; }
+.btn-sponsor .heart { color: var(--primary); }
 
 /* ── Section shared ───────────────────────────────────────────────────────── */
 .section-inner { max-width: 1100px; margin: 0 auto; }

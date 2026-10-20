@@ -12,7 +12,7 @@ const isDocs = currentPath.startsWith('/docs')
       <a href="/docs/getting-started" class:list={['nav-link', isDocs && 'nav-link--active']}>Docs</a>
       <a href="/demos/base" class:list={['nav-link', isDemo && 'nav-link--active']}>Demos</a>
       <a href="https://github.com/andresclua/sliderkit" target="_blank" rel="noopener" class="nav-link">GitHub</a>
-      <a href="/docs/sponsor" class="nav-link nav-link--sponsor">♥ Sponsor</a>
+      <a href="https://github.com/sponsors/andresclua" target="_blank" rel="noopener" class="nav-link nav-link--sponsor"><span class="heart">♥</span> Sponsor</a>
     </nav>
   </div>
 </header>
@@ -31,10 +31,11 @@ const isDocs = currentPath.startsWith('/docs')
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 0 1.5rem;
+  padding: 0 5.5rem 0 1.5rem;   /* room for the GitHub corner ribbon */
   max-width: 1400px;
   margin: 0 auto;
 }
+@media (max-width: 500px) { .header-inner { padding-right: 1.5rem; } }
 .logo {
   font-family: var(--font-head);
   font-size: 1.15rem;
@@ -57,6 +58,7 @@ const isDocs = currentPath.startsWith('/docs')
 }
 .nav-link:hover { color: var(--text); background: var(--hover); text-decoration: none; }
 .nav-link--active { color: var(--brand); background: var(--tint); }
-.nav-link--sponsor { color: #db2777; background: #fce7f3; }
-.nav-link--sponsor:hover { background: #fbcfe8; color: #be185d; }
+.nav-link--sponsor { color: #fff; background: var(--accent); }
+.nav-link--sponsor:hover { color: #fff; background: var(--brand-dark); }
+.nav-link--sponsor .heart { color: #5eead4; }
 </style>
