@@ -5,6 +5,28 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   <h1>Getting Started</h1>
   <p class="lead">SliderKit is a lightweight, accessible carousel library written in TypeScript. The core handles all sliding logic; plugins add arrows, pagination, and more.</p>
 
+  <h2>Why SliderKit</h2>
+  <p>Most carousels are a pile of features you pay for whether you use them or not. SliderKit goes the other way: a small core that does one thing well, and everything else is opt-in.</p>
+
+  <h3>Performance first</h3>
+  <ul>
+    <li><strong>Movement is a CSS transform.</strong> The core slides the track with <code>transform</code> and a CSS transition, so the browser animates it on the compositor — no layout, no per-frame JavaScript while it moves.</li>
+    <li><strong>No work while idle.</strong> The core runs no timer or <code>requestAnimationFrame</code> loop in the background. The <a href="/docs/plugins/smooth">smooth</a> plugin only runs its loop while something is moving and stops once it settles.</li>
+    <li><strong>You ship what you use.</strong> Zero runtime dependencies, and every plugin is a named export, so anything you don't import is tree-shaken out. The WebGL renderer is a separate package, loaded only when you need it.</li>
+  </ul>
+
+  <h3>Core does the sliding, plugins do the rest</h3>
+  <p>The core knows about slides, positions, breakpoints and events — nothing else. Arrows, pagination, autoplay, smooth drag or effects are plugins that hook into the same lifecycle events you can use yourself, so you can read how any of them works and write your own the same way.</p>
+
+  <h3>Accessible by default</h3>
+  <p>Keyboard navigation and ARIA attributes come with the core and the plugins, not as an afterthought. Slides outside the view are marked <code>aria-hidden</code> and <code>inert</code>, so they can't be reached by keyboard or screen readers.</p>
+
+  <h3>Predictable and typed</h3>
+  <p>Written in strict TypeScript, with every option, method and event typed. The sliding logic is a faithful port of <a href="https://github.com/ganlanyuan/tiny-slider" target="_blank" rel="noopener">Tiny Slider</a> 2.9.4, a battle-tested engine, with its own API and BEM class names (<code>sliderkit__*</code>) that are easy to style and don't collide with yours.</p>
+
+  <h3>You own the markup and the CSS</h3>
+  <p>SliderKit doesn't inject a theme. You write the HTML, and a handful of structural rules are all it needs. The design is yours.</p>
+
   <h2>Installation</h2>
   <pre><code>npm install @andresclua/sliderkit @andresclua/sliderkit-plugins
 # or
@@ -19,13 +41,25 @@ pnpm add @andresclua/sliderkit @andresclua/sliderkit-plugins</code></pre>
 &lt;/div&gt;</code></pre>
 
   <h2>Required CSS</h2>
-  <p>The slider injects widths, gutters and transitions at runtime. You need to provide the structural rules:</p>
-  <pre><code>/* clip the sliding track */
+  <p>The slider injects widths, gutters and transitions at runtime. You need to provide the structural rules below (don't skip the last one: without it the screen-reader text shows on screen):</p>
+  <pre><code>/* wrapper injected by the JS: anchor for arrows and pagination */
+.sliderkit__outer {"{"} position: relative; box-sizing: border-box; {"}"}
+.sliderkit__outer *, .sliderkit__outer *::before, .sliderkit__outer *::after {"{"} box-sizing: inherit; {"}"}
+
+/* clip the sliding track */
 .sliderkit__overflow {"{"} overflow: hidden; position: relative; {"}"}
 
-/* horizontal carousel — class added automatically by the JS */
-.sliderkit--horizontal {"{"} display: flex; {"}"}
-.sliderkit__item {"{"} flex-shrink: 0; {"}"}</code></pre>
+/* the track: classes added automatically by the JS */
+.sliderkit--horizontal {"{"} display: flex; touch-action: pan-y; {"}"}
+.sliderkit--vertical   {"{"} display: flex; flex-direction: column; touch-action: pan-x; {"}"}
+.sliderkit__item       {"{"} flex-shrink: 0; position: relative; {"}"}
+.sliderkit--vertical .sliderkit__item {"{"} width: 100%; {"}"}
+
+/* screen-reader announcements ("slide 1 of 3"): must stay visually hidden */
+.sliderkit__live {"{"}
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
+{"}"}</code></pre>
   <p>See <a href="/docs/styling">Styling</a> for the complete base stylesheet, or import <code>@andresclua/sliderkit/scss/slider.scss</code> if you use Sass. All demo pages also include a complete stylesheet reference in their CSS tab.</p>
 
   <h2>Basic usage</h2>

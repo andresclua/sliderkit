@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#6C2BD9"/>
-  <text x="16" y="22" font-family="system-ui,sans-serif" font-size="13" font-weight="800" text-anchor="middle" fill="white">SK</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#00221A"/><g transform="translate(46 106) scale(1.13)"><g>
+<path d="M15 95h57v137H15z" fill="#005345"/><path d="M15 95l14-12h50l-7 12z" fill="#14B8A6"/>
+<path d="M290 95h56v137h-56z" fill="#005345"/><path d="M290 95l14-12h50l-8 12z" fill="#14B8A6"/>
+<path d="M90 72h155v190H90z" fill="#14B8A6"/>
+<path d="M90 72h155v36L90 190z" fill="#5EEAD4"/>
+<path d="M90 72l28-34h154l-27 34z" fill="#99F6E4"/>
+<path d="M245 72l27-34v197l-27 27z" fill="#005345"/>
+<ellipse cx="141" cy="143" rx="17" ry="22" fill="#00221A"/><ellipse cx="188" cy="143" rx="17" ry="22" fill="#00221A"/>
+
+<!-- cy="184" rx="15" ry="8" fill="#99F6E4" opacity=".85"/><ellipse cx="214" cy="184" rx="15" ry="8" fill="#99F6E4" opacity=".85"/>
+-->
+</g></g></svg>

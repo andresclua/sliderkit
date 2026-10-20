@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="brand/logo.png" alt="SliderKit" width="560">
+</p>
+
 # SliderKit
 
 [![npm version](https://img.shields.io/npm/v/@andresclua/sliderkit)](https://www.npmjs.com/package/@andresclua/sliderkit)

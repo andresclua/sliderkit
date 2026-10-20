@@ -139,14 +139,14 @@ pre code { background: none; padding: 0; font-size: inherit; }
 }
 
 /* ── Demo slide colors ── */
-.s-purple  { background: #6C2BD9; }
-.s-blue    { background: #3B82F6; }
-.s-green   { background: #10B981; }
-.s-amber   { background: #F59E0B; }
-.s-red     { background: #EF4444; }
-.s-pink    { background: #EC4899; }
-.s-teal    { background: #14B8A6; }
-.s-indigo  { background: #6366F1; }
+.s-purple  { background: #005345; }
+.s-blue    { background: #0F766E; }
+.s-green   { background: #0D9488; }
+.s-amber   { background: #134E4A; }
+.s-red     { background: #00221A; }
+.s-pink    { background: #115E59; }
+.s-teal    { background: #0B7A70; }
+.s-indigo  { background: #003A30; }
 
 .demo-slide {
   height: 260px;

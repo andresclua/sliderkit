@@ -6,7 +6,8 @@ const isDocs = currentPath.startsWith('/docs')
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="logo">
-      <span class="logo-slider">Slider</span><span class="logo-kit">Kit</span>
+      <img src="/mascot.svg" alt="" class="logo-mark" width="40" height="29" />
+      <span><span class="logo-slider">Slider</span><span class="logo-kit">Kit</span></span>
     </a>
     <nav class="header-nav">
       <a href="/docs/getting-started" class:list={['nav-link', isDocs && 'nav-link--active']}>Docs</a>
@@ -37,12 +38,16 @@ const isDocs = currentPath.startsWith('/docs')
 }
 @media (max-width: 500px) { .header-inner { padding-right: 1.5rem; } }
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-head);
   font-size: 1.15rem;
   font-weight: 800;
   text-decoration: none;
   letter-spacing: -0.03em;
 }
+.logo-mark { height: 28px; width: auto; }
 .logo-slider { color: var(--text); }
 .logo-kit    { color: var(--primary); }
 
