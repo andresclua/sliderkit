@@ -1,0 +1,38 @@
+newmtl lockBody
+Kd 0.1922 0.4706 0.7765
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl ink
+Kd 0.1059 0.1098 0.1451
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl glint
+Kd 1.0000 1.0000 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 1.00
+illum 1
+
+newmtl cheek
+Kd 1.0000 0.4784 0.6588
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl shackle
+Kd 0.9098 0.9098 0.9412
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1

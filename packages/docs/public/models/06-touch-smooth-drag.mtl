@@ -1,0 +1,37 @@
+newmtl blob
+Kd 1.0000 0.3569 0.6275
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl ink
+Kd 0.1059 0.1098 0.1451
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl glint
+Kd 1.0000 1.0000 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 1.00
+illum 1
+
+newmtl cheekLight
+Kd 1.0000 0.7020 0.8196
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl trail
+Kd 1.0000 1.0000 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 0.07
+illum 1

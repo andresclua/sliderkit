@@ -1,0 +1,36 @@
+newmtl gem
+Kd 0.9137 0.9176 0.9490
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl ink
+Kd 0.1059 0.1098 0.1451
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl glint
+Kd 1.0000 1.0000 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 1.00
+illum 1
+
+newmtl rgbShift
+Kd 0.1647 0.4196 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 0.90
+illum 1
+
+newmtl sparkle
+Kd 1.0000 1.0000 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 1.00
+illum 1

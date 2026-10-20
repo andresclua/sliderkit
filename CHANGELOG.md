@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `smooth()` plugin: lerped drag with inertia, horizontal trackpad scroll, four presets (`smooth`, `snappy`, `floaty`, `free`), optional velocity skew, and an `onUpdate` hook with the live state (`velocity`, `position`, `progress`, `positions`, `dragging`). Exports `smoothPresets`
 - Demos: `/demos/smooth` (basic, skew boilerplate, custom effect with `onUpdate`, presets) and docs at `/docs/plugins/smooth`
-- Home page: draggable slider with WebGL shapes in a single canvas, layered between the DOM cards and a text layer
+- Home page: draggable slider with eight 3D characters (OBJ/MTL, raw WebGL, no dependencies) in a single canvas, layered between the DOM cards and a title layer. Hover wakes a character, a click makes it pop
 - Initial monorepo setup
 - `@andresclua/sliderkit` — slider engine with full TypeScript types
 - `@andresclua/sliderkit-plugins` — pagination, autoplay, arrows, thumbnails, and more

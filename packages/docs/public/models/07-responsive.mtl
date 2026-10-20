@@ -1,0 +1,54 @@
+newmtl bezel
+Kd 0.1059 0.1098 0.1451
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl screen
+Kd 0.2863 0.7843 1.0000
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl uiBar
+Kd 1.0000 0.9686 0.9255
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl ink
+Kd 0.1059 0.1098 0.1451
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl glint
+Kd 1.0000 1.0000 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 1.00
+illum 1
+
+newmtl cheek
+Kd 1.0000 0.4784 0.6588
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl stand
+Kd 0.2275 0.2392 0.3020
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1

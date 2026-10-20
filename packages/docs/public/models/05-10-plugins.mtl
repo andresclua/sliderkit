@@ -1,0 +1,61 @@
+newmtl socket
+Kd 1.0000 0.9686 0.9255
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl ink
+Kd 0.1059 0.1098 0.1451
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl led
+Kd 0.1647 0.4314 0.2667
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl plugBody
+Kd 1.0000 0.8235 0.2471
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl prong
+Kd 0.8510 0.8588 0.9020
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl glint
+Kd 1.0000 1.0000 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 1.00
+illum 1
+
+newmtl cheek
+Kd 1.0000 0.4784 0.6588
+Ka 0 0 0
+Ks 0 0 0
+Ke 0.0000 0.0000 0.0000
+d 1.00
+illum 1
+
+newmtl spark
+Kd 1.0000 1.0000 1.0000
+Ka 0 0 0
+Ks 0 0 0
+d 1.00
+illum 1
