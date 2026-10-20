@@ -4,15 +4,18 @@
 //   mid   → <canvas> with the characters, positioned from each card's rect every frame
 //   front → title row (DOM), positioned from each slide's rect every frame
 const MODELS = '/models/'
+// Card backgrounds and the characters' body colours (see COLORS in lib/toys.ts) both come from the
+// site palette. Each pair is chosen so the character stands out. `ink` is the big number's colour.
+const DARK = '#00221A', LIGHT = '#ffffff'
 const ITEMS = [
-  { file: '01-lightweight-core',  name: 'Lightweight core',    bg: '#EDB955' },
-  { file: '02-fully-accessible',  name: 'Fully accessible',    bg: '#8546D2' },
-  { file: '03-3-css-effects',     name: '3 CSS effects',       bg: '#EC68A3' },
-  { file: '04-webgl-renderer',    name: 'WebGL renderer',      bg: '#1E1F26' },
-  { file: '05-10-plugins',        name: '10 plugins',          bg: '#467AEB' },
-  { file: '06-touch-smooth-drag', name: 'Touch & smooth drag', bg: '#5FC480' },
-  { file: '07-responsive',        name: 'Responsive',          bg: '#EE8244' },
-  { file: '08-typescript-strict', name: 'TypeScript strict',   bg: '#EC5A47' },
+  { file: '01-lightweight-core',  name: 'Lightweight core',    bg: '#0F766E', ink: LIGHT },
+  { file: '02-fully-accessible',  name: 'Fully accessible',    bg: '#CCFBF1', ink: DARK  },
+  { file: '03-3-css-effects',     name: '3 CSS effects',       bg: '#00221A', ink: LIGHT },
+  { file: '04-webgl-renderer',    name: 'WebGL renderer',      bg: '#005345', ink: LIGHT },
+  { file: '05-10-plugins',        name: '10 plugins',          bg: '#99F6E4', ink: DARK  },
+  { file: '06-touch-smooth-drag', name: 'Touch & smooth drag', bg: '#134E4A', ink: LIGHT },
+  { file: '07-responsive',        name: 'Responsive',          bg: '#E2E8F0', ink: DARK  },
+  { file: '08-typescript-strict', name: 'TypeScript strict',   bg: '#14B8A6', ink: DARK  },
 ]
 ---
 <section class="shapes">
@@ -20,7 +23,7 @@ const ITEMS = [
     <div id="shapes-slider">
       {ITEMS.map((it, i) => (
         <div class="shapes-slide" data-i={i} data-file={it.file} data-name={it.name}>
-          <div class="shapes-card" style={`background:${it.bg}`}>
+          <div class="shapes-card" style={`background:${it.bg}; --num:${it.ink}`}>
             <span class="shapes-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
           </div>
         </div>
@@ -58,7 +61,7 @@ const ITEMS = [
 .shapes-num {
   position: absolute; top: 4cqw; right: 5cqw;
   font-family: var(--font-head); font-weight: 700; font-size: 16cqw; line-height: 0.8; letter-spacing: -0.05em;
-  color: rgba(255, 255, 255, 0.92); pointer-events: none; user-select: none;
+  color: var(--num, #fff); pointer-events: none; user-select: none;
 }
 
 .shapes-stage .sliderkit__outer { padding-bottom: 56px; }

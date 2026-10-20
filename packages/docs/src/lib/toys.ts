@@ -136,6 +136,22 @@ function discMesh(r: number, y: number): number[] {
   return out
 }
 
+// Body colours from the site palette, per toy and per MTL material. Anything not listed keeps the
+// model's own colour (cheeks, glints, the RGB-shift copies...). Eyes, mouths and keyholes (`ink`) use
+// the palette's dark green in every toy. Remove an entry to get the original colour back.
+const COLORS: Record<string, Record<string, string>> = {
+  '01-lightweight-core':   { coreRed: '#99F6E4', feather: '#F0FDFA' },
+  '02-fully-accessible':   { plate: '#005345', keycap: '#14B8A6', liveRing: '#005345' },
+  '03-3-css-effects':      { cardFade: '#5EEAD4', cardFlip: '#F0FDFA', cardClip: '#14B8A6' },
+  '04-webgl-renderer':     { gem: '#E6F6F3' },
+  '05-10-plugins':         { socket: '#005345', plugBody: '#14B8A6', prong: '#E2E8F0', spark: '#005345' },
+  '06-touch-smooth-drag':  { blob: '#99F6E4', trail: '#99F6E4' },
+  '07-responsive':         { bezel: '#00221A', screen: '#14B8A6', uiBar: '#F0FDFA', stand: '#005345' },
+  '08-typescript-strict':  { lockBody: '#F0FDFA', shackle: '#00221A' },
+}
+const INK = '#00221A'
+const hex = (h: string): V3 => [parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255]
+
 const UNLIT = new Set(['glint', 'cheek', 'cheekLight', 'led', 'spark', 'sparkle'])
 
 // ── Animations ───────────────────────────────────────────────────────────────
@@ -431,7 +447,9 @@ export function createToys(gl: WebGLRenderingContext, names: string[], base: str
       })
     }
     for (const r of raw) {
-      const m = mtl[r.mat] ?? { kd: [0.8, 0.8, 0.8] as V3, d: 1 }
+      const own = mtl[r.mat] ?? { kd: [0.8, 0.8, 0.8] as V3, d: 1 }
+      const swap = r.mat === 'ink' ? INK : COLORS[name]?.[r.mat]
+      const m = swap ? { ...own, kd: hex(swap) } : own
       if (isCollapsed(r.tris)) {   // exported at scale 0: all vertices on one point, no normals
         const at: V3 = [r.tris[0]!, r.tris[1]!, r.tris[2]!]
         if (r.name === 'sparkle') push('sparkle', r.mat, [1, 1, 1], 1, octaMesh(0.11, at))

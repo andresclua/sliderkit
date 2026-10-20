@@ -29,5 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `hooks`: `beforeChange` reports the real outgoing slide and `onResize` the active breakpoint
 
 ### Changed
+- Docs site look: Space Grotesk (headlines) and DM Sans (body), self-hosted via fontsource; palette of dark green text, teal primary and dark-teal accent; Lucide line icons on the home feature cards. The eight home characters sit on cards from that palette. All docs-site dependencies: nothing changes in the published packages
 - README and docs rewritten against the real API (`axis`, `responsive`, `loop` default `true`, flex layout, plugin options)
 - Tests replaced: removed suites for modules that no longer exist, added `Events`, `arrows`, `hooks` and `smooth`
