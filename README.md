@@ -334,7 +334,7 @@ If SliderKit is useful to you, consider [sponsoring the development](https://git
 
 ## Author
 
-**Andrés Clúa** — frontend developer based in Barcelona.
+**Andrés Clúa** — frontend developer based in the Basque Country.
 
 - GitHub: [@andresclua](https://github.com/andresclua)
 - Web: [andresclua.com](https://andresclua.com)
