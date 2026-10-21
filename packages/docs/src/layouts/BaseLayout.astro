@@ -51,7 +51,8 @@ bstf.onload({
     s.src = 'https://www.googletagmanager.com/gtag/js?id=G-SLYSZRXSQ2'
     s.onload = () => {
       window.dataLayer = window.dataLayer || []
-      function gtag(...args: unknown[]) { window.dataLayer.push(args) }
+      // gtag.js only understands the `arguments` object, not an array
+      function gtag(..._args: unknown[]) { window.dataLayer.push(arguments) }
       gtag('js', new Date())
       gtag('config', 'G-SLYSZRXSQ2')
     }
