@@ -103,7 +103,7 @@ const items = slider.slides.map(slide => {
   fg.dataset.i = String(i)
   fg.innerHTML =
     `<div class="fg-space"></div>` +
-    `<div class="fg-info"><div class="fg-row"><span>"${d.name}"</span><span>SK / ${i + 1}</span></div></div>`
+    `<div class="fg-info"><div class="fg-row"><span>${d.name}</span><span>SK / ${i + 1}</span></div></div>`
   if (clone) { fg.setAttribute('aria-hidden', 'true'); fg.setAttribute('inert', '') }
   fgRoot.appendChild(fg)
   return { slide, card: slide.querySelector<HTMLElement>('.shapes-card')!, fg, i, w: 0, h: 0 }
