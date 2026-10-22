@@ -108,7 +108,7 @@ export default async function handler(request: Request, context: any): Promise<R
   } = null
 
   try {
-    if (env('NETLIFY') !== 'true') return tagged('skip:not-netlify', context.next())
+    // NETLIFY isn't set in the edge runtime, so only the API key is checked
     if (!env('KORYLA_API_KEY')) return tagged('skip:no-api-key', context.next())
 
     const url = new URL(request.url)
