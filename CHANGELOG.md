@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-10-22
+
+`@andresclua/sliderkit` 2.1.2 (adds the Claude Code skill) · `-effects` and `-webgl` 2.0.1 (metadata only).
+
+### Added
+- Claude Code skill for SliderKit, shipped in `@andresclua/sliderkit` under `skills/sliderkit`.
+
+### Fixed
+- `-effects` README documented four effects that are not exported yet (`cube`, `coverflow`, `cards`, `creative`) and a class table that did not match the code.
+- Removed `exports` and `files` entries pointing to folders that are never built (`./css/*` in all packages, `textures` and `src/scss` in `-webgl`).
+
 ## [2.2.0] - 2026-10-20
 
 `@andresclua/sliderkit` 2.1.2 · `@andresclua/sliderkit-plugins` 2.2.0 (`-effects` and `-webgl` are unchanged).
