@@ -5,3 +5,16 @@
 [build.environment]
   NODE_VERSION = "22"
   PNPM_VERSION = "9"
+
+# Koryla A/B test (homepage hero) — see netlify/edge-functions/koryla.ts
+[[edge_functions]]
+  function = "koryla"
+  path     = "/"
+
+[[edge_functions]]
+  function = "koryla"
+  path     = "/docs/getting-started"
+
+[[edge_functions]]
+  function = "koryla"
+  path     = "/docs/getting-started/"
