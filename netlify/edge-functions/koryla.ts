@@ -91,6 +91,16 @@ export function rewriteHero(html: string): string {
   return html
 }
 
+/** Adds an `x-koryla` header saying what the function did — handy to debug without edge logs. */
+async function tagged(reason: string, res: Promise<Response> | Response): Promise<Response> {
+  const r = await res
+  try {
+    const h = new Headers(r.headers)
+    h.set('x-koryla', reason.replace(/[^\x20-\x7e]/g, '?').slice(0, 120))
+    return new Response(r.body, { status: r.status, statusText: r.statusText, headers: h })
+  } catch { return r }
+}
+
 export default async function handler(request: Request, context: any): Promise<Response> {
   let decision: null | {
     experiment: any; variantId: string; isControl: boolean; isNew: boolean; sessionId: string
@@ -98,7 +108,8 @@ export default async function handler(request: Request, context: any): Promise<R
   } = null
 
   try {
-    if (env('NETLIFY') !== 'true' || !env('KORYLA_API_KEY')) return context.next()
+    if (env('NETLIFY') !== 'true') return tagged('skip:not-netlify', context.next())
+    if (!env('KORYLA_API_KEY')) return tagged('skip:no-api-key', context.next())
 
     const url = new URL(request.url)
     const host = url.hostname
@@ -117,12 +128,12 @@ export default async function handler(request: Request, context: any): Promise<R
         })
         context.waitUntil?.(p)
       }
-      return context.next()
+      return tagged('conversion-page', context.next())
     }
 
     // Hero page: assign a variant
     const experiment = experiments.find((e: any) => pathOf(e.base_url) === path)
-    if (!experiment) return context.next()
+    if (!experiment) return tagged(`skip:no-experiment (config:${experiments.length})`, context.next())
 
     const cookieName = `${COOKIE_PREFIX}${experiment.id}`
     let variantId = cookies[cookieName]
@@ -145,8 +156,8 @@ export default async function handler(request: Request, context: any): Promise<R
       experiment, variantId, isControl: !!variant.is_control, isNew, sessionId,
       cookieName, newSession: !cookies[SESSION_COOKIE], host,
     }
-  } catch {
-    return context.next()
+  } catch (e) {
+    return tagged(`error:${(e as Error)?.message ?? e}`, context.next())
   }
 
   const response: Response = await context.next()
@@ -172,5 +183,6 @@ export default async function handler(request: Request, context: any): Promise<R
   if (d.isNew) headers.append('Set-Cookie', `${d.cookieName}=${d.variantId}; Path=/; Max-Age=${maxAge}; SameSite=Lax`)
   if (d.newSession) headers.append('Set-Cookie', `${SESSION_COOKIE}=${d.sessionId}; Path=/; Max-Age=${60 * 60 * 24 * 365}; SameSite=Lax`)
 
+  headers.set('x-koryla', `${d.isControl ? 'control' : 'variant'}${d.isNew ? ':new' : ''}`)
   return new Response(body, { status: response.status, statusText: response.statusText, headers })
 }
