@@ -12,11 +12,17 @@
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
     },
-    "./css/*": "./dist/css/*",
     "./scss/*": "./src/scss/*"
   },
-  "files": ["dist", "src/scss", "README.md"],
-  "sideEffects": ["**/*.css", "**/*.scss"],
+  "files": [
+    "dist",
+    "src/scss",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
   "homepage": "https://sliderkit.andresclua.com/docs/effects",
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
@@ -31,7 +37,15 @@
     "typescript": "^5.4.5",
     "@andresclua/sliderkit": "workspace:*"
   },
-  "keywords": ["slider", "carousel", "sliderkit", "effects", "fade", "flip", "css"],
+  "keywords": [
+    "slider",
+    "carousel",
+    "sliderkit",
+    "effects",
+    "fade",
+    "flip",
+    "css"
+  ],
   "author": "Andres Clua",
   "license": "MIT",
   "repository": {

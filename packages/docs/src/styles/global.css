@@ -58,7 +58,7 @@ a { color: var(--brand); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 code {
-  font-family: 'Fira Code', 'Cascadia Code', 'Menlo', monospace;
+  font-family: ui-monospace, 'Cascadia Code', 'Menlo', monospace;
   font-size: 0.875em;
   background: var(--hover);
   padding: 2px 6px;

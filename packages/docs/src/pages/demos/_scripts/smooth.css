@@ -11,7 +11,7 @@
   color: #fff;
 }
 .smooth-card span {
-  font: 500 0.75rem/1 'Fira Code', ui-monospace, monospace;
+  font: 500 0.75rem/1 ui-monospace, monospace;
   letter-spacing: 0.04em;
 }
 .smooth-card h3 {

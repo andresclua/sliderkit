@@ -11,13 +11,16 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
-    },
-    "./css/*": "./dist/css/*",
-    "./scss/*": "./src/scss/*",
-    "./textures/*": "./textures/*"
+    }
   },
-  "files": ["dist", "src/scss", "textures", "README.md"],
-  "sideEffects": ["**/*.css", "**/*.scss"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
   "homepage": "https://sliderkit.andresclua.com/docs/plugins/webgl",
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
@@ -28,7 +31,9 @@
     "gsap": ">=3.0.0"
   },
   "peerDependenciesMeta": {
-    "gsap": { "optional": true }
+    "gsap": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "vite": "^5.2.12",
@@ -36,7 +41,15 @@
     "typescript": "^5.4.5",
     "@andresclua/sliderkit": "workspace:*"
   },
-  "keywords": ["slider", "carousel", "sliderkit", "webgl", "displacement", "shader", "glsl"],
+  "keywords": [
+    "slider",
+    "carousel",
+    "sliderkit",
+    "webgl",
+    "displacement",
+    "shader",
+    "glsl"
+  ],
   "author": "Andres Clua",
   "license": "MIT",
   "repository": {

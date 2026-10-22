@@ -1,6 +1,6 @@
 # @andresclua/sliderkit-webgl
 
-[![npm version](https://img.shields.io/npm/v/@andresclua/sliderkit-webgl?style=flat-square&color=7c3aed)](https://www.npmjs.com/package/@andresclua/sliderkit-webgl)
+[![npm version](https://img.shields.io/npm/v/@andresclua/sliderkit-webgl?style=flat-square&color=14B8A6)](https://www.npmjs.com/package/@andresclua/sliderkit-webgl)
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@andresclua/sliderkit-webgl?style=flat-square&label=gzip)](https://bundlephobia.com/package/@andresclua/sliderkit-webgl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 

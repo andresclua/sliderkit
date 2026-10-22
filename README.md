@@ -29,6 +29,17 @@ A modern, accessible, TypeScript-first slider library with WebGL effects, CSS tr
 
 ---
 
+## Claude Code skill
+
+The core package includes a skill that teaches Claude Code the SliderKit API (options, plugins, effects, WebGL, `smooth()`, required CSS and common pitfalls). Copy it into your project:
+
+```bash
+mkdir -p .claude/skills
+cp -r node_modules/@andresclua/sliderkit/skills/sliderkit .claude/skills/
+```
+
+It is also available as a [downloadable `.skill`](https://sliderkit.andresclua.com/sliderkit.skill).
+
 ## Installation
 
 ```bash

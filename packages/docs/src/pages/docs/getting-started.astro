@@ -82,6 +82,12 @@ new Slider('#my-slider', {"{"}
   ],
 {"}"})</code></pre>
 
+  <h2>Claude Code skill</h2>
+  <p>SliderKit ships a skill for <a href="https://docs.claude.com/en/docs/claude-code/skills" target="_blank" rel="noopener">Claude Code</a> that teaches it the real API: options and defaults, plugins, effects, WebGL, <code>smooth()</code>, the required CSS and the usual mistakes. It's included in the core package; copy it into your project:</p>
+  <pre><code>mkdir -p .claude/skills
+cp -r node_modules/@andresclua/sliderkit/skills/sliderkit .claude/skills/</code></pre>
+  <p>Or <a href="/sliderkit.skill" download>download <code>sliderkit.skill</code></a> and unzip it into <code>.claude/skills/</code> (or <code>~/.claude/skills/</code> to have it in every project).</p>
+
   <h2>Next steps</h2>
   <ul>
     <li><a href="/docs/options">All options</a></li>

@@ -12,12 +12,12 @@
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
     },
-    "./css/*": "./dist/css/*",
     "./scss/*": "./src/scss/*"
   },
   "files": [
     "dist",
     "src/scss",
+    "skills",
     "README.md"
   ],
   "homepage": "https://sliderkit.andresclua.com",
