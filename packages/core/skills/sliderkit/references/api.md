@@ -60,6 +60,7 @@ Custom plugin shape: `{ name: string, install(slider), destroy() }`, usually ret
 | `thumbs()` | `container` (required: element whose children are the thumbs), `activeClass` (`'sliderkit__thumb--active'`) |
 | `hooks({...})` | `onInit({slides, slider})`, `beforeChange({outgoing, incoming, direction})`, `afterChange({slide, direction})`, `onDragStart`, `onDragEnd`, `onResize({breakpoint, items})`, `beforeDestroy` |
 | `smooth()` | see below |
+| `marquee({...})` | `speed` (`60`, px/s), `direction: 'left' \| 'right'` (`'left'`), `pauseOnHover` (`true`), `hoverSpeed` (px/s under the cursor, eased; overrides `pauseOnHover`), `pauseOnFocus` (`true`), `draggable` (`false`) |
 
 ## Effects (`@andresclua/sliderkit-effects`)
 
@@ -83,6 +84,12 @@ new Slider('#s', { items: 1, speed: 0, plugins: [webgl({ effect: 'displacement',
 `webgl()` options: `effect` (`'displacement' | 'rgb-shift' | 'radial' | 'custom'`, required), `assets` (required), `duration` (`900` ms), `intensity` (`0.08`), `easing` (`(t) => number`, cubic ease-in-out), `frag` (GLSL fragment source, required for `'custom'`), `uniforms` (`Record<string, number | number[] | () => unknown>`, injected each frame).
 
 `displacement` needs a greyscale map; `rgb-shift` and `radial` do not. Keep `items: 1` and `speed: 0`.
+
+## marquee()
+
+A strip that moves all the time. Needs `loop: true`, `touch: false`, `mouseDrag: false` and `speed: 0`; the plugin moves the track itself. Use `autoWidth: true` for slides of different widths (tags, logos, headlines); otherwise slides share the width from `items`. The slides plus the clones must be wider than the viewport, so repeat the slides if there are few. It pauses off screen and does not start under `prefers-reduced-motion: reduce`. Horizontal only.
+
+`hoverSpeed: 0` stops it under the cursor, a bigger number speeds it up, both eased. `draggable: true` follows the pointer and keeps its momentum on release.
 
 ## smooth()
 

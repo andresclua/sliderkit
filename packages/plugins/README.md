@@ -100,6 +100,18 @@ smooth({
 
 Options: `preset`, `lerp`, `inertia`, `snap`, `maxFling`, `dragSpeed`, `wheel`, `wheelSpeed`, `snapDelay`, `dragThreshold`, `skew`, `onUpdate`, `raf`. [Full reference →](https://sliderkit.andresclua.com/docs/plugins/smooth)
 
+### `marquee()`
+An endless strip that never stops, like the old `<marquee>` tag. Speed is in pixels per second; it pauses under the cursor by default, or eases to `hoverSpeed`. `draggable: true` lets you drag it, and it eases back to its own speed on release. Use `autoWidth: true` for slides of different widths. Needs `loop: true`, `touch: false` and `mouseDrag: false`. Stays still with `prefers-reduced-motion`.
+
+```typescript
+marquee({ speed: 50 })                                   // pauses on hover
+marquee({ speed: 50, hoverSpeed: 300 })                  // faster under the cursor
+marquee({ speed: 50, draggable: true })                  // drag either way
+marquee({ speed: 120, direction: 'right', pauseOnHover: false })
+```
+
+Options: `speed` (`60`), `direction` (`'left'`), `pauseOnHover` (`true`), `hoverSpeed`, `pauseOnFocus` (`true`), `draggable` (`false`). [Full reference →](https://sliderkit.andresclua.com/docs/plugins/marquee)
+
 ### `mouseWheel()`
 Navigate with the scroll wheel, one slide per gesture. For smooth, continuous trackpad scroll see `smooth()`.
 

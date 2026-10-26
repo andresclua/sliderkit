@@ -1,6 +1,6 @@
 ---
 name: sliderkit
-description: How to build sliders and carousels with SliderKit (@andresclua/sliderkit, -plugins, -effects, -webgl), a small TypeScript slider library with a plugin system. Use this skill whenever the user wants a slider, carousel, swiper, gallery, testimonial rotator or hero slideshow in a project that uses or could use SliderKit, mentions `new Slider(`, `@andresclua/sliderkit`, `sliderkit__` classes, or asks for fade/flip/clip-path transitions, WebGL slide transitions, smooth drag with inertia, arrows, pagination dots, autoplay, thumbnails or keyboard/a11y support for a slider. Also use it when migrating from Tiny Slider, since SliderKit ports its engine but renames the API.
+description: How to build sliders and carousels with SliderKit (@andresclua/sliderkit, -plugins, -effects, -webgl), a small TypeScript slider library with a plugin system. Use this skill whenever the user wants a slider, carousel, swiper, gallery, testimonial rotator or hero slideshow in a project that uses or could use SliderKit, mentions `new Slider(`, `@andresclua/sliderkit`, `sliderkit__` classes, or asks for a marquee, ticker or endless scrolling strip, fade/flip/clip-path transitions, WebGL slide transitions, smooth drag with inertia, arrows, pagination dots, autoplay, thumbnails or keyboard/a11y support for a slider. Also use it when migrating from Tiny Slider, since SliderKit ports its engine but renames the API.
 ---
 
 # SliderKit
@@ -10,7 +10,7 @@ SliderKit is a slider engine: a small core that does the sliding (a faithful Typ
 | Package | Owns |
 |---|---|
 | `@andresclua/sliderkit` | `Slider`, layout, loop/rewind, responsive breakpoints, touch, events |
-| `@andresclua/sliderkit-plugins` | `arrows`, `pagination`, `autoplay`, `a11y`, `keyboard`, `mouseWheel`, `progress`, `thumbs`, `hooks`, `smooth` |
+| `@andresclua/sliderkit-plugins` | `arrows`, `pagination`, `autoplay`, `a11y`, `keyboard`, `mouseWheel`, `progress`, `thumbs`, `hooks`, `smooth`, `marquee` |
 | `@andresclua/sliderkit-effects` | `fadeEffect`, `flipEffect`, `clipPathEffect` |
 | `@andresclua/sliderkit-webgl` | `webgl` + `preloadWebGL` (GPU transitions) |
 
@@ -65,6 +65,7 @@ When a user says "my slider is stacked / not sliding / shows odd text", check th
 - **Fade, flip or clip-path reveal** – an effect from `-effects`, passed in `plugins`. Use `items: 1`.
 - **Image transitions with shaders** – `-webgl`. Requires `items: 1` and `speed: 0` because the plugin owns the animation, and images must be preloaded with `preloadWebGL()` first.
 - **Draggable with lerp and inertia, trackpad scroll, skew while moving** – `smooth()`. Pass `touch: false, mouseDrag: false` so the core's own drag doesn't fight it. Horizontal only.
+- **Endless strip that never stops (logos, tags, tickers, like `<marquee>`)** – `marquee({ speed })` in px/s. Pass `loop: true, touch: false, mouseDrag: false, speed: 0`; add `autoWidth: true` when slides have different widths, `hoverSpeed` to speed up or slow down under the cursor, `draggable: true` to let people drag it. No `items: 1` or autoplay needed.
 - **Run your own code on slide changes (GSAP, analytics)** – `hooks()` for lifecycle callbacks, or `slider.on('indexChanged', ...)`.
 - **Drive visuals from drag velocity** – `smooth({ onUpdate })`, which runs every frame with `velocity`, `position`, `progress` and `positions[]`.
 

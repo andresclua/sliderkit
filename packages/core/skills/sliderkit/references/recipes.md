@@ -150,6 +150,22 @@ export function Carousel({ children }: { children: React.ReactNode }) {
 
 The library moves and clones DOM nodes, so render the slides once and don't let React re-render the children after init. Mount a fresh slider (change the component `key`) when the slide list changes.
 
+## Endless marquee
+
+```typescript
+import { Slider } from '@andresclua/sliderkit'
+import { marquee } from '@andresclua/sliderkit-plugins'
+
+new Slider('#tags', {
+  autoWidth: true,                          // each slide as wide as its content
+  loop: true,
+  touch: false, mouseDrag: false, speed: 0, // marquee() moves the track itself
+  plugins: [marquee({ speed: 50, hoverSpeed: 200, draggable: true })],
+})
+```
+
+Give the slides `white-space: nowrap` and some horizontal padding. Without `autoWidth`, use `items` and every slide gets the same width.
+
 ## Migrating from Tiny Slider
 
 SliderKit keeps Tiny Slider's engine, so layout options carry over by name: `items`, `gutter`, `edgePadding`, `fixedWidth`, `autoWidth`, `slideBy`, `center`, `loop`, `rewind`, `autoHeight`, `responsive`, `speed`, `startIndex`, `mouseDrag`, `touch`.

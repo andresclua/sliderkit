@@ -1,6 +1,6 @@
 {
   "name": "@andresclua/sliderkit",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "SliderKit core engine — accessible, TypeScript-first slider",
   "type": "module",
   "main": "./dist/index.umd.js",

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-10-26
+
+`@andresclua/sliderkit-plugins` 2.3.0 · `@andresclua/sliderkit` 2.1.3 (skill update only).
+
+### Added
+- `marquee()` plugin: an endless strip that never stops, like the old `<marquee>` tag. `speed` in px/s, `direction`, `pauseOnHover`, `hoverSpeed` (eased speed-up or slow-down under the cursor), `pauseOnFocus` and `draggable` (drag either way, keeps its momentum, eases back to its own speed). Works with `autoWidth: true` for slides of different widths. Pauses off screen and does not start under `prefers-reduced-motion`
+- Demos at `/demos/marquee` (pause, speed up on hover, draggable, images, images of different widths, wide and narrow slides, text ticker, logos, right to left) and docs at `/docs/plugins/marquee`
+- The Claude Code skill covers `marquee()`
+
 ## [2.2.1] - 2026-10-22
 
 `@andresclua/sliderkit` 2.1.2 (adds the Claude Code skill) · `-effects` and `-webgl` 2.0.1 (metadata only).
