@@ -48,7 +48,7 @@ import i_lock from 'lucide-static/icons/lock-keyhole.svg?raw'
       <div class="hero-stats">
         <div class="stat"><strong>~10 KB</strong><span>core (gzip)</span></div>
         <div class="stat-sep"></div>
-        <div class="stat"><strong>10</strong><span>plugins</span></div>
+        <div class="stat"><strong>11</strong><span>plugins</span></div>
         <div class="stat-sep"></div>
         <div class="stat"><strong>3</strong><span>CSS effects</span></div>
         <div class="stat-sep"></div>
@@ -72,7 +72,7 @@ import i_lock from 'lucide-static/icons/lock-keyhole.svg?raw'
             { icon: i_accessibility, title: 'Fully accessible', desc: 'ARIA roles, live regions, roledescription, keyboard navigation, and prefers-reduced-motion out of the box.' },
             { icon: i_palette, title: '3 CSS effects', desc: 'Fade, flip, and clip-path — all pure CSS, no JavaScript animations required.' },
             { icon: i_sparkles, title: 'WebGL renderer', desc: 'Raw WebGL, no dependencies. Displacement map warp, RGB-shift chromatic aberration, radial reveal, and custom GLSL shaders.' },
-            { icon: i_plug, title: '10 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, smooth drag, mouse wheel, keyboard, progress, accessibility, and hooks.' },
+            { icon: i_plug, title: '11 plugins', desc: 'Autoplay, arrows, pagination, thumbnails, smooth drag, marquee, mouse wheel, keyboard, progress, accessibility, and hooks.' },
             { icon: i_move, title: 'Touch & smooth drag', desc: 'Swipe on touch and mouse, or add the smooth plugin for lerped drag with inertia, trackpad scroll, presets and an onUpdate hook for your own effects.' },
             { icon: i_device, title: 'Responsive', desc: 'Change any option at any viewport width. ResizeObserver powered — no window resize hacks.' },
             { icon: i_lock, title: 'TypeScript strict', desc: 'Fully typed API, typed event payloads, typed plugin interface. No any escape hatches anywhere.' },
@@ -139,7 +139,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
         <div class="package-grid">
           {[
             { name: '@andresclua/sliderkit', badge: 'Core', color: '#0F766E', bg: '#CCFBF1', desc: 'The slider engine. Touch, drag, keyboard, infinite loop, breakpoints, a11y, events, and plugin system.' },
-            { name: '@andresclua/sliderkit-plugins', badge: 'Plugins', color: '#2563EB', bg: '#dbeafe', desc: '10 plugins. Arrows, pagination, autoplay, thumbnails, smooth drag, mouse wheel, keyboard, progress, accessibility, and hooks.' },
+            { name: '@andresclua/sliderkit-plugins', badge: 'Plugins', color: '#2563EB', bg: '#dbeafe', desc: '11 plugins. Arrows, pagination, autoplay, thumbnails, smooth drag, marquee, mouse wheel, keyboard, progress, accessibility, and hooks.' },
             { name: '@andresclua/sliderkit-effects', badge: 'Effects', color: '#4F46E5', bg: '#E0E7FF', desc: '6 CSS transition effects. Fade, cube, coverflow, flip, cards, and creative — zero JS animations.' },
             { name: '@andresclua/sliderkit-webgl', badge: 'WebGL', color: '#D97706', bg: '#fef3c7', desc: 'Raw WebGL renderer. 3 built-in shader effects (displacement, RGB-shift, radial) plus a custom GLSL API with automatic fallback.' },
           ].map(p => (

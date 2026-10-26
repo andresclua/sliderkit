@@ -123,6 +123,14 @@ export const DEMOS: DemoEntry[] = [
     group: 'input',
   },
   {
+    slug: 'marquee',
+    label: 'Marquee',
+    title: 'Marquee',
+    description: 'A strip that never stops moving, like the old <marquee> tag, at a speed in pixels per second. Pauses on hover, focus and when off screen.',
+    tags: ['plugin', 'marquee', 'ticker', 'infinite', 'continuous', 'speed'],
+    group: 'input',
+  },
+  {
     slug: 'mouse-wheel',
     label: 'Mouse Wheel',
     title: 'Mouse Wheel',

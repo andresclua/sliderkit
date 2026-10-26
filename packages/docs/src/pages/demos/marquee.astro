@@ -1,0 +1,87 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+import cssCode from './_scripts/marquee.css?raw'
+import { DEMOS } from './_scripts/marquee-demos.js'
+
+const WORDS = [
+  ['Fast', '#005345'], ['Small', '#0F766E'], ['Typed', '#115E59'], ['Accessible', '#00221A'],
+  ['Plugins', '#134E4A'], ['WebGL', '#0B7A70'], ['Open source', '#003A30'], ['Yours', '#0D9488'],
+]
+const chips = ['TypeScript', 'Accessible', 'Tree-shakeable', 'Plugins', 'WebGL', 'Effects', 'Smooth drag', 'Marquee', 'Autoplay', 'Thumbs', 'Keyboard', 'Hooks']
+const logos = ['ACME', 'NORTHWIND', 'ATLAS', 'PIXELFORGE', 'ORBIT', 'LUMEN LABS', 'VERTEX', 'NOVA']
+const cards = [['Mountains', 1], ['Coast', 2], ['Forest', 3], ['City', 4], ['Desert', 5]]
+const wrap = (id: string, inner: string[]) => `<div id="${id}">\n${inner.join('\n')}\n</div>`
+const slide = (inner: string) => `  <div class="marquee-slide">${inner}</div>`
+const BUILD: Record<string, (id: string) => string> = {
+  pills:  id => wrap(id, WORDS.map(([t, c]) => slide(`<div class="marquee-pill" style="background:${c}">${t}</div>`))),
+  images: id => wrap(id, [1, 2, 3, 4, 5].map(n => slide(`<img class="marquee-img" src="/webgl/slide-${n}.jpg" alt="" />`))),
+  gallery: id => wrap(id, [[1, 200], [2, 340], [3, 260], [4, 400], [5, 300], [3, 220]].map(([n, w]) => slide(`<img class="marquee-photo" src="/webgl/slide-${n}.jpg" width="${w}" height="220" alt="" />`))),
+  wide:   id => wrap(id, cards.map(([t, n]) => slide(`<div class="marquee-card"><img src="/webgl/slide-${n}.jpg" alt="" /><span>${t}</span></div>`))),
+  narrow: id => wrap(id, chips.map(t => slide(`<div class="marquee-chip">${t}</div>`))),
+  text:   id => wrap(id, ['Build sliders', 'that actually work', 'in about 10 KB', 'with no dependencies'].map((t, i) => slide(`<div class="marquee-text">${t} <b>${i % 2 ? '•' : '→'}</b></div>`))),
+  logos:  id => wrap(id, logos.map(t => slide(`<div class="marquee-logo">${t}</div>`))),
+}
+// what the viewer shows: the same markup with a plain id, and the code built from the demo's own config
+const show = (html: string, id: string) => html.replace(id, 'my-slider')
+const lit = (o: Record<string, unknown>) => '{ ' + Object.entries(o).map(([k, v]) => `${k}: ${typeof v === 'string' ? `'${v}'` : v}`).join(', ') + ' }'
+const code = (d: (typeof DEMOS)[number]) => {
+  const bp = d.autoWidth ? '' : Object.entries(d.bp).map(([w, n]) => `${w}: { items: ${n} }`).join(', ')
+  const width = d.autoWidth ? '  autoWidth: true,' : `  items: ${d.items},\n  responsive: { ${bp} },`
+  return `import { Slider } from '@andresclua/sliderkit'
+import { marquee } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+${width}
+  loop: true,
+  touch: false,
+  mouseDrag: false,
+  speed: 0,
+  plugins: [marquee(${lit(d.marquee)})],
+})`
+}
+// the shown CSS is only the rules that demo uses
+const rules = cssCode.split(/\n(?=\.)/)
+const cssFor = (...names: string[]) => rules.filter(r => names.some(n => r.startsWith('.' + n))).join('\n')
+
+const INFO: Record<string, { title: string; build: string; css: string[]; desc: string }> = {
+  pause:  { title: 'Pause on hover', build: 'pills', css: ['marquee-slide', 'marquee-pill'],
+    desc: 'The marquee() plugin keeps the strip moving forever, like the old <marquee> tag, at a speed in pixels per second. By default it stops under the cursor and while something inside has focus. It also pauses off screen, and stays still if the visitor prefers reduced motion.' },
+  hover:  { title: 'Speed up on hover', build: 'pills', css: ['marquee-slide', 'marquee-pill'],
+    desc: 'hoverSpeed sets the speed under the cursor: 300 px/s here against 50 px/s normally. It eases in and out, so there is no jump. Use 0 to stop, or a lower number to slow down.' },
+  drag:   { title: 'Marquee + draggable', build: 'pills', css: ['marquee-slide', 'marquee-pill'],
+    desc: 'draggable: true lets you grab it and drag in either direction. It follows the pointer, keeps its momentum when you let go and eases back to its own speed.' },
+  images: { title: 'With images', build: 'images', css: ['marquee-slide', 'marquee-img'],
+    desc: 'The slides can be anything: here, placeholder photos. It runs on its own and you can still drag it.' },
+  gallery: { title: 'Images of different widths', build: 'gallery', css: ['marquee-slide', 'marquee-photo'],
+    desc: 'A gallery with the same height and a different width for every photo. autoWidth: true takes each width from the image itself, so portrait, square and panoramic shots sit side by side.' },
+  wide:   { title: 'Wide slides', build: 'wide', css: ['marquee-slide', 'marquee-card'],
+    desc: 'items: 1 makes each slide as wide as the strip (two on larger screens). Big cards with a caption, draggable.' },
+  narrow: { title: 'Narrow slides', build: 'narrow', css: ['marquee-slide', 'marquee-chip'],
+    desc: 'autoWidth: true lets every slide be as wide as its content, so short and long labels sit side by side with no gaps and no overlap. Slow and quiet, like a tag cloud.' },
+  text:   { title: 'Text ticker', build: 'text', css: ['marquee-slide', 'marquee-text'],
+    desc: 'Big headlines in a ticker. With autoWidth: true each slide is exactly as wide as its text, whatever its length.' },
+  logos:  { title: 'Logos that stop on hover', build: 'logos', css: ['marquee-slide', 'marquee-logo'],
+    desc: 'The classic logo wall, with logos of different widths: slow, and hoverSpeed: 0 stops it under the cursor so people can read or click.' },
+  right:  { title: 'Left to right, never pauses', build: 'pills', css: ['marquee-slide', 'marquee-pill'],
+    desc: "direction: 'right' reverses it, and pauseOnHover: false keeps it going under the pointer." },
+}
+---
+<DemoLayout title="Marquee">
+  {DEMOS.map(d => {
+    const id = `demo-marquee-${d.id}`
+    const i = INFO[d.id]!
+    const html = BUILD[i.build]!(id)
+    return (
+      <DemoViewer title={i.title} description={i.desc} html={show(html, id)} css={cssFor(...i.css)} js={code(d)}>
+        <Fragment set:html={html} />
+      </DemoViewer>
+    )
+  })}
+</DemoLayout>
+
+<style is:global set:html={cssCode}></style>
+
+<script>
+import './_scripts/marquee.js'
+</script>

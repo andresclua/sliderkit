@@ -27,3 +27,6 @@ export type { HooksContext } from './hooks'
 
 export { smooth, smoothPresets } from './smooth'
 export type { SmoothOptions, SmoothPlugin, SmoothPreset, SmoothSkewOptions } from './smooth'
+
+export { marquee } from './marquee'
+export type { MarqueeOptions } from './marquee'

@@ -57,6 +57,7 @@ export const docsNav: NavGroup[] = [
       { label: 'Autoplay',      href: '/docs/plugins/autoplay' },
       { label: 'Mouse Wheel',   href: '/docs/plugins/mouseWheel' },
       { label: 'Smooth Drag',   href: '/docs/plugins/smooth' },
+      { label: 'Marquee',       href: '/docs/plugins/marquee' },
       { label: 'Keyboard',      href: '/docs/plugins/keyboard' },
       { label: 'Accessibility', href: '/docs/plugins/a11y' },
     ],

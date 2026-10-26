@@ -1,0 +1,61 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro'
+---
+<DocsLayout title="Marquee Plugin">
+  <h1>Marquee</h1>
+  <p class="lead">An endless strip that moves all the time, like the old <code>&lt;marquee&gt;</code> tag, at the speed you choose. Logos, tickers, tag clouds.</p>
+
+  <h2>Import</h2>
+  <pre><code>import {"{"} marquee {"}"} from '@andresclua/sliderkit-plugins'</code></pre>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>speed</code></td><td>number</td><td><code>60</code></td><td>Pixels per second.</td></tr>
+      <tr><td><code>direction</code></td><td><code>'left' | 'right'</code></td><td><code>'left'</code></td><td>Which way the content travels.</td></tr>
+      <tr><td><code>pauseOnHover</code></td><td>boolean</td><td><code>true</code></td><td>Stop while the cursor is over the strip.</td></tr>
+      <tr><td><code>hoverSpeed</code></td><td>number</td><td>—</td><td>Pixels per second under the cursor, eased in and out. Faster, slower or <code>0</code>. Overrides <code>pauseOnHover</code>.</td></tr>
+      <tr><td><code>pauseOnFocus</code></td><td>boolean</td><td><code>true</code></td><td>Stop while something inside has keyboard focus.</td></tr>
+      <tr><td><code>draggable</code></td><td>boolean</td><td><code>false</code></td><td>Drag it sideways with pointer or touch. It keeps its momentum on release and eases back to <code>speed</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Basic example</h2>
+  <pre><code>import {"{"} Slider {"}"} from '@andresclua/sliderkit'
+import {"{"} marquee {"}"} from '@andresclua/sliderkit-plugins'
+
+new Slider('#logos', {"{"}
+  items: 4,
+  loop: true,
+  touch: false,
+  mouseDrag: false,
+  speed: 0,
+  plugins: [marquee({"{"} speed: 50 {"}"})],
+{"}"})</code></pre>
+
+  <h2>Speed up on hover, and drag</h2>
+  <pre><code>marquee({"{"} speed: 50, hoverSpeed: 300 {"}"})      // faster under the cursor
+marquee({"{"} speed: 50, draggable: true {"}"})      // grab it and drag either way</code></pre>
+
+  <h2>Slides of different widths</h2>
+  <pre><code>new Slider('#tags', {"{"}
+  autoWidth: true,
+  loop: true, touch: false, mouseDrag: false, speed: 0,
+  plugins: [marquee({"{"} speed: 40 {"}"})],
+{"}"})</code></pre>
+
+  <h2>Behaviour notes</h2>
+  <ul>
+    <li>Needs <code>loop: true</code> and more slides than <code>items</code>. With only a few slides, repeat them in the HTML so the strip is wider than the viewport.</li>
+    <li>Set <code>touch: false</code> and <code>mouseDrag: false</code>: the plugin moves the track itself, so the core's drag would fight it. For dragging, use <code>draggable: true</code>. For dragging, use <code>draggable: true</code>.</li>
+    <li>Every real slide stays reachable by keyboard and screen readers, because they all pass through the view. The loop clones stay hidden.</li>
+    <li>The loop only runs while the strip is on screen and not paused, and it does not start if the visitor has <code>prefers-reduced-motion: reduce</code>.</li>
+    <li>Slides can have different widths: set <code>autoWidth: true</code> and each one is as wide as its content (tags, logos, headlines). The plugin measures the real length of one loop, so nothing overlaps. Without it, slides share the width given by <code>items</code>.</li>
+    <li>The slides plus the loop clones must be wider than the viewport. With <code>autoWidth</code> and just a few short slides, repeat them in the HTML.</li>
+    <li>Horizontal only.</li>
+  </ul>
+
+  <h2>Demo</h2>
+  <ul><li><a href="/demos/marquee">Marquee demos</a></li></ul>
+</DocsLayout>
