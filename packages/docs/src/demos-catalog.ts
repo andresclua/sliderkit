@@ -67,6 +67,14 @@ export const DEMOS: DemoEntry[] = [
     group: 'layout',
   },
   {
+    slug: 'scaled-peek',
+    label: 'Scaled Peek',
+    title: 'Scaled Peek',
+    description: 'Active card at full size, the next one peeking in smaller. Pure CSS on the active class.',
+    tags: ['core', 'dots', 'scale', 'peek'],
+    group: 'layout',
+  },
+  {
     slug: 'center',
     label: 'Center Mode',
     title: 'Center Mode',

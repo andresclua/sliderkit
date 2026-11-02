@@ -1,0 +1,63 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Scaled Peek">
+  <DemoViewer
+    title="Scaled Peek"
+    description="The active card is full size and the next one peeks in smaller. The scale is plain CSS on the active class: no plugin needed."
+    html={`<div class="peek">
+<div id="my-slider">
+  <div><div class="peek-card" style="background:#00221A;color:#fff"><h3>Receive with ease.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="peek-card" style="background:#E6F6F3;color:#00221A"><h3>Hold with confidence.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="peek-card" style="background:#0F766E;color:#fff"><h3>Spend anywhere.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="peek-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
+</div>
+</div>`}
+    css={`.peek { overflow: hidden; }
+.peek .sliderkit__outer { width: 80%; background: none; border-radius: 0; }  /* the slide is 80% wide, the next one peeks in the other 20% */
+.peek .sliderkit__overflow { overflow: visible; }
+.peek-card { height: 340px; margin-right: 16px; padding: 28px; border-radius: 28px; transform: scale(.82); transform-origin: left bottom; transition: transform .35s ease, opacity .35s; opacity: .6; }
+.sliderkit__item--active .peek-card { transform: scale(1); opacity: 1; }
+
+.peek-card h3 { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { pagination } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  speed: 400,
+  plugins: [pagination({ type: 'dots', clickable: true })],
+})`}
+  >
+    <div class="peek"><div id="demo-peek">
+      <div><div class="peek-card" style="background:#00221A;color:#fff"><h3>Receive with ease.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="peek-card" style="background:#E6F6F3;color:#00221A"><h3>Hold with confidence.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="peek-card" style="background:#0F766E;color:#fff"><h3>Spend anywhere.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="peek-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
+    </div></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style is:global>
+.peek { overflow: hidden; }
+.peek .sliderkit__outer { width: 80%; background: none; border-radius: 0; }  /* the slide is 80% wide, the next one peeks in the other 20% */
+.peek .sliderkit__overflow { overflow: visible; }
+.peek-card { height: 340px; margin-right: 16px; padding: 28px; border-radius: 28px; transform: scale(.82); transform-origin: left bottom; transition: transform .35s ease, opacity .35s; opacity: .6; }
+.sliderkit__item--active .peek-card { transform: scale(1); opacity: 1; }
+
+.peek-card h3 { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
+</style>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { pagination } from '@andresclua/sliderkit-plugins'
+
+new Slider('#demo-peek', {
+  items: 1,
+  loop: true,
+  speed: 400,
+  plugins: [pagination({ type: 'dots', clickable: true })],
+})
+</script>
