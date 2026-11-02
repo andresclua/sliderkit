@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-11-02
+
+`@andresclua/sliderkit-plugins` 2.4.0 · `@andresclua/sliderkit` 2.1.4 (skill update only).
+
+### Added
+- `marquee()`: `scrollBoost` option. It adds speed while the page scrolls (px/s per px/s of scroll, capped), then eases back. Off by default
+- Demos: "Speeds up when you scroll" in `/demos/marquee` and "Scaled Peek" (active card full size, the next one smaller, all aligned to the base)
+
 ## [2.3.0] - 2026-10-26
 
 `@andresclua/sliderkit-plugins` 2.3.0 · `@andresclua/sliderkit` 2.1.3 (skill update only).
