@@ -171,7 +171,7 @@ new Slider('#my-slider', {
 | `progress()` | `container` | Progress bar; mounted after the slider if no `container`. |
 | `mouseWheel()` | `threshold` (120), `invert` | Calls `preventDefault` on wheel events over the slider. |
 | `smooth()` | `preset` (`'smooth' \| 'snappy' \| 'floaty' \| 'free'`), `lerp`, `inertia`, `snap`, `maxFling`, `dragSpeed`, `wheel`, `wheelSpeed`, `snapDelay`, `dragThreshold`, `skew`, `onUpdate`, `raf` | Smooth drag + horizontal trackpad scroll with lerp, inertia and optional velocity skew. Use with `touch: false, mouseDrag: false`. |
-| `marquee()` | `speed` (60 px/s), `direction: 'left' \| 'right'`, `pauseOnHover` (`true`), `hoverSpeed`, `pauseOnFocus` (`true`), `draggable` (`false`) | Endless strip that never stops, like the old `<marquee>`. Works with `autoWidth: true` for slides of different widths. Use with `touch: false, mouseDrag: false`. |
+| `marquee()` | `speed` (60 px/s), `direction: 'left' \| 'right'`, `pauseOnHover` (`true`), `hoverSpeed`, `pauseOnFocus` (`true`), `draggable` (`false`), `scrollBoost` | Endless strip that never stops, like the old `<marquee>`. Works with `autoWidth: true` for slides of different widths. Use with `touch: false, mouseDrag: false`. |
 | `keyboard()` | `focusable` (default `true`) | ←/→ (↑/↓ if vertical) when the slider has focus. |
 | `a11y()` | `containerLabel`, `slideLabel` | Carousel roles/labels, and `tabindex="-1"` on focusable elements inside inactive slides. |
 | `hooks()` | see below | Convenience callbacks, handy for GSAP. |

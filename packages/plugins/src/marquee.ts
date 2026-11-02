@@ -7,11 +7,13 @@ export interface MarqueeOptions {
   hoverSpeed?:   number                 // px per second under the cursor, eased: faster, slower or 0. Overrides pauseOnHover
   pauseOnFocus?: boolean                // stop while something inside has focus (default true)
   draggable?:    boolean                // drag it sideways; it eases back to `speed` on release (default false)
+  scrollBoost?:  number                 // extra speed while the page scrolls: px/s added per px/s of scroll (default 0 = off; try 0.5)
 }
 
 const mod = (a: number, m: number): number => ((a % m) + m) % m
 const EASE = 0.06          // how fast the speed catches up with its target, per 60fps frame
 const MAX_FLING = 4000     // px/s
+const MAX_BOOST = 2000     // px/s, cap on what scrolling can add
 
 // A continuous, never-ending strip. Needs `loop: true` and more slides than `items`;
 // use with `touch: false, mouseDrag: false`. Respects prefers-reduced-motion (stays still).
@@ -23,6 +25,7 @@ export function marquee(opts: MarqueeOptions = {}): SliderPlugin {
   const hoverTo   = opts.hoverSpeed ?? (opts.pauseOnHover ?? true ? 0 : speed)
   const onFocus   = opts.pauseOnFocus ?? true
   const draggable = opts.draggable ?? false
+  const boostBy   = opts.scrollBoost ?? 0
 
   let slider: SliderInstance
   let styleEl: HTMLStyleElement
@@ -33,6 +36,7 @@ export function marquee(opts: MarqueeOptions = {}): SliderPlugin {
   let rafId = 0
   let hovering = false, focused = false, dragging = false, visible = true
   let startX = 0, lastX = 0, lastT = 0, moved = 0
+  let scrollY = 0, scrollT = 0, scrollV = 0   // page scroll speed in px/s, and when it was last seen
 
   const clones = () => (slider.slides.length - slider.slideCount) / 2
   // width of one full turn: from the first real slide to its first clone at the end
@@ -40,7 +44,8 @@ export function marquee(opts: MarqueeOptions = {}): SliderPlugin {
     const a = slider.slides[clones()], b = slider.slides[clones() + slider.slideCount]
     return a && b ? b.offsetLeft - a.offsetLeft : 0
   }
-  const target = () => sign * (focused ? 0 : hovering ? hoverTo : speed)
+  const boost = () => (performance.now() - scrollT < 120 ? Math.min(scrollV * boostBy, MAX_BOOST) : 0)
+  const target = () => sign * (focused ? 0 : (hovering ? hoverTo : speed) + boost())
 
   function write(): void {
     const first = slider.slides[clones()]!
@@ -97,6 +102,12 @@ export function marquee(opts: MarqueeOptions = {}): SliderPlugin {
     last = 0
     run()
   }
+  const onScroll = (): void => {
+    const now = performance.now(), dt = (now - scrollT) / 1000, y = window.scrollY
+    if (scrollT && dt > 0) scrollV += (Math.abs(y - scrollY) / dt - scrollV) * 0.5   // lightly smoothed
+    scrollY = y; scrollT = now
+    run()
+  }
   const onClick = (e: Event): void => { if (moved > 5) { e.preventDefault(); e.stopPropagation() } }
   const onDragStart = (e: Event): void => e.preventDefault()
 
@@ -126,6 +137,7 @@ export function marquee(opts: MarqueeOptions = {}): SliderPlugin {
         c.addEventListener('pointerup', onUp);     c.addEventListener('pointercancel', onUp)
         c.addEventListener('click', onClick, true); c.addEventListener('dragstart', onDragStart)
       }
+      if (boostBy) { scrollY = window.scrollY; window.addEventListener('scroll', onScroll, { passive: true }) }
       io = new IntersectionObserver(([e]) => { visible = !!e?.isIntersecting; run() })
       io.observe(w)
       s.on('resize', run)
@@ -144,6 +156,7 @@ export function marquee(opts: MarqueeOptions = {}): SliderPlugin {
       c.removeEventListener('pointerup', onUp);     c.removeEventListener('pointercancel', onUp)
       c.removeEventListener('click', onClick, true); c.removeEventListener('dragstart', onDragStart)
       slider.off('resize', run)
+      window.removeEventListener('scroll', onScroll)
     },
   }
 }

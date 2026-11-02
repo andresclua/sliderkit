@@ -1,6 +1,7 @@
 // One config per demo: the page prints it as the visible code and marquee.js runs it
 export const DEMOS = [
   { id: 'pause',  autoWidth: true, marquee: { speed: 50 } },
+  { id: 'scroll', autoWidth: true, marquee: { speed: 40, scrollBoost: 1.5 } },
   { id: 'hover',  autoWidth: true, marquee: { speed: 50, hoverSpeed: 300 } },
   { id: 'drag',   autoWidth: true, marquee: { speed: 50, draggable: true } },
   { id: 'images', items: 2, bp: { 700: 3, 1100: 4 }, marquee: { speed: 40, draggable: true } },

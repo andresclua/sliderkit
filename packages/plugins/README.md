@@ -110,7 +110,7 @@ marquee({ speed: 50, draggable: true })                  // drag either way
 marquee({ speed: 120, direction: 'right', pauseOnHover: false })
 ```
 
-Options: `speed` (`60`), `direction` (`'left'`), `pauseOnHover` (`true`), `hoverSpeed`, `pauseOnFocus` (`true`), `draggable` (`false`). [Full reference →](https://sliderkit.andresclua.com/docs/plugins/marquee)
+Options: `speed` (`60`), `direction` (`'left'`), `pauseOnHover` (`true`), `hoverSpeed`, `pauseOnFocus` (`true`), `draggable` (`false`), `scrollBoost` (speeds up while the page scrolls). [Full reference →](https://sliderkit.andresclua.com/docs/plugins/marquee)
 
 ### `mouseWheel()`
 Navigate with the scroll wheel, one slide per gesture. For smooth, continuous trackpad scroll see `smooth()`.

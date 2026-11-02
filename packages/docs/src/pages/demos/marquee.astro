@@ -47,6 +47,8 @@ const cssFor = (...names: string[]) => rules.filter(r => names.some(n => r.start
 const INFO: Record<string, { title: string; build: string; css: string[]; desc: string }> = {
   pause:  { title: 'Pause on hover', build: 'pills', css: ['marquee-slide', 'marquee-pill'],
     desc: 'The marquee() plugin keeps the strip moving forever, like the old <marquee> tag, at a speed in pixels per second. By default it stops under the cursor and while something inside has focus. It also pauses off screen, and stays still if the visitor prefers reduced motion.' },
+  scroll: { title: 'Speeds up when you scroll', build: 'text', css: ['marquee-slide', 'marquee-text'],
+    desc: 'scrollBoost adds speed while the page scrolls: 1.5 px/s for every px/s you scroll. It follows how fast you scroll, eases in and out, and settles back to its own speed when you stop. Scroll the page up and down to see it.' },
   hover:  { title: 'Speed up on hover', build: 'pills', css: ['marquee-slide', 'marquee-pill'],
     desc: 'hoverSpeed sets the speed under the cursor: 300 px/s here against 50 px/s normally. It eases in and out, so there is no jump. Use 0 to stop, or a lower number to slow down.' },
   drag:   { title: 'Marquee + draggable', build: 'pills', css: ['marquee-slide', 'marquee-pill'],

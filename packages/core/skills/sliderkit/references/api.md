@@ -60,7 +60,7 @@ Custom plugin shape: `{ name: string, install(slider), destroy() }`, usually ret
 | `thumbs()` | `container` (required: element whose children are the thumbs), `activeClass` (`'sliderkit__thumb--active'`) |
 | `hooks({...})` | `onInit({slides, slider})`, `beforeChange({outgoing, incoming, direction})`, `afterChange({slide, direction})`, `onDragStart`, `onDragEnd`, `onResize({breakpoint, items})`, `beforeDestroy` |
 | `smooth()` | see below |
-| `marquee({...})` | `speed` (`60`, px/s), `direction: 'left' \| 'right'` (`'left'`), `pauseOnHover` (`true`), `hoverSpeed` (px/s under the cursor, eased; overrides `pauseOnHover`), `pauseOnFocus` (`true`), `draggable` (`false`) |
+| `marquee({...})` | `speed` (`60`, px/s), `direction: 'left' \| 'right'` (`'left'`), `pauseOnHover` (`true`), `hoverSpeed` (px/s under the cursor, eased; overrides `pauseOnHover`), `pauseOnFocus` (`true`), `draggable` (`false`), `scrollBoost` (extra px/s per px/s of page scroll, `0` = off) |
 
 ## Effects (`@andresclua/sliderkit-effects`)
 
