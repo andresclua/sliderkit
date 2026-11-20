@@ -394,7 +394,9 @@ export class Slider implements SliderInstance {
     const itemsMax = this.getItemsMax()
     // carousel: ceil((itemsMax*5 - slideCount)/2)
     let result = Math.ceil((itemsMax * 5 - this.slideCount_) / 2)
-    result = Math.max(itemsMax, result)
+    // itemsMax + 1: one extra clone so a card peeking beside the active one (overflow: visible)
+    // still has a neighbour while the loop sits on a clone, instead of popping in at the silent jump
+    result = Math.max(itemsMax + 1, result)
     return this.edgePadding ? result + 1 : result
   }
 

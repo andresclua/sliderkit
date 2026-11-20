@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.7] - 2026-11-20
+
+`@andresclua/sliderkit` 2.1.7.
+
+### Fixed
+- Loop: with `items: 1` the core made a single clone per side, so a card peeking beside the active one (`overflow: visible`) had no neighbour while the slider sat on a clone, and appeared suddenly at the silent loop jump. The core now makes one more clone per side (2 with `items: 1`, always `items + 1` at least). Sliders with a peek, centred or scaled cards now wrap from the last card to the first without a pop
+
 ## [2.1.6] - 2026-11-20
 
 `@andresclua/sliderkit` 2.1.6 (skill update only).

@@ -136,6 +136,17 @@ describe('Slider', () => {
     })
   })
 
+  describe('loop clones', () => {
+    it('keeps a neighbour beside a clone (2 clones per side with items: 1)', () => {
+      const el = createContainer(4)
+      const s = new Slider(el, { loop: true, items: 1 })
+      const items = Array.from(el.children) as HTMLElement[]
+      const clones = items.filter(i => i.classList.contains('sliderkit__item--clone'))
+      expect(clones.length).toBe(4)  // 2 before + 2 after; with 1 per side the peeking card popped in at the loop jump
+      s.destroy()
+    })
+  })
+
   describe('loop --active on clones', () => {
     it('a clone and its original share --active (no re-zoom on the loop jump)', () => {
       const el = createContainer(4)
