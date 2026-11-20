@@ -156,6 +156,47 @@ slider.on('indexChanged', ({ displayIndex }) => {
       </div>
     </section>
 
+    <!-- Guide: which setup do I need? -->
+    <section class="guide">
+      <div class="section-inner">
+        <header class="section-header">
+          <h2>Which setup do I need?</h2>
+          <p>Start from what you want to build. Most sliders are the core plus one plugin, and many need no plugin at all.</p>
+        </header>
+        <div class="guide-grid">
+          {[
+            { want: 'A plain slider or carousel', use: 'Core only', cfg: 'items, loop, speed, gutter' },
+            { want: 'Several cards per screen', use: 'Core only', cfg: 'responsive: { 700: { items: 2 }, 1100: { items: 3 } }' },
+            { want: 'Arrows, dots, autoplay, thumbnails', use: 'Plugins', cfg: 'arrows() · pagination() · autoplay() · thumbs()' },
+            { want: 'Next card peeking, or active card centred and scaled', use: 'Core + CSS, no plugin', cfg: 'narrow .sliderkit__outer, overflow: visible, style .sliderkit__item--active' },
+            { want: 'Fade, flip or clip-path transition', use: 'Effects package', cfg: 'items: 1 + fadeEffect() · flipEffect() · clipPathEffect()' },
+            { want: 'Image transitions with shaders', use: 'WebGL package', cfg: 'items: 1, speed: 0, preloadWebGL() first' },
+            { want: 'Drag with inertia', use: 'smooth()', cfg: 'touch: false, mouseDrag: false' },
+            { want: 'Endless logo strip or ticker', use: 'marquee()', cfg: 'autoWidth: true, loop: true, speed: 0, marquee({ speed })' },
+            { want: 'Run your own code on slide change (GSAP, analytics)', use: 'hooks() or slider.on()', cfg: 'hooks() gives outgoing and incoming slide plus direction; slider.on("indexChanged") for a plain event' },
+          ].map(g => (
+            <div class="guide-card">
+              <h3>{g.want}</h3>
+              <span class="guide-use">{g.use}</span>
+              <code>{g.cfg}</code>
+            </div>
+          ))}
+        </div>
+        <p class="guide-note">Rule of thumb: if the change is only styling, put CSS on <code>.sliderkit__item--active</code> and skip hooks.</p>
+
+        <div class="guide-skill">
+          <div>
+            <h3>Let Claude Code follow this guide for you</h3>
+            <p>The same guide ships as a <a href="/docs/getting-started#claude-code-skill">Claude Code skill</a>. Copy it into your project and ask for a slider in plain words; Claude picks the package, the real option names and the required CSS instead of guessing.</p>
+          </div>
+          <div class="guide-skill-actions">
+            <pre><code>cp -r node_modules/@andresclua/sliderkit/skills/sliderkit .claude/skills/</code></pre>
+            <a href="/sliderkit.skill" download class="btn btn-primary-dark">Download sliderkit.skill</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA / Sponsor -->
     <section class="cta">
       <div class="cta-inner">
@@ -440,6 +481,23 @@ slider.on('indexChanged', ({ displayIndex }) => {
   word-break: break-all;
 }
 .package-card p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.55; margin: 0; }
+
+/* ── Guide ────────────────────────────────────────────────────────────────── */
+.guide { padding: 5rem 1.5rem; background: var(--bg); }
+.guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+.guide-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.guide-card h3 { font-size: 0.95rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+.guide-use { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0F766E; }
+.guide-card code { font-size: 0.74rem; color: var(--text-muted); line-height: 1.55; word-break: break-word; }
+.guide-note { text-align: center; font-size: 0.88rem; color: var(--text-muted); margin: 1.5rem 0 0; }
+.guide-skill { margin-top: 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; background: #082a21; color: #e2e8f0; border-radius: var(--radius); padding: 2rem; }
+@media (max-width: 800px) { .guide-skill { grid-template-columns: 1fr; } }
+.guide-skill h3 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 0.5rem; color: #fff; }
+.guide-skill p { font-size: 0.9rem; color: #94a3b8; line-height: 1.65; margin: 0; }
+.guide-skill a:not(.btn) { color: #99f6e4; }
+.guide-skill-actions { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; min-width: 0; }
+.guide-skill-actions pre { margin: 0; padding: 0.9rem 1rem; background: #0c3329; border-radius: 8px; font-size: 0.75rem; white-space: pre-wrap; word-break: break-all; max-width: 100%; }
+.guide-skill-actions code { color: #99f6e4; }
 
 /* ── CTA ──────────────────────────────────────────────────────────────────── */
 .cta { padding: 5rem 1.5rem; text-align: center; background: var(--bg); }

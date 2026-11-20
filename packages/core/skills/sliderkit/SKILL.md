@@ -66,7 +66,9 @@ When a user says "my slider is stacked / not sliding / shows odd text", check th
 - **Image transitions with shaders** – `-webgl`. Requires `items: 1` and `speed: 0` because the plugin owns the animation, and images must be preloaded with `preloadWebGL()` first.
 - **Draggable with lerp and inertia, trackpad scroll, skew while moving** – `smooth()`. Pass `touch: false, mouseDrag: false` so the core's own drag doesn't fight it. Horizontal only.
 - **Endless strip that never stops (logos, tags, tickers, like `<marquee>`)** – `marquee({ speed })` in px/s. Pass `loop: true, touch: false, mouseDrag: false, speed: 0`; add `autoWidth: true` when slides have different widths, `hoverSpeed` to speed up or slow down under the cursor, `draggable: true` to let people drag it. No `items: 1` or autoplay needed.
-- **Run your own code on slide changes (GSAP, analytics)** – `hooks()` for lifecycle callbacks, or `slider.on('indexChanged', ...)`.
+- **Run your own code on slide changes (GSAP, analytics)** – `hooks()` when you need the outgoing and incoming slide plus the direction (`beforeChange`, `afterChange`), or `slider.on('indexChanged', ...)` for a plain event. Rule of thumb: if the change is only styling, put CSS on `sliderkit__item--active` and skip both.
+- **Next card peeking in, or the active card centred and scaled** – no plugin. Make `.sliderkit__outer` narrower than the container (`width: 80%`, or `62%` with `margin: 0 auto`), set `.sliderkit__overflow { overflow: visible }` and style `.sliderkit__item--active`. Don't use `edgePadding` for this: the cards that peek count as visible, so they also get `--active` and you can't tell them from the centre one.
+- **Arrows in their own row** – `arrows({ container: '#controls' })` renders into any element, so the buttons can sit under the slider. They are absolutely positioned by default: set `position: static` on `.sliderkit__arrow` inside that container.
 - **Drive visuals from drag velocity** – `smooth({ onUpdate })`, which runs every frame with `velocity`, `position`, `progress` and `positions[]`.
 
 ## Things that commonly go wrong

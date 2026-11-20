@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.6] - 2026-11-20
+
+`@andresclua/sliderkit` 2.1.6 (skill update only).
+
+### Added
+- Homepage: "Which setup do I need?" guide (what you want to build, what to use, which options) and the Claude Code skill download
+- Skill: when to use `hooks()` vs `slider.on()`, peek and centred cards without a plugin (and why not `edgePadding`), arrows in their own row, and a "Scaled cards with arrows below" recipe
+
 ## [2.1.5] - 2026-11-20
 
 `@andresclua/sliderkit` 2.1.5.

@@ -166,6 +166,29 @@ new Slider('#tags', {
 
 Give the slides `white-space: nowrap` and some horizontal padding. Without `autoWidth`, use `items` and every slide gets the same width.
 
+## Scaled cards with arrows below
+
+```typescript
+import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+
+new Slider('#cards', {
+  items: 1, gutter: 16, loop: true, speed: 400,
+  plugins: [arrows({ container: '#controls' })],
+})
+```
+
+```css
+.cards { overflow: hidden; }
+.cards .sliderkit__outer { width: 62%; margin: 0 auto; background: none; }  /* neighbours show in the other 38% */
+.cards .sliderkit__overflow { overflow: visible; }
+.card { transform: scale(.86); opacity: .5; transition: transform .4s, opacity .4s; }
+.sliderkit__item--active .card { transform: none; opacity: 1; }
+#controls .sliderkit__arrow { position: static; transform: none; }
+```
+
+The transition runs once per slide, also when the loop wraps from the last card to the first (a clone and its original share `sliderkit__item--active` since core 2.1.5).
+
 ## Migrating from Tiny Slider
 
 SliderKit keeps Tiny Slider's engine, so layout options carry over by name: `items`, `gutter`, `edgePadding`, `fixedWidth`, `autoWidth`, `slideBy`, `center`, `loop`, `rewind`, `autoHeight`, `responsive`, `speed`, `startIndex`, `mouseDrag`, `touch`.
