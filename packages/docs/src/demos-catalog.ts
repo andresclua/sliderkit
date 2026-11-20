@@ -75,6 +75,14 @@ export const DEMOS: DemoEntry[] = [
     group: 'layout',
   },
   {
+    slug: 'fade-rise-arrows',
+    label: 'Fade & Rise + Arrows',
+    title: 'Fade & Rise + Arrows',
+    description: 'One card at a time; active rises in, others fade. Pill arrows aligned right below.',
+    tags: ['core', 'arrows', 'fade', 'translate'],
+    group: 'layout',
+  },
+  {
     slug: 'center',
     label: 'Center Mode',
     title: 'Center Mode',

@@ -38,6 +38,49 @@ new Slider('#my-slider', {
       <div><div class="peek-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
     </div></div>
   </DemoViewer>
+
+  <DemoViewer
+    title="Centered Cards + Arrows"
+    description="The active card sits in the middle at full size, both neighbours peek in smaller and dimmed. Round arrows centred below."
+    html={`<div class="cc"><div id="my-slider">
+  <div><div class="cc-card" style="background:#00221A;color:#fff"><h3>Receive with ease.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="cc-card" style="background:#E6F6F3;color:#00221A"><h3>Hold with confidence.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="cc-card" style="background:#0F766E;color:#fff"><h3>Spend anywhere.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="cc-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
+</div></div>
+<div class="cc-controls" id="my-controls"></div>`}
+    css={`.cc { overflow: hidden; }
+.cc .sliderkit__outer { width: 62%; margin: 0 auto; background: none; border-radius: 0; }  /* only the centre card is "active"; the neighbours show in the other 38% */
+.cc .sliderkit__overflow { overflow: visible; }
+.cc-card { height: 320px; padding: 28px; border-radius: 28px; transform: scale(.86); opacity: .5; transition: transform .4s ease, opacity .4s; }
+.sliderkit__item--active .cc-card { transform: scale(1); opacity: 1; }
+.cc-card h3 { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
+
+/* arrows in their own row, centred */
+.cc-controls { display: flex; justify-content: center; margin-top: 20px; }
+.cc-controls .sliderkit__arrows { display: flex; gap: 10px; }
+.cc-controls .sliderkit__arrow { position: static; transform: none; width: 48px; height: 48px; border-radius: 50%; background: #00221A; transition: transform .2s, background .2s; }
+.cc-controls .sliderkit__arrow svg { color: #fff; }
+.cc-controls .sliderkit__arrow:hover { background: #0F766E; transform: scale(1.08); }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  gutter: 16,
+  loop: true,
+  speed: 400,
+  plugins: [arrows({ container: '#my-controls' })],
+})`}
+  >
+    <div class="cc"><div id="demo-cc">
+      <div><div class="cc-card" style="background:#00221A;color:#fff"><h3>Receive with ease.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="cc-card" style="background:#E6F6F3;color:#00221A"><h3>Hold with confidence.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="cc-card" style="background:#0F766E;color:#fff"><h3>Spend anywhere.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="cc-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
+    </div></div>
+    <div class="cc-controls" id="demo-cc-controls"></div>
+  </DemoViewer>
 </DemoLayout>
 
 <style is:global>
@@ -48,16 +91,38 @@ new Slider('#my-slider', {
 .sliderkit__item--active .peek-card { transform: scale(1); opacity: 1; }
 
 .peek-card h3 { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
+
+.cc { overflow: hidden; }
+.cc .sliderkit__outer { width: 62%; margin: 0 auto; background: none; border-radius: 0; }  /* only the centre card is "active"; the neighbours show in the other 38% */
+.cc .sliderkit__overflow { overflow: visible; }
+.cc-card { height: 320px; padding: 28px; border-radius: 28px; transform: scale(.86); opacity: .5; transition: transform .4s ease, opacity .4s; }
+.sliderkit__item--active .cc-card { transform: scale(1); opacity: 1; }
+.cc-card h3 { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
+
+/* arrows in their own row, centred */
+.cc-controls { display: flex; justify-content: center; margin-top: 20px; }
+.cc-controls .sliderkit__arrows { display: flex; gap: 10px; }
+.cc-controls .sliderkit__arrow { position: static; transform: none; width: 48px; height: 48px; border-radius: 50%; background: #00221A; transition: transform .2s, background .2s; }
+.cc-controls .sliderkit__arrow svg { color: #fff; }
+.cc-controls .sliderkit__arrow:hover { background: #0F766E; transform: scale(1.08); }
 </style>
 
 <script>
 import { Slider } from '@andresclua/sliderkit'
-import { pagination } from '@andresclua/sliderkit-plugins'
+import { pagination, arrows } from '@andresclua/sliderkit-plugins'
 
 new Slider('#demo-peek', {
   items: 1,
   loop: true,
   speed: 400,
   plugins: [pagination({ type: 'dots', clickable: true })],
+})
+
+new Slider('#demo-cc', {
+  items: 1,
+  gutter: 16,
+  loop: true,
+  speed: 400,
+  plugins: [arrows({ container: '#demo-cc-controls' })],
 })
 </script>

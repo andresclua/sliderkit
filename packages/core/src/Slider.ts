@@ -1213,20 +1213,24 @@ export class Slider implements SliderInstance {
     const start = range[0]
     const end   = range[1]
 
+    // a clone and its original are the same card: both share --active so the silent
+    // loop jump (clone -> original) doesn't re-run the CSS transition on the original
+    const n = this.slideCount_
+    const real = (i: number) => (((i - this.cloneCount) % n) + n) % n
+    const activeReal = new Set<number>()
+    for (let i = start; i <= end; i++) activeReal.add(real(i))
+
     Array.from(this.slideItems).forEach((item, i) => {
       const el = item as HTMLElement
+      if (activeReal.has(real(i))) { addClass(el, CLS.ACTIVE) } else { removeClass(el, CLS.ACTIVE) }
       if (i >= start && i <= end) {
         if (el.hasAttribute('aria-hidden')) {
           el.removeAttribute('aria-hidden')
           el.removeAttribute('tabindex')
           el.removeAttribute('inert')
-          addClass(el, CLS.ACTIVE)
         }
-      } else {
-        if (!el.hasAttribute('aria-hidden')) {
-          setAttrs(el, { 'aria-hidden': 'true', 'tabindex': '-1', 'inert': '' })
-          removeClass(el, CLS.ACTIVE)
-        }
+      } else if (!el.hasAttribute('aria-hidden')) {
+        setAttrs(el, { 'aria-hidden': 'true', 'tabindex': '-1', 'inert': '' })
       }
     })
   }

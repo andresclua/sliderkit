@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.5] - 2026-11-20
+
+`@andresclua/sliderkit` 2.1.5.
+
+### Fixed
+- Loop: a clone and its original card now share `sliderkit__item--active`. Before, going from the last card to the first one landed on the clone, then jumped silently to the original, which only then got the class. Any CSS transition on the active class (scale, opacity) ran twice. `aria-hidden`, `tabindex` and `inert` work as before
+
+### Added
+- Demos: "Centered Cards + Arrows" in `/demos/scaled-peek` (arrows in their own row below the slider) and "Fade & Rise + Arrows" at `/demos/fade-rise-arrows`
+
 ## [2.4.0] - 2026-11-02
 
 `@andresclua/sliderkit-plugins` 2.4.0 · `@andresclua/sliderkit` 2.1.4 (skill update only).

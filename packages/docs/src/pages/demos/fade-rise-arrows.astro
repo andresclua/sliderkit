@@ -1,0 +1,73 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import DemoViewer from '../../components/DemoViewer.astro'
+---
+<DemoLayout title="Fade & Rise + Arrows">
+  <DemoViewer
+    title="Fade & Rise + Arrows"
+    description="One card at a time. Inactive cards fade out and drop slightly; the active one rises into place. Pill arrows below, aligned right."
+    html={`<div id="my-slider">
+  <div><div class="fr-card" style="background:#00221A;color:#fff"><h3>Receive with ease.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="fr-card" style="background:#E6F6F3;color:#00221A"><h3>Hold with confidence.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="fr-card" style="background:#0F766E;color:#fff"><h3>Spend anywhere.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="fr-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
+</div>
+<div class="fr-controls" id="my-controls"></div>`}
+    css={`.fr-card { height: 300px; padding: 36px; border-radius: 20px; opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease; }
+.sliderkit__item--active .fr-card { opacity: 1; transform: none; }
+.fr-card h3 { font-size: 2rem; line-height: 1.1; margin-bottom: 12px; }
+
+/* arrows in their own row, aligned right */
+.fr-controls { display: flex; justify-content: flex-end; margin-top: 20px; }
+.fr-controls .sliderkit__arrows { display: flex; gap: 8px; }
+.fr-controls .sliderkit__arrow { position: static; transform: none; width: 64px; height: 40px; border-radius: 999px; background: transparent; border: 2px solid #00221A; transition: background .2s; }
+.fr-controls .sliderkit__arrow svg { color: #00221A; transition: color .2s; }
+.fr-controls .sliderkit__arrow:hover { background: #00221A; }
+.fr-controls .sliderkit__arrow:hover svg { color: #fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  gutter: 24,
+  loop: true,
+  speed: 500,
+  plugins: [arrows({ container: '#my-controls' })],
+})`}
+  >
+    <div id="demo-fr">
+      <div><div class="fr-card" style="background:#00221A;color:#fff"><h3>Receive with ease.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="fr-card" style="background:#E6F6F3;color:#00221A"><h3>Hold with confidence.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="fr-card" style="background:#0F766E;color:#fff"><h3>Spend anywhere.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="fr-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
+    </div>
+    <div class="fr-controls" id="demo-fr-controls"></div>
+  </DemoViewer>
+</DemoLayout>
+
+<style is:global>
+.fr-card { height: 300px; padding: 36px; border-radius: 20px; opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease; }
+.sliderkit__item--active .fr-card { opacity: 1; transform: none; }
+.fr-card h3 { font-size: 2rem; line-height: 1.1; margin-bottom: 12px; }
+
+/* arrows in their own row, aligned right */
+.fr-controls { display: flex; justify-content: flex-end; margin-top: 20px; }
+.fr-controls .sliderkit__arrows { display: flex; gap: 8px; }
+.fr-controls .sliderkit__arrow { position: static; transform: none; width: 64px; height: 40px; border-radius: 999px; background: transparent; border: 2px solid #00221A; transition: background .2s; }
+.fr-controls .sliderkit__arrow svg { color: #00221A; transition: color .2s; }
+.fr-controls .sliderkit__arrow:hover { background: #00221A; }
+.fr-controls .sliderkit__arrow:hover svg { color: #fff; }
+</style>
+
+<script>
+import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+
+new Slider('#demo-fr', {
+  items: 1,
+  gutter: 24,
+  loop: true,
+  speed: 500,
+  plugins: [arrows({ container: '#demo-fr-controls' })],
+})
+</script>

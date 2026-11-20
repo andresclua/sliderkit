@@ -135,4 +135,21 @@ describe('Slider', () => {
       expect(pdestroy).toHaveBeenCalledOnce()
     })
   })
+
+  describe('loop --active on clones', () => {
+    it('a clone and its original share --active (no re-zoom on the loop jump)', () => {
+      const el = createContainer(4)
+      const s = new Slider(el, { loop: true, items: 1 })
+      const items = Array.from(el.children) as HTMLElement[]
+      const active = items.filter(i => i.classList.contains('sliderkit__item--active'))
+      const texts = new Set(active.map(i => i.textContent))
+      // every active card's twin is active too
+      for (const t of texts) {
+        const twins = items.filter(i => i.textContent === t)
+        expect(twins.every(i => i.classList.contains('sliderkit__item--active'))).toBe(true)
+      }
+      expect(texts.size).toBe(1)
+      s.destroy()
+    })
+  })
 })
