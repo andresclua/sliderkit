@@ -187,10 +187,10 @@ slider.on('indexChanged', ({ displayIndex }) => {
         <div class="guide-skill">
           <div>
             <h3>Let Claude Code follow this guide for you</h3>
-            <p>The same guide ships as a <a href="/docs/getting-started#claude-code-skill">Claude Code skill</a>. Copy it into your project and ask for a slider in plain words; Claude picks the package, the real option names and the required CSS instead of guessing.</p>
+            <p>The same guide ships as a <a href="/docs/getting-started#claude-code-skill">Claude Code skill</a>. Install it from GitHub and ask for a slider in plain words; Claude picks the package, the real option names and the required CSS instead of guessing.</p>
           </div>
           <div class="guide-skill-actions">
-            <pre><code>cp -r node_modules/@andresclua/sliderkit/skills/sliderkit .claude/skills/</code></pre>
+            <pre><code>npx skills add andresclua/sliderkit</code></pre>
             <a href="/sliderkit.skill" download class="btn btn-primary-dark">Download sliderkit.skill</a>
           </div>
         </div>
