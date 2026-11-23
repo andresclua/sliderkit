@@ -18,6 +18,7 @@ export interface SliderOptions {
   touch?:                     boolean
   mouseDrag?:                 boolean
   overflow?:                  'hidden' | 'visible'
+  peek?:                      string  // e.g. '20%': width kept free on the right for the next card to show
   swipeAngle?:                number | false
   preventActionWhenRunning?:  boolean
   preventScrollOnTouch?:      'auto' | 'force' | false

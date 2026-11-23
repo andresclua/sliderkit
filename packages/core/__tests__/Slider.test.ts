@@ -146,6 +146,20 @@ describe('Slider', () => {
     })
   })
 
+  describe('peek option', () => {
+    it('narrows the outer, shows overflow, clips the wrapper, and undoes the wrapper on destroy', () => {
+      const el = createContainer(3)
+      const wrap = el.parentElement as HTMLElement
+      wrap.style.overflow = 'auto'
+      const s = new Slider(el, { items: 1, peek: '30%' })
+      expect((el.closest('.sliderkit__outer') as HTMLElement).style.width).toContain('calc(')
+      expect((el.closest('.sliderkit__overflow') as HTMLElement).style.overflow).toBe('visible')
+      expect(wrap.style.overflow).toBe('hidden')
+      s.destroy()
+      expect(wrap.style.overflow).toBe('auto')
+    })
+  })
+
   describe('loop clones', () => {
     it('keeps a neighbour beside a clone (2 clones per side with items: 1)', () => {
       const el = createContainer(4)

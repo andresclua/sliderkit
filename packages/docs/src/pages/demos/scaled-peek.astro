@@ -83,6 +83,35 @@ new Slider('#my-slider', {
     </div></div>
     <div class="cc-controls" id="demo-cc-controls"></div>
   </DemoViewer>
+
+  <DemoViewer
+    title="Peek Option"
+    description="The same peek layout from one option, no layout CSS: peek: '20%' keeps the last 20% free so the next card shows."
+    html={`<div class="pk"><div id="my-slider">
+  <div><div class="pk-card" style="background:#00221A;color:#fff"><h3>Receive with ease.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="pk-card" style="background:#E6F6F3;color:#00221A"><h3>Hold with confidence.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="pk-card" style="background:#0F766E;color:#fff"><h3>Spend anywhere.</h3><p>Short supporting text for this card.</p></div></div>
+  <div><div class="pk-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
+</div></div>`}
+    css={`.pk .sliderkit__outer { background: none; border-radius: 0; }
+.pk-card { height: 340px; margin-right: 16px; padding: 28px; border-radius: 28px; transform: scale(.82); transform-origin: left bottom; transition: transform .35s ease, opacity .35s; opacity: .6; }
+.sliderkit__item--active .pk-card { transform: scale(1); opacity: 1; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+
+new Slider('#my-slider', {
+  items: 1,
+  loop: true,
+  mouseDrag: true,
+  peek: '20%',
+})`}
+  >
+    <div class="pk"><div id="demo-pk">
+      <div><div class="pk-card" style="background:#00221A;color:#fff"><h3>Receive with ease.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="pk-card" style="background:#E6F6F3;color:#00221A"><h3>Hold with confidence.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="pk-card" style="background:#0F766E;color:#fff"><h3>Spend anywhere.</h3><p>Short supporting text for this card.</p></div></div>
+      <div><div class="pk-card" style="background:#CCFBF1;color:#00221A"><h3>Stay in control.</h3><p>Short supporting text for this card.</p></div></div>
+    </div></div>
+  </DemoViewer>
 </DemoLayout>
 
 <style is:global>
@@ -105,6 +134,10 @@ new Slider('#my-slider', {
 .cc-controls .sliderkit__arrow { position: static; transform: none; width: 48px; height: 48px; border-radius: 50%; background: #00221A; transition: transform .2s, background .2s; }
 .cc-controls .sliderkit__arrow svg { color: #fff; }
 .cc-controls .sliderkit__arrow:hover { background: #0F766E; transform: scale(1.08); }
+.pk-card { height: 340px; margin-right: 16px; padding: 28px; border-radius: 28px; transform: scale(.82); transform-origin: left bottom; transition: transform .35s ease, opacity .35s; opacity: .6; }
+.sliderkit__item--active .pk-card { transform: scale(1); opacity: 1; }
+.pk-card h3 { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
+.pk .sliderkit__outer { background: none; border-radius: 0; }
 </style>
 
 <script>
@@ -128,5 +161,12 @@ new Slider('#demo-cc', {
   mouseDrag: true,
   speed: 400,
   plugins: [arrows({ container: '#demo-cc-controls' })],
+})
+
+new Slider('#demo-pk', {
+  items: 1,
+  loop: true,
+  mouseDrag: true,
+  peek: '20%',
 })
 </script>

@@ -166,6 +166,19 @@ new Slider('#tags', {
 
 Give the slides `white-space: nowrap` and some horizontal padding. Without `autoWidth`, use `items` and every slide gets the same width.
 
+## Next card peeking in
+
+```typescript
+new Slider('#cards', { items: 1, loop: true, mouseDrag: true, peek: '20%' })
+```
+
+```css
+.card { transform: scale(.82); opacity: .6; transition: transform .35s, opacity .35s; }
+.sliderkit__item--active .card { transform: none; opacity: 1; }
+```
+
+`peek` is the width kept free on the right, so `'20%'` leaves the last 20% for the next card. It sets the outer width, `overflow: 'visible'` and `overflow: hidden` on the slider's wrapper.
+
 ## Scaled cards with arrows below
 
 ```typescript

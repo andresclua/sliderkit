@@ -91,6 +91,8 @@ slider.on('indexChanged', ({ displayIndex }) => {
 |---|---|---|---|
 | `items` | `number` | `1` | Slides visible at once |
 | `gutter` | `number` | `0` | Space between slides in px |
+| `peek` | `string` | `''` | Width kept free on the right so the next card shows (`'20%'`); for `items: 1` |
+| `overflow` | `'hidden' \| 'visible'` | `'hidden'` | `'visible'` shows neighbouring cards outside the slider |
 | `edgePadding` | `number` | `0` | Padding on the outer edges in px — makes adjacent slides peek |
 | `fixedWidth` | `number \| false` | `false` | Fixed pixel width per slide, overrides `items` |
 | `autoWidth` | `boolean` | `false` | Each slide uses its natural width |

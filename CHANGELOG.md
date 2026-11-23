@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-11-23
+
+`@andresclua/sliderkit` 2.3.0.
+
+### Added
+- `peek` option (e.g. `peek: '20%'`) for `items: 1` sliders where the next card shows beside the active one. It narrows the outer, sets `overflow: 'visible'` and clips the slider's wrapper (restored on `destroy()`). Documented in options, styling, the skill and the homepage guide. New Peek Option demo
+
 ## [2.2.0] - 2026-11-23
 
 `@andresclua/sliderkit` 2.2.0.

@@ -70,6 +70,7 @@ const DEFAULTS: Required<SliderOptions> = {
   touch:                    true,
   mouseDrag:                false,
   overflow:                 'hidden',
+  peek:                     '',
   swipeAngle:               15,
   preventActionWhenRunning: true,
   preventScrollOnTouch:     false,
@@ -124,6 +125,7 @@ export class Slider implements SliderInstance {
   private autoHeight:                 boolean = false
   private touch:                      boolean = true
   private mouseDrag:                  boolean = false
+  private peekParent:                 { el: HTMLElement; overflow: string } | null = null
   private swipeAngle:                 number | false = 15
   private preventScrollOnTouch:       'auto' | 'force' | false = false
   private preventActionWhenRunning:   boolean = false
@@ -547,6 +549,14 @@ export class Slider implements SliderInstance {
     this.middleWrapper.className = CLS.OVERFLOW
     // 'visible' lets neighbouring cards show outside the slider (peek / centered layouts)
     if (this.getOption('overflow') === 'visible') this.middleWrapper.style.overflow = 'visible'
+    // peek: narrower outer, visible overflow, and the user's wrapper clips the page (restored on destroy)
+    const peek = this.getOption('peek') as string
+    if (peek) {
+      this.outerWrapper.style.width = `calc(100% - ${peek})`
+      this.middleWrapper.style.overflow = 'visible'
+      this.peekParent = { el: parentNode, overflow: parentNode.style.overflow }
+      parentNode.style.overflow = 'hidden'
+    }
 
     if (this.autoHeight) {
       this.middleWrapper.className += ' ' + CLS.AUTOHEIGHT
@@ -1773,6 +1783,12 @@ export class Slider implements SliderInstance {
     removeEvents(this.container, this.transitionEvent)
     if (this.touch)     removeEvents(this.container, this.touchEvents)
     if (this.mouseDrag) removeEvents(this.container, this.dragEvents)
+
+    // restore the wrapper's overflow that peek changed
+    if (this.peekParent) {
+      this.peekParent.el.style.overflow = this.peekParent.overflow
+      this.peekParent = null
+    }
 
     // restore DOM
     const parent = this.outerWrapper.parentNode

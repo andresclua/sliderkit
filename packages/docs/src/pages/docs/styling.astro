@@ -145,6 +145,17 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
   transform: scale(1.4);
 {"}"}</code></pre>
 
+  <h2>Peek and centred cards</h2>
+  <p>To let the next card show beside the active one, pass <code>peek</code> with the width to keep free. Then style the active card.</p>
+  <pre><code>new Slider('#slider', {"{"} items: 1, loop: true, peek: '20%' {"}"})
+
+.sliderkit__item--active .card {"{"} transform: none; opacity: 1; {"}"}</code></pre>
+  <p>For a centred card with both neighbours showing, <code>peek</code> only reserves space on the right, so use <code>overflow: 'visible'</code> and size the outer yourself:</p>
+  <pre><code>new Slider('#slider', {"{"} items: 1, loop: true, overflow: 'visible' {"}"})
+
+#wrapper {"{"} overflow: hidden; {"}"}
+#wrapper .sliderkit__outer {"{"} width: 62%; margin: 0 auto; {"}"}</code></pre>
+
   <h2>Highlighting the active slide</h2>
   <pre><code>/* dim all slides, brighten the active one */
 .sliderkit__item {"{"}

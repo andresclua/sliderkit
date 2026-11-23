@@ -168,7 +168,7 @@ slider.on('indexChanged', ({ displayIndex }) => {
             { want: 'A plain slider or carousel', use: 'Core only', cfg: 'items, loop, speed, gutter' },
             { want: 'Several cards per screen', use: 'Core only', cfg: 'responsive: { 700: { items: 2 }, 1100: { items: 3 } }' },
             { want: 'Arrows, dots, autoplay, thumbnails', use: 'Plugins', cfg: 'arrows() · pagination() · autoplay() · thumbs()' },
-            { want: 'Next card peeking, or active card centred and scaled', use: 'Core + CSS, no plugin', cfg: 'narrow .sliderkit__outer, overflow: visible, style .sliderkit__item--active' },
+            { want: 'Next card peeking, or active card centred and scaled', use: 'Core only, no plugin', cfg: "peek: '20%' (centred: overflow: 'visible' + narrow .sliderkit__outer) + style .sliderkit__item--active" },
             { want: 'Fade, flip or clip-path transition', use: 'Effects package', cfg: 'items: 1 + fadeEffect() · flipEffect() · clipPathEffect()' },
             { want: 'Image transitions with shaders', use: 'WebGL package', cfg: 'items: 1, speed: 0, preloadWebGL() first' },
             { want: 'Drag with inertia', use: 'smooth()', cfg: 'touch: false, mouseDrag: false' },
