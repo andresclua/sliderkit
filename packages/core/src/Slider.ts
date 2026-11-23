@@ -69,6 +69,7 @@ const DEFAULTS: Required<SliderOptions> = {
   lazyload:                 false,
   touch:                    true,
   mouseDrag:                false,
+  overflow:                 'hidden',
   swipeAngle:               15,
   preventActionWhenRunning: true,
   preventScrollOnTouch:     false,
@@ -544,6 +545,8 @@ export class Slider implements SliderInstance {
     this.middleWrapper    = doc.createElement('div')
     this.middleWrapper.id = this.slideId + '-mw'
     this.middleWrapper.className = CLS.OVERFLOW
+    // 'visible' lets neighbouring cards show outside the slider (peek / centered layouts)
+    if (this.getOption('overflow') === 'visible') this.middleWrapper.style.overflow = 'visible'
 
     if (this.autoHeight) {
       this.middleWrapper.className += ' ' + CLS.AUTOHEIGHT

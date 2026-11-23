@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-11-23
+
+`@andresclua/sliderkit` 2.2.0.
+
+### Added
+- `overflow: 'hidden' | 'visible'` option (default `'hidden'`). `'visible'` lets neighbouring cards show outside the slider for peek / centered layouts, without the `.sliderkit__overflow { overflow: visible }` CSS override. The Scaled Peek demos use it
+
 ## [2.1.8] - 2026-11-23
 
 `@andresclua/sliderkit` 2.1.8.

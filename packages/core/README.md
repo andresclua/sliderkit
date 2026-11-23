@@ -57,6 +57,7 @@ const slider = new Slider('#my-slider', {
 | `fixedWidth` | `number\|false` | `false` | Fixed pixel width per slide |
 | `touch` | `boolean` | `true` | Enable touch swipe |
 | `mouseDrag` | `boolean` | `false` | Enable mouse drag |
+| `overflow` | `'hidden' \| 'visible'` | `'hidden'` | `'visible'` lets neighbouring cards show outside the slider (peek / centered layouts) |
 | `breakpoints` | `object` | `{}` | Responsive option overrides |
 
 ## Methods

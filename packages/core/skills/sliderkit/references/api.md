@@ -24,6 +24,7 @@ Contents: core options · instance API · plugins · effects · WebGL · smooth
 | `lazyload` | `boolean` | `false` | Lazy-load images |
 | `touch` | `boolean` | `true` | Swipe on touch devices |
 | `mouseDrag` | `boolean` | `false` | Drag with the mouse |
+| `overflow` | `'hidden' \| 'visible'` | `'hidden'` | `'visible'` shows neighbouring cards outside the slider (peek / centered). Also narrow `.sliderkit__outer` and put `overflow: hidden` on a wrapper |
 | `swipeAngle` | `number \| false` | `15` | Max angle (deg) for a swipe to count |
 | `preventActionWhenRunning` | `boolean` | `true` | Ignore input while a transition runs |
 | `preventScrollOnTouch` | `'auto' \| 'force' \| false` | `false` | |

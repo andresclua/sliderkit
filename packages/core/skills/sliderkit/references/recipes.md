@@ -174,6 +174,7 @@ import { arrows } from '@andresclua/sliderkit-plugins'
 
 new Slider('#cards', {
   items: 1, gutter: 16, loop: true, speed: 400,
+  overflow: 'visible',
   plugins: [arrows({ container: '#controls' })],
 })
 ```
@@ -181,7 +182,6 @@ new Slider('#cards', {
 ```css
 .cards { overflow: hidden; }
 .cards .sliderkit__outer { width: 62%; margin: 0 auto; background: none; }  /* neighbours show in the other 38% */
-.cards .sliderkit__overflow { overflow: visible; }
 .card { transform: scale(.86); opacity: .5; transition: transform .4s, opacity .4s; }
 .sliderkit__item--active .card { transform: none; opacity: 1; }
 #controls .sliderkit__arrow { position: static; transform: none; }

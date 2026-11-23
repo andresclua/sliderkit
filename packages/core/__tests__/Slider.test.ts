@@ -136,6 +136,16 @@ describe('Slider', () => {
     })
   })
 
+  describe('overflow option', () => {
+    it('is hidden by default and visible when asked', () => {
+      const a = createContainer(3); const sa = new Slider(a, {})
+      const b = createContainer(3); const sb = new Slider(b, { overflow: 'visible' })
+      expect((a.closest('.sliderkit__overflow') as HTMLElement).style.overflow).toBe('')
+      expect((b.closest('.sliderkit__overflow') as HTMLElement).style.overflow).toBe('visible')
+      sa.destroy(); sb.destroy()
+    })
+  })
+
   describe('loop clones', () => {
     it('keeps a neighbour beside a clone (2 clones per side with items: 1)', () => {
       const el = createContainer(4)

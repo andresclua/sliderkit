@@ -17,6 +17,7 @@ export interface SliderOptions {
   lazyload?:                  boolean
   touch?:                     boolean
   mouseDrag?:                 boolean
+  overflow?:                  'hidden' | 'visible'
   swipeAngle?:                number | false
   preventActionWhenRunning?:  boolean
   preventScrollOnTouch?:      'auto' | 'force' | false

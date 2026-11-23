@@ -16,7 +16,6 @@ import DemoViewer from '../../components/DemoViewer.astro'
 </div>`}
     css={`.peek { overflow: hidden; }
 .peek .sliderkit__outer { width: 80%; background: none; border-radius: 0; }  /* the slide is 80% wide, the next one peeks in the other 20% */
-.peek .sliderkit__overflow { overflow: visible; }
 .peek-card { height: 340px; margin-right: 16px; padding: 28px; border-radius: 28px; transform: scale(.82); transform-origin: left bottom; transition: transform .35s ease, opacity .35s; opacity: .6; }
 .sliderkit__item--active .peek-card { transform: scale(1); opacity: 1; }
 
@@ -27,6 +26,7 @@ import { pagination } from '@andresclua/sliderkit-plugins'
 new Slider('#my-slider', {
   items: 1,
   loop: true,
+  overflow: 'visible',
   mouseDrag: true,
   speed: 400,
   plugins: [pagination({ type: 'dots', clickable: true })],
@@ -52,7 +52,6 @@ new Slider('#my-slider', {
 <div class="cc-controls" id="my-controls"></div>`}
     css={`.cc { overflow: hidden; }
 .cc .sliderkit__outer { width: 62%; margin: 0 auto; background: none; border-radius: 0; }  /* only the centre card is "active"; the neighbours show in the other 38% */
-.cc .sliderkit__overflow { overflow: visible; }
 .cc-card { height: 320px; padding: 28px; border-radius: 28px; transform: scale(.86); opacity: .5; transition: transform .4s ease, opacity .4s; }
 .sliderkit__item--active .cc-card { transform: scale(1); opacity: 1; }
 .cc-card h3 { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
@@ -70,6 +69,7 @@ new Slider('#my-slider', {
   items: 1,
   gutter: 16,
   loop: true,
+  overflow: 'visible',
   mouseDrag: true,
   speed: 400,
   plugins: [arrows({ container: '#my-controls' })],
@@ -88,7 +88,6 @@ new Slider('#my-slider', {
 <style is:global>
 .peek { overflow: hidden; }
 .peek .sliderkit__outer { width: 80%; background: none; border-radius: 0; }  /* the slide is 80% wide, the next one peeks in the other 20% */
-.peek .sliderkit__overflow { overflow: visible; }
 .peek-card { height: 340px; margin-right: 16px; padding: 28px; border-radius: 28px; transform: scale(.82); transform-origin: left bottom; transition: transform .35s ease, opacity .35s; opacity: .6; }
 .sliderkit__item--active .peek-card { transform: scale(1); opacity: 1; }
 
@@ -96,7 +95,6 @@ new Slider('#my-slider', {
 
 .cc { overflow: hidden; }
 .cc .sliderkit__outer { width: 62%; margin: 0 auto; background: none; border-radius: 0; }  /* only the centre card is "active"; the neighbours show in the other 38% */
-.cc .sliderkit__overflow { overflow: visible; }
 .cc-card { height: 320px; padding: 28px; border-radius: 28px; transform: scale(.86); opacity: .5; transition: transform .4s ease, opacity .4s; }
 .sliderkit__item--active .cc-card { transform: scale(1); opacity: 1; }
 .cc-card h3 { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
@@ -116,6 +114,7 @@ import { pagination, arrows } from '@andresclua/sliderkit-plugins'
 new Slider('#demo-peek', {
   items: 1,
   loop: true,
+  overflow: 'visible',
   mouseDrag: true,
   speed: 400,
   plugins: [pagination({ type: 'dots', clickable: true })],
@@ -125,6 +124,7 @@ new Slider('#demo-cc', {
   items: 1,
   gutter: 16,
   loop: true,
+  overflow: 'visible',
   mouseDrag: true,
   speed: 400,
   plugins: [arrows({ container: '#demo-cc-controls' })],

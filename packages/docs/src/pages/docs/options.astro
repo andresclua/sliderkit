@@ -43,6 +43,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
     <tbody>
       <tr><td><code>touch</code></td><td>boolean</td><td><code>true</code></td><td>Enable touch swipe navigation.</td></tr>
       <tr><td><code>mouseDrag</code></td><td>boolean</td><td><code>false</code></td><td>Enable click-and-drag on desktop.</td></tr>
+      <tr><td><code>overflow</code></td><td>'hidden' | 'visible'</td><td><code>'hidden'</code></td><td><code>'visible'</code> shows neighbouring cards outside the slider (peek / centered layouts). Also narrow <code>.sliderkit__outer</code> (e.g. <code>width: 80%</code>) and put <code>overflow: hidden</code> on a wrapper so the page does not scroll sideways.</td></tr>
       <tr><td><code>swipeAngle</code></td><td>number | false</td><td><code>15</code></td><td>Max degrees from the axis direction to register as a swipe. <code>false</code> disables angle filtering.</td></tr>
       <tr><td><code>preventScrollOnTouch</code></td><td><code>'auto' | 'force' | false</code></td><td><code>false</code></td><td>Whether to call <code>preventDefault()</code> on touch events to block page scroll.</td></tr>
     </tbody>
