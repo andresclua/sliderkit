@@ -27,6 +27,7 @@ import { pagination } from '@andresclua/sliderkit-plugins'
 new Slider('#my-slider', {
   items: 1,
   loop: true,
+  mouseDrag: true,
   speed: 400,
   plugins: [pagination({ type: 'dots', clickable: true })],
 })`}
@@ -69,6 +70,7 @@ new Slider('#my-slider', {
   items: 1,
   gutter: 16,
   loop: true,
+  mouseDrag: true,
   speed: 400,
   plugins: [arrows({ container: '#my-controls' })],
 })`}
@@ -114,6 +116,7 @@ import { pagination, arrows } from '@andresclua/sliderkit-plugins'
 new Slider('#demo-peek', {
   items: 1,
   loop: true,
+  mouseDrag: true,
   speed: 400,
   plugins: [pagination({ type: 'dots', clickable: true })],
 })
@@ -122,6 +125,7 @@ new Slider('#demo-cc', {
   items: 1,
   gutter: 16,
   loop: true,
+  mouseDrag: true,
   speed: 400,
   plugins: [arrows({ container: '#demo-cc-controls' })],
 })

@@ -394,10 +394,15 @@ export class Slider implements SliderInstance {
     const itemsMax = this.getItemsMax()
     // carousel: ceil((itemsMax*5 - slideCount)/2)
     let result = Math.ceil((itemsMax * 5 - this.slideCount_) / 2)
-    // itemsMax + 1: one extra clone so a card peeking beside the active one (overflow: visible)
-    // still has a neighbour while the loop sits on a clone, instead of popping in at the silent jump
-    result = Math.max(itemsMax + 1, result)
-    return this.edgePadding ? result + 1 : result
+    result = Math.max(itemsMax, result)
+    if (this.edgePadding) return result + 1
+    // Same guarantee edgePadding gives, for sliders that peek with CSS (overflow: visible): updateIndex
+    // jumps one step earlier (see there), so a clone always has a neighbour while it is on screen.
+    // That jump needs 2 * clones >= items + 2 * slideBy + 1 so it lands inside the real slides.
+    if (!this.fixedWidth && !this.autoWidth) {
+      result = Math.max(result, Math.ceil((itemsMax + 2 * this.getSlideByResolved() + 1) / 2))
+    }
+    return result
   }
 
   private getViewportWidth(): number {
@@ -947,6 +952,11 @@ export class Slider implements SliderInstance {
         rightEdge -= 1
       } else if (this.fixedWidth) {
         if ((this.viewport + this.gutter) % (this.fixedWidth + this.gutter)) { rightEdge -= 1 }
+      } else if (!this.autoWidth) {
+        // jump from the second-to-last clone, not the last one: the last clone has no card after it,
+        // so a card peeking beside the active one would pop in at the jump
+        leftEdge  += 1
+        rightEdge -= 1
       }
 
       if (this.cloneCount) {

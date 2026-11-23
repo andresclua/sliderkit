@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.8] - 2026-11-23
+
+`@andresclua/sliderkit` 2.1.8.
+
+### Fixed
+- Loop: 2.1.7 only fixed the first step of the loop. The silent jump from a clone back to the real slides happened on the last clone, which has no card after it, so a card peeking beside the active one still popped in on the second step. The jump now happens one step earlier (like `edgePadding` already did) and the core makes enough clones for it (2 per side with `items: 1`). Only for loop sliders sized by `items`: `edgePadding`, `fixedWidth` and `autoWidth` keep their behaviour
+
+### Changed
+- Demos: `mouseDrag: true` in the two Scaled Peek examples, so they can be dragged on desktop
+
 ## [2.1.7] - 2026-11-20
 
 `@andresclua/sliderkit` 2.1.7.
