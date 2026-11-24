@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.1] - 2026-11-24
+
+`@andresclua/sliderkit-plugins` 2.4.1.
+
+### Fixed
+- `arrows()` and `smooth()` read the effective `slider.loop`, so `loop` / `rewind` inside `responsive` disable the prev arrow and the wrap-around at the right widths. With a core older than 2.4.0 they fall back to `options.loop`
+
 ## [2.4.0] - 2026-11-24
 
 `@andresclua/sliderkit` 2.4.0.
