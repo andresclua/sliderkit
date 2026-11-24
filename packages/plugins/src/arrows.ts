@@ -29,7 +29,7 @@ export function arrows(opts: ArrowsOptions = {}): SliderPlugin {
   }
 
   function updateDisabled(): void {
-    if (slider.options.loop) {
+    if (slider.loop ?? slider.options.loop) {
       prevBtn.classList.remove(CLS_DISABLED)
       nextBtn.classList.remove(CLS_DISABLED)
       return

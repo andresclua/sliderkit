@@ -64,6 +64,7 @@ export interface SliderInstance {
   currentItems: number
   isBeginning:  boolean
   isEnd:        boolean
+  loop:         boolean   // effective loop at the current width (rewind forces false)
   options:      Required<SliderOptions>
   goTo(target: number | 'next' | 'prev' | 'first' | 'last'): void
   next():       void

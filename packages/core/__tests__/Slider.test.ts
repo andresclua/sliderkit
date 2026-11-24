@@ -160,6 +160,209 @@ describe('Slider', () => {
     })
   })
 
+  describe('responsive loop', () => {
+    const makeAt = (width: number, options: Record<string, unknown>, n = 6) => {
+      Object.defineProperty(window, 'innerWidth', { value: width, configurable: true })
+      document.body.innerHTML = ''
+      const el = createContainer(n)
+      const s = new Slider(el, options as never)
+      return { el, s, clones: () => el.querySelectorAll('.sliderkit__item--clone').length }
+    }
+
+    it('loop: false in a breakpoint removes the clones at load', () => {
+      const cfg = { items: 1, loop: true, responsive: { 1024: { items: 3, loop: false } } }
+      const wide = makeAt(1200, cfg)
+      expect(wide.clones()).toBe(0)
+      wide.s.destroy()
+      const narrow = makeAt(600, cfg)
+      expect(narrow.clones()).toBeGreaterThan(0)
+      narrow.s.destroy()
+    })
+
+    it('rewind in a breakpoint turns the loop off only there', () => {
+      const cfg = { loop: true, responsive: { 1024: { rewind: true } } }
+      const wide = makeAt(1200, cfg)
+      expect(wide.clones()).toBe(0)
+      wide.s.destroy()
+      const narrow = makeAt(600, cfg)
+      expect(narrow.clones()).toBeGreaterThan(0)
+      narrow.s.destroy()
+    })
+
+    const resizeTo = async (width: number) => {
+      Object.defineProperty(window, 'innerWidth', { value: width, configurable: true })
+      window.dispatchEvent(new Event('resize'))
+      await new Promise(r => setTimeout(r, 80))
+    }
+    const cfg = { items: 1, loop: true, responsive: { 1024: { items: 3, loop: false } } }
+
+    it('crossing the breakpoint turns the loop off and on again', async () => {
+      const { s, clones } = makeAt(600, cfg)
+      const before = clones()
+      expect(before).toBeGreaterThan(0)
+      await resizeTo(1200)
+      expect(clones()).toBe(0)
+      await resizeTo(600)
+      expect(clones()).toBe(before)
+      s.destroy()
+    })
+
+    it('keeps the same real card across the crossing', async () => {
+      const { s } = makeAt(600, { ...cfg, startIndex: 2 })
+      expect(s.activeIndex).toBe(2)
+      await resizeTo(1200)
+      expect(s.activeIndex).toBe(2)
+      await resizeTo(600)
+      expect(s.activeIndex).toBe(2)
+      s.destroy()
+    })
+
+    it('clamps and emits indexChanged when the card no longer exists', async () => {
+      const { s } = makeAt(600, { ...cfg, startIndex: 5 })
+      const spy = vi.fn()
+      s.on('indexChanged', spy)
+      await resizeTo(1200)
+      expect(s.activeIndex).toBe(3)   // 6 slides, 3 visible: last valid start without loop
+      expect(spy).toHaveBeenCalled()
+      s.destroy()
+    })
+
+    it('repeated crossings do not accumulate clones or css rules', async () => {
+      const { s, clones } = makeAt(600, cfg)
+      const rules = () => (document.head.querySelector('style')!.sheet as CSSStyleSheet).cssRules.length
+      const c0 = clones(), r0 = rules()
+      for (let i = 0; i < 3; i++) { await resizeTo(1200); await resizeTo(600) }
+      expect(clones()).toBe(c0)
+      expect(rules()).toBe(r0)
+      s.destroy()
+    })
+
+    it('ignores loop in the breakpoint when edgePadding is set', async () => {
+      const { s, clones } = makeAt(600, { ...cfg, edgePadding: 20 })
+      const before = clones()
+      await resizeTo(1200)
+      expect(clones()).toBe(before)
+      s.destroy()
+    })
+
+    it('ignores loop in the breakpoint with an effect plugin and warns', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      const fake = { name: 'fadeEffect', install() {}, destroy() {} }
+      const { s, clones } = makeAt(600, { ...cfg, plugins: [fake] })
+      const before = clones()
+      await resizeTo(1200)
+      expect(clones()).toBe(before)
+      expect(warn).toHaveBeenCalled()
+      warn.mockRestore()
+      s.destroy()
+    })
+
+    it('crossing during a running transition leaves the slider usable', async () => {
+      const { s } = makeAt(600, { ...cfg, startIndex: 1 })
+      ;(s as unknown as { running: boolean }).running = true
+      await resizeTo(1200)
+      expect((s as unknown as { running: boolean }).running).toBe(false)
+      s.destroy()
+    })
+
+    it('crossing to a width where every card fits does not throw', async () => {
+      const { s, clones } = makeAt(600, cfg, 3)
+      await expect(resizeTo(1200)).resolves.toBeUndefined()
+      expect(clones()).toBe(0)
+      s.destroy()
+    })
+
+    it('a vertical slider crossing the breakpoint keeps the same card', async () => {
+      const { s } = makeAt(600, { ...cfg, axis: 'vertical', startIndex: 2 })
+      await resizeTo(1200)
+      expect(s.activeIndex).toBe(2)
+      s.destroy()
+    })
+
+    it('does not move the card when the new breakpoint has room for it', async () => {
+      // loaded wide (items 3, loop on), card 5; narrowing to items 1 / no loop keeps card 5
+      const c = { items: 1, loop: false, startIndex: 5, responsive: { 1024: { items: 3, loop: true } } }
+      const { s } = makeAt(1200, c)
+      expect(s.activeIndex).toBe(5)
+      await resizeTo(600)
+      expect(s.activeIndex).toBe(5)
+      s.destroy()
+    })
+
+    it('emits indexChanged when only the loop change clamps the card', async () => {
+      const c = { items: 3, loop: true, startIndex: 5, responsive: { 1024: { loop: false } } }
+      const { s } = makeAt(600, c)
+      const spy = vi.fn()
+      s.on('indexChanged', spy)
+      await resizeTo(1200)
+      expect(s.activeIndex).toBe(3)
+      expect(spy).toHaveBeenCalled()
+      s.destroy()
+    })
+
+    it('uses the new breakpoint slideBy for the clone count', async () => {
+      const c = { items: 1, loop: false, responsive: { 1024: { items: 3, slideBy: 3, loop: true } } }
+      const atLoad = makeAt(1200, c, 12)
+      const expected = atLoad.clones()
+      atLoad.s.destroy()
+      const { s, clones } = makeAt(600, c, 12)
+      await resizeTo(1200)
+      expect(clones()).toBe(expected)
+      s.destroy()
+    })
+
+    it('keeps the base transition speed in the stylesheet after crossings', async () => {
+      const c = { items: 1, loop: true, speed: 300, responsive: { 1024: { loop: false, speed: 1000 } } }
+      const { el, s } = makeAt(600, c)
+      const base = () => {
+        const sheet = [...document.styleSheets].pop()!
+        return [...sheet.cssRules].filter(r => (r as CSSStyleRule).selectorText === '#' + el.id).map(r => r.cssText).join('')
+      }
+      const before = base()
+      await resizeTo(1200)
+      await resizeTo(600)
+      expect(base()).toBe(before)
+      expect(before).toContain('0.3s')
+      s.destroy()
+    })
+
+    it('ignores a breakpoint loop at load with fixedWidth', () => {
+      const { s, clones } = makeAt(1200, { loop: true, fixedWidth: 200, responsive: { 1024: { loop: false } } })
+      expect(clones()).toBeGreaterThan(0)
+      s.destroy()
+    })
+
+    it('ignores a breakpoint loop at load with an effect plugin and warns', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      const fake = { name: 'fadeEffect', install() {}, destroy() {} }
+      const { s, clones } = makeAt(1200, { ...cfg, plugins: [fake] })
+      expect(clones()).toBeGreaterThan(0)
+      expect(warn).toHaveBeenCalled()
+      warn.mockRestore()
+      s.destroy()
+    })
+
+    it('exposes the effective loop', async () => {
+      const { s } = makeAt(600, { loop: true, responsive: { 1024: { rewind: true } } })
+      expect(s.loop).toBe(true)
+      await resizeTo(1200)
+      expect(s.loop).toBe(false)
+      s.destroy()
+      const plain = makeAt(1200, { rewind: true })
+      expect(plain.s.loop).toBe(false)
+      plain.s.destroy()
+    })
+
+    it('destroy after a switch leaves no clones', async () => {
+      const { el, s } = makeAt(600, cfg)
+      await resizeTo(1200)
+      await resizeTo(600)
+      s.destroy()
+      expect(el.querySelectorAll('.sliderkit__item--clone').length).toBe(0)
+      expect(el.children.length).toBe(6)
+    })
+  })
+
   describe('loop clones', () => {
     it('keeps a neighbour beside a clone (2 clones per side with items: 1)', () => {
       const el = createContainer(4)

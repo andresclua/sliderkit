@@ -121,7 +121,7 @@ export class Slider implements SliderInstance {
   private arrowKeys:                  boolean = false
   private speed:                      number = 300
   private rewind:                     boolean = false
-  private loop:                       boolean = true
+  loop:                               boolean = true   // effective value (rewind forces false), read by plugins
   private autoHeight:                 boolean = false
   private touch:                      boolean = true
   private mouseDrag:                  boolean = false
@@ -212,7 +212,7 @@ export class Slider implements SliderInstance {
 
     this.options = rawOptions as Required<SliderOptions>
 
-    // rewind implies no loop
+    // rewind in the base options implies no loop (older plugins read options.loop); per-breakpoint values go through resolveLoop()
     if (this.options.rewind) this.options.loop = false
 
     this.events   = new Events()
@@ -266,8 +266,9 @@ export class Slider implements SliderInstance {
     this.viewportMax  = this.options.viewportMax || false
     this.arrowKeys    = this.getOption('arrowKeys') as boolean
     this.speed        = this.getOption('speed') as number
-    this.rewind       = this.options.rewind
-    this.loop         = this.rewind ? false : this.options.loop
+    const resolved    = this.resolveLoop(true)
+    this.rewind       = resolved.rewind
+    this.loop         = resolved.loop
     this.autoHeight   = this.getOption('autoHeight') as boolean
     this.touch        = this.getOption('touch') as boolean
     this.mouseDrag    = this.getOption('mouseDrag') as boolean
@@ -583,7 +584,14 @@ export class Slider implements SliderInstance {
       })
     })
 
-    // clone slides: carousel => n + slides + n
+    this.insertClones()
+  }
+
+  // clone slides: carousel => n + slides + n. Also refreshes this.slides.
+  private insertClones(): void {
+    const doc       = document
+    const container = this.container
+
     if (this.cloneCount) {
       const fragmentBefore = doc.createDocumentFragment()
       const fragmentAfter  = doc.createDocumentFragment()
@@ -638,7 +646,7 @@ export class Slider implements SliderInstance {
     let containerStr = this.horizontal && !this.autoWidth
       ? 'width:' + this.getContainerWidth(this.options.fixedWidth, this.options.gutter, this.options.items as number) + ';'
       : ''
-    if (TRANSITIONDURATION) { containerStr += this.getTransitionDurationStyle(this.speed) }
+    if (TRANSITIONDURATION) { containerStr += this.getTransitionDurationStyle(this.options.speed) }
     this.addCSSRule('#' + id + ' { ' + containerStr + ' }')
 
     // slide styles
@@ -1268,6 +1276,58 @@ export class Slider implements SliderInstance {
     this.updateLiveRegion()
   }
 
+  // loop / rewind for the current width. A breakpoint may change them, except with edgePadding, fixedWidth,
+  // autoWidth or an effect plugin: there the base options win (and effects get a warning).
+  private resolveLoop(warn = false): { loop: boolean; rewind: boolean } {
+    const wantRewind = this.getOption('rewind') as boolean
+    const wantLoop   = wantRewind ? false : this.getOption('loop') as boolean
+    const baseRewind = this.options.rewind
+    const baseLoop   = baseRewind ? false : this.options.loop
+    if (wantLoop === baseLoop && wantRewind === baseRewind) return { loop: wantLoop, rewind: wantRewind }
+
+    const hasEffect   = this._plugins.some(p => /Effect$/.test(p.name) || p.name === 'webgl')
+    const unsupported = this.edgePadding || this.fixedWidth || this.autoWidth ||
+      this.getOption('edgePadding') || this.getOption('fixedWidth')
+    if (hasEffect || unsupported) {
+      if (hasEffect && warn) console.warn('SliderKit: loop/rewind in responsive is ignored with effect plugins')
+      return { loop: baseLoop, rewind: baseRewind }
+    }
+    return { loop: wantLoop, rewind: wantRewind }
+  }
+
+  // the container/slide widths in the stylesheet depend on slideCountNew, so they are rebuilt
+  private rebuildSheet(): void {
+    while (this.sheet.cssRules.length) this.sheet.deleteRule(0)
+    this.initSheet()
+  }
+
+  // switch the loop on or off in place (a breakpoint changed loop / rewind): same real card, no animation
+  private applyLoop(nextLoop: boolean): void {
+    const realIndex = this.getAbsIndex(this.index)
+
+    Array.from(this.container.children).forEach(el => {
+      if (hasClass(el, CLS.CLONE)) el.remove()
+    })
+
+    this.loop          = nextLoop
+    this.cloneCount    = nextLoop ? this.getCloneCountForLoop() : 0
+    this.slideCountNew = this.slideCount_ + this.cloneCount * 2
+    this.hasRightDeadZone = (!!this.fixedWidth || this.autoWidth) && !nextLoop ? true : false
+    this.updateIndexBeforeTransform = !nextLoop
+
+    this.insertClones()
+    this.rebuildSheet()
+
+    this.indexMax    = this.getIndexMax()
+    this.index       = nextLoop ? realIndex + this.cloneCount : Math.min(realIndex, this.indexMax)
+    this.indexCached = this.index
+
+    this.running = false   // a transition in flight would never report its end after a silent jump
+    this.additionalUpdates()
+    this.doContainerTransformSilent()
+    if (this.activeIndex !== realIndex) this.events.emit('indexChanged', this.info())
+  }
+
   // ════════════════════════════════════════════════════════════════════════
   //  RENDER
   // ════════════════════════════════════════════════════════════════════════
@@ -1586,7 +1646,19 @@ export class Slider implements SliderInstance {
     const itemsTem   = this.items
     const freezeTem  = this.freeze
     const disableTem = this.disable
-    const indexTem   = this.index
+
+    // loop / rewind can change per breakpoint. applyLoop needs the new breakpoint's items and slideBy
+    // (clone count, index limits), so they are refreshed first; itemsTem above still detects the change.
+    if (bpChanged) {
+      const next = this.resolveLoop(true)
+      if (next.loop !== this.loop) {
+        this.items   = this.getOption('items') as number
+        this.slideBy = this.getOption('slideBy') as number | 'page'
+        this.applyLoop(next.loop)
+      }
+      this.rewind = next.rewind
+    }
+    const indexTem = this.index
 
     if (bpChanged) {
       // re-read bp-dependent options

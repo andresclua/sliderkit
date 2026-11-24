@@ -145,6 +145,41 @@ new Slider('#my-slider', {
     </div>
   </DemoViewer>
 
+  <DemoViewer
+    title="Loop by breakpoint"
+    description="Loops below 1024px, no loop from 1024px with 3 cards. Resize the window across 1024px: the slider keeps the same card."
+    html={`<div id="my-slider">
+  <div class="demo-slide s-purple">1</div>
+  <div class="demo-slide s-blue">2</div>
+  <div class="demo-slide s-green">3</div>
+  <div class="demo-slide s-amber">4</div>
+  <div class="demo-slide s-red">5</div>
+  <div class="demo-slide s-pink">6</div>
+</div>`}
+    css={`.demo-slide { height: 260px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700; color:#fff; }`}
+    js={`import { Slider } from '@andresclua/sliderkit'
+import { arrows } from '@andresclua/sliderkit-plugins'
+
+new Slider('#my-slider', {
+  items: 1,
+  gutter: 16,
+  loop: true,
+  responsive: {
+    1024: { items: 3, gutter: 24, loop: false },
+  },
+  plugins: [arrows()],
+})`}
+  >
+    <div id="demo-responsive-loop">
+      <div class="demo-slide s-purple">1</div>
+      <div class="demo-slide s-blue">2</div>
+      <div class="demo-slide s-green">3</div>
+      <div class="demo-slide s-amber">4</div>
+      <div class="demo-slide s-red">5</div>
+      <div class="demo-slide s-pink">6</div>
+    </div>
+  </DemoViewer>
+
 </DemoLayout>
 
 <script>
@@ -206,5 +241,15 @@ window.addEventListener('resize', () => {
       items: 1, loop: false, speed: 300, plugins: buildPlugins(zone),
     })
   }, 150)
+})
+
+new Slider('#demo-responsive-loop', {
+  items: 1,
+  gutter: 16,
+  loop: true,
+  responsive: {
+    1024: { items: 3, gutter: 24, loop: false },
+  },
+  plugins: [arrows()],
 })
 </script>

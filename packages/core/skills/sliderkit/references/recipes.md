@@ -179,6 +179,34 @@ new Slider('#cards', { items: 1, loop: true, mouseDrag: true, peek: '20%' })
 
 `peek` is the width kept free on the right, so `'20%'` leaves the last 20% for the next card. It sets the outer width, `overflow: 'visible'` and `overflow: hidden` on the slider's wrapper.
 
+## Loop off on wide screens, different plugins per width
+
+`loop` and `rewind` go inside `responsive`; the slider keeps the same card when it crosses:
+
+```typescript
+new Slider('#s', { items: 1, loop: true, responsive: { 1024: { items: 3, loop: false } } })
+```
+
+`plugins` is read once and can't go inside `responsive`. Hide arrows with CSS; for other plugins, recreate the slider when the width crosses the breakpoint.
+
+```typescript
+const mq = matchMedia('(min-width: 1024px)')
+const make = () => new Slider('#s', {
+  items: mq.matches ? 3 : 1,
+  plugins: mq.matches ? [arrows()] : [pagination()],   // new instances every time
+})
+
+let slider = make()
+mq.addEventListener('change', () => { slider.destroy(); slider = make() })
+```
+
+```css
+/* arrows only: no JS needed */
+@media (max-width: 1023px) { .sliderkit__arrows { display: none; } }
+```
+
+The recreated slider starts at the first slide. `matchMedia` fires once when the width crosses, not on every pixel.
+
 ## Scaled cards with arrows below
 
 ```typescript

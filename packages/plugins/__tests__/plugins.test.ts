@@ -13,6 +13,13 @@ function make(n: number): HTMLElement {
 describe('arrows', () => {
   beforeEach(() => { document.body.innerHTML = '' })
 
+  it('disables prev at the start when rewind is on (loop is effectively off)', () => {
+    const s = new Slider(make(5), { items: 1, loop: true, rewind: true, plugins: [arrows()] })
+    const prev = s.outerWrapper.querySelector<HTMLElement>('.sliderkit__arrow--prev')!
+    expect(prev.classList.contains('sliderkit__arrow--disabled')).toBe(true)
+    s.destroy()
+  })
+
   it('hides arrows when all slides fit', () => {
     const s = new Slider(make(2), { items: 2, loop: false, plugins: [arrows()] })
     const wrap = s.outerWrapper.querySelector<HTMLElement>('.sliderkit__arrows')!

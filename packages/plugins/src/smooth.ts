@@ -83,7 +83,7 @@ export function smooth(opts: SmoothOptions = {}): SmoothPlugin {
   let wheelTimer: ReturnType<typeof setTimeout> | undefined
 
   const n      = () => slider.slideCount
-  const loop   = () => slider.options.loop
+  const loop   = () => slider.loop ?? slider.options.loop
   const active = () => n() > slider.currentItems
   const clones = () => (slider.slides.length - n()) / 2
   const clamp  = (v: number) => loop() ? v : Math.min(Math.max(v, 0), n() - slider.currentItems)

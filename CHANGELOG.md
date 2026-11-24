@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-11-24
+
+`@andresclua/sliderkit` 2.4.0.
+
+### Added
+- `loop` and `rewind` can be set inside `responsive`, e.g. `responsive: { 1024: { items: 3, loop: false } }`. Crossing the breakpoint adds or removes the clones and keeps the same card, without animation; if that card does not exist without the loop the slider goes to the last valid position and emits `indexChanged`. Ignored with `edgePadding`, `fixedWidth`, `autoWidth` and effect or WebGL plugins (a warning is logged)
+- Responsive demo: Loop by breakpoint
+
+### Fixed
+- `rewind: true` in the base options no longer forces `loop: false` for every breakpoint
+- The base `transition-duration` of the track no longer takes the speed of whichever breakpoint was active when the stylesheet was built
+- `loop` / `rewind` per breakpoint are also ignored at load with `edgePadding`, `fixedWidth`, `autoWidth` or an effect plugin, not only when crossing
+
+### Changed
+- New public `slider.loop` (effective loop at the current width, `rewind` forces `false`). `arrows()` and `smooth()` read it, falling back to `options.loop` with an older core. Needs a plugins release that depends on core 2.4.0
+- Docs: `/docs/options` now lists what can and can't change per breakpoint (`plugins`, `overflow` and `peek` can't) with recipes; skill updated
+
 ## [2.3.0] - 2026-11-23
 
 `@andresclua/sliderkit` 2.3.0.

@@ -71,15 +71,58 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
     1280: {"{"} items: 4, gutter: 24 {"}"},
   {"}"},
 {"}"})</code></pre>
-  <p>All layout and navigation options can be overridden per breakpoint. The slider rebuilds pagination and recalculates layout automatically on each resize that crosses a breakpoint.</p>
-  <p><strong>Note:</strong> <code>plugins</code> cannot be set inside <code>responsive</code>. If you need a plugin only above a certain breakpoint, initialise it conditionally in JS before creating the slider:</p>
-  <pre><code>const plugins = [arrows()]
-if (window.innerWidth >= 960) {"{"}
-  plugins.push(progress({"{"} container: '#my-progress' {"}"}))
-{"}"}
+  <p>Layout and input options update when the window crosses a breakpoint: <code>items</code>, <code>slideBy</code>, <code>speed</code>, <code>center</code>, <code>autoHeight</code>, <code>fixedWidth</code>, <code>touch</code>, <code>mouseDrag</code> and <code>arrowKeys</code>. <code>loop</code> and <code>rewind</code> also change at a breakpoint (see below). The slider recalculates its layout and pagination on each resize that crosses a breakpoint. <code>gutter</code> and <code>edgePadding</code> change the layout too, but the values used for drag maths and for the number of loop clones are read once, so keep them similar across breakpoints.</p>
 
-new Slider('#my-slider', {"{"} plugins {"}"})
-</code></pre>
+  <h3><code>loop</code> and <code>rewind</code> per breakpoint</h3>
+  <p>Both can go inside <code>responsive</code>. When the window crosses the breakpoint the slider adds or removes its clones and stays on the same card, with no animation. <code>rewind: true</code> still turns the loop off, only at the widths where it is active.</p>
+  <pre><code>{`new Slider('#my-slider', {
+  items: 1, loop: true,
+  responsive: { 1024: { items: 3, loop: false } },
+})`}</code></pre>
+  <p>If the current card does not exist without the loop (for example card 6 when 3 cards are visible), the slider moves to the last valid position and emits <code>indexChanged</code>. It is ignored, and the slider keeps its current loop, when it uses <code>edgePadding</code> or <code>fixedWidth</code>, or when an effect plugin or WebGL is installed (a warning is logged).</p>
+
+  <h3>What you can't change per breakpoint</h3>
+  <p>These are read once, when the slider is created. Putting <code>plugins</code> inside <code>responsive</code> does nothing, and <code>overflow</code> and <code>peek</code> only apply at load.</p>
+  <table>
+    <thead><tr><th>Option</th><th>Why</th><th>What to do instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>plugins</code></td><td>Plugins are installed once.</td><td>Hide them with CSS, choose them at load, or recreate the slider.</td></tr>
+      <tr><td><code>overflow</code>, <code>peek</code></td><td>Applied when the slider is created.</td><td>Recreate the slider, or set the CSS yourself with a media query.</td></tr>
+      <tr><td>Effects and WebGL</td><td>They control the slide styles for the whole life of the slider.</td><td>Choose them at load.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Recipes</h3>
+  <p><strong>Arrows only on desktop.</strong> Hide them with CSS. It reacts to every resize and needs no JavaScript. <code>display: none</code> also removes them from the tab order.</p>
+  <pre><code>{`new Slider('#my-slider', { items: 1, plugins: [arrows()] })
+
+@media (max-width: 1023px) {
+  .sliderkit__arrows { display: none; }
+}`}</code></pre>
+  <p>If you passed <code>container</code> to <code>arrows()</code>, hide that container instead.</p>
+
+  <p><strong>A plugin only above a certain width, decided at load.</strong> It does not react if the window is resized afterwards.</p>
+  <pre><code>{`const plugins = [arrows()]
+if (window.innerWidth >= 960) {
+  plugins.push(progress({ container: '#my-progress' }))
+}
+
+new Slider('#my-slider', { plugins })`}</code></pre>
+
+  <p><strong>Different plugins per width, also on resize.</strong> Recreate the slider when the width crosses the breakpoint. <code>matchMedia</code> fires only when it crosses, not on every pixel, and the plugins must be created again inside the function. The new slider starts at the first slide.</p>
+  <pre><code>{`const mq = matchMedia('(min-width: 1024px)')
+const make = () => new Slider('#my-slider', {
+  items: mq.matches ? 3 : 1,
+  plugins: mq.matches ? [arrows()] : [pagination()],
+})
+
+let slider = make()
+mq.addEventListener('change', () => { slider.destroy(); slider = make() })`}</code></pre>
+
+  <p><strong>Run your own code when a breakpoint is crossed.</strong> The slider emits an event, only when it has a <code>responsive</code> map. Call your function once after creating the slider as well, because the event does not fire at load.</p>
+  <pre><code>{`slider.on('newBreakpointEnd', () => {
+  document.querySelector('.sliderkit__arrows').hidden = window.innerWidth < 1024
+})`}</code></pre>
 
   <h2>Callbacks & plugins</h2>
   <table>
