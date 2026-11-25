@@ -71,7 +71,25 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
     1280: {"{"} items: 4, gutter: 24 {"}"},
   {"}"},
 {"}"})</code></pre>
-  <p>Layout and input options update when the window crosses a breakpoint: <code>items</code>, <code>slideBy</code>, <code>speed</code>, <code>center</code>, <code>autoHeight</code>, <code>fixedWidth</code>, <code>touch</code>, <code>mouseDrag</code> and <code>arrowKeys</code>. <code>loop</code> and <code>rewind</code> also change at a breakpoint (see below). The slider recalculates its layout and pagination on each resize that crosses a breakpoint. <code>gutter</code> and <code>edgePadding</code> change the layout too, but the values used for drag maths and for the number of loop clones are read once, so keep them similar across breakpoints.</p>
+  <h3>What you can set inside <code>responsive</code></h3>
+  <p>Not every option reacts to the window width. Anything not marked <strong>Yes</strong> is ignored inside <code>responsive</code> (no error, it just does nothing), so check this table before relying on it.</p>
+  <table>
+    <thead><tr><th>Option</th><th>Inside <code>responsive</code></th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>items</code>, <code>slideBy</code></td><td><strong>Yes</strong></td><td>Updated every time a breakpoint is crossed.</td></tr>
+      <tr><td><code>speed</code>, <code>center</code>, <code>autoHeight</code>, <code>fixedWidth</code></td><td><strong>Yes</strong></td><td>Updated every time a breakpoint is crossed.</td></tr>
+      <tr><td><code>touch</code>, <code>mouseDrag</code>, <code>arrowKeys</code></td><td><strong>Yes</strong></td><td>Updated every time a breakpoint is crossed.</td></tr>
+      <tr><td><code>loop</code>, <code>rewind</code></td><td><strong>Yes</strong>, with limits</td><td>Clones are added or removed and you stay on the same card. Ignored with <code>edgePadding</code>, <code>fixedWidth</code>, <code>autoWidth</code> and effect or WebGL plugins. See below.</td></tr>
+      <tr><td><code>gutter</code>, <code>edgePadding</code></td><td><strong>Yes</strong>, layout only</td><td>The sizes change, but the values used for drag maths and for the number of loop clones are read once. Keep them similar across breakpoints.</td></tr>
+      <tr><td><code>startIndex</code>, <code>overflow</code>, <code>peek</code></td><td>At load only</td><td>Uses the breakpoint that matches when the slider is created. Resizing afterwards does not change them.</td></tr>
+      <tr><td><code>plugins</code></td><td>No</td><td>Installed once at creation. See the recipes below.</td></tr>
+      <tr><td><code>autoWidth</code>, <code>axis</code>, <code>viewportMax</code>, <code>freezable</code>, <code>lazyload</code></td><td>No</td><td>Base options only, read once.</td></tr>
+      <tr><td><code>swipeAngle</code>, <code>preventScrollOnTouch</code>, <code>preventActionWhenRunning</code></td><td>No</td><td>Base options only, read once.</td></tr>
+      <tr><td><code>container</code>, <code>mode</code>, <code>onInit</code></td><td>No</td><td>Base options only.</td></tr>
+      <tr><td>Effects and WebGL</td><td>No</td><td>They control the slide styles for the whole life of the slider. Choose them at load.</td></tr>
+    </tbody>
+  </table>
+  <p>The slider recalculates its layout and pagination on each resize that crosses a breakpoint.</p>
 
   <h3><code>loop</code> and <code>rewind</code> per breakpoint</h3>
   <p>Both can go inside <code>responsive</code>. When the window crosses the breakpoint the slider adds or removes its clones and stays on the same card, with no animation. <code>rewind: true</code> still turns the loop off, only at the widths where it is active.</p>
@@ -81,8 +99,8 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 })`}</code></pre>
   <p>If the current card does not exist without the loop (for example card 6 when 3 cards are visible), the slider moves to the last valid position and emits <code>indexChanged</code>. It is ignored, and the slider keeps its current loop, when it uses <code>edgePadding</code> or <code>fixedWidth</code>, or when an effect plugin or WebGL is installed (a warning is logged).</p>
 
-  <h3>What you can't change per breakpoint</h3>
-  <p>These are read once, when the slider is created. Putting <code>plugins</code> inside <code>responsive</code> does nothing, and <code>overflow</code> and <code>peek</code> only apply at load.</p>
+  <h3>What to do when it can't change</h3>
+  <p>The most common cases from the table above:</p>
   <table>
     <thead><tr><th>Option</th><th>Why</th><th>What to do instead</th></tr></thead>
     <tbody>

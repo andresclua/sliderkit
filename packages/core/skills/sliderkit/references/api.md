@@ -20,7 +20,7 @@ Contents: core options · instance API · plugins · effects · WebGL · smooth
 | `loop` | `boolean` | `true` | Infinite loop (clones slides) |
 | `rewind` | `boolean` | `false` | Jump back at the ends; use with `loop: false` |
 | `autoHeight` | `boolean` | `false` | Container height follows the visible slides |
-| `responsive` | `Record<number, Partial<SliderOptions>>` | `{}` | Keyed by min viewport width in px |
+| `responsive` | `Record<number, Partial<SliderOptions>>` | `{}` | Keyed by min viewport width in px. Only some options react to it: see /docs/options (Responsive) and SKILL.md |
 | `lazyload` | `boolean` | `false` | Lazy-load images |
 | `touch` | `boolean` | `true` | Swipe on touch devices |
 | `mouseDrag` | `boolean` | `false` | Drag with the mouse |

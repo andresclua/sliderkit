@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Docs: `/docs/options` Responsive section now has one table of every option showing whether it works inside `responsive` (yes, load only, or no). Skill updated to match
+
 ## [2.4.1] - 2026-11-24
 
 `@andresclua/sliderkit-plugins` 2.4.1.
