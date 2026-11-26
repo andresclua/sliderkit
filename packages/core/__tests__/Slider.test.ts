@@ -363,6 +363,79 @@ describe('Slider', () => {
     })
   })
 
+  describe('mouse drag and links', () => {
+    function makeCards() {
+      const el = document.createElement('div')
+      for (let i = 0; i < 3; i++) {
+        const d = document.createElement('div')
+        d.innerHTML = '<a href="#x"><h3>title</h3><p>text</p></a>'
+        el.appendChild(d)
+      }
+      document.body.appendChild(el)
+      const s = new Slider(el, { loop: false, mouseDrag: true })
+      const a = el.querySelector('a') as HTMLElement
+      return { s, a, h3: a.querySelector('h3') as HTMLElement, p: a.querySelector('p') as HTMLElement }
+    }
+    const mouse = (type: string, target: Element, x: number) =>
+      target.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: 0 }))
+    const click = (target: Element) => {
+      const ev = new MouseEvent('click', { bubbles: true, cancelable: true })
+      target.dispatchEvent(ev)
+      return ev.defaultPrevented
+    }
+
+    it('cancels the native link drag when pressing on a child of the link', () => {
+      const { s, h3 } = makeCards()
+      const down = new MouseEvent('mousedown', { bubbles: true, cancelable: true, clientX: 100 })
+      h3.dispatchEvent(down)
+      expect(down.defaultPrevented).toBe(true)
+      s.destroy()
+    })
+
+    it('cancels the click after a drag on the element where the button was released', () => {
+      const { s, h3 } = makeCards()
+      mouse('mousedown', h3, 100); mouse('mousemove', h3, 60); mouse('mouseup', h3, 60)
+      expect(click(h3)).toBe(true)
+      s.destroy()
+    })
+
+    it('cancels the click when it lands on the link because press and release were on different children', () => {
+      const { s, a, h3, p } = makeCards()
+      mouse('mousedown', h3, 100); mouse('mousemove', p, 60); mouse('mouseup', p, 60)
+      expect(click(a)).toBe(true)
+      s.destroy()
+    })
+
+    it('does not cancel a later real click when no click followed the drag', async () => {
+      const { s, h3 } = makeCards()
+      mouse('mousedown', h3, 100); mouse('mousemove', h3, 60); mouse('mouseup', h3, 60)
+      await new Promise(r => setTimeout(r, 0))
+      expect(click(h3)).toBe(false)
+      s.destroy()
+    })
+
+    it('keeps the click of a drag from reaching document listeners, but not a later real click', async () => {
+      const { s, h3 } = makeCards()
+      const seen = vi.fn()
+      document.addEventListener('click', seen)
+      mouse('mousedown', h3, 100); mouse('mousemove', h3, 60); mouse('mouseup', h3, 60)
+      click(h3)
+      expect(seen).not.toHaveBeenCalled()
+      await new Promise(r => setTimeout(r, 0))
+      click(h3)
+      expect(seen).toHaveBeenCalledTimes(1)
+      document.removeEventListener('click', seen)
+      s.destroy()
+    })
+
+    it('does not cancel a click without a drag', () => {
+      const { s, h3 } = makeCards()
+      mouse('mousedown', h3, 100); mouse('mouseup', h3, 100)
+      expect(click(h3)).toBe(false)
+      s.destroy()
+    })
+  })
+
   describe('loop clones', () => {
     it('keeps a neighbour beside a clone (2 clones per side with items: 1)', () => {
       const el = createContainer(4)

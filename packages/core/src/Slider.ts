@@ -1450,8 +1450,9 @@ export class Slider implements SliderInstance {
     this.events.emit(this.isTouchEvent(e) ? 'touchStart' : 'dragStart', this.info(e))
 
     if (!this.isTouchEvent(e)) {
-      const tag = (e.target as HTMLElement).nodeName.toLowerCase()
-      if (tag === 'img' || tag === 'a') { e.preventDefault() }
+      // also for children of a link or image (<a><h3/></a>): otherwise the browser starts its native drag,
+      // swallows the mouseup and the slider never ends its drag
+      if ((e.target as Element).closest?.('a, img')) { e.preventDefault() }
     }
 
     this.lastPosition.x = this.initPosition.x = pt.clientX
@@ -1542,12 +1543,14 @@ export class Slider implements SliderInstance {
       if (Math.abs(dist)) {
         // drag vs click: prevent accidental click after drag
         if (!this.isTouchEvent(e)) {
-          const target = e.target as EventTarget
-          const preventClick = (ev: Event) => {
-            ev.preventDefault()
-            target.removeEventListener('click', preventClick)
-          }
-          target.addEventListener('click', preventClick)
+          // The click fires on the closest common ancestor of the press and the release, which is not always
+          // the mouseup target, and may not fire at all (released outside). So it is caught on the window and
+          // dropped on the next tick: it never stays behind to cancel a later real click.
+          // A drag is not a click: besides cancelling it, nothing else on the page hears about it (a router
+          // that ignores defaultPrevented would otherwise open the link).
+          const preventClick = (ev: Event) => { ev.preventDefault(); ev.stopImmediatePropagation() }
+          window.addEventListener('click', preventClick, { capture: true, once: true })
+          setTimeout(() => window.removeEventListener('click', preventClick, true), 0)
         }
 
         // carousel path

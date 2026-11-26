@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Docs: `/docs/options` Responsive section now has one table of every option showing whether it works inside `responsive` (yes, load only, or no). Skill updated to match
 
+## [2.4.1] - 2026-11-26
+
+`@andresclua/sliderkit` 2.4.1.
+
+### Fixed
+- With `mouseDrag`, pressing on a child of a link (`<a><h3>…</h3></a>`) no longer starts the browser's native link drag, which swallowed the `mouseup` and left the card stuck to the cursor. Only the link or image itself was covered before
+- The listener that cancels the click after a drag no longer stays behind: it is now caught on the window and dropped on the next tick. Before, it sat on the `mouseup` target, so a drag released outside (or a click that landed on the link because press and release were on different children) left it armed to cancel the next real click, or let the link open
+- The click that ends a drag is now swallowed (`preventDefault` plus `stopImmediatePropagation`), so nothing else on the page hears about it. A router that ignores `defaultPrevented` (Pagefold) used to open the card after a drag. A drag is not a click: `document` click listeners no longer fire for it
+
 ## [2.4.1] - 2026-11-24
 
 `@andresclua/sliderkit-plugins` 2.4.1.
